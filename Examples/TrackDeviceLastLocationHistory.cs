@@ -1,0 +1,65 @@
+﻿using Route4MeSDK.DataTypes;
+using Route4MeSDK.QueryTypes;
+using System;
+
+namespace Route4MeSDK.Examples
+{
+  public sealed partial class Route4MeExamples
+  {
+    public void TrackDeviceLastLocationHistory()
+    {
+      // Create the manager with the api key
+      Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+      // Create the gps parametes
+      GPSParameters gpsParameters = new GPSParameters()
+      {
+        Format = Format.Csv.Description(),
+        RouteId = "742A9E5051AA84B9E6365C92369B030C",
+        Latitude = 33.14384,
+        Longitude = -83.22466,
+        Course = 1,
+        Speed = 120,
+        DeviceType = DeviceType.IPhone.Description(),
+        MemberId = 1,
+        DeviceGuid = "TEST_GPS",
+        DeviceTimestamp = "2014-06-14 17:43:35"
+      };
+
+      string errorString;
+      string response = route4Me.SetGPS(gpsParameters, out errorString);
+
+      Console.WriteLine("SetGps response: {0}", response);
+
+      GenericParameters genericParameters = new GenericParameters();
+      genericParameters.ParametersCollection.Add("route_id", "742A9E5051AA84B9E6365C92369B030C");
+      genericParameters.ParametersCollection.Add("device_tracking_history", "1");
+      
+      var dataObject = route4Me.GetLastLocation(genericParameters, out errorString);
+
+      if (dataObject != null)
+      {
+        Console.WriteLine("TrackDeviceLastLocationHistory executed successfully");
+        Console.WriteLine("");
+
+        Console.WriteLine("Optimization Problem ID: {0}", dataObject.OptimizationProblemId);
+        Console.WriteLine("State: {0}", dataObject.State);
+        Console.WriteLine("");
+
+        dataObject.TrackingHistory.ForEach(th =>
+        {
+          Console.WriteLine("Speed: {0}",      th.Speed);
+          Console.WriteLine("Longitude: {0}",  th.Longitude);
+          Console.WriteLine("Latitude: {0}",   th.Latitude);
+          Console.WriteLine("Time Stamp: {0}", th.TimeStampFriendly);
+          Console.WriteLine("");
+        });
+      }
+      else
+      {
+        // TODO error handling
+        Console.WriteLine("TrackDeviceLastLocationHistory error: {0}", errorString);
+      }
+    }
+  }
+}
