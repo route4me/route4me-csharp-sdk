@@ -121,6 +121,12 @@ namespace Route4MeSDK.DataTypes
     public int? TruckWidthMeters { get; set; }
 
     [DataMember(Name = "truck_length_meters", EmitDefaultValue = false)]
-    public int? TruckLengthMeters { get; set; }  
+    public int? TruckLengthMeters { get; set; }
+
+    [DataMember(Name = "max_tour_size", EmitDefaultValue = false)]
+    public int? MaxTourSize { get; set; }
+
+    [DataMember(Name = "optimization_quality", EmitDefaultValue = false)]
+    public int? OptimizationQuality { get; set; }
   }
 }

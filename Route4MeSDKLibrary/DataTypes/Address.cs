@@ -131,5 +131,20 @@ namespace Route4MeSDK.DataTypes
 
     [DataMember(Name = "notes", EmitDefaultValue = false)]
     public string[] Notes { get; set; }
+
+    [DataMember(Name = "priority", EmitDefaultValue = false)]
+    public int? Priority { get; set; }
+
+    [DataMember(Name = "curbside_lat")]
+    public double? CurbsideLatitude { get; set; }
+
+    [DataMember(Name = "curbside_lng")]
+    public double? CurbsideLongitude { get; set; }
+
+    [DataMember(Name = "time_window_start_2", EmitDefaultValue = false)]
+    public int? TimeWindowStart2 { get; set; }
+
+    [DataMember(Name = "time_window_end_2", EmitDefaultValue = false)]
+    public int? TimeWindowEnd2 { get; set; }
   }
 }
