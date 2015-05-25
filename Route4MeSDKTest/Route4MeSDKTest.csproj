@@ -41,6 +41,7 @@
     <Compile Include="Examples\GenericExample.cs" />
     <Compile Include="Examples\GetRoute.cs" />
     <Compile Include="Examples\MultipleDepotMultipleDriver.cs" />
+    <Compile Include="Examples\MultipleDepotMultipleDriverNoTimeWindow.cs" />
     <Compile Include="Examples\MultipleDepotMultipleDriverTimeWindow.cs" />
     <Compile Include="Examples\MultipleDepotMultipleDriverWith24StopsTimeWindow.cs" />
     <Compile Include="Examples\ReOptimization.cs" />
