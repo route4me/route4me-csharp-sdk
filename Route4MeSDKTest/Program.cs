@@ -13,7 +13,7 @@ namespace Route4MeSDKTest
       examples.SingleDriverRoundTripGeneric();
       examples.MultipleDepotMultipleDriver();
       examples.MultipleDepotMultipleDriverTimeWindow();
-      examples.MultipleDepotMultipleDriverNoTimeWindow();
+      examples.SingleDepotMultipleDriverNoTimeWindow();
       examples.MultipleDepotMultipleDriverWith24StopsTimeWindow();
       examples.GetRoute();
       examples.ReOptimization();
