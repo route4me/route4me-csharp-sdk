@@ -20,6 +20,7 @@ namespace Route4MeSDK
     #region Fields
 
     private readonly string m_ApiKey;
+    private readonly TimeSpan m_DefaultTimeOut = new TimeSpan(TimeSpan.TicksPerMinute * 30); // Default timeout - 30 minutes
 
     #endregion
 
@@ -32,9 +33,9 @@ namespace Route4MeSDK
 
     #region Route4Me Shortcut Methods
 
-    public DataObject GetRoute(OptimizatonParameters optimizatonParameters, out string errorString)
+    public DataObject GetRoute(OptimizationParameters optimizationParameters, out string errorString)
     {
-      var result = GetJsonObjectFromAPI<DataObject>(optimizatonParameters,
+      var result = GetJsonObjectFromAPI<DataObject>(optimizationParameters,
                                                     R4MEInfrastructureSettings.ApiHost,
                                                     HttpMethodType.Get,
                                                     out errorString);
@@ -74,9 +75,9 @@ namespace Route4MeSDK
       return result;
     }
 
-    public DataObject UpdateOptimization(OptimizatonParameters optimizatonParameters, out string errorString)
+    public DataObject UpdateOptimization(OptimizationParameters optimizationParameters, out string errorString)
     {
-      var result = GetJsonObjectFromAPI<DataObject>(optimizatonParameters,
+      var result = GetJsonObjectFromAPI<DataObject>(optimizationParameters,
                                                     R4MEInfrastructureSettings.ApiHost,
                                                     HttpMethodType.Put,
                                                     false,
@@ -85,9 +86,9 @@ namespace Route4MeSDK
       return result;
     }
 
-    public DataObject RunOptimization(OptimizatonParameters optimizatonParameters, out string errorString)
+    public DataObject RunOptimization(OptimizationParameters optimizationParameters, out string errorString)
     {
-      var result = GetJsonObjectFromAPI<DataObject>(optimizatonParameters,
+      var result = GetJsonObjectFromAPI<DataObject>(optimizationParameters,
                                                     R4MEInfrastructureSettings.ApiHost,
                                                     HttpMethodType.Post,
                                                     false,
@@ -100,12 +101,12 @@ namespace Route4MeSDK
 
     #region Generic Methods
 
-    public string GetStringResponseFromAPI(GenericParameters optimizatonParameters,
+    public string GetStringResponseFromAPI(GenericParameters optimizationParameters,
                                            string            url,
                                            HttpMethodType    httpMethod,
                                            out string        errorMessage)
     {
-      string result = GetJsonObjectFromAPI<string>(optimizatonParameters,
+      string result = GetJsonObjectFromAPI<string>(optimizationParameters,
                                                    url,
                                                    httpMethod,
                                                    true,
@@ -114,13 +115,13 @@ namespace Route4MeSDK
       return result;
     }
 
-    public T GetJsonObjectFromAPI<T>(GenericParameters optimizatonParameters,
+    public T GetJsonObjectFromAPI<T>(GenericParameters optimizationParameters,
                                      string            url,
                                      HttpMethodType    httpMethod,
                                      out string        errorMessage)
       where T : class
     {
-      T result = GetJsonObjectFromAPI<T>(optimizatonParameters,
+      T result = GetJsonObjectFromAPI<T>(optimizationParameters,
                                          url,
                                          httpMethod,
                                          false,
@@ -129,7 +130,7 @@ namespace Route4MeSDK
       return result;
     }
 
-    private T GetJsonObjectFromAPI<T>(GenericParameters optimizatonParameters,
+    private T GetJsonObjectFromAPI<T>(GenericParameters optimizationParameters,
                                       string            url,
                                       HttpMethodType    httpMethod,
                                       bool              isString,
@@ -144,7 +145,7 @@ namespace Route4MeSDK
         using (HttpClient httpClient = CreateHttpClient(url))
         {
           // Get the parameters
-          string parametersURI = optimizatonParameters.Serialize(m_ApiKey);
+          string parametersURI = optimizationParameters.Serialize(m_ApiKey);
 
           switch (httpMethod)
           {
@@ -165,7 +166,7 @@ namespace Route4MeSDK
             case HttpMethodType.Put:
             {
               bool isPut = httpMethod == HttpMethodType.Put;
-              string jsonString = R4MeUtils.SerializeObjectToJson(optimizatonParameters);
+              string jsonString = R4MeUtils.SerializeObjectToJson(optimizationParameters);
               StringContent content = new StringContent(jsonString);
 
               // Post and wait for response
@@ -209,6 +210,7 @@ namespace Route4MeSDK
     {
       HttpClient result = new HttpClient() { BaseAddress = new Uri(url) };
 
+      result.Timeout = m_DefaultTimeOut;
       result.DefaultRequestHeaders.Accept.Clear();
       result.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 

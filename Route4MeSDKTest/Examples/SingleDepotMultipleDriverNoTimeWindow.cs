@@ -8,8 +8,7 @@ namespace Route4MeSDK.Examples
         public void SingleDepotMultipleDriverNoTimeWindow()
         {
             // Create the manager with the api key
-            //Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
-            Route4MeManager route4Me = new Route4MeManager("1d479a8464677d9fc054eb7d00b046d2");
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
             // Prepare the addresses
             Address[] addresses = new Address[]
@@ -885,7 +884,7 @@ namespace Route4MeSDK.Examples
                         TimeWindowStart = null,
                         TimeWindowEnd   = null },
         //125left
-        /*new Address() { AddressString   = "NYC",
+        new Address() { AddressString   = "NYC",
                         Latitude        = 40.7143528,
                         Longitude       = -74.0059731,
                         Time            = 0,
@@ -1758,7 +1757,7 @@ namespace Route4MeSDK.Examples
                         Longitude       = -74.0096370,
                         Time            = 0,
                         TimeWindowStart = null,
-                        TimeWindowEnd   = null },*/
+                        TimeWindowEnd   = null },
 
         new Address() { AddressString   = "33 Beaver St, New York, NY 10004-2736",
                         Latitude        = 40.7050980,
@@ -1791,7 +1790,7 @@ namespace Route4MeSDK.Examples
                 Metric = Metric.Geodesic
             };
 
-            OptimizatonParameters optimizatonParameters = new OptimizatonParameters()
+            OptimizationParameters optimizationParameters = new OptimizationParameters()
             {
                 Addresses = addresses,
                 Parameters = parameters
@@ -1799,7 +1798,7 @@ namespace Route4MeSDK.Examples
 
             // Run the query
             string errorString;
-            DataObject dataObject = route4Me.RunOptimization(optimizatonParameters, out errorString);
+            DataObject dataObject = route4Me.RunOptimization(optimizationParameters, out errorString);
 
             // Output the result
             PrintExampleOptimizationResult("SingleDepotMultipleDriverNoTimeWindow", dataObject, errorString);

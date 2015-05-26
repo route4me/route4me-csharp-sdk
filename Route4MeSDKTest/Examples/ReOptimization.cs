@@ -11,15 +11,15 @@ namespace Route4MeSDK.Examples
       // Create the manager with the api key
       Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
     
-      OptimizatonParameters optimizatonParameters = new OptimizatonParameters()
+      OptimizationParameters optimizationParameters = new OptimizationParameters()
       {
-        OptimizatonProblemID = "5ACDD6065C45A34768EA97FEBB14D637",
+        OptimizationProblemID = "5ACDD6065C45A34768EA97FEBB14D637",
         ReOptimize = true
       };
 
       // Run the query
       string errorString;
-      DataObject dataObject = route4Me.UpdateOptimization(optimizatonParameters, out errorString);
+      DataObject dataObject = route4Me.UpdateOptimization(optimizationParameters, out errorString);
 
       Console.WriteLine("");
 

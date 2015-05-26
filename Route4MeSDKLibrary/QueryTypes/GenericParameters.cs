@@ -15,7 +15,7 @@ namespace Route4MeSDK.QueryTypes
   /// Important: You have to add here all derived classes, that are serealized as json as a KnownType
   /// </summary>
   [DataContract]
-  [KnownType(typeof(OptimizatonParameters))]
+  [KnownType(typeof(OptimizationParameters))]
   public class GenericParameters
   {
     #region Fields
