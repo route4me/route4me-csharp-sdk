@@ -49,7 +49,7 @@
     <Compile Include="QueryTypes\GenericParameters.cs" />
     <Compile Include="QueryTypes\GPSParameters.cs" />
     <Compile Include="QueryTypes\HttpQueryMemberAttribute.cs" />
-    <Compile Include="QueryTypes\OptimizatonParameters.cs" />
+    <Compile Include="QueryTypes\OptimizationParameters.cs" />
     <Compile Include="QueryTypes\RouteParametersQuery.cs" />
     <Compile Include="Route4MeManager.cs" />
     <Compile Include="Types.cs" />

@@ -678,7 +678,7 @@ namespace Route4MeSDK.Examples
         Metric       = Metric.Geodesic
       };
 
-      OptimizatonParameters optimizatonParameters = new OptimizatonParameters()
+      OptimizationParameters optimizationParameters = new OptimizationParameters()
       {
         Addresses = addresses,
         Parameters = parameters
@@ -686,7 +686,7 @@ namespace Route4MeSDK.Examples
 
       // Run the query
       string errorString;
-      DataObject dataObject = route4Me.RunOptimization(optimizatonParameters, out errorString);
+      DataObject dataObject = route4Me.RunOptimization(optimizationParameters, out errorString);
 
       // Output the result
       PrintExampleOptimizationResult("MultipleDepotMultipleDriverTimeWindow", dataObject, errorString);
