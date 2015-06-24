@@ -126,6 +126,9 @@ namespace Route4MeSDK.DataTypes
     [DataMember(Name = "max_tour_size", EmitDefaultValue = false)]
     public int? MaxTourSize { get; set; }
 
+    [DataMember(Name = "min_tour_size", EmitDefaultValue = false)]
+    public int? MinTourSize { get; set; }
+
     [DataMember(Name = "optimization_quality", EmitDefaultValue = false)]
     public int? OptimizationQuality { get; set; }
   }
