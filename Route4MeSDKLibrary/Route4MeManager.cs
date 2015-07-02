@@ -1,5 +1,6 @@
 ﻿using Route4MeSDK.DataTypes;
 using Route4MeSDK.QueryTypes;
+using Route4MeSDKLibrary.DataTypes;
 using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -188,6 +189,37 @@ namespace Route4MeSDK
                   result = isString ? streamTask.Result.ReadString() as T :
                                       streamTask.Result.ReadObject<T>();
                 }
+              }
+              else
+              {
+                  var streamTask = ((StreamContent)response.Result.Content).ReadAsStreamAsync();
+                  streamTask.Wait();
+                  ErrorResponse errorResponse = null;
+                  try
+                  {
+                      errorResponse = streamTask.Result.ReadObject<ErrorResponse>();
+                  }
+                  catch// (Exception e)
+                  {
+                      errorResponse = default(ErrorResponse);
+                  }
+                  if (errorResponse != null && errorResponse.Errors != null && errorResponse.Errors.Count > 0)
+                  {
+                      foreach (String error in errorResponse.Errors)
+                      {
+                          if (errorMessage.Length > 0)
+                              errorMessage += "; ";
+                          errorMessage += error;
+                      }
+                  }
+                  else
+                  {
+                      var responseStream = response.Result.Content.ReadAsStringAsync();
+                      responseStream.Wait();
+                      String responseString = responseStream.Result;
+                      if (responseString != null)
+                         errorMessage = "Response: " + responseString;
+                  }
               }
 
               break;

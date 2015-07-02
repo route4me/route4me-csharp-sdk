@@ -41,6 +41,7 @@
     <Compile Include="DataTypes\Address.cs" />
     <Compile Include="DataTypes\DataObject.cs" />
     <Compile Include="DataTypes\Enums.cs" />
+    <Compile Include="DataTypes\ErrorResponse.cs" />
     <Compile Include="DataTypes\Links.cs" />
     <Compile Include="DataTypes\Route.cs" />
     <Compile Include="DataTypes\RouteParameters.cs" />
