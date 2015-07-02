@@ -22,6 +22,9 @@ namespace Route4MeSDKTest
 
       examples.GenericExample();
       examples.GenericExampleShortcut();
+
+      System.Console.WriteLine("Press any key");
+      System.Console.ReadKey();
     }
   }
 }
