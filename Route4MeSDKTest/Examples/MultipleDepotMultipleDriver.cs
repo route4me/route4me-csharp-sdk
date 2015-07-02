@@ -40,7 +40,7 @@ namespace Route4MeSDK.Examples
         new Address() { AddressString   = "512 Florida Pl, Barberton, OH 44203",
                         Latitude        = 41.003671512008,
                         Longitude       = -81.598461046815,
-                        Time            = 300,
+                        Time            = 100,
                         TimeWindowStart = 33779,
                         TimeWindowEnd   = 33944},
 
@@ -96,7 +96,7 @@ namespace Route4MeSDK.Examples
         new Address() { AddressString   = "559 W Aurora Rd, Northfield, OH 44067",
                         Latitude        = 41.315116882324,
                         Longitude       = -81.558746337891,
-                        Time            = 300,
+                        Time            = 50,
                         TimeWindowStart = 48389,
                         TimeWindowEnd   = 48449},
 
@@ -117,7 +117,7 @@ namespace Route4MeSDK.Examples
         new Address() { AddressString   = "3731 Osage St, Stow, OH 44224",
                         Latitude        = 41.161357879639,
                         Longitude       = -81.42293548584,
-                        Time            = 300,
+                        Time            = 100,
                         TimeWindowStart = 51982,
                         TimeWindowEnd   = 52180},
 
