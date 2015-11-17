@@ -12,9 +12,9 @@ No. The sample API key only permits you to optimize routes with the sample addre
 
 ## Does the SDK have rate limits?
 The number of requests you can make per second is limited by your current subscription plan. Typically, there are different rate limits for these core features:
-### Address Geocoding & Address Reverse Geocoding
-### Route Optimization & Management
-### Viewing a Route
+Address Geocoding & Address Reverse Geocoding
+Route Optimization & Management
+Viewing a Route
 
 
 ## What is the recommended architecture for the Route4Me SDK?
