@@ -112,7 +112,7 @@ namespace Route4MeSDK.DataTypes
     public string Ip { get; set; }
 
 
-    //the type of matrix
+    //the method to use when compute the distance between the points in a route
     //1 = DEFAULT (R4M PROPRIETARY ROUTING)
     //2 = DEPRECRATED
     //3 = R4M TRAFFIC ENGINE
