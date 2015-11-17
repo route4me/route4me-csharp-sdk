@@ -2,10 +2,7 @@
 
 namespace Route4MeSDK.DataTypes
 {
-  /// <summary>
-  /// Links data-structure
-  /// See https://www.assembla.com/spaces/route4me_api/wiki/Optimization_Problem_V4
-  /// </summary>
+
   [DataContract]
   public sealed class Links
   {
