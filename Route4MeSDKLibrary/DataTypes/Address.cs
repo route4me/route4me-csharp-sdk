@@ -153,18 +153,24 @@ namespace Route4MeSDK.DataTypes
     [DataMember(Name = "time_window_end", EmitDefaultValue = false)]
     public int? TimeWindowEnd { get; set; }
 
+    //the expected amount of time that will be spent at this address by the driver/user
     [DataMember(Name = "time", EmitDefaultValue = false)]
     public int? Time { get; set; }
 
     [DataMember(Name = "notes", EmitDefaultValue = false)]
     public string[] Notes { get; set; }
-
+  
+    //if present, the priority will sequence addresses in all the optimal routes so that
+    //higher priority addresses are general at the beginning of the route sequence
+    //1 is the highest priority, 100000 is the lowest
     [DataMember(Name = "priority", EmitDefaultValue = false)]
     public int? Priority { get; set; }
 
+    //generate optimal routes and driving directions to this curbside lat
     [DataMember(Name = "curbside_lat")]
     public double? CurbsideLatitude { get; set; }
 
+  //generate optimal routes and driving directions to the curbside lang
     [DataMember(Name = "curbside_lng")]
     public double? CurbsideLongitude { get; set; }
 
