@@ -91,8 +91,7 @@ namespace Route4MeSDK.DataTypes
     [DataMember(Name = "route_type", EmitDefaultValue = false)]
     public string RouteType { get; set; }
   
-  
-    //deprecated
+      //deprecated
     //all routes are stored by default at this time
     [DataMember(Name = "store_route", EmitDefaultValue = false)]
     public bool? StoreRoute { get; set; }
