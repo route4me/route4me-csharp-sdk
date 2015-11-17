@@ -111,18 +111,34 @@ namespace Route4MeSDK.DataTypes
     [DataMember(Name = "ip", EmitDefaultValue = false)]
     public string Ip { get; set; }
 
+
+    //the type of matrix
+    //1 = DEFAULT (R4M PROPRIETARY ROUTING)
+    //2 = DEPRECRATED
+    //3 = R4M TRAFFIC ENGINE
+    //4 = DEPRECATED
+    //5 = DEPRECATED
+    //6 = TRUCKING
     [DataMember(Name = "dm", EmitDefaultValue = false)]
     public int? DM { get; set; }
 
+    //directions method
+    //1 = DEFAULT (R4M PROPRIETARY INTERNAL NAVIGATION SYSTEM)
+    //2 = DEPRECATED
+    //3 = TRUCKING
+    //4 = DEPRECATED
     [DataMember(Name = "dirm", EmitDefaultValue = false)]
     public int? Dirm { get; set; }
 
     [DataMember(Name = "parts", EmitDefaultValue = false)]
     public int? Parts { get; set; }
 
+    //deprecated 
     [DataMember(Name = "device_id", EmitDefaultValue = false)]
     public object DeviceID { get; set; }
 
+    //the type of device making this request
+    //ENUM("web", "iphone", "ipad", "android_phone", "android_tablet")
     [DataMember(Name = "device_type", EmitDefaultValue = false)]
     public string DeviceType { get; set; }
 
