@@ -153,26 +153,43 @@ namespace Route4MeSDK.DataTypes
     [DataMember(Name = "device_type", EmitDefaultValue = false)]
     public string DeviceType { get; set; }
 
+    //for routes that have trucking directions enabled, directions generated
+    //will ensure compliance so that road directions generated do not take the vehicle
+    //where trailers are prohibited
     [DataMember(Name = "has_trailer", EmitDefaultValue = false)]
     public bool? HasTrailer { get; set; }
 
+    //for routes that have trucking directions enabled, directions generated
+    //will ensure compliance so that road directions generated do not take the vehicle
+    //on roads where the weight of the vehicle in tons exceeds this value
     [DataMember(Name = "trailer_weight_t", EmitDefaultValue = false)]
     public double? TrailerWeightT { get; set; }
+
 
     [DataMember(Name = "limited_weight_t", EmitDefaultValue = false)]
     public double? LimitedWeightT { get; set; }
 
+    //for routes that have trucking directions enabled, directions generated
+    //will ensure compliance so that road directions generated do not take the vehicle
+    //where the weight per axle in tons exceeds this value
     [DataMember(Name = "weight_per_axle_t", EmitDefaultValue = false)]
     public double? WeightPerAxleT { get; set; }
 
+    //for routes that have trucking directions enabled, directions generated
+    //will ensure compliance of this maximum height of truck when generating road network driving directions
     [DataMember(Name = "truck_height_meters", EmitDefaultValue = false)]
     public int? TruckHeightMeters { get; set; }
 
+    //for routes that have trucking directions enabled, directions generated
+    //will ensure compliance of this width of the truck when generating road network driving directions
     [DataMember(Name = "truck_width_meters", EmitDefaultValue = false)]
     public int? TruckWidthMeters { get; set; }
-
+  
+    //for routes that have trucking directions enabled, directions generated
+    //will ensure compliance of this length of the truck when generating road network driving directions
     [DataMember(Name = "truck_length_meters", EmitDefaultValue = false)]
     public int? TruckLengthMeters { get; set; }
+
 
     //the minimum number of stops permitted per created subroute
     [DataMember(Name = "min_tour_size", EmitDefaultValue = false)]
