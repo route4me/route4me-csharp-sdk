@@ -20,7 +20,13 @@ namespace Route4MeSDK.Examples
                         IsDepot = true,
                         Latitude = 33.132675170898,
                         Longitude = -83.244743347168,
-                        Time = 0,
+                        
+                        //the expected time on site, in seconds. this value is incorporated into the optimization engine
+                        //it also adjusts the estimated and dynamic eta's for a route
+                        Time = 0, 
+                        
+                        
+                        //input as many custom fields as needed, custom data is passed through to mobile devices and to the manifest
                         CustomFields = new Dictionary<string, string>() {{"color", "red"}, {"size", "huge"}}
         },
 
