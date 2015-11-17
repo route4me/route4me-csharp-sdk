@@ -57,33 +57,47 @@ namespace Route4MeSDK.DataTypes
     [DataMember(Name = "FailedGeocoding", EmitDefaultValue = false)]
     public bool? FailedGeocoding { get; set; }
 
-    // Ignored
-    //  public List<object> geocodings { get; set; }
-
+    //when planning a route from the address book or using existing address book ids
+    //pass the address book id (contact_id) for an address so that route4me can run
+    //analytics on the address book addresses that were used to plan routes, and to find previous visits to 
+    //favorite addresses
     [DataMember(Name = "contact_id", EmitDefaultValue = false)]
     public int? ContactId { get; set; }
 
+
+    //status flag to mark an address as visited (aka check in)
     [DataMember(Name = "is_visited", EmitDefaultValue = false)]
     public bool? IsVisited { get; set; }
 
+    //status flag to mark an address as departed (aka check out)
     [DataMember(Name = "is_departed", EmitDefaultValue = false)]
     public bool? IsDeparted { get; set; }
 
+    //the last known visited timestamp of this address
     [DataMember(Name = "timestamp_last_visited", EmitDefaultValue = false)]
     public uint? TimestampLastVisited { get; set; }
-
+    
+    //the last known departed timestamp of this address
     [DataMember(Name = "timestamp_last_departed", EmitDefaultValue = false)]
     public uint? TimestampLastDeparted { get; set; }
 
+    //pass-through data about this route destination
+    //the data will be visible on the manifest, website, and mobile apps
     [DataMember(Name = "customer_po", EmitDefaultValue = false)]
     public object CustomerPo { get; set; }
-
+    
+    //pass-through data about this route destination
+    //the data will be visible on the manifest, website, and mobile apps
     [DataMember(Name = "invoice_no", EmitDefaultValue = false)]
     public object InvoiceNo { get; set; }
 
+    //pass-through data about this route destination
+    //the data will be visible on the manifest, website, and mobile apps
     [DataMember(Name = "reference_no", EmitDefaultValue = false)]
     public object ReferenceNo { get; set; }
 
+    //pass-through data about this route destination
+    //the data will be visible on the manifest, website, and mobile apps
     [DataMember(Name = "order_no", EmitDefaultValue = false)]
     public object OrderNo { get; set; }
 
@@ -102,12 +116,19 @@ namespace Route4MeSDK.DataTypes
     [DataMember(Name = "pieces", EmitDefaultValue = false)]
     public object Pieces { get; set; }
 
+    //pass-through data about this route destination
+    //the data will be visible on the manifest, website, and mobile apps
+    //also used to email clients when vehicles are approaching (future capability)
     [DataMember(Name = "email", EmitDefaultValue = false)]
     public object Email { get; set; }
 
+    //pass-through data about this route destination
+    //the data will be visible on the manifest, website, and mobile apps
+    //also used to sms message clients when vehicles are approaching (future capability)
     [DataMember(Name = "phone", EmitDefaultValue = false)]
     public object Phone { get; set; }
 
+    //the number of notes that are already associated with this address on the route
     [DataMember(Name = "destination_note_count", EmitDefaultValue = false)]
     public int? DestinationNoteCount { get; set; }
 
