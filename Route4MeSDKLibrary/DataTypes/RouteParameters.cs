@@ -37,7 +37,7 @@ namespace Route4MeSDK.DataTypes
     [DataMember(Name = "shared_publicly", EmitDefaultValue = false)]
     public string SharedPublicly { get; set; }
 
-    
+
     [DataMember(Name = "optimize", EmitDefaultValue = false)]
     public string Optimize { get; set; }
 
@@ -45,7 +45,6 @@ namespace Route4MeSDK.DataTypes
     //example: driver leaves a depot, but must always arrive at home ( or a specific gas station) at the end of the route
     [DataMember(Name = "lock_last", EmitDefaultValue = false)]
     public bool? LockLast { get; set; }
-
 
     
     [DataMember(Name = "vehicle_capacity", EmitDefaultValue = false)]
