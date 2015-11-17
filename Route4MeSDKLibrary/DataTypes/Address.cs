@@ -12,28 +12,36 @@ namespace Route4MeSDK.DataTypes
 
     [DataMember(Name = "alias", EmitDefaultValue = false)]
     public string Alias { get; set; }
-
+  
+    //the id of the member inside the route4me system
     [DataMember(Name = "MemberId", EmitDefaultValue = false)]
     public string MemberId { get; set; }
 
     [DataMember(Name = "address")]
     public string AddressString { get; set; }
 
+    //designate this stop as a depot
+    //a route may have multiple depots/points of origin
     [DataMember(Name = "is_depot", EmitDefaultValue = false)]
     public bool? IsDepot { get; set; }
-
+  
+    //the latitude of this address
     [DataMember(Name = "lat")]
     public double Latitude { get; set; }
-
+  
+    //the longitude of this address
     [DataMember(Name = "lng")]
     public double Longitude { get; set; }
 
+    //the id of the route being viewed, modified, erased
     [DataMember(Name = "route_id", EmitDefaultValue = false)]
     public string RouteId { get; set; }
 
+    //if this route was duplicated from an existing route, this value would have the original route's id
     [DataMember(Name = "original_route_id", EmitDefaultValue = false)]
     public string OriginalRouteId { get; set; }
 
+    //the id of the optimization request that was used to initially instantiate this route
     [DataMember(Name = "optimization_problem_id", EmitDefaultValue = false)]
     public string OptimizationProblemId { get; set; }
 
