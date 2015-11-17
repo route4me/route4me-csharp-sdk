@@ -148,12 +148,19 @@ namespace Route4MeSDK.DataTypes
     [DataMember(Name = "truck_length_meters", EmitDefaultValue = false)]
     public int? TruckLengthMeters { get; set; }
 
-    [DataMember(Name = "max_tour_size", EmitDefaultValue = false)]
-    public int? MaxTourSize { get; set; }
-
+    //the minimum number of stops permitted per created subroute
     [DataMember(Name = "min_tour_size", EmitDefaultValue = false)]
     public int? MinTourSize { get; set; }
 
+    //the maximum number of stops permitted per created subroute
+    [DataMember(Name = "max_tour_size", EmitDefaultValue = false)]
+    public int? MaxTourSize { get; set; }
+
+    //there are 3 types of optimization qualities that are optimizations goals
+    //1 - Generate Optimized Routes As Quickly as Possible
+    //2 - Generate Routes That Look Better On A Map
+    //3 - Generate The Shortest And Quickest Possible Routes
+    
     [DataMember(Name = "optimization_quality", EmitDefaultValue = false)]
     public int? OptimizationQuality { get; set; }
   }
