@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace Route4MeSDK.DataTypes
 {
@@ -146,5 +147,8 @@ namespace Route4MeSDK.DataTypes
 
     [DataMember(Name = "time_window_end_2", EmitDefaultValue = false)]
     public int? TimeWindowEnd2 { get; set; }
+
+    [DataMember(Name = "custom_fields", EmitDefaultValue = false)]
+    public Dictionary<string, string> CustomFields { get; set; }
   }
 }

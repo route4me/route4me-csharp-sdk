@@ -1,5 +1,6 @@
 ﻿using Route4MeSDK.DataTypes;
 using Route4MeSDK.QueryTypes;
+using System.Collections.Generic;
 
 namespace Route4MeSDK.Examples
 {
@@ -19,7 +20,9 @@ namespace Route4MeSDK.Examples
                         IsDepot = true,
                         Latitude = 33.132675170898,
                         Longitude = -83.244743347168,
-                        Time = 0 },
+                        Time = 0,
+                        CustomFields = new Dictionary<string, string>() {{"color", "red"}, {"size", "huge"}}
+        },
 
         new Address() { AddressString = "230 Arbor Way Milledgeville GA 31061",
                         Latitude = 33.129695892334,
