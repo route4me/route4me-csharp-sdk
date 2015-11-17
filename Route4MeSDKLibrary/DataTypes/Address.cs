@@ -3,10 +3,7 @@ using System.Runtime.Serialization;
 
 namespace Route4MeSDK.DataTypes
 {
-  /// <summary>
-  /// Address data-structure
-  /// See https://www.assembla.com/wiki/show/route4me_api/Route_Address_V4
-  /// </summary>
+  
   [DataContract]
   public sealed class Address
   {
