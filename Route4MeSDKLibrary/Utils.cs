@@ -19,7 +19,11 @@ namespace Route4MeSDK
     /// </summary>
     public static T ReadObject<T>(this Stream stream)
     {
-      var parser = new DataContractJsonSerializer(typeof(T));
+      var settings = new DataContractJsonSerializerSettings()
+      {
+        UseSimpleDictionaryFormat = true
+      };
+      var parser = new DataContractJsonSerializer(typeof(T), settings);
 
       return (T)parser.ReadObject(stream);
     }
@@ -42,7 +46,11 @@ namespace Route4MeSDK
     /// </summary>
     public static string SerializeObjectToJson(object obj)
     {
-      var writer = new DataContractJsonSerializer(obj.GetType());
+      var settings = new DataContractJsonSerializerSettings()
+      {
+        UseSimpleDictionaryFormat = true
+      };
+      var writer = new DataContractJsonSerializer(obj.GetType(), settings);
       string result = null;
 
       using (var memoryStream = new MemoryStream())
