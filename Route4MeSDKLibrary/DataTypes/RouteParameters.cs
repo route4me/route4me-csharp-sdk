@@ -88,6 +88,7 @@ namespace Route4MeSDK.DataTypes
     [DataMember(Name = "route_email", EmitDefaultValue = false)]
     public string RouteEmail { get; set; }
 
+    //type of route being created: ENUM(api,null)
     [DataMember(Name = "route_type", EmitDefaultValue = false)]
     public string RouteType { get; set; }
   
@@ -96,9 +97,17 @@ namespace Route4MeSDK.DataTypes
     [DataMember(Name = "store_route", EmitDefaultValue = false)]
     public bool? StoreRoute { get; set; }
 
+    //1 = ROUTE4ME_METRIC_EUCLIDEAN (use euclidean distance when computing point to point distance)
+    //2 = ROUTE4ME_METRIC_MANHATTAN (use manhattan distance (taxicab geometry) when computing point to point distance)
+    //3 = ROUTE4ME_METRIC_GEODESIC (use geodesic distance when computing point to point distance)
+    //#4 is the default and suggested metric
+    //4 = ROUTE4ME_METRIC_MATRIX (use road network driving distance when computing point to point distance)
+    //5 = ROUTE4ME_METRIC_EXACT_2D (use exact rectilinear distance)
     [DataMember(Name = "metric", EmitDefaultValue = false)]
     public Metric Metric { get; set; }
 
+
+    //the type of algorithm to use when optimizing the route
     [DataMember(Name = "algorithm_type", EmitDefaultValue = false)]
     public AlgorithmType AlgorithmType { get; set; }
 
@@ -108,6 +117,8 @@ namespace Route4MeSDK.DataTypes
     [DataMember(Name = "member_id", EmitDefaultValue = false)]
     public string MemberId { get; set; }
 
+
+    //specify the ip address of the remote user making this optimization request
     [DataMember(Name = "ip", EmitDefaultValue = false)]
     public string Ip { get; set; }
 
