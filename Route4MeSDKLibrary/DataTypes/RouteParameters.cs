@@ -67,6 +67,7 @@ namespace Route4MeSDK.DataTypes
     [DataMember(Name = "vehicle_id", EmitDefaultValue = false)]
     public string VehicleId { get; set; }
 
+    //deprecated, all new routes should be assigned to a member_id
     [DataMember(Name = "driver_id", EmitDefaultValue = false)]
     public string DriverId { get; set; }
 
