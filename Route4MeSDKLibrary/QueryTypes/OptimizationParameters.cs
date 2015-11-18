@@ -3,12 +3,8 @@ using System.Runtime.Serialization;
 
 namespace Route4MeSDK.QueryTypes
 {
-  /// <summary>
-  /// Helper class, for setting Optimization data
-  /// Used to create the suitable query string
-  /// See example in Route4MeExamples.ReOptimization() and Route4MeExamples.MultipleDepotMultipleDriver()
-  /// Important: this class is used both to generate the query string and as JSON object
-  /// </summary>
+
+
   [DataContract]
   public sealed class OptimizationParameters : GenericParameters
   {
