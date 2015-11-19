@@ -17,8 +17,11 @@ namespace Route4MeSDKTest
       examples.MultipleDepotMultipleDriverWith24StopsTimeWindow();
       examples.GetRoute();
       examples.ReOptimization();
-      examples.SetGPSPosition();
-      examples.TrackDeviceLastLocationHistory();
+      
+      //disabled by default, not necessary for optimization tests
+      //not all accounts are capable of storing gps data
+      //examples.SetGPSPosition();
+      //examples.TrackDeviceLastLocationHistory();
 
       examples.GenericExample();
       examples.GenericExampleShortcut();
