@@ -10,8 +10,8 @@ namespace Route4MeSDK
   /// <summary>
   /// This class encapsulates the Route4Me REST API
   /// 1. Create an instance of Route4MeManager with the api_key
-  /// 1. Shortcut methods: Use shortcuts methods (for example Route4MeManager.GetRoute()) to access the most popular functionality.
-  ///    See examples Route4MeExamples.GetRoute(), Route4MeExamples.SingleDriverRoundTrip()
+  /// 1. Shortcut methods: Use shortcuts methods (for example Route4MeManager.GetOptimization()) to access the most popular functionality.
+  ///    See examples Route4MeExamples.GetOptimization(), Route4MeExamples.SingleDriverRoundTrip()
   /// 2. Generic methods: Use generic methods (for example Route4MeManager.GetJsonObjectFromAPI() or Route4MeManager.GetStringResponseFromAPI())
   ///    to access any availaible functionality.
   ///    See examples Route4MeExamples.GenericExample(), Route4MeExamples.SingleDriverRoundTripGeneric()
@@ -34,7 +34,7 @@ namespace Route4MeSDK
 
     #region Route4Me Shortcut Methods
 
-    public DataObject GetRoute(OptimizationParameters optimizationParameters, out string errorString)
+    public DataObject GetOptimization(OptimizationParameters optimizationParameters, out string errorString)
     {
       var result = GetJsonObjectFromAPI<DataObject>(optimizationParameters,
                                                     R4MEInfrastructureSettings.ApiHost,
@@ -42,6 +42,26 @@ namespace Route4MeSDK
                                                     out errorString);
 
       return result;
+    }
+
+    public DataObjectOptimizations GetOptimizations(RouteParametersQuery queryParameters, out string errorString)
+    {
+        var result = GetJsonObjectFromAPI<DataObjectOptimizations>(queryParameters,
+                                                             R4MEInfrastructureSettings.ApiHost,
+                                                             HttpMethodType.Get,
+                                                             out errorString);
+
+        return result;
+    }
+
+    public DataObjectRoute GetRoute(RouteParametersQuery routeParameters, out string errorString)
+    {
+        var result = GetJsonObjectFromAPI<DataObjectRoute>(routeParameters,
+                                                      R4MEInfrastructureSettings.RouteHost,
+                                                      HttpMethodType.Get,
+                                                      out errorString);
+
+        return result;
     }
 
     public DataObjectRoute[] GetRoutes(RouteParametersQuery routeParameters, out string errorString)
