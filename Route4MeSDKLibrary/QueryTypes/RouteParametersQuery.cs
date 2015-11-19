@@ -1,11 +1,7 @@
 ﻿
 namespace Route4MeSDK.QueryTypes
 {
-  /// <summary>
-  /// Helper class, for setting Route data
-  /// Used to create the suitable query string
-  /// See example in Route4MeExamples.GenericExampleShortcut()
-  /// </summary>
+
   public sealed class RouteParametersQuery : GenericParameters
   {
     [HttpQueryMemberAttribute(Name = "route_id", EmitDefaultValue = false)]

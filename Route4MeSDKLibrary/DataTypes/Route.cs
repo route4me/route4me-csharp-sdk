@@ -2,10 +2,8 @@
 
 namespace Route4MeSDK.DataTypes
 {
-  /// <summary>
-  /// Route data-structure
-  /// See https://www.assembla.com/spaces/route4me_api/wiki/Route_v4
-  /// </summary>
+
+
   [DataContract]
   public sealed class DataObjectRoute : DataObject
   {

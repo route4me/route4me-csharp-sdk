@@ -2,25 +2,19 @@
 
 namespace Route4MeSDK.DataTypes
 {
-  /// <summary>
-  /// Algorithm type
-  /// See https://www.assembla.com/spaces/route4me_api/wiki/Route_v4
-  /// </summary>
+  
   public enum AlgorithmType
   {
-    TSP        = 1,
-    VRP        = 2,
-    CVRP_TW_SD = 3,
-    CVRP_TW_MD = 4,
-    TSP_TW     = 5,
-    TSP_TW_CR  = 6,
-    BBCVRP     = 7,
+    TSP        = 1, //single depot, single driver route
+    VRP        = 2, //single depot, multiple driver, no constraints, no time windows, no capacities
+    CVRP_TW_SD = 3, //single depot, multiple driver, capacitated, time windows
+    CVRP_TW_MD = 4, //multiple depot, multiple driver, capacitated, time windows
+    TSP_TW     = 5, //single depot, single driver, time windows
+    TSP_TW_CR  = 6, //single depot, single driver, time windows, continuous optimization (minimal location shifting)
+    BBCVRP     = 7, //shifts addresses from one route to another over time on a recurring schedule
   }
 
-  /// <summary>
-  /// The travel mode enum
-  /// See https://www.assembla.com/spaces/route4me_api/wiki/Route_v4
-  /// </summary>
+
   public enum TravelMode : uint
   {
     [Description("Driving")]
@@ -33,10 +27,7 @@ namespace Route4MeSDK.DataTypes
     Trucking
   }
 
-  /// <summary>
-  /// The distance units type
-  /// See https://www.assembla.com/spaces/route4me_api/wiki/Route_v4
-  /// </summary>
+  
   public enum DistanceUnit : uint
   {
     [Description("mi")]
@@ -45,11 +36,6 @@ namespace Route4MeSDK.DataTypes
     [Description("km")]
     KM
   }
-
-  /// <summary>
-  /// Enum that specifies which road obstacles to avoid
-  /// See https://www.assembla.com/spaces/route4me_api/wiki/Route_v4
-  /// </summary>
   public enum Avoid
   {
     [Description("Highways")]
@@ -68,10 +54,7 @@ namespace Route4MeSDK.DataTypes
     None
   }
 
-  /// <summary>
-  /// Enum that specifies the optimization type
-  /// See https://www.assembla.com/spaces/route4me_api/wiki/Route_v4
-  /// </summary>
+  
   public enum Optimize : uint
   {
     [Description("Distance")]
@@ -84,23 +67,16 @@ namespace Route4MeSDK.DataTypes
     TimeWithTraffic
   }
 
-  /// <summary>
-  /// The metric type
-  /// See https://www.assembla.com/spaces/route4me_api/wiki/Route_v4
-  /// </summary>
+  
   public enum Metric : uint
   {
-    Euclidean = 1,
-    Manhattan = 2,
-    Geodesic  = 3,
-    Matrix    = 4,
-    Exact_2D  = 5
+    Euclidean = 1, //measures point to point distance as a straight line
+    Manhattan = 2, //measures point to point distance as taxicab geometry line
+    Geodesic  = 3, //measures point to point distance approximating curvature of the earth
+    Matrix    = 4, //measures point to point distance by traversing the actual road network
+    Exact_2D  = 5  //measures point to point distance using 2d rectilinear distance
   }
 
-  /// <summary>
-  /// The type of the device that is planning this route
-  /// See https://www.assembla.com/spaces/route4me_api/wiki/Route_v4
-  /// </summary>
   public enum DeviceType
   {
     [Description("web")]
@@ -119,11 +95,7 @@ namespace Route4MeSDK.DataTypes
     AndroidTablet
   }
 
-  /// <summary>
-  /// Specifies the format in which to return the route data.
-  /// This parameter is ignored for now, as only JSON is supported.
-  /// See https://www.assembla.com/spaces/route4me_api/wiki/Optimization_Problem_V4
-  /// </summary>
+
   public enum Format
   {
     [Description("csv")]
@@ -136,10 +108,10 @@ namespace Route4MeSDK.DataTypes
     Xml
   }
 
-  /// <summary>
-  /// The optimization state
-  /// See https://www.assembla.com/spaces/route4me_api/wiki/Optimization_Problem_V4
-  /// </summary>
+
+  //an optimization problem can be at one state at any given time
+  //every state change invokes a socket notification to the associated member id
+  //every state change invokes a callback webhook event invocation if it was provided during the initial optimization
   public enum OptimizationState : uint
   {
     Initial             = 1,
@@ -149,11 +121,8 @@ namespace Route4MeSDK.DataTypes
     Error               = 5,
     ComputingDirections = 6
   }
-
-  /// <summary>
-  /// Spesifies whether to return the path points when returning the newly created route
-  /// See https://www.assembla.com/spaces/route4me_api/wiki/Optimization_Problem_V4
-  /// </summary>
+  
+  //if the actual polylines of the driving path between all the stops on the route should be returned
   public enum RoutePathOutput : uint
   {
     [Description("None")]

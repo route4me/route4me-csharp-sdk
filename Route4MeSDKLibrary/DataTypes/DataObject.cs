@@ -29,7 +29,7 @@ namespace Route4MeSDK.DataTypes
     public Address[] Addresses { get; set; }
 
     [DataMember(Name = "routes")]
-	public DataObjectRoute[] Routes { get; set; }
+    public DataObjectRoute[] Routes { get; set; }
 
     [DataMember(Name = "links")]
     public Links Links { get; set; }

@@ -19,8 +19,11 @@ namespace Route4MeSDKTest
       examples.ReOptimization();
       examples.GetRoute();
       examples.GetRoutes();
-      // examples.SetGPSPosition();
-      // examples.TrackDeviceLastLocationHistory();
+      
+      //disabled by default, not necessary for optimization tests
+      //not all accounts are capable of storing gps data
+      //examples.SetGPSPosition();
+      //examples.TrackDeviceLastLocationHistory();
 
       examples.GenericExample();
       examples.GenericExampleShortcut();
