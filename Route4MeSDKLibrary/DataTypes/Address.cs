@@ -110,9 +110,13 @@ namespace Route4MeSDK.DataTypes
     [DataMember(Name = "revenue", EmitDefaultValue = false)]
     public object Revenue { get; set; }
 
+
+    //the cubic volume that this destination/order/line-item consumes/contains
+    //this is how much space it will take up on a vehicle
     [DataMember(Name = "cube", EmitDefaultValue = false)]
     public object Cube { get; set; }
 
+    //the number of pieces/palllets that this destination/order/line-item consumes/contains on a vehicle
     [DataMember(Name = "pieces", EmitDefaultValue = false)]
     public object Pieces { get; set; }
 
@@ -132,18 +136,24 @@ namespace Route4MeSDK.DataTypes
     [DataMember(Name = "destination_note_count", EmitDefaultValue = false)]
     public int? DestinationNoteCount { get; set; }
 
+    //server-side generated amount of km/miles that it will take to get to the next location on the route
     [DataMember(Name = "drive_time_to_next_destination", EmitDefaultValue = false)]
     public int? DriveTimeToNextDestination { get; set; }
 
+    //server-side generated amount of seconds that it will take to get to the next location
     [DataMember(Name = "distance_to_next_destination", EmitDefaultValue = false)]
     public double? DistanceToNextDestination { get; set; }
-
+  
+  
+    //estimated time window start based on the optimization engine, after all the sequencing has been completed
     [DataMember(Name = "generated_time_window_start", EmitDefaultValue = false)]
     public int? GeneratedTimeEindowStart { get; set; }
-
+    
+    //estimated time window end based on the optimization engine, after all the sequencing has been completed
     [DataMember(Name = "generated_time_window_end", EmitDefaultValue = false)]
     public int? GeneratedTimeWindowEnd { get; set; }
 
+    //the unique socket channel name which should be used to get real time alerts
     [DataMember(Name = "channel_name", EmitDefaultValue = false)]
     public string channel_name { get; set; }
 
