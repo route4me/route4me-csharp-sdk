@@ -7,7 +7,6 @@ namespace Route4MeSDKTest
     static void Main(string[] args)
     {
       Route4MeExamples examples = new Route4MeExamples();
-
       examples.SingleDriverRoute10Stops();
       examples.SingleDriverRoundTrip();
       examples.SingleDriverRoundTripGeneric();
@@ -15,10 +14,13 @@ namespace Route4MeSDKTest
       examples.MultipleDepotMultipleDriverTimeWindow();
       examples.SingleDepotMultipleDriverNoTimeWindow();
       examples.MultipleDepotMultipleDriverWith24StopsTimeWindow();
-      examples.GetRoute();
+      examples.GetOptimization();
+      examples.GetOptimizations();
       examples.ReOptimization();
-      examples.SetGPSPosition();
-      examples.TrackDeviceLastLocationHistory();
+      examples.GetRoute();
+      examples.GetRoutes();
+      // examples.SetGPSPosition();
+      // examples.TrackDeviceLastLocationHistory();
 
       examples.GenericExample();
       examples.GenericExampleShortcut();

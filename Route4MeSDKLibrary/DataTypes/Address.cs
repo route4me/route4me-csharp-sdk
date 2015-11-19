@@ -10,13 +10,13 @@ namespace Route4MeSDK.DataTypes
   [DataContract]
   public sealed class Address
   {
-    [DataMember(Name = "RouteDestinationId", EmitDefaultValue = false)]
+    [DataMember(Name = "route_destination_id", EmitDefaultValue = false)]
     public int? RouteDestinationId { get; set; }
 
     [DataMember(Name = "alias", EmitDefaultValue = false)]
     public string Alias { get; set; }
 
-    [DataMember(Name = "MemberId", EmitDefaultValue = false)]
+    [DataMember(Name = "member_id", EmitDefaultValue = false)]
     public string MemberId { get; set; }
 
     [DataMember(Name = "address")]
