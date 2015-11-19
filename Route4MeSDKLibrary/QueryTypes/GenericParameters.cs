@@ -36,7 +36,6 @@ namespace Route4MeSDK.QueryTypes
       ParametersCollection = new NameValueCollection();
     }
 
-    /// </summary>
     public string Serialize(string apiKey = null)
     {
       var paramsCollection = HttpUtility.ParseQueryString(string.Empty);

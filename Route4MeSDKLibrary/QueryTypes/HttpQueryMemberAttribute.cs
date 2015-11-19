@@ -2,11 +2,7 @@
 
 namespace Route4MeSDK.QueryTypes
 {
-  /// <summary>
-  /// Property attribute that is used by GenericParameters class
-  /// Only properties with this attribute in GenericParameters or derived class are serialized by GenericParameters.Serialize()
-  /// See example in Route4MeExamples.SetGPSPosition()
-  /// </summary>
+
   public sealed class HttpQueryMemberAttribute : Attribute
   {
     #region Properties
