@@ -17,7 +17,11 @@ namespace Route4MeSDK.Examples
         #region Addresses
 
         new Address() { AddressString = "151 Arbor Way Milledgeville GA 31061",
-                        IsDepot = true,
+                        //indicate that this is a departure stop
+                        //single depot routes can only have one departure depot 
+                        IsDepot = true, 
+                        
+                        //required coordinates for every departure and stop on the route
                         Latitude = 33.132675170898,
                         Longitude = -83.244743347168,
                         
