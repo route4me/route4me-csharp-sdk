@@ -10,38 +10,38 @@ Every Route4Me SDK instance needs a unique API key. The API key can be retrieved
 ### Can I test the SDK with other addresses without a valid API Key?
 No. The sample API key only permits you to optimize routes with the sample address coordinates that are part of this SDK.
 
-## Does the SDK have rate limits?
+### Does the SDK have rate limits?
 The number of requests you can make per second is limited by your current subscription plan. Typically, there are different rate limits for these core features:
 Address Geocoding & Address Reverse Geocoding
 Route Optimization & Management
 Viewing a Route
 
 
-## What is the recommended architecture for the Route4Me SDK?
+### What is the recommended architecture for the Route4Me SDK?
 There are two typical integration strategies that we recommend.  Using this SDK, you can make optimization requests and then the SDK polls the Route4Me API to detect state changes as the optimization progresses. Alternatively, you can provide a webhook/callback url, and the API will notify that callback URL every time there is a state change.
 
-## I don't need route management or mobile capabilities. Is there a lower level Route4Me API just for the optimization engine?
+### I don't need route management or mobile capabilities. Is there a lower level Route4Me API just for the optimization engine?
 Yes. Please contact support@route4me.com to learn about the low-level RESTful API.
 
-## How fast is the route Route4Me Optimization Web Service?
+### How fast is the route Route4Me Optimization Web Service?
 Most routes having less than 200 destinations are optimized in 1 second or less.
 
-## Can I disable optimization when planning routes?
+### Can I disable optimization when planning routes?
 Yes. You can send routes with optimization disabled if you want to conveniently see them on a map, or distribute them to your drivers in the order you prefer.
 
-## Installation and Usage
+### Installation and Usage
 
 1. Add reference to Route4MeSDKLibrary.dll
 2. Use the class Route4MeSDK.Route4MeManager for accessing the Route4ME API
 3. Use methods Route4MeManager.GetRoute(), Route4MeManager.UpdateOptimization() etc. to access the main functionality of Route4Me API.
 4. Use generic methods Route4MeManager.GetStringResponseFromAPI() and Route4MeManager.GetJsonObjectFromAPI<T>() for accessing any Route4Me API functionally via custom defined classes (see example in Route4MeSDKTest.SingleDriverRoundTripGeneric.cs)
 
-## Examples and Tests
+### Examples and Tests
 
 1. See project Route4MeSDKTest (class Route4MeSDKTest.Examples) for some examples of using Route4MeSDKLibrary
 2. See an example of creating a simple route below
 
-## Creating a Simple Route
+### Creating a Simple Route
 
 ``` C#
 using Route4MeSDK.DataTypes;
