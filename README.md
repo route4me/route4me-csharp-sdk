@@ -4,6 +4,12 @@
 ### What does the Route4Me SDK do?
 This SDK makes it easier for you use the Route4Me API, which generates optimally sequenced driving routes.
 
+### Who can use the Route4Me SDK (and API)?
+The service is typically used by organizations who must route many drivers to many destinations. In addition to route optimization for new (future) routes, the API can also be used to analyze historical routes, and to distribute routes to field personnel.
+
+### Who is prohibited from using the Route4Me SDK (and API)?
+The Route4Me SDK and API cannot be resold or used in a product or system that competes directly with Route4Me. This means that developers cannot resell route optimization services to other businesses or developers. However, developers can integrate our route optimization SDK/API into their software applications. Developers and startups are also permitted to use our software for internal purposes (i.e. a same day delivery startup).
+
 ### Do optimized routes automatically appear inside my Route4Me account?
 Every Route4Me SDK instance needs a unique API key. The API key can be retrieved inside your Route4Me.com account, inside the Settings tab called API.
 
