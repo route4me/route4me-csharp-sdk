@@ -1,8 +1,8 @@
 # Route4Me Route Optimization SaaS C# SDK
 
 
-### What does the Route4Me SDK do?
-This SDK makes it easier for you use the Route4Me API, which generates optimally sequenced driving routes.
+### What does the Route4Me SDK permit me to do?
+This SDK makes it easier for you use the Route4Me API, which creates optimally sequenced driving routes for many drivers.
 
 ### Who can use the Route4Me SDK (and API)?
 The service is typically used by organizations who must route many drivers to many destinations. In addition to route optimization for new (future) routes, the API can also be used to analyze historical routes, and to distribute routes to field personnel.
