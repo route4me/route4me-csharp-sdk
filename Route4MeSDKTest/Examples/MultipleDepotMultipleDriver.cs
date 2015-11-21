@@ -16,11 +16,20 @@ namespace Route4MeSDK.Examples
         #region Addresses
 
         new Address() { AddressString   = "3634 W Market St, Fairlawn, OH 44333",
-                        IsDepot         = true,
+                        //all possible originating locations are depots, should be marked as true
+                        //stylistically we recommend all depots should be at the top of the destinations list
+                        IsDepot         = true, 
                         Latitude        = 41.135762259364,
                         Longitude       = -81.629313826561,
+                        
+                        //the number of seconds at destination
                         Time            = 300,
-                        TimeWindowStart = 28800,
+                        
+                        //together these two specify the time window of a destination
+                        //seconds offset relative to the route start time for the open availability of a destination
+                        TimeWindowStart = 28800,  
+                        
+                        //seconds offset relative to the route end time for the open availability of a destination
                         TimeWindowEnd   = 29465},
 
         new Address() { AddressString   = "1218 Ruth Ave, Cuyahoga Falls, OH 44221",
@@ -134,11 +143,17 @@ namespace Route4MeSDK.Examples
       // Set parameters
       RouteParameters parameters = new RouteParameters()
       {
+        //specify capacitated vehicle routing with time windows and multiple depots, with multiple drivers
         AlgorithmType = AlgorithmType.CVRP_TW_MD,
+        
+        //set an arbitrary route name
+        //this value shows up in the website, and all the connected mobile device
         RouteName     = "Multiple Depot, Multiple Driver",
-        StoreRoute    = false,
-
+        
+        //the time in UTC when a route is starting (12AM)
         RouteTime            = 0,
+        
+        //the maximum duration of a route
         RouteMaxDuration     = 86400,
         VehicleCapacity      = "1",
         VehicleMaxDistanceMI = "10000",
