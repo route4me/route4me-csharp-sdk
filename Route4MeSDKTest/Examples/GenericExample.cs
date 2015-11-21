@@ -13,12 +13,19 @@ namespace Route4MeSDK.Examples
     public void GenericExample()
     {
       const string uri = R4MEInfrastructureSettings.MainHost + "/api.v4/route.php";
+      
+      //the api key of the account
+      //the api key must have hierarchical ownership of the route being viewed (api key can't view routes of others)
       const string myApiKey = "11111111111111111111111111111111";
       
       Route4MeManager route4Me = new Route4MeManager(myApiKey);
 
       GenericParameters genericParameters = new GenericParameters();
-      genericParameters.ParametersCollection.Add("limit", "10");
+      
+      //number of records per page
+      genericParameters.ParametersCollection.Add("limit", "10");  
+      
+      //the page offset starting at zero
       genericParameters.ParametersCollection.Add("Offset", "5");
 
       string errorMessage;
