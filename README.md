@@ -22,7 +22,6 @@ Address Geocoding & Address Reverse Geocoding
 Route Optimization & Management
 Viewing a Route
 
-
 ### What is the recommended architecture for the Route4Me SDK?
 There are two typical integration strategies that we recommend.  Using this SDK, you can make optimization requests and then the SDK polls the Route4Me API to detect state changes as the optimization progresses. Alternatively, you can provide a webhook/callback url, and the API will notify that callback URL every time there is a state change.
 
