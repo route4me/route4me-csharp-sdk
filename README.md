@@ -35,6 +35,13 @@ Most routes having less than 200 destinations are optimized in 1 second or less.
 ### Can I disable optimization when planning routes?
 Yes. You can send routes with optimization disabled if you want to conveniently see them on a map, or distribute them to your drivers in the order you prefer.
 
+### Can the API be used for aerial vehicles such as drones or self-driving cars?
+Yes. The API can accept lat/lng and an unlimited amount of per-address metadata. The metadata will be preserved as passthrough data by our API, so that the receiving device will have access to critical data when our API invokes a webhook callback to the device.
+
+### Are all my optimized stored permanently stored in the Route4Me database?
+Yes. All routes are permanently stored from the database and are no longer accessible to you after your subscription is terminated.
+
+
 ### Installation and Usage
 
 1. Add reference to Route4MeSDKLibrary.dll
