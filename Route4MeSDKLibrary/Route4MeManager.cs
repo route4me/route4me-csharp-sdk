@@ -2,8 +2,10 @@
 using Route4MeSDK.QueryTypes;
 using Route4MeSDKLibrary.DataTypes;
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Runtime.Serialization;
 
 namespace Route4MeSDK
 {
@@ -44,14 +46,27 @@ namespace Route4MeSDK
       return result;
     }
 
-    public DataObjectOptimizations GetOptimizations(RouteParametersQuery queryParameters, out string errorString)
+    /// <summary>
+    /// </summary>
+    [DataContract]
+    private sealed class DataObjectOptimizations
     {
-        var result = GetJsonObjectFromAPI<DataObjectOptimizations>(queryParameters,
+      [DataMember(Name = "optimizations")]
+      public DataObject[] Optimizations { get; set; }
+    }
+
+    public DataObject[] GetOptimizations(RouteParametersQuery queryParameters, out string errorString)
+    {
+      DataObjectOptimizations dataObjectOptimizations = GetJsonObjectFromAPI<DataObjectOptimizations>(queryParameters,
                                                              R4MEInfrastructureSettings.ApiHost,
                                                              HttpMethodType.Get,
                                                              out errorString);
-
-        return result;
+      DataObject[] result = null;
+      if (dataObjectOptimizations != null)
+      {
+        result = dataObjectOptimizations.Optimizations;
+      }
+      return result;
     }
 
     public DataObjectRoute GetRoute(RouteParametersQuery routeParameters, out string errorString)
@@ -118,6 +133,59 @@ namespace Route4MeSDK
       return result;
     }
 
+    public User[] GetUsers(GenericParameters parameters, out string errorString)
+    {
+      var result = GetJsonObjectFromAPI<User[]>(parameters,
+                                                           R4MEInfrastructureSettings.GetUsersHost,
+                                                           HttpMethodType.Get,
+                                                           out errorString);
+
+      return result;
+    }
+
+    [DataContract]
+    private sealed class AddAddressNoteResponse
+    {
+      [DataMember(Name = "status")]
+      public bool Status { get; set; }
+
+      [DataMember(Name = "note")]
+      public AddressNote Note { get; set; }
+    }
+
+    public AddressNote AddAddressNote(NoteParameters noteParameters, string noteContents, out string errorString)
+    {
+      var keyValues = new List<KeyValuePair<string, string>>();
+      keyValues.Add(new KeyValuePair<string, string>("strUpdateType", "unclassified"));
+      keyValues.Add(new KeyValuePair<string, string>("strNoteContents", noteContents));
+      HttpContent httpContent = new FormUrlEncodedContent(keyValues);
+
+      AddAddressNoteResponse response = GetJsonObjectFromAPI<AddAddressNoteResponse>(noteParameters,
+                                                           R4MEInfrastructureSettings.AddRouteNotesHost,
+                                                           HttpMethodType.Post,
+                                                           httpContent,
+                                                           out errorString);
+      if (response != null)
+      {
+        if (response.Note != null)
+        {
+          return response.Note;
+        }
+        else
+        {
+          if (response.Status == false)
+          {
+            errorString = "Note not added";
+          }
+          return null;
+        }
+      }
+      else
+      {
+        return null;
+      }
+    }
+
     #endregion
 
     #region Generic Methods
@@ -151,9 +219,44 @@ namespace Route4MeSDK
       return result;
     }
 
+    public T GetJsonObjectFromAPI<T>(GenericParameters optimizationParameters,
+                                     string url,
+                                     HttpMethodType httpMethod,
+                                     HttpContent httpContent,
+                                     out string errorMessage)
+      where T : class
+    {
+      T result = GetJsonObjectFromAPI<T>(optimizationParameters,
+                                         url,
+                                         httpMethod,
+                                         httpContent,
+                                         false,
+                                         out errorMessage);
+
+      return result;
+    }
+
     private T GetJsonObjectFromAPI<T>(GenericParameters optimizationParameters,
                                       string            url,
                                       HttpMethodType    httpMethod,
+                                      bool              isString,
+                                      out string        errorMessage)
+      where T : class
+    {
+      T result = GetJsonObjectFromAPI<T>(optimizationParameters,
+                                         url,
+                                         httpMethod,
+                                         (HttpContent)null,
+                                         isString,
+                                         out errorMessage);
+
+      return result;
+    }
+
+    private T GetJsonObjectFromAPI<T>(GenericParameters optimizationParameters,
+                                      string            url,
+                                      HttpMethodType    httpMethod,
+                                      HttpContent       httpContent,
                                       bool              isString,
                                       out string        errorMessage)
       where T : class
@@ -187,8 +290,16 @@ namespace Route4MeSDK
             case HttpMethodType.Put:
             {
               bool isPut = httpMethod == HttpMethodType.Put;
-              string jsonString = R4MeUtils.SerializeObjectToJson(optimizationParameters);
-              StringContent content = new StringContent(jsonString);
+              HttpContent content = null;
+              if (httpContent != null)
+              {
+                content = httpContent;
+              }
+              else
+              {
+                string jsonString = R4MeUtils.SerializeObjectToJson(optimizationParameters);
+                content = new StringContent(jsonString);
+              }
 
               // Post and wait for response
               var response = isPut ? httpClient.PutAsync(parametersURI, content) :

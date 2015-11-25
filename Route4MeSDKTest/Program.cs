@@ -19,6 +19,10 @@ namespace Route4MeSDKTest
       examples.ReOptimization();
       examples.GetRoute();
       examples.GetRoutes();
+      examples.GetUsers();
+
+      //disabled by default
+      //examples.AddAddressNote();
       
       //disabled by default, not necessary for optimization tests
       //not all accounts are capable of storing gps data
