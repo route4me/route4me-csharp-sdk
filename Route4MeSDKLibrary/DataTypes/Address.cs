@@ -168,7 +168,7 @@ namespace Route4MeSDK.DataTypes
     public int? Time { get; set; }
 
     [DataMember(Name = "notes", EmitDefaultValue = false)]
-    public string[] Notes { get; set; }
+    public AddressNote[] Notes { get; set; }
   
     //if present, the priority will sequence addresses in all the optimal routes so that
     //higher priority addresses are general at the beginning of the route sequence

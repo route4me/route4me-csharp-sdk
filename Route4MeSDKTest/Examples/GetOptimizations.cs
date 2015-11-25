@@ -19,16 +19,16 @@ namespace Route4MeSDK.Examples
 
             // Run the query
             string errorString;
-            DataObjectOptimizations dataObjects = route4Me.GetOptimizations(queryParameters, out errorString);
+            DataObject[] dataObjects = route4Me.GetOptimizations(queryParameters, out errorString);
 
             Console.WriteLine("");
 
             if (dataObjects != null)
             {
-                Console.WriteLine("GetOptimizations executed successfully, {0} optimizations returned", dataObjects.Optimizations.Length);
+                Console.WriteLine("GetOptimizations executed successfully, {0} optimizations returned", dataObjects.Length);
                 Console.WriteLine("");
 
-                dataObjects.Optimizations.ForEach(optimization =>
+                dataObjects.ForEach(optimization =>
                 {
                     Console.WriteLine("Optimization Problem ID: {0}", optimization.OptimizationProblemId);
                     Console.WriteLine("");

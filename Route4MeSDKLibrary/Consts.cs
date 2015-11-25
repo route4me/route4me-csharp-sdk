@@ -16,6 +16,8 @@ namespace Route4MeSDK
     public const string ShowRouteHost = MainHost + "/route4me.php";
     public const string RouteHost     = MainHost + "/api.v4/route.php";
     public const string SetGpsHost    = MainHost + "/track/set.php";
+    public const string GetUsersHost  = MainHost + "/api/member/view_users.php";
+    public const string AddRouteNotesHost = MainHost + "/actions/addRouteNotes.php";
 
     #endregion
   }
