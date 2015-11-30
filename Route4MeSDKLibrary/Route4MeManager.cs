@@ -186,6 +186,30 @@ namespace Route4MeSDK
       }
     }
 
+    [DataContract]
+    private sealed class GetActivitiesResponse
+    {
+      [DataMember(Name = "results")]
+      public Activity[] Results { get; set; }
+
+      [DataMember(Name = "total")]
+      public uint Total { get; set; }
+    }
+
+    public Activity[] GetActivities(ActivityParameters activityParameters, out string errorString)
+    {
+      GetActivitiesResponse response = GetJsonObjectFromAPI<GetActivitiesResponse>(activityParameters,
+                                                           R4MEInfrastructureSettings.GetActivitiesHost,
+                                                           HttpMethodType.Get,
+                                                           out errorString);
+      Activity[] result = null;
+      if (response != null)
+      {
+        result = response.Results;
+      }
+      return result;
+    }
+
     #endregion
 
     #region Generic Methods
