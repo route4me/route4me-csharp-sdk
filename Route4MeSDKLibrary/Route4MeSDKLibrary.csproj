@@ -38,6 +38,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Consts.cs" />
+    <Compile Include="DataTypes\Activity.cs" />
     <Compile Include="DataTypes\Address.cs" />
     <Compile Include="DataTypes\AddressNote.cs" />
     <Compile Include="DataTypes\DataObject.cs" />
@@ -49,6 +50,7 @@
     <Compile Include="DataTypes\TrackingHistory.cs" />
     <Compile Include="DataTypes\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QueryTypes\ActivityParameters.cs" />
     <Compile Include="QueryTypes\GenericParameters.cs" />
     <Compile Include="QueryTypes\GPSParameters.cs" />
     <Compile Include="QueryTypes\HttpQueryMemberAttribute.cs" />
