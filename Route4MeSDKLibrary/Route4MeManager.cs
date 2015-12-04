@@ -89,6 +89,16 @@ namespace Route4MeSDK
       return result;
     }
 
+    public Address GetAddress(AddressParameters addressParameters, out string errorString)
+    {
+      var result = GetJsonObjectFromAPI<Address>(addressParameters,
+                                                           R4MEInfrastructureSettings.GetAddress,
+                                                           HttpMethodType.Get,
+                                                           out errorString);
+
+      return result;
+    }
+
     public DataObject GetLastLocation(GenericParameters parameters, out string errorString)
     {
       var result = GetJsonObjectFromAPI<DataObject>(parameters,
