@@ -8,5 +8,8 @@ namespace Route4MeSDK.QueryTypes
 
     [HttpQueryMemberAttribute(Name = "route_destination_id", EmitDefaultValue = false)]
     public int RouteDestinationId { get; set; }
+
+    [HttpQueryMemberAttribute(Name = "notes")]
+    public bool Notes { get; set; }
   }
 }

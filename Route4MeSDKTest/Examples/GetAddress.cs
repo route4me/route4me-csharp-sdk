@@ -14,7 +14,8 @@ namespace Route4MeSDK.Examples
       AddressParameters addressParameters = new AddressParameters()
       {
         RouteId = "7C0119495FBB74108F269DFA0E7FDED1",
-        RouteDestinationId = 31219284
+        RouteDestinationId = 31219284,
+        Notes = true
       };
 
       // Run the query

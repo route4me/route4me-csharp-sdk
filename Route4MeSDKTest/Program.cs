@@ -22,6 +22,7 @@ namespace Route4MeSDKTest
       examples.GetUsers();
       examples.GetActivities();
       examples.GetAddress();
+      examples.GetAddressNotes();
 
       //disabled by default
       //examples.AddAddressNote();

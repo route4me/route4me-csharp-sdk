@@ -42,6 +42,7 @@
     <Compile Include="Examples\GenericExample.cs" />
     <Compile Include="Examples\GetActivities.cs" />
     <Compile Include="Examples\GetAddress.cs" />
+    <Compile Include="Examples\GetAddressNotes.cs" />
     <Compile Include="Examples\GetOptimization.cs" />
     <Compile Include="Examples\GetOptimizations.cs" />
     <Compile Include="Examples\GetRoute.cs" />
