@@ -18,7 +18,7 @@ namespace Route4MeSDK.Examples
         Latitude = 33.132675170898,
         Longitude = -83.244743347168,
         DeviceType = DeviceType.Web.Description(),
-        ActivityType = "dropoff"
+        ActivityType = StatusUpdateType.DropOff.Description()
       };
 
       // Run the query
