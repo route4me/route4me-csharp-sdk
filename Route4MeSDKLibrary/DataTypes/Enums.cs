@@ -131,4 +131,70 @@ namespace Route4MeSDK.DataTypes
     [Description("Points")]
     Points
   }
+
+  public enum StatusUpdateType
+  {
+    [Description("pickup")]
+    Pickup,
+
+    [Description("dropoff")]
+    DropOff,
+
+    [Description("noanswer")]
+    NoAnswer,
+
+    [Description("notfound")]
+    NotFound,
+
+    [Description("notpaid")]
+    NotPaid,
+
+    [Description("paid")]
+    Paid,
+
+    [Description("wrongdelivery")]
+    WrongDelivery,
+
+    [Description("wrongaddressrecipient")]
+    WrongAddressRecipient,
+
+    [Description("notpresent")]
+    NotPresent,
+
+    [Description("parts_missing")]
+    PartsMissing,
+
+    [Description("service_rendered")]
+    ServiceRendered,
+
+    [Description("follow_up")]
+    FollowUp,
+
+    [Description("left_information")]
+    LeftInformation,
+
+    [Description("spoke_with_decision_maker")]
+    SpokeWithDecisionMaker,
+
+    [Description("spoke_with_decision_influencer")]
+    SpokeWithDecisionInfluencer,
+
+    [Description("competitive_account")]
+    CompetitiveAccount,
+
+    [Description("scheduled_follow_up_meeting")]
+    ScheduledFollowUpMeeting,
+
+    [Description("scheduled_lunch")]
+    ScheduledLunch,
+
+    [Description("scheduled_product_demo")]
+    ScheduledProductDemo,
+
+    [Description("scheduled_clinical_demo")]
+    ScheduledClinicalDemo,
+
+    [Description("no_opportunity")]
+    NoOpportunity
+  }
 }

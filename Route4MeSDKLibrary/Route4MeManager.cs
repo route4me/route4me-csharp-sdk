@@ -189,7 +189,6 @@ namespace Route4MeSDK
       if (noteParameters.ActivityType != null && noteParameters.ActivityType.Length > 0)
       {
         strUpdateType = noteParameters.ActivityType;
-        //noteParameters.ActivityType = null;
       }
       keyValues.Add(new KeyValuePair<string, string>("strUpdateType", strUpdateType));
       keyValues.Add(new KeyValuePair<string, string>("strNoteContents", noteContents));

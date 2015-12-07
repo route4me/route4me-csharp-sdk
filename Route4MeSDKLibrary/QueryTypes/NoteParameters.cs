@@ -22,7 +22,7 @@ namespace Route4MeSDK.QueryTypes
     [HttpQueryMemberAttribute(Name = "strUpdateType")]
     public string ActivityType { get; set; }
 
-    [HttpQueryMemberAttribute(Name = "strNoteContents", EmitDefaultValue = false)]
-    public string StrNoteContents { get; set; }
+    //[HttpQueryMemberAttribute(Name = "strNoteContents", EmitDefaultValue = false)]
+    //public string StrNoteContents { get; set; }
   }
 }
