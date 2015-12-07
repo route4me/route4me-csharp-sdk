@@ -153,6 +153,25 @@ namespace Route4MeSDK
       return result;
     }
 
+    public AddressNote[] GetAddressNotes(NoteParameters noteParameters, out string errorString)
+    {
+      AddressParameters addressParameters = new AddressParameters()
+      {
+        RouteId = noteParameters.RouteId,
+        RouteDestinationId = noteParameters.AddressId,
+        Notes = true
+      };
+      Address address = this.GetAddress(addressParameters, out errorString);
+      if (address != null)
+      {
+        return address.Notes;
+      }
+      else
+      {
+        return null;
+      }
+    }
+
     [DataContract]
     private sealed class AddAddressNoteResponse
     {
@@ -166,7 +185,13 @@ namespace Route4MeSDK
     public AddressNote AddAddressNote(NoteParameters noteParameters, string noteContents, out string errorString)
     {
       var keyValues = new List<KeyValuePair<string, string>>();
-      keyValues.Add(new KeyValuePair<string, string>("strUpdateType", "unclassified"));
+      var strUpdateType = "unclassified";
+      if (noteParameters.ActivityType != null && noteParameters.ActivityType.Length > 0)
+      {
+        strUpdateType = noteParameters.ActivityType;
+        //noteParameters.ActivityType = null;
+      }
+      keyValues.Add(new KeyValuePair<string, string>("strUpdateType", strUpdateType));
       keyValues.Add(new KeyValuePair<string, string>("strNoteContents", noteContents));
       HttpContent httpContent = new FormUrlEncodedContent(keyValues);
 

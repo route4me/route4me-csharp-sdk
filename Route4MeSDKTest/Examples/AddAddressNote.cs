@@ -14,7 +14,11 @@ namespace Route4MeSDK.Examples
       NoteParameters noteParameters = new NoteParameters()
       {
         RouteId = "7C0119495FBB74108F269DFA0E7FDED1",
-        AddressId = 31219284
+        AddressId = 31219284,
+        Latitude = 33.132675170898,
+        Longitude = -83.244743347168,
+        DeviceType = DeviceType.Web.Description(),
+        ActivityType = "dropoff"
       };
 
       // Run the query
