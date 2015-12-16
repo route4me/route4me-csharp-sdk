@@ -10,8 +10,17 @@ The service is typically used by organizations who must route many drivers to ma
 ### Who is prohibited from using the Route4Me SDK (and API)?
 The Route4Me SDK and API cannot be resold or used in a product or system that competes directly with Route4Me. This means that developers cannot resell route optimization services to other businesses or developers. However, developers can integrate our route optimization SDK/API into their software applications. Developers and startups are also permitted to use our software for internal purposes (i.e. a same day delivery startup).
 
+
+### How does the API/SDK Integration Work?
+#A Route4Me customer, integrator, or partner incorporates the Route4Me SDK or API into their code base.
+#Route4Me permits any paying subscriber to interact with every part of its system using it’s API.
+#The API is RESTful, which means that it’s web based and can be accessed by other programs and machines
+#The API/SDK should be used to automate the route planning process, or to generate many routes with minimal manual intervention
+
+
+
 ### Do optimized routes automatically appear inside my Route4Me account?
-Every Route4Me SDK instance needs a unique API key. The API key can be retrieved inside your Route4Me.com account, inside the Settings tab called API.
+Every Route4Me SDK instance needs a unique API key. The API key can be retrieved inside your Route4Me.com account, inside the Settings tab called API. When a route is planned, it appears inside the corresponding Route4Me account. Because Route4Me web and mobile accounts are synchronized, the routes will appear in both environments at the same time.
 
 ### Can I test the SDK with other addresses without a valid API Key?
 No. The sample API key only permits you to optimize routes with the sample address coordinates that are part of this SDK.
@@ -39,6 +48,25 @@ Yes. The API can accept lat/lng and an unlimited amount of per-address metadata.
 
 ### Are all my optimized routes stored permanently stored in the Route4Me database?
 Yes. All routes are permanently stored in the database and are no longer accessible to you after your subscription is terminated.
+
+
+### Can I incorporate your API into my mobile application?
+Route4Me’s route planning and optimization technology can only be added into applications that do not directly compete with Route4Me. 
+This means the application’s primary capabilities must be unrelated to route optimization, route planning, or navigation.
+
+### Can I pay you to develop a custom algorithm?
+Yes
+
+### Can I use your API and resell it to my customers?
+White-labeling and private-labeling Route4Me is possible but the deal’s licensing terms vary considerably based on customer count, route count, and the level of support that Route4Me should provide to your customers.
+
+### Does the API/SDK have TMS or EDI, or EDI translator capabilities?
+Route4Me is currently working on these features but they are not currently available for sale.
+
+### Can the API/SDK send notifications back to our system using callbacks, notifications, pushes, or webhooks?
+
+Because Route4Me processes all routes asynchronously, Route4Me will conveniently notify the endpoint you specify as the route optimization job progresses through each state of the optimization. Every stage of the route optimization process has a unique stage id.
+
 
 
 ### Installation and Usage
