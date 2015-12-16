@@ -12,10 +12,10 @@ The Route4Me SDK and API cannot be resold or used in a product or system that co
 
 
 ### How does the API/SDK Integration Work?
-#A Route4Me customer, integrator, or partner incorporates the Route4Me SDK or API into their code base.
-#Route4Me permits any paying subscriber to interact with every part of its system using it’s API.
-#The API is RESTful, which means that it’s web based and can be accessed by other programs and machines
-#The API/SDK should be used to automate the route planning process, or to generate many routes with minimal manual intervention
+A Route4Me customer, integrator, or partner incorporates the Route4Me SDK or API into their code base.
+Route4Me permits any paying subscriber to interact with every part of its system using it’s API.
+The API is RESTful, which means that it’s web based and can be accessed by other programs and machines
+The API/SDK should be used to automate the route planning process, or to generate many routes with minimal manual intervention
 
 
 
