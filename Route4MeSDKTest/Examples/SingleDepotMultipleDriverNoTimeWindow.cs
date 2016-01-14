@@ -3,15 +3,15 @@ using Route4MeSDK.QueryTypes;
 
 namespace Route4MeSDK.Examples
 {
-    public sealed partial class Route4MeExamples
+  public sealed partial class Route4MeExamples
+  {
+    public DataObject SingleDepotMultipleDriverNoTimeWindow()
     {
-        public void SingleDepotMultipleDriverNoTimeWindow()
-        {
-            // Create the manager with the api key
-            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+      // Create the manager with the api key
+      Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
-            // Prepare the addresses
-            Address[] addresses = new Address[]
+      // Prepare the addresses
+      Address[] addresses = new Address[]
       {
         #region Addresses
 
@@ -1769,39 +1769,41 @@ namespace Route4MeSDK.Examples
         #endregion
       };
 
-            // Set parameters
-            RouteParameters parameters = new RouteParameters()
-            {
-                AlgorithmType = AlgorithmType.CVRP_TW_MD,
-                RouteName = "Single Depot, Multiple Driver, No Time Window",
-                StoreRoute = false,
+      // Set parameters
+      RouteParameters parameters = new RouteParameters()
+      {
+        AlgorithmType = AlgorithmType.CVRP_TW_MD,
+        RouteName = "Single Depot, Multiple Driver, No Time Window",
+        StoreRoute = false,
 
-                RouteTime = 0,
-                RT = true,
-                RouteMaxDuration = 86400,
-                VehicleCapacity = "20",
-                VehicleMaxDistanceMI = "99999",
-                Parts = 4,
+        RouteTime = 0,
+        RT = true,
+        RouteMaxDuration = 86400,
+        VehicleCapacity = "20",
+        VehicleMaxDistanceMI = "99999",
+        Parts = 4,
 
-                Optimize = Optimize.Time.Description(),
-                DistanceUnit = DistanceUnit.MI.Description(),
-                DeviceType = DeviceType.Web.Description(),
-                TravelMode = TravelMode.Driving.Description(),
-                Metric = Metric.Geodesic
-            };
+        Optimize = Optimize.Time.Description(),
+        DistanceUnit = DistanceUnit.MI.Description(),
+        DeviceType = DeviceType.Web.Description(),
+        TravelMode = TravelMode.Driving.Description(),
+        Metric = Metric.Geodesic
+      };
 
-            OptimizationParameters optimizationParameters = new OptimizationParameters()
-            {
-                Addresses = addresses,
-                Parameters = parameters
-            };
+      OptimizationParameters optimizationParameters = new OptimizationParameters()
+      {
+        Addresses = addresses,
+        Parameters = parameters
+      };
 
-            // Run the query
-            string errorString;
-            DataObject dataObject = route4Me.RunOptimization(optimizationParameters, out errorString);
+      // Run the query
+      string errorString;
+      DataObject dataObject = route4Me.RunOptimization(optimizationParameters, out errorString);
 
-            // Output the result
-            PrintExampleOptimizationResult("SingleDepotMultipleDriverNoTimeWindow", dataObject, errorString);
-        }
+      // Output the result
+      PrintExampleOptimizationResult("SingleDepotMultipleDriverNoTimeWindow", dataObject, errorString);
+
+      return dataObject;
     }
+  }
 }

@@ -38,6 +38,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Examples\AddAddressNote.cs" />
+    <Compile Include="Examples\DeleteRoutes.cs" />
+    <Compile Include="Examples\DuplicateRoute.cs" />
     <Compile Include="Examples\ExamplesInfrastructure.cs" />
     <Compile Include="Examples\GenericExample.cs" />
     <Compile Include="Examples\GetActivities.cs" />

@@ -5,7 +5,7 @@ namespace Route4MeSDK.Examples
 {
   public sealed partial class Route4MeExamples
   {
-    public void MultipleDepotMultipleDriverTimeWindow()
+    public DataObject MultipleDepotMultipleDriverTimeWindow()
     {
       // Create the manager with the api key
       Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
@@ -690,6 +690,8 @@ namespace Route4MeSDK.Examples
 
       // Output the result
       PrintExampleOptimizationResult("MultipleDepotMultipleDriverTimeWindow", dataObject, errorString);
+
+      return dataObject;
     }
   }
 }

@@ -6,7 +6,7 @@ namespace Route4MeSDK.Examples
 {
   public sealed partial class Route4MeExamples
   {
-    public void SingleDriverRoute10Stops()
+    public DataObject SingleDriverRoute10Stops()
     {
       // Create the manager with the api key
       Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
@@ -106,6 +106,8 @@ namespace Route4MeSDK.Examples
 
       // Output the result
       PrintExampleOptimizationResult("SingleDriverRoute10Stops", dataObject, errorString);
+
+      return dataObject;
     }
   }
 }

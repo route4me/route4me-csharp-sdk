@@ -244,6 +244,94 @@ namespace Route4MeSDK
       return result;
     }
 
+    [DataContract]
+    private sealed class DuplicateRouteResponse
+    {
+      [DataMember(Name = "optimization_problem_id")]
+      public string OptimizationProblemId { get; set; }
+
+      [DataMember(Name = "success")]
+      public Boolean Success { get; set; }
+    }
+
+    public string DuplicateRoute(RouteParametersQuery queryParameters, out string errorString)
+    {
+      //if (queryParameters.ParametersCollection["to"] == null)
+      //  queryParameters.ParametersCollection.Add("to", "none");
+      // Redirect to page or return json for none
+      queryParameters.ParametersCollection["to"] = "none";
+      DuplicateRouteResponse response = GetJsonObjectFromAPI<DuplicateRouteResponse>(queryParameters,
+                                                             R4MEInfrastructureSettings.DuplicateRoute,
+                                                             HttpMethodType.Get,
+                                                             out errorString);
+      string routeId = null;
+      if (response != null && response.Success)
+      {
+        string optimizationProblemId = response.OptimizationProblemId;
+        if (optimizationProblemId != null)
+        {
+          routeId = this.GetRouteId(optimizationProblemId, out errorString);
+        }
+      }
+      return routeId;
+    }
+
+    [DataContract]
+    private sealed class DeleteRouteResponse
+    {
+      [DataMember(Name = "deleted")]
+      public Boolean Deleted { get; set; }
+
+      [DataMember(Name = "errors")]
+      public List<String> Errors { get; set; }
+
+      [DataMember(Name = "route_id")]
+      public string routeId { get; set; }
+
+      [DataMember(Name = "route_ids")]
+      public string[] routeIds { get; set; }
+    }
+
+    public string[] DeleteRoutes(string[] routeIds, out string errorString)
+    {
+      string str_route_ids = "";
+      foreach (string routeId in routeIds)
+      {
+        if (str_route_ids.Length > 0)
+          str_route_ids += ",";
+        str_route_ids += routeId;
+      }
+      GenericParameters genericParameters = new GenericParameters();
+      genericParameters.ParametersCollection.Add("route_id", str_route_ids);
+      DeleteRouteResponse response = GetJsonObjectFromAPI<DeleteRouteResponse>(genericParameters,
+                                                             R4MEInfrastructureSettings.RouteHost,
+                                                             HttpMethodType.Delete,
+                                                             out errorString);
+      string[] deletedRouteIds = null;
+      if (response != null)
+      {
+        deletedRouteIds = response.routeIds;
+      }
+      return deletedRouteIds;
+    }
+
+    public string GetRouteId(string optimizationProblemId, out string errorString)
+    {
+      GenericParameters genericParameters = new GenericParameters();
+      genericParameters.ParametersCollection.Add("optimization_problem_id", optimizationProblemId);
+      genericParameters.ParametersCollection.Add("wait_for_final_state", "1");
+      DataObject response = GetJsonObjectFromAPI<DataObject>(genericParameters,
+                                                             R4MEInfrastructureSettings.ApiHost,
+                                                             HttpMethodType.Get,
+                                                             out errorString);
+      if (response != null && response.Routes != null && response.Routes.Length > 0)
+      {
+        string routeId = response.Routes[0].RouteID;
+        return routeId;
+      }
+      return null;
+    }
+
     #endregion
 
     #region Generic Methods
@@ -346,8 +434,10 @@ namespace Route4MeSDK
             }
             case HttpMethodType.Post:
             case HttpMethodType.Put:
+            case HttpMethodType.Delete:
             {
               bool isPut = httpMethod == HttpMethodType.Put;
+              bool isDelete = httpMethod == HttpMethodType.Delete;
               HttpContent content = null;
               if (httpContent != null)
               {
@@ -361,7 +451,7 @@ namespace Route4MeSDK
 
               // Post and wait for response
               var response = isPut ? httpClient.PutAsync(parametersURI, content) :
-                                      httpClient.PostAsync(parametersURI, content);
+                (isDelete ? httpClient.DeleteAsync(parametersURI) : httpClient.PostAsync(parametersURI, content));
 
               response.Wait();
 
