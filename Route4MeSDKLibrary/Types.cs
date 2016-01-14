@@ -5,6 +5,7 @@ namespace Route4MeSDK
   {
     Get,
     Put,
-    Post
+    Post,
+    Delete
   }
 }

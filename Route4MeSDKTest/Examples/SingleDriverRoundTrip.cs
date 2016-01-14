@@ -5,7 +5,7 @@ namespace Route4MeSDK.Examples
 {
   public sealed partial class Route4MeExamples
   {
-    public void SingleDriverRoundTrip()
+    public DataObject SingleDriverRoundTrip()
     {
       // Create the manager with the api key
       Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
@@ -103,6 +103,8 @@ namespace Route4MeSDK.Examples
 
       // Output the result
       PrintExampleOptimizationResult("SingleDriverRoundTrip", dataObject, errorString);
+
+      return dataObject;
     }
   }
 }

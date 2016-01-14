@@ -6,38 +6,33 @@ namespace Route4MeSDK.Examples
 {
   public sealed partial class Route4MeExamples
   {
-    public void GetRoutes()
+    public string DuplicateRoute()
     {
       // Create the manager with the api key
       Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
       RouteParametersQuery routeParameters = new RouteParametersQuery()
       {
-        Limit = 10,
-        Offset = 5
+        RouteId = "7C0119495FBB74108F269DFA0E7FDED1"
       };
 
       // Run the query
       string errorString;
-      DataObjectRoute[] dataObjects = route4Me.GetRoutes(routeParameters, out errorString);
+      string duplicatedRouteId = route4Me.DuplicateRoute(routeParameters, out errorString);
 
       Console.WriteLine("");
 
-      if (dataObjects != null)
+      if (duplicatedRouteId != null)
       {
-        Console.WriteLine("GetRoutes executed successfully, {0} routes returned", dataObjects.Length);
+        Console.WriteLine("DuplicateRoute executed successfully, duplicated route ID: {0}", duplicatedRouteId);
         Console.WriteLine("");
-
-        dataObjects.ForEach(dataObject =>
-        {
-          Console.WriteLine("RouteID: {0}", dataObject.RouteID);
-          Console.WriteLine("");
-        });
       }
       else
       {
-        Console.WriteLine("GetRoutes error {0}", errorString);
+        Console.WriteLine("DuplicateRoute error {0}", errorString);
       }
+
+      return duplicatedRouteId;
     }
   }
 }

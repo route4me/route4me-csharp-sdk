@@ -1,4 +1,6 @@
-﻿using Route4MeSDK.Examples;
+﻿using Route4MeSDK.DataTypes;
+using Route4MeSDK.Examples;
+using System.Collections.Generic;
 
 namespace Route4MeSDKTest
 {
@@ -7,13 +9,29 @@ namespace Route4MeSDKTest
     static void Main(string[] args)
     {
       Route4MeExamples examples = new Route4MeExamples();
-      examples.SingleDriverRoute10Stops();
-      examples.SingleDriverRoundTrip();
+
+      DataObject dataObject = null;
+
+      dataObject = examples.SingleDriverRoute10Stops();
+      string routeId_SingleDriverRoute10Stops = (dataObject != null && dataObject.Routes.Length > 0) ? dataObject.Routes[0].RouteID : null;
+
+      dataObject = examples.SingleDriverRoundTrip();
+      string routeId_SingleDriverRoundTrip = (dataObject != null && dataObject.Routes.Length > 0) ? dataObject.Routes[0].RouteID : null;
+
       examples.SingleDriverRoundTripGeneric();
-      examples.MultipleDepotMultipleDriver();
-      examples.MultipleDepotMultipleDriverTimeWindow();
-      examples.SingleDepotMultipleDriverNoTimeWindow();
-      examples.MultipleDepotMultipleDriverWith24StopsTimeWindow();
+
+      dataObject = examples.MultipleDepotMultipleDriver();
+      string routeId_MultipleDepotMultipleDriver = (dataObject != null && dataObject.Routes.Length > 0) ? dataObject.Routes[0].RouteID : null;
+
+      dataObject = examples.MultipleDepotMultipleDriverTimeWindow();
+      string routeId_MultipleDepotMultipleDriverTimeWindow = (dataObject != null && dataObject.Routes.Length > 0) ? dataObject.Routes[0].RouteID : null;
+
+      dataObject = examples.SingleDepotMultipleDriverNoTimeWindow();
+      string routeId_SingleDepotMultipleDriverNoTimeWindow = (dataObject != null && dataObject.Routes.Length > 0) ? dataObject.Routes[0].RouteID : null;
+
+      dataObject = examples.MultipleDepotMultipleDriverWith24StopsTimeWindow();
+      string routeId_MultipleDepotMultipleDriverWith24StopsTimeWindow = (dataObject != null && dataObject.Routes.Length > 0) ? dataObject.Routes[0].RouteID : null;
+
       examples.GetOptimization();
       examples.GetOptimizations();
       examples.ReOptimization();
@@ -23,6 +41,29 @@ namespace Route4MeSDKTest
       examples.GetActivities();
       examples.GetAddress();
       examples.GetAddressNotes();
+
+      string routeId_DuplicateRoute = examples.DuplicateRoute();
+
+      List<string> routeIdsToDelete = new List<string>();
+      if (routeId_SingleDriverRoute10Stops != null)
+        routeIdsToDelete.Add(routeId_SingleDriverRoute10Stops);
+      if (routeId_SingleDriverRoundTrip != null)
+        routeIdsToDelete.Add(routeId_SingleDriverRoundTrip);
+      if (routeId_DuplicateRoute != null)
+        routeIdsToDelete.Add(routeId_DuplicateRoute);
+      if (routeId_MultipleDepotMultipleDriver != null)
+        routeIdsToDelete.Add(routeId_MultipleDepotMultipleDriver);
+      if (routeId_MultipleDepotMultipleDriverTimeWindow != null)
+        routeIdsToDelete.Add(routeId_MultipleDepotMultipleDriverTimeWindow);
+      if (routeId_SingleDepotMultipleDriverNoTimeWindow != null)
+        routeIdsToDelete.Add(routeId_SingleDepotMultipleDriverNoTimeWindow);
+      if (routeId_MultipleDepotMultipleDriverWith24StopsTimeWindow != null)
+        routeIdsToDelete.Add(routeId_MultipleDepotMultipleDriverWith24StopsTimeWindow);
+
+      if (routeIdsToDelete.Count > 0)
+        examples.DeleteRoutes(routeIdsToDelete.ToArray());
+      else
+        System.Console.WriteLine("routeIdsToDelete.Count == 0. DeleteRoutes not called.");
 
       //disabled by default
       //examples.AddAddressNote();
