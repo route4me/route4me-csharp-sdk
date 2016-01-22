@@ -13,24 +13,30 @@ namespace Route4MeSDKTest
       DataObject dataObject = null;
 
       dataObject = examples.SingleDriverRoute10Stops();
-      string routeId_SingleDriverRoute10Stops = (dataObject != null && dataObject.Routes.Length > 0) ? dataObject.Routes[0].RouteID : null;
+      string routeId_SingleDriverRoute10Stops = (dataObject != null && dataObject.Routes != null && dataObject.Routes.Length > 0) ? dataObject.Routes[0].RouteID : null;
+
+      int[] destinationIds = examples.AddRouteDestinations(routeId_SingleDriverRoute10Stops);
+      if (destinationIds != null && destinationIds.Length > 0)
+      {
+        examples.RemoveRouteDestination(routeId_SingleDriverRoute10Stops, destinationIds[0]);
+      }
 
       dataObject = examples.SingleDriverRoundTrip();
-      string routeId_SingleDriverRoundTrip = (dataObject != null && dataObject.Routes.Length > 0) ? dataObject.Routes[0].RouteID : null;
+      string routeId_SingleDriverRoundTrip = (dataObject != null && dataObject.Routes != null && dataObject.Routes.Length > 0) ? dataObject.Routes[0].RouteID : null;
 
       examples.SingleDriverRoundTripGeneric();
 
       dataObject = examples.MultipleDepotMultipleDriver();
-      string routeId_MultipleDepotMultipleDriver = (dataObject != null && dataObject.Routes.Length > 0) ? dataObject.Routes[0].RouteID : null;
+      string routeId_MultipleDepotMultipleDriver = (dataObject != null && dataObject.Routes != null && dataObject.Routes.Length > 0) ? dataObject.Routes[0].RouteID : null;
 
       dataObject = examples.MultipleDepotMultipleDriverTimeWindow();
-      string routeId_MultipleDepotMultipleDriverTimeWindow = (dataObject != null && dataObject.Routes.Length > 0) ? dataObject.Routes[0].RouteID : null;
+      string routeId_MultipleDepotMultipleDriverTimeWindow = (dataObject != null && dataObject.Routes != null && dataObject.Routes.Length > 0) ? dataObject.Routes[0].RouteID : null;
 
       dataObject = examples.SingleDepotMultipleDriverNoTimeWindow();
-      string routeId_SingleDepotMultipleDriverNoTimeWindow = (dataObject != null && dataObject.Routes.Length > 0) ? dataObject.Routes[0].RouteID : null;
+      string routeId_SingleDepotMultipleDriverNoTimeWindow = (dataObject != null && dataObject.Routes != null && dataObject.Routes.Length > 0) ? dataObject.Routes[0].RouteID : null;
 
       dataObject = examples.MultipleDepotMultipleDriverWith24StopsTimeWindow();
-      string routeId_MultipleDepotMultipleDriverWith24StopsTimeWindow = (dataObject != null && dataObject.Routes.Length > 0) ? dataObject.Routes[0].RouteID : null;
+      string routeId_MultipleDepotMultipleDriverWith24StopsTimeWindow = (dataObject != null && dataObject.Routes != null && dataObject.Routes.Length > 0) ? dataObject.Routes[0].RouteID : null;
 
       examples.GetOptimization();
       examples.GetOptimizations();
