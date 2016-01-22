@@ -38,6 +38,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Examples\AddAddressNote.cs" />
+    <Compile Include="Examples\AddRouteDestinations.cs" />
     <Compile Include="Examples\DeleteRoutes.cs" />
     <Compile Include="Examples\DuplicateRoute.cs" />
     <Compile Include="Examples\ExamplesInfrastructure.cs" />
@@ -51,6 +52,7 @@
     <Compile Include="Examples\GetRoutes.cs" />
     <Compile Include="Examples\GetUsers.cs" />
     <Compile Include="Examples\MultipleDepotMultipleDriver.cs" />
+    <Compile Include="Examples\RemoveRouteDestination.cs" />
     <Compile Include="Examples\SingleDepotMultipleDriverNoTimeWindow.cs" />
     <Compile Include="Examples\MultipleDepotMultipleDriverTimeWindow.cs" />
     <Compile Include="Examples\MultipleDepotMultipleDriverWith24StopsTimeWindow.cs" />

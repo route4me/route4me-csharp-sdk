@@ -332,6 +332,94 @@ namespace Route4MeSDK
       return null;
     }
 
+
+    [DataContract]
+    private sealed class AddRouteDestinationRequest : GenericParameters
+    {
+      [HttpQueryMemberAttribute(Name = "route_id", EmitDefaultValue = false)]
+      public string RouteId { get; set; }
+
+      [DataMember(Name = "addresses", EmitDefaultValue = false)]
+      public Address[] Addresses { get; set; }
+    }
+
+    public int[] AddRouteDestinations(string routeId, Address[] addresses, out string errorString)
+    {
+      AddRouteDestinationRequest request = new AddRouteDestinationRequest()
+      {
+        RouteId = routeId,
+        Addresses = addresses
+      };
+      DataObject response = GetJsonObjectFromAPI<DataObject>(request,
+                                                             R4MEInfrastructureSettings.RouteHost,
+                                                             HttpMethodType.Put,
+                                                             out errorString);
+      int[] destinationIds = null;
+      if (response != null && response.Addresses != null)
+      {
+        List<int> arrDestinationIds = new List<int>();
+        foreach (Address addressNew in addresses)
+        {
+          int destinationId = 0;
+          foreach (Address addressResp in response.Addresses)
+          {
+            if (addressResp.AddressString == addressNew.AddressString
+              && addressResp.Latitude == addressNew.Latitude
+              && addressResp.Longitude == addressNew.Longitude
+              && addressResp.RouteDestinationId != null)
+            {
+              destinationId = (int)addressResp.RouteDestinationId;
+            }
+          }
+          arrDestinationIds.Add(destinationId);
+        }
+        destinationIds = arrDestinationIds.ToArray();
+      }
+      return destinationIds;
+    }
+
+
+    [DataContract]
+    private sealed class RemoveRouteDestinationRequest : GenericParameters
+    {
+      [HttpQueryMemberAttribute(Name = "route_id", EmitDefaultValue = false)]
+      public string RouteId { get; set; }
+
+      [HttpQueryMemberAttribute(Name = "route_destination_id", EmitDefaultValue = false)]
+      public int RouteDestinationId { get; set; }
+    }
+
+    [DataContract]
+    private sealed class RemoveRouteDestinationResponse
+    {
+      [DataMember(Name = "deleted")]
+      public Boolean Deleted { get; set; }
+
+      [DataMember(Name = "route_destination_id")]
+      public int RouteDestinationId { get; set; }
+    }
+
+    public bool RemoveRouteDestination(string routeId, int destinationId, out string errorString)
+    {
+      RemoveRouteDestinationRequest request = new RemoveRouteDestinationRequest()
+      {
+        RouteId = routeId,
+        RouteDestinationId = destinationId
+      };
+      RemoveRouteDestinationResponse response = GetJsonObjectFromAPI<RemoveRouteDestinationResponse>(request,
+                                                             R4MEInfrastructureSettings.GetAddress,
+                                                             HttpMethodType.Delete,
+                                                             out errorString);
+      if (response != null && response.Deleted)
+      {
+        return true;
+      }
+      else
+      {
+        return false;
+      }
+    }
+
     #endregion
 
     #region Generic Methods
@@ -465,6 +553,7 @@ namespace Route4MeSDK
 
                 if (streamTask.IsCompleted)
                 {
+                  //var test = streamTask.Result.ReadString();
                   result = isString ? streamTask.Result.ReadString() as T :
                                       streamTask.Result.ReadObject<T>();
                 }
