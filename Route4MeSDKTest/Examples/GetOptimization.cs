@@ -6,14 +6,14 @@ namespace Route4MeSDK.Examples
 {
   public sealed partial class Route4MeExamples
   {
-    public void GetOptimization()
+    public void GetOptimization(string optimizationProblemID)
     {
       // Create the manager with the api key
       Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
     
       OptimizationParameters optimizationParameters = new OptimizationParameters()
       {
-        OptimizationProblemID = "5ACDD6065C45A34768EA97FEBB14D637"
+        OptimizationProblemID = optimizationProblemID
       };
 
       // Run the query
@@ -24,14 +24,14 @@ namespace Route4MeSDK.Examples
 
       if (dataObject != null)
       {
-        Console.WriteLine("GetRoute executed successfully");
+        Console.WriteLine("GetOptimization executed successfully");
 
         Console.WriteLine("Optimization Problem ID: {0}", dataObject.OptimizationProblemId);
         Console.WriteLine("State: {0}", dataObject.State);
       }
       else
       {
-        Console.WriteLine("GetRoute error: {0}", errorString);
+        Console.WriteLine("GetOptimization error: {0}", errorString);
       }
     }
   }

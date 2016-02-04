@@ -6,15 +6,15 @@ namespace Route4MeSDK.Examples
 {
   public sealed partial class Route4MeExamples
   {
-    public void GetAddressNotes()
+    public void GetAddressNotes(string routeId, int routeDestinationId)
     {
       // Create the manager with the api key
       Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
       NoteParameters noteParameters = new NoteParameters()
       {
-        RouteId = "7C0119495FBB74108F269DFA0E7FDED1",
-        AddressId = 31219284
+        RouteId = routeId,
+        AddressId = routeDestinationId
       };
 
       // Run the query
