@@ -6,14 +6,14 @@ namespace Route4MeSDK.Examples
 {
   public sealed partial class Route4MeExamples
   {
-    public string DuplicateRoute()
+    public string DuplicateRoute(string routeId)
     {
       // Create the manager with the api key
       Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
       RouteParametersQuery routeParameters = new RouteParametersQuery()
       {
-        RouteId = "7C0119495FBB74108F269DFA0E7FDED1"
+        RouteId = routeId
       };
 
       // Run the query

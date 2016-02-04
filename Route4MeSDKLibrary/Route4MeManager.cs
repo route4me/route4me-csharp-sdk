@@ -24,6 +24,7 @@ namespace Route4MeSDK
 
     private readonly string m_ApiKey;
     private readonly TimeSpan m_DefaultTimeOut = new TimeSpan(TimeSpan.TicksPerMinute * 30); // Default timeout - 30 minutes
+    //private bool m_isTestMode = false;
 
     #endregion
 
@@ -420,6 +421,41 @@ namespace Route4MeSDK
       }
     }
 
+
+    [DataContract]
+    private sealed class MoveDestinationToRouteResponse
+    {
+      [DataMember(Name = "success")]
+      public Boolean Success { get; set; }
+
+      [DataMember(Name = "error")]
+      public string error { get; set; }
+    }
+
+    public bool MoveDestinationToRoute(string toRouteId, int routeDestinationId, int afterDestinationId, out string errorString)
+    {
+      var keyValues = new List<KeyValuePair<string, string>>();
+      keyValues.Add(new KeyValuePair<string, string>("to_route_id", toRouteId));
+      keyValues.Add(new KeyValuePair<string, string>("route_destination_id", Convert.ToString(routeDestinationId)));
+      keyValues.Add(new KeyValuePair<string, string>("after_destination_id", Convert.ToString(afterDestinationId)));
+      HttpContent httpContent = new FormUrlEncodedContent(keyValues);
+
+      MoveDestinationToRouteResponse response = GetJsonObjectFromAPI<MoveDestinationToRouteResponse>(new GenericParameters(),
+                                                           R4MEInfrastructureSettings.MoveRouteDestination,
+                                                           HttpMethodType.Post,
+                                                           httpContent,
+                                                           out errorString);
+      if (response != null)
+      {
+        if (!response.Success && response.error != null)
+        {
+          errorString = response.error;
+        }
+        return response.Success;
+      }
+      return false;
+    }
+
     #endregion
 
     #region Generic Methods
@@ -553,7 +589,7 @@ namespace Route4MeSDK
 
                 if (streamTask.IsCompleted)
                 {
-                  //var test = streamTask.Result.ReadString();
+                  //var test = m_isTestMode ? streamTask.Result.ReadString() : null;
                   result = isString ? streamTask.Result.ReadString() as T :
                                       streamTask.Result.ReadObject<T>();
                 }

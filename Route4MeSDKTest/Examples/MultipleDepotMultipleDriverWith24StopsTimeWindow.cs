@@ -119,13 +119,6 @@ namespace Route4MeSDK.Examples
                         Longitude       = -81.42293548584,
                         Time            = 300,
                         TimeWindowStart = 51682,
-                        TimeWindowEnd   = 52180 },
-
-        new Address() { AddressString   = "3731 Osage St, Stow, OH 44224",
-                        Latitude        = 41.161357879639,
-                        Longitude       = -81.42293548584,
-                        Time            = 300,
-                        TimeWindowStart = 52180,
                         TimeWindowEnd   = 54379 },
 
         new Address() { AddressString   = "3862 Klein Ave, Stow, OH 44224",

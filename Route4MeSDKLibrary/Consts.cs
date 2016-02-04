@@ -21,6 +21,7 @@ namespace Route4MeSDK
     public const string GetActivitiesHost = MainHost + "/api/get_activities.php";
     public const string GetAddress = MainHost + "/api.v4/address.php";
     public const string DuplicateRoute = MainHost + "/actions/duplicate_route.php";
+    public const string MoveRouteDestination = MainHost + "/actions/route/move_route_destination.php";
 
     #endregion
   }

@@ -46,7 +46,7 @@ namespace Route4MeSDK.Examples
 
     #region Methods
 
-    public void SingleDriverRoundTripGeneric()
+    public string SingleDriverRoundTripGeneric()
     {
       const string uri = R4MEInfrastructureSettings.MainHost + "/api.v4/optimization_problem.php";
       const string myApiKey = "11111111111111111111111111111111";
@@ -166,10 +166,12 @@ namespace Route4MeSDK.Examples
           Console.WriteLine("Address: {0}", address.AddressString);
           Console.WriteLine("Route ID: {0}", address.RouteId);
         });
+        return dataObject.OptimizationProblemId;
       }
       else
       {
         Console.WriteLine("SingleDriverRoundTripGeneric error {0}", errorString);
+        return null;
       }
     }
 

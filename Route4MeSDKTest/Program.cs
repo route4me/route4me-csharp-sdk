@@ -12,7 +12,8 @@ namespace Route4MeSDKTest
 
       DataObject dataObject = null;
 
-      dataObject = examples.SingleDriverRoute10Stops();
+      DataObject dataObject1 = examples.SingleDriverRoute10Stops();
+      dataObject = dataObject1;
       string routeId_SingleDriverRoute10Stops = (dataObject != null && dataObject.Routes != null && dataObject.Routes.Length > 0) ? dataObject.Routes[0].RouteID : null;
 
       int[] destinationIds = examples.AddRouteDestinations(routeId_SingleDriverRoute10Stops);
@@ -21,10 +22,23 @@ namespace Route4MeSDKTest
         examples.RemoveRouteDestination(routeId_SingleDriverRoute10Stops, destinationIds[0]);
       }
 
-      dataObject = examples.SingleDriverRoundTrip();
+      DataObject dataObject2 = examples.SingleDriverRoundTrip();
+      dataObject = dataObject2;
       string routeId_SingleDriverRoundTrip = (dataObject != null && dataObject.Routes != null && dataObject.Routes.Length > 0) ? dataObject.Routes[0].RouteID : null;
 
-      examples.SingleDriverRoundTripGeneric();
+      string routeIdToMoveTo = routeId_SingleDriverRoundTrip;
+      int routeDestinationIdToMove = (dataObject1 != null && dataObject1.Routes != null && dataObject1.Routes.Length > 0 && dataObject1.Routes[0].Addresses.Length > 1 && dataObject1.Routes[0].Addresses[1].RouteDestinationId != null) ? dataObject1.Routes[0].Addresses[1].RouteDestinationId.Value : 0;
+      int afterDestinationIdToMoveAfter = (dataObject2 != null && dataObject2.Routes != null && dataObject2.Routes.Length > 0 && dataObject2.Routes[0].Addresses.Length > 1 && dataObject2.Routes[0].Addresses[0].RouteDestinationId != null) ? dataObject2.Routes[0].Addresses[0].RouteDestinationId.Value : 0;
+      if (routeIdToMoveTo != null && routeDestinationIdToMove != 0 && afterDestinationIdToMoveAfter != 0)
+      {
+        examples.MoveDestinationToRoute(routeIdToMoveTo, routeDestinationIdToMove, afterDestinationIdToMoveAfter);
+      }
+      else
+      {
+        System.Console.WriteLine("MoveDestinationToRoute not called. routeDestinationId = {0}, afterDestinationId = {1}.", routeDestinationIdToMove, afterDestinationIdToMoveAfter);
+      }
+
+      string optimizationProblemID = examples.SingleDriverRoundTripGeneric();
 
       dataObject = examples.MultipleDepotMultipleDriver();
       string routeId_MultipleDepotMultipleDriver = (dataObject != null && dataObject.Routes != null && dataObject.Routes.Length > 0) ? dataObject.Routes[0].RouteID : null;
@@ -38,17 +52,48 @@ namespace Route4MeSDKTest
       dataObject = examples.MultipleDepotMultipleDriverWith24StopsTimeWindow();
       string routeId_MultipleDepotMultipleDriverWith24StopsTimeWindow = (dataObject != null && dataObject.Routes != null && dataObject.Routes.Length > 0) ? dataObject.Routes[0].RouteID : null;
 
-      examples.GetOptimization();
+      if (optimizationProblemID != null)
+        examples.GetOptimization(optimizationProblemID);
+      else
+        System.Console.WriteLine("GetOptimization not called. optimizationProblemID == null.");
+      
       examples.GetOptimizations();
-      examples.ReOptimization();
-      examples.GetRoute();
+
+      if (optimizationProblemID != null)
+        examples.ReOptimization(optimizationProblemID);
+      else
+        System.Console.WriteLine("ReOptimization not called. optimizationProblemID == null.");
+
+      if (routeId_SingleDriverRoute10Stops != null)
+        examples.GetRoute(routeId_SingleDriverRoute10Stops);
+      else
+        System.Console.WriteLine("GetRoute not called. routeId_SingleDriverRoute10Stops == null.");
+
       examples.GetRoutes();
       examples.GetUsers();
-      examples.GetActivities();
-      examples.GetAddress();
-      examples.GetAddressNotes();
 
-      string routeId_DuplicateRoute = examples.DuplicateRoute();
+      if (routeId_SingleDriverRoute10Stops != null)
+        examples.GetActivities(routeId_SingleDriverRoute10Stops);
+      else
+        System.Console.WriteLine("GetActivities not called. routeId_SingleDriverRoute10Stops == null.");
+
+      if (routeIdToMoveTo != null && routeDestinationIdToMove != 0)
+      {
+        examples.GetAddress(routeIdToMoveTo, routeDestinationIdToMove);
+
+        examples.AddAddressNote(routeIdToMoveTo, routeDestinationIdToMove);
+        examples.GetAddressNotes(routeIdToMoveTo, routeDestinationIdToMove);
+      }
+      else
+      {
+        System.Console.WriteLine("AddAddressNote, GetAddress, GetAddressNotes not called. routeIdToMoveTo == null || routeDestinationIdToMove == 0.");
+      }
+
+      string routeId_DuplicateRoute = null;
+      if (routeId_SingleDriverRoute10Stops != null)
+        routeId_DuplicateRoute = examples.DuplicateRoute(routeId_SingleDriverRoute10Stops);
+      else
+        System.Console.WriteLine("DuplicateRoute not called. routeId_SingleDriverRoute10Stops == null.");
 
       List<string> routeIdsToDelete = new List<string>();
       if (routeId_SingleDriverRoute10Stops != null)
@@ -70,9 +115,6 @@ namespace Route4MeSDKTest
         examples.DeleteRoutes(routeIdsToDelete.ToArray());
       else
         System.Console.WriteLine("routeIdsToDelete.Count == 0. DeleteRoutes not called.");
-
-      //disabled by default
-      //examples.AddAddressNote();
       
       //disabled by default, not necessary for optimization tests
       //not all accounts are capable of storing gps data
