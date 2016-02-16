@@ -26,7 +26,7 @@ namespace Route4MeSDK.DataTypes
     //the route start date in UTC, unix timestamp seconds. 
     //used to show users when the route will begin, also used for reporting and analytics
     [DataMember(Name = "route_date", EmitDefaultValue = false)]
-    public int? RouteDate { get; set; }
+    public long? RouteDate { get; set; }
 
     //offset in seconds relative to the route start date (i.e. 9AM would be 60 * 60 * 9)
     [DataMember(Name = "route_time", EmitDefaultValue = false)]

@@ -1,5 +1,6 @@
 ﻿using Route4MeSDK.DataTypes;
 using Route4MeSDK.QueryTypes;
+using System;
 
 namespace Route4MeSDK.Examples
 {
@@ -1776,7 +1777,8 @@ namespace Route4MeSDK.Examples
         RouteName = "Single Depot, Multiple Driver, No Time Window",
         StoreRoute = false,
 
-        RouteTime = 0,
+        RouteDate = R4MeUtils.ConvertToUnixTimestamp(DateTime.UtcNow.Date.AddDays(1)),
+        RouteTime = 60 * 60 * 7,
         RT = true,
         RouteMaxDuration = 86400,
         VehicleCapacity = "20",
