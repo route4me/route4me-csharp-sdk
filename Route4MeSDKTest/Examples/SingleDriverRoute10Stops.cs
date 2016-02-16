@@ -1,5 +1,6 @@
 ﻿using Route4MeSDK.DataTypes;
 using Route4MeSDK.QueryTypes;
+using System;
 using System.Collections.Generic;
 
 namespace Route4MeSDK.Examples
@@ -89,6 +90,8 @@ namespace Route4MeSDK.Examples
         StoreRoute = false,
         RouteName = "Single Driver Route 10 Stops",
 
+        RouteDate    = R4MeUtils.ConvertToUnixTimestamp(DateTime.UtcNow.Date.AddDays(1)),
+        RouteTime    = 60 * 60 * 7,
         Optimize     = Optimize.Distance.Description(),
         DistanceUnit = DistanceUnit.MI.Description(),
         DeviceType   = DeviceType.Web.Description()

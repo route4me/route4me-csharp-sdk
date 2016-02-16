@@ -1,5 +1,6 @@
 ﻿using Route4MeSDK.DataTypes;
 using Route4MeSDK.QueryTypes;
+using System;
 
 namespace Route4MeSDK.Examples
 {
@@ -149,9 +150,11 @@ namespace Route4MeSDK.Examples
         //set an arbitrary route name
         //this value shows up in the website, and all the connected mobile device
         RouteName     = "Multiple Depot, Multiple Driver",
-        
-        //the time in UTC when a route is starting (12AM)
-        RouteTime            = 0,
+
+        //the route start date in UTC, unix timestamp seconds (Tomorrow)
+        RouteDate     = R4MeUtils.ConvertToUnixTimestamp(DateTime.UtcNow.Date.AddDays(1)),
+        //the time in UTC when a route is starting (7AM)
+        RouteTime     = 60 * 60 * 7,
         
         //the maximum duration of a route
         RouteMaxDuration     = 86400,

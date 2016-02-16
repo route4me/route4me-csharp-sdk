@@ -91,5 +91,24 @@ namespace Route4MeSDK
       foreach (var item in source)
         action(item);
     }
+
+    /// <summary>
+    /// Convert DateTime to Unix epoch time
+    /// </summary>
+    public static long ConvertToUnixTimestamp(DateTime date)
+    {
+      DateTime origin = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+      TimeSpan diff = date.ToUniversalTime() - origin;
+      return (long)Math.Floor(diff.TotalSeconds);
+    }
+
+    /// <summary>
+    /// Convert DateTime from Unix epoch time
+    /// </summary>
+    public static DateTime ConvertFromUnixTimestamp(long timestamp)
+    {
+      DateTime origin = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+      return origin.AddSeconds(timestamp);
+    }
   }
 }
