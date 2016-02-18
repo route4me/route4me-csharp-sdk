@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Runtime.Serialization;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Route4MeSDK
 {
@@ -456,6 +458,89 @@ namespace Route4MeSDK
       return false;
     }
 
+
+    [DataContract]
+    private sealed class GetAddressBookContactsResponse
+    {
+      [DataMember(Name = "results")]
+      public AddressBookContact[] Results { get; set; }
+
+      [DataMember(Name = "total")]
+      public uint Total { get; set; }
+    }
+
+    public AddressBookContact[] GetAddressBookContacts(AddressBookParameters addressBookParameters, out uint total, out string errorString)
+    {
+      total = 0;
+      var response = GetJsonObjectFromAPI<GetAddressBookContactsResponse>(addressBookParameters,
+                                                           R4MEInfrastructureSettings.AddressBook,
+                                                           HttpMethodType.Get,
+                                                           out errorString);
+      AddressBookContact[] result = null;
+      if (response != null)
+      {
+        result = response.Results;
+        total = response.Total;
+      }
+      return result;
+    }
+
+    public AddressBookContact AddAddressBookContact(AddressBookContact contact, out string errorString)
+    {
+      contact.PrepareForSerialization();
+      AddressBookContact result = GetJsonObjectFromAPI<AddressBookContact>(contact,
+                                                           R4MEInfrastructureSettings.AddressBook,
+                                                           HttpMethodType.Post,
+                                                           out errorString);
+      return result;
+    }
+
+
+    public AddressBookContact UpdateAddressBookContact(AddressBookContact contact, out string errorString)
+    {
+      contact.PrepareForSerialization();
+      AddressBookContact result = GetJsonObjectFromAPI<AddressBookContact>(contact,
+                                                           R4MEInfrastructureSettings.AddressBook,
+                                                           HttpMethodType.Put,
+                                                           out errorString);
+      return result;
+    }
+
+
+    [DataContract]
+    private sealed class RemoveAddressBookContactsRequest : GenericParameters
+    {
+      [DataMember(Name = "address_ids", EmitDefaultValue = false)]
+      public string[] AddressIds { get; set; }
+    }
+
+    [DataContract]
+    private sealed class RemoveAddressBookContactsResponse
+    {
+      [DataMember(Name = "status")]
+      public bool Status { get; set; }
+    }
+
+    public bool RemoveAddressBookContacts(string[] addressIds, out string errorString)
+    {
+      RemoveAddressBookContactsRequest request = new RemoveAddressBookContactsRequest()
+      {
+        AddressIds = addressIds
+      };
+      RemoveAddressBookContactsResponse response = GetJsonObjectFromAPI<RemoveAddressBookContactsResponse>(request,
+                                                             R4MEInfrastructureSettings.AddressBook,
+                                                             HttpMethodType.Delete,
+                                                             out errorString);
+      if (response != null && response.Status)
+      {
+        return true;
+      }
+      else
+      {
+        return false;
+      }
+    }
+
     #endregion
 
     #region Generic Methods
@@ -550,6 +635,7 @@ namespace Route4MeSDK
 
               if (response.IsCompleted)
               {
+                //var test = m_isTestMode ? response.Result.ReadString() : null;
                 result = isString ? response.Result.ReadString() as T :
                                     response.Result.ReadObject<T>();
               }
@@ -573,10 +659,27 @@ namespace Route4MeSDK
                 content = new StringContent(jsonString);
               }
 
-              // Post and wait for response
-              var response = isPut ? httpClient.PutAsync(parametersURI, content) :
-                (isDelete ? httpClient.DeleteAsync(parametersURI) : httpClient.PostAsync(parametersURI, content));
+              Task<HttpResponseMessage> response = null;
+              if (isPut)
+              {
+                response = httpClient.PutAsync(parametersURI, content);
+              }
+              else if(isDelete)
+              {
+                HttpRequestMessage request = new HttpRequestMessage
+                {
+                  Content = content,
+                  Method = HttpMethod.Delete,
+                  RequestUri = new Uri(parametersURI, UriKind.Relative)
+                };
+                response = httpClient.SendAsync(request);
+              }
+              else
+              {
+                response = httpClient.PostAsync(parametersURI, content);
+              }
 
+              // Wait for response
               response.Wait();
 
               // Check if successful
@@ -640,8 +743,6 @@ namespace Route4MeSDK
       return result;
     }
 
-    #endregion
-
     private HttpClient CreateHttpClient(string url)
     {
       HttpClient result = new HttpClient() { BaseAddress = new Uri(url) };
@@ -652,6 +753,8 @@ namespace Route4MeSDK
 
       return result;
     }
+
+    #endregion
 
     #endregion
   }
