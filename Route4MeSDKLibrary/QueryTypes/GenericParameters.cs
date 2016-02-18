@@ -1,4 +1,5 @@
-﻿using System.Collections.Specialized;
+﻿using Route4MeSDK.DataTypes;
+using System.Collections.Specialized;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Web;
@@ -16,12 +17,19 @@ namespace Route4MeSDK.QueryTypes
   /// </summary>
   [DataContract]
   [KnownType(typeof(OptimizationParameters))]
+  [KnownType(typeof(AddressBookContact))]
+  [KnownType(typeof(ActivityParameters))]
+  [KnownType(typeof(AddressBookParameters))]
+  [KnownType(typeof(AddressParameters))]
+  [KnownType(typeof(GPSParameters))]
+  [KnownType(typeof(NoteParameters))]
+  [KnownType(typeof(RouteParametersQuery))]
   public class GenericParameters
   {
     #region Fields
 
     [IgnoreDataMember]
-    public readonly NameValueCollection ParametersCollection;
+    public NameValueCollection ParametersCollection = new NameValueCollection();
 
     [IgnoreDataMember]
     public bool ConvertBooleansToInteger {get; protected set;}
@@ -32,8 +40,14 @@ namespace Route4MeSDK.QueryTypes
 
     public GenericParameters()
     {
+      this.PrepareForSerialization();
+    }
+
+    public void PrepareForSerialization()
+    {
       ConvertBooleansToInteger = true;
-      ParametersCollection = new NameValueCollection();
+      if (ParametersCollection == null)
+        ParametersCollection = new NameValueCollection();
     }
 
     public string Serialize(string apiKey = null)

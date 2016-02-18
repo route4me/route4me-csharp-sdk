@@ -34,6 +34,8 @@ namespace Route4MeSDK.Examples
                                                                                        HttpMethodType.Get,
                                                                                        out errorMessage);
 
+      Console.WriteLine("");
+
       if (dataObjects != null)
       {
         Console.WriteLine("GenericExample executed successfully, {0} routes returned", dataObjects.Length);

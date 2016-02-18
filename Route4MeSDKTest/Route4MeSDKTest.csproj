@@ -37,6 +37,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Examples\AddAddressBookContact.cs" />
     <Compile Include="Examples\AddAddressNote.cs" />
     <Compile Include="Examples\AddRouteDestinations.cs" />
     <Compile Include="Examples\DeleteRoutes.cs" />
@@ -45,6 +46,7 @@
     <Compile Include="Examples\GenericExample.cs" />
     <Compile Include="Examples\GetActivities.cs" />
     <Compile Include="Examples\GetAddress.cs" />
+    <Compile Include="Examples\GetAddressBookContacts.cs" />
     <Compile Include="Examples\GetAddressNotes.cs" />
     <Compile Include="Examples\GetOptimization.cs" />
     <Compile Include="Examples\GetOptimizations.cs" />
@@ -53,6 +55,7 @@
     <Compile Include="Examples\GetUsers.cs" />
     <Compile Include="Examples\MoveDestinationToRoute.cs" />
     <Compile Include="Examples\MultipleDepotMultipleDriver.cs" />
+    <Compile Include="Examples\RemoveAddressBookContacts.cs" />
     <Compile Include="Examples\RemoveRouteDestination.cs" />
     <Compile Include="Examples\SingleDepotMultipleDriverNoTimeWindow.cs" />
     <Compile Include="Examples\MultipleDepotMultipleDriverTimeWindow.cs" />
@@ -63,6 +66,7 @@
     <Compile Include="Examples\SingleDriverRoundTripGeneric.cs" />
     <Compile Include="Examples\SingleDriverRoute10Stops.cs" />
     <Compile Include="Examples\TrackDeviceLastLocationHistory.cs" />
+    <Compile Include="Examples\UpdateAddressBookContact.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -1,5 +1,6 @@
 ﻿using Route4MeSDK.DataTypes;
 using Route4MeSDK.Examples;
+using System;
 using System.Collections.Generic;
 
 namespace Route4MeSDKTest
@@ -115,7 +116,26 @@ namespace Route4MeSDKTest
         examples.DeleteRoutes(routeIdsToDelete.ToArray());
       else
         System.Console.WriteLine("routeIdsToDelete.Count == 0. DeleteRoutes not called.");
-      
+
+      AddressBookContact contact1 = examples.AddAddressBookContact();
+      AddressBookContact contact2 = examples.AddAddressBookContact();
+      examples.GetAddressBookContacts();
+      if (contact1 != null)
+      {
+        contact1.LastName = "Updated " + (new Random()).Next().ToString();
+        examples.UpdateAddressBookContact(contact1);
+      }
+      else
+      {
+        System.Console.WriteLine("contact1 == null. UpdateAddressBookContact not called.");
+      }
+      List<string> addressIdsToRemove = new List<string>();
+      if (contact1 != null)
+        addressIdsToRemove.Add(contact1.AddressId);
+      if (contact2 != null)
+        addressIdsToRemove.Add(contact2.AddressId);
+      examples.RemoveAddressBookContacts(addressIdsToRemove.ToArray());
+
       //disabled by default, not necessary for optimization tests
       //not all accounts are capable of storing gps data
       //examples.SetGPSPosition();
