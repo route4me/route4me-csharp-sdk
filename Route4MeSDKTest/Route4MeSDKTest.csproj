@@ -62,6 +62,7 @@
     <Compile Include="Examples\MultipleDepotMultipleDriverWith24StopsTimeWindow.cs" />
     <Compile Include="Examples\ReOptimization.cs" />
     <Compile Include="Examples\SetGPSPosition.cs" />
+    <Compile Include="Examples\SingleDriverMultipleTimeWindows.cs" />
     <Compile Include="Examples\SingleDriverRoundTrip.cs" />
     <Compile Include="Examples\SingleDriverRoundTripGeneric.cs" />
     <Compile Include="Examples\SingleDriverRoute10Stops.cs" />

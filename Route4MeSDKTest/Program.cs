@@ -53,6 +53,9 @@ namespace Route4MeSDKTest
       dataObject = examples.MultipleDepotMultipleDriverWith24StopsTimeWindow();
       string routeId_MultipleDepotMultipleDriverWith24StopsTimeWindow = (dataObject != null && dataObject.Routes != null && dataObject.Routes.Length > 0) ? dataObject.Routes[0].RouteID : null;
 
+      dataObject = examples.SingleDriverMultipleTimeWindows();
+      string routeId_SingleDriverMultipleTimeWindows = (dataObject != null && dataObject.Routes != null && dataObject.Routes.Length > 0) ? dataObject.Routes[0].RouteID : null;
+
       if (optimizationProblemID != null)
         examples.GetOptimization(optimizationProblemID);
       else
@@ -111,6 +114,8 @@ namespace Route4MeSDKTest
         routeIdsToDelete.Add(routeId_SingleDepotMultipleDriverNoTimeWindow);
       if (routeId_MultipleDepotMultipleDriverWith24StopsTimeWindow != null)
         routeIdsToDelete.Add(routeId_MultipleDepotMultipleDriverWith24StopsTimeWindow);
+      if (routeId_SingleDriverMultipleTimeWindows != null)
+        routeIdsToDelete.Add(routeId_SingleDriverMultipleTimeWindows);
 
       if (routeIdsToDelete.Count > 0)
         examples.DeleteRoutes(routeIdsToDelete.ToArray());
