@@ -39,6 +39,7 @@
   <ItemGroup>
     <Compile Include="Examples\AddAddressBookContact.cs" />
     <Compile Include="Examples\AddAddressNote.cs" />
+    <Compile Include="Examples\AddDestinationToOptimization.cs" />
     <Compile Include="Examples\AddRouteDestinations.cs" />
     <Compile Include="Examples\DeleteRoutes.cs" />
     <Compile Include="Examples\DuplicateRoute.cs" />
