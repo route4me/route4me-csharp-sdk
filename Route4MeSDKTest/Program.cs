@@ -64,6 +64,11 @@ namespace Route4MeSDKTest
       examples.GetOptimizations();
 
       if (optimizationProblemID != null)
+        examples.AddDestinationToOptimization(optimizationProblemID, true);
+      else
+        System.Console.WriteLine("AddDestinationToOptimization not called. optimizationProblemID == null.");
+
+      if (optimizationProblemID != null)
         examples.ReOptimization(optimizationProblemID);
       else
         System.Console.WriteLine("ReOptimization not called. optimizationProblemID == null.");
