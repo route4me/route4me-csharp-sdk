@@ -11,7 +11,7 @@ namespace Route4MeSDK.Examples
       // Create the manager with the api key
       Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
-      // Prepare the address
+      // Prepare the address that we are going to add to an existing route optimization
       Address[] addresses = new Address[]
       {
         new Address() { AddressString = "717 5th Ave New York, NY 10021",
@@ -22,6 +22,7 @@ namespace Route4MeSDK.Examples
         }
       };
 
+      //Optionally change any route parameters, such as maximum route duration, maximum cubic constraints, etc.
       OptimizationParameters optimizationParameters = new OptimizationParameters()
       {
         OptimizationProblemID = optimizationProblemID,
@@ -29,7 +30,7 @@ namespace Route4MeSDK.Examples
         ReOptimize = andReOptimize
       };
 
-      // Run the query
+      // Execute the optimization to re-optimize and rebalance all the routes in this optimization
       string errorString;
       DataObject dataObject = route4Me.UpdateOptimization(optimizationParameters, out errorString);
 
