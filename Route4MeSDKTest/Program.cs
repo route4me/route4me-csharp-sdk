@@ -146,6 +146,22 @@ namespace Route4MeSDKTest
         addressIdsToRemove.Add(contact2.AddressId);
       examples.RemoveAddressBookContacts(addressIdsToRemove.ToArray());
 
+      // Avoidance Zones
+      string territoryId = examples.AddAvoidanceZone();
+      examples.GetAvoidanceZones();
+      if (territoryId != null)
+        examples.GetAvoidanceZone(territoryId);
+      else
+        System.Console.WriteLine("GetAvoidanceZone not called. territoryId == null.");
+      if (territoryId != null)
+        examples.UpdateAvoidanceZone(territoryId);
+      else
+        System.Console.WriteLine("UpdateAvoidanceZone not called. territoryId == null.");
+      if (territoryId != null)
+        examples.DeleteAvoidanceZone(territoryId);
+      else
+        System.Console.WriteLine("DeleteAvoidanceZone not called. territoryId == null.");
+
       //disabled by default, not necessary for optimization tests
       //not all accounts are capable of storing gps data
       //examples.SetGPSPosition();
@@ -154,6 +170,7 @@ namespace Route4MeSDKTest
       examples.GenericExample();
       examples.GenericExampleShortcut();
 
+      System.Console.WriteLine("");
       System.Console.WriteLine("Press any key");
       System.Console.ReadKey();
     }
