@@ -197,4 +197,19 @@ namespace Route4MeSDK.DataTypes
     [Description("no_opportunity")]
     NoOpportunity
   }
+
+  /// <summary>
+  /// Territory type (circle, rectangle, polygon)
+  /// </summary>
+  public enum TerritoryType : uint
+  {
+    [Description("circle")]
+    Circle,
+
+    [Description("poly")]
+    Poly,
+
+    [Description("rect")]
+    Rect
+  }
 }

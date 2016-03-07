@@ -39,8 +39,10 @@
   <ItemGroup>
     <Compile Include="Examples\AddAddressBookContact.cs" />
     <Compile Include="Examples\AddAddressNote.cs" />
+    <Compile Include="Examples\AddAvoidanceZone.cs" />
     <Compile Include="Examples\AddDestinationToOptimization.cs" />
     <Compile Include="Examples\AddRouteDestinations.cs" />
+    <Compile Include="Examples\DeleteAvoidanceZone.cs" />
     <Compile Include="Examples\DeleteRoutes.cs" />
     <Compile Include="Examples\DuplicateRoute.cs" />
     <Compile Include="Examples\ExamplesInfrastructure.cs" />
@@ -49,6 +51,8 @@
     <Compile Include="Examples\GetAddress.cs" />
     <Compile Include="Examples\GetAddressBookContacts.cs" />
     <Compile Include="Examples\GetAddressNotes.cs" />
+    <Compile Include="Examples\GetAvoidanceZone.cs" />
+    <Compile Include="Examples\GetAvoidanceZones.cs" />
     <Compile Include="Examples\GetOptimization.cs" />
     <Compile Include="Examples\GetOptimizations.cs" />
     <Compile Include="Examples\GetRoute.cs" />
@@ -69,6 +73,7 @@
     <Compile Include="Examples\SingleDriverRoute10Stops.cs" />
     <Compile Include="Examples\TrackDeviceLastLocationHistory.cs" />
     <Compile Include="Examples\UpdateAddressBookContact.cs" />
+    <Compile Include="Examples\UpdateAvoidanceZone.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
