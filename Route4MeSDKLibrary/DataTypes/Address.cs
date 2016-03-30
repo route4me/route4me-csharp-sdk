@@ -54,7 +54,7 @@ namespace Route4MeSDK.DataTypes
     [DataMember(Name = "preferred_geocoding", EmitDefaultValue = false)]
     public int? PreferredGeocoding { get; set; }
 
-    [DataMember(Name = "FailedGeocoding", EmitDefaultValue = false)]
+    [DataMember(Name = "failed_geocoding", EmitDefaultValue = false)]
     public bool? FailedGeocoding { get; set; }
 
     //when planning a route from the address book or using existing address book ids
@@ -147,7 +147,7 @@ namespace Route4MeSDK.DataTypes
   
     //estimated time window start based on the optimization engine, after all the sequencing has been completed
     [DataMember(Name = "generated_time_window_start", EmitDefaultValue = false)]
-    public int? GeneratedTimeEindowStart { get; set; }
+    public int? GeneratedTimeWindowStart { get; set; }
     
     //estimated time window end based on the optimization engine, after all the sequencing has been completed
     [DataMember(Name = "generated_time_window_end", EmitDefaultValue = false)]
@@ -155,7 +155,7 @@ namespace Route4MeSDK.DataTypes
 
     //the unique socket channel name which should be used to get real time alerts
     [DataMember(Name = "channel_name", EmitDefaultValue = false)]
-    public string channel_name { get; set; }
+    public string ChannelName { get; set; }
 
     [DataMember(Name = "time_window_start", EmitDefaultValue = false)]
     public int? TimeWindowStart { get; set; }
