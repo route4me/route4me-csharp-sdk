@@ -6,7 +6,7 @@ namespace Route4MeSDK.Examples
 {
   public sealed partial class Route4MeExamples
   {
-    public void SetGPSPosition()
+    public void SetGPSPosition(string routeId)
     {
       // Create the manager with the api key
       Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
@@ -15,7 +15,7 @@ namespace Route4MeSDK.Examples
       GPSParameters gpsParameters = new GPSParameters()
       {
         Format = Format.Csv.Description(),
-        RouteId = "742A9E5051AA84B9E6365C92369B030C",
+        RouteId = routeId,
         Latitude = 33.14384,
         Longitude = -83.22466,
         Course = 1,
