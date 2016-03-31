@@ -104,6 +104,18 @@ namespace Route4MeSDKTest
       else
         System.Console.WriteLine("DuplicateRoute not called. routeId_SingleDriverRoute10Stops == null.");
 
+      //disabled by default, not necessary for optimization tests
+      //not all accounts are capable of storing gps data
+      /*if (routeId_SingleDriverRoute10Stops != null)
+      {
+        examples.SetGPSPosition(routeId_SingleDriverRoute10Stops);
+        examples.TrackDeviceLastLocationHistory(routeId_SingleDriverRoute10Stops);
+      }
+      else
+      {
+        System.Console.WriteLine("SetGPSPosition, TrackDeviceLastLocationHistory not called. routeId_SingleDriverRoute10Stops == null.");
+      }*/
+
       List<string> routeIdsToDelete = new List<string>();
       if (routeId_SingleDriverRoute10Stops != null)
         routeIdsToDelete.Add(routeId_SingleDriverRoute10Stops);
@@ -161,11 +173,6 @@ namespace Route4MeSDKTest
         examples.DeleteAvoidanceZone(territoryId);
       else
         System.Console.WriteLine("DeleteAvoidanceZone not called. territoryId == null.");
-
-      //disabled by default, not necessary for optimization tests
-      //not all accounts are capable of storing gps data
-      //examples.SetGPSPosition();
-      //examples.TrackDeviceLastLocationHistory();
 
       examples.GenericExample();
       examples.GenericExampleShortcut();
