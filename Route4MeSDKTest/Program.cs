@@ -74,9 +74,15 @@ namespace Route4MeSDKTest
         System.Console.WriteLine("ReOptimization not called. optimizationProblemID == null.");
 
       if (routeId_SingleDriverRoute10Stops != null)
+      {
+        examples.UpdateRoute(routeId_SingleDriverRoute10Stops);
+        examples.ReoptimizeRoute(routeId_SingleDriverRoute10Stops);
         examples.GetRoute(routeId_SingleDriverRoute10Stops);
+      }
       else
-        System.Console.WriteLine("GetRoute not called. routeId_SingleDriverRoute10Stops == null.");
+      {
+        System.Console.WriteLine("UpdateRoute, ReoptimizeRoute, GetRoute not called. routeId_SingleDriverRoute10Stops == null.");
+      }
 
       examples.GetRoutes();
       examples.GetUsers();

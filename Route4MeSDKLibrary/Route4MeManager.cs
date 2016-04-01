@@ -141,6 +141,17 @@ namespace Route4MeSDK
       return null;
     }
 
+    public DataObjectRoute UpdateRoute(RouteParametersQuery routeParameters, out string errorString)
+    {
+      var result = GetJsonObjectFromAPI<DataObjectRoute>(routeParameters,
+                                                    R4MEInfrastructureSettings.RouteHost,
+                                                    HttpMethodType.Put,
+                                                    out errorString);
+
+      return result;
+    }
+
+
     [DataContract]
     private sealed class DuplicateRouteResponse
     {

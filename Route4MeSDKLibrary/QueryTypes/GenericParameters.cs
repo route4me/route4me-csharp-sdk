@@ -23,6 +23,7 @@ namespace Route4MeSDK.QueryTypes
   [KnownType(typeof(AddressParameters))]
   [KnownType(typeof(GPSParameters))]
   [KnownType(typeof(NoteParameters))]
+  [KnownType(typeof(RouteParameters))]
   [KnownType(typeof(RouteParametersQuery))]
   [KnownType(typeof(AvoidanceZoneParameters))]
   [KnownType(typeof(AvoidanceZoneQuerry))]
