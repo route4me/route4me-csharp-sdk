@@ -74,9 +74,15 @@ namespace Route4MeSDKTest
         System.Console.WriteLine("ReOptimization not called. optimizationProblemID == null.");
 
       if (routeId_SingleDriverRoute10Stops != null)
+      {
+        examples.UpdateRoute(routeId_SingleDriverRoute10Stops);
+        examples.ReoptimizeRoute(routeId_SingleDriverRoute10Stops);
         examples.GetRoute(routeId_SingleDriverRoute10Stops);
+      }
       else
-        System.Console.WriteLine("GetRoute not called. routeId_SingleDriverRoute10Stops == null.");
+      {
+        System.Console.WriteLine("UpdateRoute, ReoptimizeRoute, GetRoute not called. routeId_SingleDriverRoute10Stops == null.");
+      }
 
       examples.GetRoutes();
       examples.GetUsers();
@@ -103,6 +109,18 @@ namespace Route4MeSDKTest
         routeId_DuplicateRoute = examples.DuplicateRoute(routeId_SingleDriverRoute10Stops);
       else
         System.Console.WriteLine("DuplicateRoute not called. routeId_SingleDriverRoute10Stops == null.");
+
+      //disabled by default, not necessary for optimization tests
+      //not all accounts are capable of storing gps data
+      /*if (routeId_SingleDriverRoute10Stops != null)
+      {
+        examples.SetGPSPosition(routeId_SingleDriverRoute10Stops);
+        examples.TrackDeviceLastLocationHistory(routeId_SingleDriverRoute10Stops);
+      }
+      else
+      {
+        System.Console.WriteLine("SetGPSPosition, TrackDeviceLastLocationHistory not called. routeId_SingleDriverRoute10Stops == null.");
+      }*/
 
       List<string> routeIdsToDelete = new List<string>();
       if (routeId_SingleDriverRoute10Stops != null)
@@ -161,11 +179,6 @@ namespace Route4MeSDKTest
         examples.DeleteAvoidanceZone(territoryId);
       else
         System.Console.WriteLine("DeleteAvoidanceZone not called. territoryId == null.");
-
-      //disabled by default, not necessary for optimization tests
-      //not all accounts are capable of storing gps data
-      //examples.SetGPSPosition();
-      //examples.TrackDeviceLastLocationHistory();
 
       examples.GenericExample();
       examples.GenericExampleShortcut();

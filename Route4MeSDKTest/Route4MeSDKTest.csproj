@@ -57,6 +57,8 @@
     <Compile Include="Examples\Optimizations\GetOptimizations.cs" />
     <Compile Include="Examples\Routes\GetRoute.cs" />
     <Compile Include="Examples\Routes\GetRoutes.cs" />
+    <Compile Include="Examples\Routes\ReoptimizeRoute.cs" />
+    <Compile Include="Examples\Routes\UpdateRoute.cs" />
     <Compile Include="Examples\Users\GetUsers.cs" />
     <Compile Include="Examples\Addresses\MoveDestinationToRoute.cs" />
     <Compile Include="Examples\MultipleDepotMultipleDriver.cs" />
