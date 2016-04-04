@@ -15,14 +15,14 @@ namespace Route4MeSDK.Examples
       // Create the manager with the api key
       Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
-      AvoidanceZoneQuerry avoidanceZoneQuerry = new AvoidanceZoneQuerry()
+      AvoidanceZoneQuery avoidanceZoneQuery = new AvoidanceZoneQuery()
       {
         TerritoryId = territoryId
       };
 
       // Run the query
       string errorString;
-      AvoidanceZone avoidanceZone = route4Me.GetAvoidanceZone(avoidanceZoneQuerry, out errorString);
+      AvoidanceZone avoidanceZone = route4Me.GetAvoidanceZone(avoidanceZoneQuery, out errorString);
 
       Console.WriteLine("");
 
