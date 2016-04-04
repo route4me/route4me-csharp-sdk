@@ -57,7 +57,7 @@
     <Compile Include="QueryTypes\AddressBookParameters.cs" />
     <Compile Include="QueryTypes\AddressParameters.cs" />
     <Compile Include="QueryTypes\AvoidanceZoneParameters.cs" />
-    <Compile Include="QueryTypes\AvoidanceZoneQuerry.cs" />
+    <Compile Include="QueryTypes\AvoidanceZoneQuery.cs" />
     <Compile Include="QueryTypes\GenericParameters.cs" />
     <Compile Include="QueryTypes\GPSParameters.cs" />
     <Compile Include="QueryTypes\HttpQueryMemberAttribute.cs" />

@@ -4,9 +4,9 @@ using System.Runtime.Serialization;
 namespace Route4MeSDK.QueryTypes
 {
   /// <summary>
-  /// Avoidance zone querry
+  /// Avoidance zone Query
   /// </summary>
-  public sealed class AvoidanceZoneQuerry : GenericParameters
+  public sealed class AvoidanceZoneQuery : GenericParameters
   {
     /// <summary>
     /// Device Id
