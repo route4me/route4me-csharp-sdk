@@ -15,8 +15,8 @@ namespace Route4MeSDK.QueryTypes
     [HttpQueryMemberAttribute(Name = "start", EmitDefaultValue = false)]
     public uint? Start { get; set; }
 
-    [HttpQueryMemberAttribute(Name = "querry", EmitDefaultValue = false)]
-    public string Querry { get; set; }
+    [HttpQueryMemberAttribute(Name = "query", EmitDefaultValue = false)]
+    public string Query { get; set; }
 
     [HttpQueryMemberAttribute(Name = "fields", EmitDefaultValue = false)]
     public string Fields { get; set; }
