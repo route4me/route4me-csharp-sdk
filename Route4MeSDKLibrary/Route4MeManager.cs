@@ -606,12 +606,12 @@ namespace Route4MeSDK
     /// <summary>
     /// Get avoidance zones
     /// </summary>
-    /// <param name="avoidanceZoneQuerry"> Parameters for request </param>
+    /// <param name="avoidanceZoneQuery"> Parameters for request </param>
     /// <param name="errorString"> out: Error as string </param>
     /// <returns> Avoidance zone Object list </returns>
-    public AvoidanceZone[] GetAvoidanceZones(AvoidanceZoneQuerry avoidanceZoneQuerry, out string errorString)
+    public AvoidanceZone[] GetAvoidanceZones(AvoidanceZoneQuery avoidanceZoneQuery, out string errorString)
     {
-      AvoidanceZone[] avoidanceZones = GetJsonObjectFromAPI<AvoidanceZone[]>(avoidanceZoneQuerry,
+      AvoidanceZone[] avoidanceZones = GetJsonObjectFromAPI<AvoidanceZone[]>(avoidanceZoneQuery,
                                                              R4MEInfrastructureSettings.Avoidance,
                                                              HttpMethodType.Get,
                                                              out errorString);
@@ -621,12 +621,12 @@ namespace Route4MeSDK
     /// <summary>
     /// Get avoidance zone by parameters (territory id, device id)
     /// </summary>
-    /// <param name="avoidanceZoneQuerry"> Parameters for request </param>
+    /// <param name="avoidanceZoneQuery"> Parameters for request </param>
     /// <param name="errorString"> out: Error as string </param>
     /// <returns> Avoidance zone Object </returns>
-    public AvoidanceZone GetAvoidanceZone(AvoidanceZoneQuerry avoidanceZoneQuerry, out string errorString)
+    public AvoidanceZone GetAvoidanceZone(AvoidanceZoneQuery avoidanceZoneQuery, out string errorString)
     {
-      AvoidanceZone avoidanceZone = GetJsonObjectFromAPI<AvoidanceZone>(avoidanceZoneQuerry,
+      AvoidanceZone avoidanceZone = GetJsonObjectFromAPI<AvoidanceZone>(avoidanceZoneQuery,
                                                              R4MEInfrastructureSettings.Avoidance,
                                                              HttpMethodType.Get,
                                                              out errorString);
@@ -651,12 +651,12 @@ namespace Route4MeSDK
     /// <summary>
     /// Delete avoidance zone (by territory id, device id)
     /// </summary>
-    /// <param name="avoidanceZoneQuerry"> Parameters for request </param>
+    /// <param name="avoidanceZoneQuery"> Parameters for request </param>
     /// <param name="errorString"> out: Error as string </param>
     /// <returns> Result status true/false </returns>
-    public bool DeleteAvoidanceZone(AvoidanceZoneQuerry avoidanceZoneQuerry, out string errorString)
+    public bool DeleteAvoidanceZone(AvoidanceZoneQuery avoidanceZoneQuery, out string errorString)
     {
-      GetJsonObjectFromAPI<AvoidanceZone>(avoidanceZoneQuerry,
+      GetJsonObjectFromAPI<AvoidanceZone>(avoidanceZoneQuery,
                                                              R4MEInfrastructureSettings.Avoidance,
                                                              HttpMethodType.Delete,
                                                              out errorString);

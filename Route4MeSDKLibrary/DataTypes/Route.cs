@@ -41,7 +41,7 @@ namespace Route4MeSDK.DataTypes
     public double? TripDistance { get; set; }
 
     [DataMember(Name = "gas_price", EmitDefaultValue = false)]
-    public double? GasPprice { get; set; }
+    public double? GasPrice { get; set; }
 
     [DataMember(Name = "route_duration_sec", EmitDefaultValue = false)]
     public int? RouteDurationSec { get; set; }
