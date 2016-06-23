@@ -24,6 +24,7 @@ namespace Route4MeSDK
     public const string MoveRouteDestination = MainHost + "/actions/route/move_route_destination.php";
     public const string AddressBook = MainHost + "/api.v4/address_book.php";
     public const string Avoidance = MainHost + "/api.v4/avoidance.php";
+    public const string Order = MainHost + "/api.v4/order.php";
 
     #endregion
   }

@@ -47,6 +47,7 @@
     <Compile Include="DataTypes\Enums.cs" />
     <Compile Include="DataTypes\ErrorResponse.cs" />
     <Compile Include="DataTypes\Links.cs" />
+    <Compile Include="DataTypes\Order.cs" />
     <Compile Include="DataTypes\Route.cs" />
     <Compile Include="DataTypes\RouteParameters.cs" />
     <Compile Include="DataTypes\Territory.cs" />
@@ -63,6 +64,7 @@
     <Compile Include="QueryTypes\HttpQueryMemberAttribute.cs" />
     <Compile Include="QueryTypes\NoteParameters.cs" />
     <Compile Include="QueryTypes\OptimizationParameters.cs" />
+    <Compile Include="QueryTypes\OrderParameters.cs" />
     <Compile Include="QueryTypes\RouteParametersQuery.cs" />
     <Compile Include="Route4MeManager.cs" />
     <Compile Include="Types.cs" />

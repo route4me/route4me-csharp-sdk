@@ -665,6 +665,115 @@ namespace Route4MeSDK
 
     #endregion
 
+    #region Orders
+
+    [DataContract]
+    private sealed class GetOrdersResponse
+    {
+      [DataMember(Name = "results")]
+      public Order[] Results { get; set; }
+
+      [DataMember(Name = "total")]
+      public uint Total { get; set; }
+    }
+
+    /// <summary>
+    /// Get Orders
+    /// </summary>
+    /// <param name="ordersQuery"> Parameters for request </param>
+    /// <param name="total"> out: Total number of orders </param>
+    /// <param name="errorString"> out: Error as string </param>
+    /// <returns> Order object list </returns>
+    public Order[] GetOrders(OrderParameters ordersQuery, out uint total, out string errorString)
+    {
+      total = 0;
+      GetOrdersResponse response = GetJsonObjectFromAPI<GetOrdersResponse>(ordersQuery,
+                                                           R4MEInfrastructureSettings.Order,
+                                                           HttpMethodType.Get,
+                                                           out errorString);
+      Order[] result = null;
+      if (response != null)
+      {
+        result = response.Results;
+        total = response.Total;
+      }
+      return result;
+    }
+
+    /// <summary>
+    /// Create Order
+    /// </summary>
+    /// <param name="order"> Parameters for request </param>
+    /// <param name="errorString"> out: Error as string </param>
+    /// <returns> Order object </returns>
+    public Order AddOrder(Order order, out string errorString)
+    {
+      order.PrepareForSerialization();
+      Order resultOrder = GetJsonObjectFromAPI<Order>(order,
+                                                             R4MEInfrastructureSettings.Order,
+                                                             HttpMethodType.Post,
+                                                             out errorString);
+      return resultOrder;
+    }
+
+    /// <summary>
+    /// Update Order
+    /// </summary>
+    /// <param name="order"> Parameters for request </param>
+    /// <param name="errorString"> out: Error as string </param>
+    /// <returns> Order Object </returns>
+    public Order UpdateOrder(Order order, out string errorString)
+    {
+      order.PrepareForSerialization();
+      Order resultOrder = GetJsonObjectFromAPI<Order>(order,
+                                                           R4MEInfrastructureSettings.Order,
+                                                           HttpMethodType.Put,
+                                                           out errorString);
+      return resultOrder;
+    }
+
+    [DataContract]
+    private sealed class RemoveOrdersRequest : GenericParameters
+    {
+      [DataMember(Name = "order_ids", EmitDefaultValue = false)]
+      public string[] OrderIds { get; set; }
+    }
+
+    [DataContract]
+    private sealed class RemoveOrdersResponse
+    {
+      [DataMember(Name = "status")]
+      public bool Status { get; set; }
+    }
+
+    /// <summary>
+    /// Remove Orders
+    /// </summary>
+    /// <param name="orderIds"> Order IDs </param>
+    /// <param name="errorString"> out: Error as string </param>
+    /// <returns> Result status true/false </returns>
+    public bool RemoveOrders(string[] orderIds, out string errorString)
+    {
+      RemoveOrdersRequest request = new RemoveOrdersRequest()
+      {
+        OrderIds = orderIds
+      };
+      RemoveOrdersResponse response = GetJsonObjectFromAPI<RemoveOrdersResponse>(request,
+                                                             R4MEInfrastructureSettings.Order,
+                                                             HttpMethodType.Delete,
+                                                             out errorString);
+      if (response != null && response.Status)
+      {
+        return true;
+      }
+      else
+      {
+        return false;
+      }
+    }
+
+    #endregion
+
     #endregion
 
     #region Generic Methods
@@ -760,6 +869,7 @@ namespace Route4MeSDK
               if (response.IsCompleted)
               {
                 //var test = m_isTestMode ? response.Result.ReadString() : null;
+                //var test = response.Result.ReadString();
                 result = isString ? response.Result.ReadString() as T :
                                     response.Result.ReadObject<T>();
               }

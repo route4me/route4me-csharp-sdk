@@ -145,6 +145,8 @@ namespace Route4MeSDKTest
       else
         System.Console.WriteLine("routeIdsToDelete.Count == 0. DeleteRoutes not called.");
 
+
+      // Address Book
       AddressBookContact contact1 = examples.AddAddressBookContact();
       AddressBookContact contact2 = examples.AddAddressBookContact();
       examples.GetAddressBookContacts();
@@ -164,6 +166,7 @@ namespace Route4MeSDKTest
         addressIdsToRemove.Add(contact2.AddressId);
       examples.RemoveAddressBookContacts(addressIdsToRemove.ToArray());
 
+
       // Avoidance Zones
       string territoryId = examples.AddAvoidanceZone();
       examples.GetAvoidanceZones();
@@ -179,6 +182,28 @@ namespace Route4MeSDKTest
         examples.DeleteAvoidanceZone(territoryId);
       else
         System.Console.WriteLine("DeleteAvoidanceZone not called. territoryId == null.");
+
+
+      // Orders
+      Order order1 = examples.AddOrder();
+      Order order2 = examples.AddOrder();
+      examples.GetOrders();
+      if (order1 != null)
+      {
+        order1.LastName = "Updated " + (new Random()).Next().ToString();
+        examples.UpdateOrder(order1);
+      }
+      else
+      {
+        System.Console.WriteLine("order1 == null. UpdateOrder not called.");
+      }
+      List<string> orderIdsToRemove = new List<string>();
+      if (order1 != null)
+        orderIdsToRemove.Add(order1.OrderId);
+      if (order2 != null)
+        orderIdsToRemove.Add(order2.OrderId);
+      examples.RemoveOrders(orderIdsToRemove.ToArray());
+
 
       examples.GenericExample();
       examples.GenericExampleShortcut();
