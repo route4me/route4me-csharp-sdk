@@ -348,10 +348,16 @@ namespace Route4MeSDK
       public uint Total { get; set; }
     }
 
+    /// <summary>
+    /// Get Activity Feed
+    /// </summary>
+    /// <param name="activityParameters"> Input parameters </param>
+    /// <param name="errorString"> Error string </param>
+    /// <returns> List of Activity objects </returns>
     public Activity[] GetActivityFeed(ActivityParameters activityParameters, out string errorString)
     {
       GetActivitiesResponse response = GetJsonObjectFromAPI<GetActivitiesResponse>(activityParameters,
-                                                           R4MEInfrastructureSettings.GetActivitiesHost,
+                                                           R4MEInfrastructureSettings.ActivityFeedHost,
                                                            HttpMethodType.Get,
                                                            out errorString);
       Activity[] result = null;
@@ -360,6 +366,36 @@ namespace Route4MeSDK
         result = response.Results;
       }
       return result;
+    }
+
+    [DataContract]
+    private sealed class LogCustomActivityResponse
+    {
+      [DataMember(Name = "status")]
+      public bool Status { get; set; }
+    }
+
+    /// <summary>
+    /// Create User Activity. Send custom message to Activity Stream.
+    /// </summary>
+    /// <param name="activity"> Input Activity object to add </param>
+    /// <param name="errorString"> Error string </param>
+    /// <returns> True/False </returns>
+    public bool LogCustomActivity(Activity activity, out string errorString)
+    {
+      activity.PrepareForSerialization();
+      LogCustomActivityResponse response = GetJsonObjectFromAPI<LogCustomActivityResponse>(activity,
+                                                             R4MEInfrastructureSettings.ActivityFeedHost,
+                                                             HttpMethodType.Post,
+                                                             out errorString);
+      if (response != null && response.Status)
+      {
+        return true;
+      }
+      else
+      {
+        return false;
+      }
     }
 
     #endregion

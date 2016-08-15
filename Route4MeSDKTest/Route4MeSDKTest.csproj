@@ -37,6 +37,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Examples\Activities\LogCustomActivity.cs" />
     <Compile Include="Examples\AddressBook\AddAddressBookContact.cs" />
     <Compile Include="Examples\Notes\AddAddressNote.cs" />
     <Compile Include="Examples\AvoidanceZones\AddAvoidanceZone.cs" />

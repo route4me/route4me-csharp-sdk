@@ -88,6 +88,11 @@ namespace Route4MeSDKTest
       examples.GetUsers();
 
       if (routeId_SingleDriverRoute10Stops != null)
+        examples.LogCustomActivity("Test User Activity " + DateTime.Now.ToString(), routeId_SingleDriverRoute10Stops);
+      else
+        System.Console.WriteLine("LogCustomActivity not called. routeId_SingleDriverRoute10Stops == null.");
+
+      if (routeId_SingleDriverRoute10Stops != null)
         examples.GetActivities(routeId_SingleDriverRoute10Stops);
       else
         System.Console.WriteLine("GetActivities not called. routeId_SingleDriverRoute10Stops == null.");
