@@ -44,6 +44,7 @@
     <Compile Include="Examples\Addresses\AddDestinationToOptimization.cs" />
     <Compile Include="Examples\Addresses\AddRouteDestinations.cs" />
     <Compile Include="Examples\AvoidanceZones\DeleteAvoidanceZone.cs" />
+    <Compile Include="Examples\Optimizations\RemoveOptimization.cs" />
     <Compile Include="Examples\Orders\AddOrder.cs" />
     <Compile Include="Examples\Orders\RemoveOrders.cs" />
     <Compile Include="Examples\Orders\GetOrders.cs" />

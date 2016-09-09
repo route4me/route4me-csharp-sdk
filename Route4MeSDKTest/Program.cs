@@ -150,6 +150,12 @@ namespace Route4MeSDKTest
       else
         System.Console.WriteLine("routeIdsToDelete.Count == 0. DeleteRoutes not called.");
 
+      // Remove optimization
+      if (optimizationProblemID != null)
+        examples.RemoveOptimization(optimizationProblemID);
+      else
+        System.Console.WriteLine("RemoveOptimization not called. optimizationProblemID == null.");
+
 
       // Address Book
       AddressBookContact contact1 = examples.AddAddressBookContact();

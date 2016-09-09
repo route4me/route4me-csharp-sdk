@@ -100,6 +100,41 @@ namespace Route4MeSDK
       return result;
     }
 
+    [DataContract]
+    private sealed class RemoveOptimizationResponse
+    {
+      [DataMember(Name = "status")]
+      public bool Status { get; set; }
+      [DataMember(Name = "removed")]
+      public bool Removed { get; set; }
+    }
+
+    /// <summary>
+    /// Remove an existing optimization belonging to an user.
+    /// </summary>
+    /// <param name="optimizationProblemID"> Optimization Problem ID </param>
+    /// <param name="errorString"> out: Error as string </param>
+    /// <returns> Result status true/false </returns>
+    public bool RemoveOptimization(string optimizationProblemID, out string errorString)
+    {
+      GenericParameters genericParameters = new GenericParameters();
+      genericParameters.ParametersCollection.Add("optimization_problem_id", optimizationProblemID);
+      RemoveOptimizationResponse response = GetJsonObjectFromAPI<RemoveOptimizationResponse>(genericParameters,
+                                                             R4MEInfrastructureSettings.ApiHost,
+                                                             HttpMethodType.Delete,
+                                                             out errorString);
+      if (response != null && response.Status && response.Removed)
+      {
+        return true;
+      }
+      else
+      {
+        if (errorString == "")
+          errorString = "Error removing optimization";
+        return false;
+      }
+    }
+
     #endregion
 
     #region Routes
