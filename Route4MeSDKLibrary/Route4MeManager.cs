@@ -135,6 +135,35 @@ namespace Route4MeSDK
       }
     }
 
+    [DataContract]
+    private sealed class RemoveDestinationFromOptimizationResponse
+    {
+      [DataMember(Name = "deleted")]
+      public Boolean Deleted { get; set; }
+
+      [DataMember(Name = "route_destination_id")]
+      public int RouteDestinationId { get; set; }
+    }
+
+    public bool RemoveDestinationFromOptimization(string optimizationId, int destinationId, out string errorString)
+    {
+      GenericParameters genericParameters = new GenericParameters();
+      genericParameters.ParametersCollection.Add("optimization_problem_id", optimizationId);
+      genericParameters.ParametersCollection.Add("route_destination_id", destinationId.ToString());
+      RemoveDestinationFromOptimizationResponse response = GetJsonObjectFromAPI<RemoveDestinationFromOptimizationResponse>(genericParameters,
+                                                             R4MEInfrastructureSettings.GetAddress,
+                                                             HttpMethodType.Delete,
+                                                             out errorString);
+      if (response != null && response.Deleted)
+      {
+        return true;
+      }
+      else
+      {
+        return false;
+      }
+    }
+
     #endregion
 
     #region Routes

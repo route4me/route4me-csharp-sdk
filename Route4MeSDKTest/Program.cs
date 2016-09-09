@@ -64,9 +64,25 @@ namespace Route4MeSDKTest
       examples.GetOptimizations();
 
       if (optimizationProblemID != null)
-        examples.AddDestinationToOptimization(optimizationProblemID, true);
+      {
+        dataObject = examples.AddDestinationToOptimization(optimizationProblemID, true);
+      }
       else
+      {
         System.Console.WriteLine("AddDestinationToOptimization not called. optimizationProblemID == null.");
+        dataObject = null;
+      }
+
+      if (optimizationProblemID != null)
+      {
+        Address destinationToRemove = (dataObject != null && dataObject.Addresses.Length > 0) ? dataObject.Addresses[dataObject.Addresses.Length - 1] : null;
+        if (destinationToRemove != null)
+          examples.RemoveDestinationFromOptimization(optimizationProblemID, destinationToRemove.RouteDestinationId.Value, false);
+        else
+          System.Console.WriteLine("RemoveDestinationFromOptimization not called. destinationToRemove == null.");
+      }
+      else
+        System.Console.WriteLine("RemoveDestinationFromOptimization not called. optimizationProblemID == null.");
 
       if (optimizationProblemID != null)
         examples.ReOptimization(optimizationProblemID);
