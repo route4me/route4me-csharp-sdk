@@ -30,8 +30,9 @@ namespace Route4MeSDK.Examples
       };
 
       // Run the query
+      bool optimalPosition = true;
       string errorString;
-      int[] destinationIds = route4Me.AddRouteDestinations(routeId, addresses, out errorString);
+      int[] destinationIds = route4Me.AddRouteDestinations(routeId, addresses, optimalPosition, out errorString);
 
       Console.WriteLine("");
 

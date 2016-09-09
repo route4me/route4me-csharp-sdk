@@ -484,14 +484,29 @@ namespace Route4MeSDK
 
       [DataMember(Name = "addresses", EmitDefaultValue = false)]
       public Address[] Addresses { get; set; }
+
+      /// <summary>
+      /// If true, an address will be inserted at optimal position of a route
+      /// </summary>
+      [DataMember(Name = "optimal_position", EmitDefaultValue = true)]
+      public bool OptimalPosition { get; set; }
     }
 
-    public int[] AddRouteDestinations(string routeId, Address[] addresses, out string errorString)
+    /// <summary>
+    /// Add address(es) into a route.
+    /// </summary>
+    /// <param name="routeId"> Route ID </param>
+    /// <param name="addresses"> Valid array of Address objects. </param>
+    /// <param name="optimalPosition"> If true, an address will be inserted at optimal position of a route </param>
+    /// <param name="errorString"> out: Error as string </param>
+    /// <returns> IDs of added addresses </returns>
+    public int[] AddRouteDestinations(string routeId, Address[] addresses, bool optimalPosition, out string errorString)
     {
       AddRouteDestinationRequest request = new AddRouteDestinationRequest()
       {
         RouteId = routeId,
-        Addresses = addresses
+        Addresses = addresses,
+        OptimalPosition = optimalPosition
       };
       DataObject response = GetJsonObjectFromAPI<DataObject>(request,
                                                              R4MEInfrastructureSettings.RouteHost,
@@ -519,6 +534,18 @@ namespace Route4MeSDK
         destinationIds = arrDestinationIds.ToArray();
       }
       return destinationIds;
+    }
+
+    /// <summary>
+    /// Add address(es) into a route.
+    /// </summary>
+    /// <param name="routeId"> Route ID </param>
+    /// <param name="addresses"> Valid array of Address objects. </param>
+    /// <param name="errorString"> out: Error as string </param>
+    /// <returns> IDs of added addresses </returns>
+    public int[] AddRouteDestinations(string routeId, Address[] addresses, out string errorString)
+    {
+      return this.AddRouteDestinations(routeId, addresses, true, out errorString);
     }
 
 
