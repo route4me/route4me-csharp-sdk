@@ -40,6 +40,7 @@
     <Compile Include="Examples\Activities\LogCustomActivity.cs" />
     <Compile Include="Examples\AddressBook\AddAddressBookContact.cs" />
     <Compile Include="Examples\Addresses\RemoveDestinationFromOptimization.cs" />
+    <Compile Include="Examples\Addresses\ResequenceRouteDestinations.cs" />
     <Compile Include="Examples\Notes\AddAddressNote.cs" />
     <Compile Include="Examples\AvoidanceZones\AddAvoidanceZone.cs" />
     <Compile Include="Examples\Addresses\AddDestinationToOptimization.cs" />

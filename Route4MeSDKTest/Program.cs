@@ -15,7 +15,13 @@ namespace Route4MeSDKTest
 
       DataObject dataObject1 = examples.SingleDriverRoute10Stops();
       dataObject = dataObject1;
-      string routeId_SingleDriverRoute10Stops = (dataObject != null && dataObject.Routes != null && dataObject.Routes.Length > 0) ? dataObject.Routes[0].RouteID : null;
+      DataObjectRoute routeSingleDriverRoute10Stops = (dataObject != null && dataObject.Routes != null && dataObject.Routes.Length > 0) ? dataObject.Routes[0] : null;
+      string routeId_SingleDriverRoute10Stops = (routeSingleDriverRoute10Stops != null) ? routeSingleDriverRoute10Stops.RouteID : null;
+
+      if (routeSingleDriverRoute10Stops != null)
+        examples.ResequenceRouteDestinations(routeSingleDriverRoute10Stops);
+      else
+        System.Console.WriteLine("ResequenceRouteDestinations not called. routeSingleDriverRoute10Stops == null.");
 
       int[] destinationIds = examples.AddRouteDestinations(routeId_SingleDriverRoute10Stops);
       if (destinationIds != null && destinationIds.Length > 0)
