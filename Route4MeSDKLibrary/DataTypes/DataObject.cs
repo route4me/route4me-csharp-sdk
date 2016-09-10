@@ -36,5 +36,11 @@ namespace Route4MeSDK.DataTypes
 
     [DataMember(Name = "tracking_history")]
     public TrackingHistory[] TrackingHistory { get; set; }
+
+    [DataMember(Name = "directions")]
+    public Direction[] Directions { get; set; }
+
+    [DataMember(Name = "path")]
+    public DirectionPathPoint[] Path { get; set; }
   }
 }

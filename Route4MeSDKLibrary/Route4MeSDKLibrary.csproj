@@ -44,6 +44,10 @@
     <Compile Include="DataTypes\AddressNote.cs" />
     <Compile Include="DataTypes\AvoidanceZone.cs" />
     <Compile Include="DataTypes\DataObject.cs" />
+    <Compile Include="DataTypes\Direction.cs" />
+    <Compile Include="DataTypes\DirectionLocation.cs" />
+    <Compile Include="DataTypes\DirectionPathPoint.cs" />
+    <Compile Include="DataTypes\DirectionStep.cs" />
     <Compile Include="DataTypes\Enums.cs" />
     <Compile Include="DataTypes\ErrorResponse.cs" />
     <Compile Include="DataTypes\Links.cs" />

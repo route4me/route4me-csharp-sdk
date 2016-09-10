@@ -93,7 +93,9 @@ namespace Route4MeSDKTest
       {
         examples.UpdateRoute(routeId_SingleDriverRoute10Stops);
         examples.ReoptimizeRoute(routeId_SingleDriverRoute10Stops);
-        examples.GetRoute(routeId_SingleDriverRoute10Stops);
+        bool getRouteDirections = true;
+        bool getRoutePathPoints = true;
+        examples.GetRoute(routeId_SingleDriverRoute10Stops, getRouteDirections, getRoutePathPoints);
       }
       else
       {
