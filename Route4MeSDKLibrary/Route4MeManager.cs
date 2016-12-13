@@ -287,6 +287,23 @@ namespace Route4MeSDK
       return deletedRouteIds;
     }
 
+    public void MergeRoutes(string[] routeIds, out string errorString)
+    {
+      string str_route_ids = "";
+      foreach (string routeId in routeIds)
+      {
+        if (str_route_ids.Length > 0)
+          str_route_ids += ",";
+        str_route_ids += routeId;
+      }
+      GenericParameters genericParameters = new GenericParameters();
+      genericParameters.ParametersCollection.Add("route_ids", str_route_ids);
+      DataObject result = GetJsonObjectFromAPI<DataObject>(genericParameters,
+                                                             R4MEInfrastructureSettings.MergeRoutes,
+                                                             HttpMethodType.Post,
+                                                             out errorString);
+    }
+
     #endregion
 
     #region Tracking

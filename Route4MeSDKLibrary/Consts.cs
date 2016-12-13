@@ -25,6 +25,7 @@ namespace Route4MeSDK
     public const string AddressBook = MainHost + "/api.v4/address_book.php";
     public const string Avoidance = MainHost + "/api.v4/avoidance.php";
     public const string Order = MainHost + "/api.v4/order.php";
+    public const string MergeRoutes = MainHost + "/actions/merge_routes.php";
 
     #endregion
   }
