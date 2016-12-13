@@ -57,7 +57,7 @@ namespace Route4MeSDK
       {
         writer.WriteObject(memoryStream, obj);
 
-        result = Encoding.Default.GetString(memoryStream.ToArray());
+        result = Encoding.UTF8.GetString(memoryStream.ToArray());
       }
 
       return result;
