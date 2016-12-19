@@ -126,6 +126,7 @@ namespace Route4MeSDKTest
         examples.GetAddress(routeIdToMoveTo, routeDestinationIdToMove);
 
         examples.AddAddressNote(routeIdToMoveTo, routeDestinationIdToMove);
+        examples.AddAddressNoteWithFile(routeIdToMoveTo, routeDestinationIdToMove);
         examples.GetAddressNotes(routeIdToMoveTo, routeDestinationIdToMove);
       }
       else

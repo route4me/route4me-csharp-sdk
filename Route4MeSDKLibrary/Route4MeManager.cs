@@ -3,6 +3,7 @@ using Route4MeSDK.QueryTypes;
 using Route4MeSDKLibrary.DataTypes;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Runtime.Serialization;
@@ -377,23 +378,46 @@ namespace Route4MeSDK
       public AddressNote Note { get; set; }
     }
 
-    public AddressNote AddAddressNote(NoteParameters noteParameters, string noteContents, out string errorString)
+    public AddressNote AddAddressNote(NoteParameters noteParameters, string noteContents, string attachmentFilePath, out string errorString)
     {
-      var keyValues = new List<KeyValuePair<string, string>>();
       var strUpdateType = "unclassified";
       if (noteParameters.ActivityType != null && noteParameters.ActivityType.Length > 0)
       {
         strUpdateType = noteParameters.ActivityType;
       }
-      keyValues.Add(new KeyValuePair<string, string>("strUpdateType", strUpdateType));
-      keyValues.Add(new KeyValuePair<string, string>("strNoteContents", noteContents));
-      HttpContent httpContent = new FormUrlEncodedContent(keyValues);
-
+      HttpContent httpContent = null;
+      FileStream attachmentFileStream = null;
+      StreamContent attachmentStreamContent = null;
+      if (attachmentFilePath != null)
+      {
+        attachmentFileStream = File.OpenRead(attachmentFilePath);
+        attachmentStreamContent = new StreamContent(attachmentFileStream);
+        MultipartFormDataContent multipartFormDataContent = new MultipartFormDataContent();
+        multipartFormDataContent.Add(attachmentStreamContent, "strFilename", Path.GetFileName(attachmentFilePath));
+        multipartFormDataContent.Add(new StringContent(strUpdateType), "strUpdateType");
+        multipartFormDataContent.Add(new StringContent(noteContents), "strNoteContents");
+        httpContent = multipartFormDataContent;
+      }
+      else
+      {
+        var keyValues = new List<KeyValuePair<string, string>>();
+        keyValues.Add(new KeyValuePair<string, string>("strUpdateType", strUpdateType));
+        keyValues.Add(new KeyValuePair<string, string>("strNoteContents", noteContents));
+        httpContent = new FormUrlEncodedContent(keyValues);
+      }
       AddAddressNoteResponse response = GetJsonObjectFromAPI<AddAddressNoteResponse>(noteParameters,
                                                            R4MEInfrastructureSettings.AddRouteNotesHost,
                                                            HttpMethodType.Post,
                                                            httpContent,
                                                            out errorString);
+      if (attachmentStreamContent != null)
+      {
+        attachmentStreamContent.Dispose();
+      }
+      if (attachmentFileStream != null)
+      {
+        attachmentFileStream.Dispose();
+      }
       if (response != null)
       {
         if (response.Note != null)
@@ -413,6 +437,11 @@ namespace Route4MeSDK
       {
         return null;
       }
+    }
+
+    public AddressNote AddAddressNote(NoteParameters noteParameters, string noteContents, out string errorString)
+    {
+      return this.AddAddressNote(noteParameters, noteContents, null, out errorString);
     }
 
     #endregion
