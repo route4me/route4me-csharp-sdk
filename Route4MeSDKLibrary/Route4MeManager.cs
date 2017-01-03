@@ -338,6 +338,24 @@ namespace Route4MeSDK
         }
     }
 
+    public bool RouteSharing(RouteParametersQuery roParames, string Email, out string errorString)
+    {
+        List<KeyValuePair<string, string>> keyValues = new List<KeyValuePair<string, string>>();
+        
+        keyValues.Add(new KeyValuePair<string, string>("recipient_email", Email));
+        HttpContent httpContent = new FormUrlEncodedContent(keyValues);
+
+        ResequenceReoptimizeRouteResponse response = GetJsonObjectFromAPI<ResequenceReoptimizeRouteResponse>(roParames, R4MEInfrastructureSettings.RouteSharing, HttpMethodType.Post, httpContent, out errorString);
+
+        if (response != null && response.Status)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 
     #endregion
 

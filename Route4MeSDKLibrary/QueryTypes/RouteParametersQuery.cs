@@ -105,6 +105,15 @@ namespace Route4MeSDK.QueryTypes
     [HttpQueryMemberAttribute(Name = "recompute_directions", EmitDefaultValue = false)]
     public bool? RecomputeDirections { get; set; }
 
+    [IgnoreDataMember()]
+    [HttpQueryMemberAttribute(Name = "response_format", EmitDefaultValue = false)]
+    public string ResponseFormat
+    {
+        get { return m_ResponseFormat; }
+        set { m_ResponseFormat = value; }
+    }
+    private string m_ResponseFormat;
+
     /// <summary>
     /// Route Parameters to update.
     /// (After a PUT there is no guarantee that the route_destination_id values are preserved! It may create copies resulting in new destination IDs, especially when dealing with multiple depots.)

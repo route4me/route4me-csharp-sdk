@@ -27,6 +27,7 @@ namespace Route4MeSDK
     public const string Order = MainHost + "/api.v4/order.php";
     public const string MergeRoutes = MainHost + "/actions/merge_routes.php";
     public const string RouteReoptimize = MainHost + "/api.v3/route/reoptimize_2.php";
+    public const string RouteSharing = MainHost + "/actions/route/share_route.php";
 
     #endregion
   }
