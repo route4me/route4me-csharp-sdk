@@ -357,6 +357,50 @@ namespace Route4MeSDK
         }
     }
 
+    [DataContract()]
+    private sealed class UpdateRouteCustomDataRequest : GenericParameters
+    {
+
+        [HttpQueryMemberAttribute(Name = "route_id", EmitDefaultValue = false)]
+        public string RouteId
+        {
+            get { return m_RouteId; }
+            set { m_RouteId = value; }
+        }
+
+        private string m_RouteId;
+        [HttpQueryMemberAttribute(Name = "route_destination_id", EmitDefaultValue = false)]
+        public System.Nullable<int> RouteDestinationId
+        {
+            get { return m_RouteDestinationId; }
+            set { m_RouteDestinationId = value; }
+        }
+
+        private System.Nullable<int> m_RouteDestinationId;
+
+        [DataMember(Name = "custom_fields", EmitDefaultValue = false)]
+        public Dictionary<string, string> CustomFields
+        {
+            get { return m_CustomFields; }
+            set { m_CustomFields = value; }
+        }
+        private Dictionary<string, string> m_CustomFields;
+    }
+
+    public Address UpdateRouteCustomData(RouteParametersQuery routeParameters, Dictionary<string, string> customData, out string errorString)
+    {
+        UpdateRouteCustomDataRequest request = new UpdateRouteCustomDataRequest
+        {
+            RouteId = routeParameters.RouteId,
+            RouteDestinationId = routeParameters.RouteDestinationId,
+            CustomFields = customData
+        };
+
+        var result = GetJsonObjectFromAPI<Address>(request, R4MEInfrastructureSettings.GetAddress, HttpMethodType.Put, out errorString);
+
+        return result;
+    }
+
     #endregion
 
     #region Tracking

@@ -114,6 +114,15 @@ namespace Route4MeSDK.QueryTypes
     }
     private string m_ResponseFormat;
 
+    [IgnoreDataMember()]
+    [HttpQueryMemberAttribute(Name = "route_destination_id", EmitDefaultValue = false)]
+    public System.Nullable<int> RouteDestinationId
+    {
+        get { return m_RouteDestinationId; }
+        set { m_RouteDestinationId = value; }
+    }
+    private System.Nullable<int> m_RouteDestinationId;
+
     /// <summary>
     /// Route Parameters to update.
     /// (After a PUT there is no guarantee that the route_destination_id values are preserved! It may create copies resulting in new destination IDs, especially when dealing with multiple depots.)
