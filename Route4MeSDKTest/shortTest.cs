@@ -13,7 +13,7 @@ namespace Route4MeSDKTest
             Route4MeExamples examples = new Route4MeExamples();
 
             //======== Route Sharing  ============
-            examples.RouteSharing("56E8F6BF949670F0C0BBAC00590FD116", "olegi_g@yahoo.com");
+            examples.RouteSharing("56E8F6BF949670F0C0BBAC00590FD116", "ooooooo@yahoo.com");
             //===================================================================
 
             //======== Routes Merging  ============
