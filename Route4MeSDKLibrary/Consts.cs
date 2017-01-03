@@ -26,6 +26,7 @@ namespace Route4MeSDK
     public const string Avoidance = MainHost + "/api.v4/avoidance.php";
     public const string Order = MainHost + "/api.v4/order.php";
     public const string MergeRoutes = MainHost + "/actions/merge_routes.php";
+    public const string RouteReoptimize = MainHost + "/api.v3/route/reoptimize_2.php";
 
     #endregion
   }

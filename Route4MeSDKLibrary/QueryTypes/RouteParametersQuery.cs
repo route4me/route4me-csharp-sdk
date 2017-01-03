@@ -79,6 +79,25 @@ namespace Route4MeSDK.QueryTypes
     [HttpQueryMemberAttribute(Name = "reoptimize", EmitDefaultValue = false)]
     public bool? ReOptimize { get; set; }
 
+
+    [IgnoreDataMember()]
+    [HttpQueryMemberAttribute(Name = "disable_optimization", EmitDefaultValue = false)]
+    public System.Nullable<bool> DisableOptimization
+    {
+        get { return m_DisableOptimization; }
+        set { m_DisableOptimization = value; }
+    }
+    private System.Nullable<bool> m_DisableOptimization;
+
+    [IgnoreDataMember()]
+    [HttpQueryMemberAttribute(Name = "optimize", EmitDefaultValue = false)]
+    public string Optimize
+    {
+        get { return m_Optimize; }
+        set { m_Optimize = value; }
+    }
+    private string m_Optimize;
+
     /// <summary>
     /// By sending recompute_directions=1 we request that the route directions be recomputed (note that this does happen automatically if certain properties of the route are updated, such as stop sequence_no changes or round-tripness)
     /// </summary>

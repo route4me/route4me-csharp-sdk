@@ -23,6 +23,11 @@ namespace Route4MeSDKTest
       else
         System.Console.WriteLine("ResequenceRouteDestinations not called. routeSingleDriverRoute10Stops == null.");
 
+      if (routeSingleDriverRoute10Stops != null)
+          examples.ResequenceReoptimizeRoute(routeId_SingleDriverRoute10Stops);
+      else
+          System.Console.WriteLine("ResequenceReoptimizeRoute not called. routeSingleDriverRoute10Stops == null.");
+
       int[] destinationIds = examples.AddRouteDestinations(routeId_SingleDriverRoute10Stops);
       if (destinationIds != null && destinationIds.Length > 0)
       {

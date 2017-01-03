@@ -305,6 +305,40 @@ namespace Route4MeSDK
                                                              out errorString);
     }
 
+    [DataContract()]
+    private sealed class ResequenceReoptimizeRouteResponse
+    {
+        [DataMember(Name = "status")]
+        public Boolean Status
+        {
+            get { return m_Status; }
+            set { m_Status = value; }
+        }
+        private Boolean m_Status;
+    }
+
+    public bool ResequenceReoptimizeRoute(Dictionary<string, string> roParames, out string errorString)
+    {
+        RouteParametersQuery request = new RouteParametersQuery
+        {
+            RouteId = roParames["route_id"],
+            DisableOptimization = roParames["disable_optimization"]=="1" ? true : false,
+            Optimize = roParames["optimize"]
+        };
+
+        ResequenceReoptimizeRouteResponse response = GetJsonObjectFromAPI<ResequenceReoptimizeRouteResponse>(request, R4MEInfrastructureSettings.RouteReoptimize, HttpMethodType.Get, out errorString);
+
+        if (response != null && response.Status)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+
     #endregion
 
     #region Tracking
