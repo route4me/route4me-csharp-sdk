@@ -16,12 +16,11 @@ namespace Route4MeSDK.Examples
             // Create the manager with the api key
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
-            // The example refers to teh process of adding an order to a route by sending HTPP PUT data
-
-            RouteParametersQuery rQueryParams = new RouteParametersQuery();
-            var _with1 = rQueryParams;
-            _with1.RouteId = "F0C842829D8799067F9BF7A495076335";
-            _with1.Redirect = false;
+            RouteParametersQuery rQueryParams = new RouteParametersQuery()
+            {
+                RouteId = "F0C842829D8799067F9BF7A495076335",
+                Redirect = false
+            };
 
             Address[] addresses = new Address[] {
 		        new Address {
@@ -98,7 +97,7 @@ namespace Route4MeSDK.Examples
             }
             else
             {
-                Console.WriteLine("AddOrder error: {0}", errorString);
+                Console.WriteLine("AddOrdersToRoute error: {0}", errorString);
             }
         }
     }
