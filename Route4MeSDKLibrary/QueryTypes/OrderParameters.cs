@@ -34,5 +34,37 @@ namespace Route4MeSDK.QueryTypes
     [HttpQueryMemberAttribute(Name = "display", EmitDefaultValue = false)]
     public string Display { get; set; }
 
+    /// <summary>
+    /// Order ID.
+    /// </summary>
+    [HttpQueryMemberAttribute(Name = "order_id", EmitDefaultValue = false)]
+    public string OrderId
+    {
+        get { return m_OrderId; }
+        set { m_OrderId = value; }
+    }
+    private string m_OrderId;
+
+    /// <summary>
+    /// Date an order was inserted
+    /// </summary>
+    [HttpQueryMemberAttribute(Name = "day_added_YYMMDD", EmitDefaultValue = false)]
+    public string DayAddedYYMMDD
+    {
+        get { return m_DayAddedYYMMDD; }
+        set { m_DayAddedYYMMDD = value; }
+    }
+    private string m_DayAddedYYMMDD;
+
+    /// <summary>
+    /// Date an order was scheduled for
+    /// </summary>
+    [HttpQueryMemberAttribute(Name = "scheduled_for_YYMMDD", EmitDefaultValue = false)]
+    public string ScheduledForYYMMDD
+    {
+        get { return m_ScheduledForYYMMDD; }
+        set { m_ScheduledForYYMMDD = value; }
+    }
+    private string m_ScheduledForYYMMDD;
   }
 }

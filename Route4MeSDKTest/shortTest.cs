@@ -12,8 +12,13 @@ namespace Route4MeSDKTest
         {
             Route4MeExamples examples = new Route4MeExamples();
 
+            //======== Get an Order Details by order_id ===========================
+            string OrderIds = "437,438,439";
+            examples.GetOrderByID(OrderIds);
+            //======================================================================
+
             //======== Add Orders To a Route ===========================
-            examples.AddOrdersToOptimization();
+            //examples.AddOrdersToOptimization();
             //======================================================================
 
             //======== Add Orders To a Route ===========================
