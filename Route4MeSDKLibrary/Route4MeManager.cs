@@ -975,6 +975,18 @@ namespace Route4MeSDK
         return response.Results;
     }
 
+    public Order[] SearchOrders(OrderParameters orderQuery, out string errorString)
+    {
+        GetOrdersResponse response = GetJsonObjectFromAPI<GetOrdersResponse>(orderQuery, R4MEInfrastructureSettings.Order, HttpMethodType.Get, out errorString);
+
+        Order[] result = null;
+        if (response != null)
+        {
+            result = response.Results;
+        }
+        return result;
+    }
+
     /// <summary>
     /// Create Order
     /// </summary>
