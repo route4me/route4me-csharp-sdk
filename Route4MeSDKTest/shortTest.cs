@@ -12,9 +12,16 @@ namespace Route4MeSDKTest
         {
             Route4MeExamples examples = new Route4MeExamples();
 
+            // Note run an example by uncommenting code lines between appropriate //=======.... lines
+
             //======== Get an Order Details by order_id ===========================
-            string InsertedDate = "2016-12-18";
-            examples.GetOrderByInsertedDate(InsertedDate);
+            string scheduledDate = "2016-12-20";
+            examples.GetOrderByScheduledDate(scheduledDate);
+            //======================================================================
+
+            //======== Get the Orders by Inserted Date ===========================
+            //string InsertedDate = "2016-12-18";
+            //examples.GetOrderByInsertedDate(InsertedDate);
             //======================================================================
 
             //======== Get an Order Details by order_id ===========================
