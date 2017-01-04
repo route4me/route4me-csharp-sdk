@@ -14,9 +14,14 @@ namespace Route4MeSDKTest
 
             // Note run an example by uncommenting code lines between appropriate //=======.... lines
 
+            //======== Get the Orders by containing specified text in any field =======
+            string query = "Luzerne";
+            examples.GetOrdersBySpecifiedText(query);
+            //======================================================================
+
             //======== Show the Orders using values of the specified fields  =======
-            string CustomFields = "order_id,member_id";
-            examples.GetOrdersByCustomFields(CustomFields);
+            //string CustomFields = "order_id,member_id";
+            //examples.GetOrdersByCustomFields(CustomFields);
             //======================================================================
 
             //======== Get the Orders by Scheduled Date ===========================
