@@ -4,7 +4,6 @@ using System.Runtime.Serialization;
 namespace Route4MeSDK.QueryTypes
 {
 
-
   [DataContract]
   public sealed class OptimizationParameters : GenericParameters
   {
@@ -15,6 +14,18 @@ namespace Route4MeSDK.QueryTypes
     [IgnoreDataMember] // Don't serialize as JSON
     [HttpQueryMemberAttribute(Name = "reoptimize", EmitDefaultValue = false)]
     public bool? ReOptimize { get; set; }
+
+    /// <summary>
+    /// If true will be redirected
+    /// </summary>
+    [IgnoreDataMember()]
+    [HttpQueryMemberAttribute(Name = "redirect", EmitDefaultValue = false)]
+    public System.Nullable<bool> Redirect
+    {
+        get { return m_Redirect; }
+        set { m_Redirect = value; }
+    }
+    private System.Nullable<bool> m_Redirect;
 
     [IgnoreDataMember] // Don't serialize as JSON
     [HttpQueryMemberAttribute(Name = "show_directions", EmitDefaultValue = false)]

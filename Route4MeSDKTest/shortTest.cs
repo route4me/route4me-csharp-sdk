@@ -13,7 +13,11 @@ namespace Route4MeSDKTest
             Route4MeExamples examples = new Route4MeExamples();
 
             //======== Add Orders To a Route ===========================
-            examples.AddOrdersToRoute();
+            examples.AddOrdersToOptimization();
+            //======================================================================
+
+            //======== Add Orders To a Route ===========================
+            //examples.AddOrdersToRoute();
             //======================================================================
 
             //======== Search Routes For Text  ============

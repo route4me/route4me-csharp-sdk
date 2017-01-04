@@ -1092,6 +1092,58 @@ namespace Route4MeSDK
         return response;
     }
 
+    [DataContract()]
+    private sealed class AddOrdersToOptimizationRequest : GenericParameters
+    {
+        [HttpQueryMemberAttribute(Name = "optimization_problem_id", EmitDefaultValue = false)]
+        public string OptimizationProblemId
+        {
+            get { return m_OptimizationProblemId; }
+            set { m_OptimizationProblemId = value; }
+        }
+
+        private string m_OptimizationProblemId;
+        [HttpQueryMemberAttribute(Name = "redirect", EmitDefaultValue = false)]
+        public System.Nullable<int> Redirect
+        {
+            get { return m_Redirect; }
+            set { m_Redirect = value; }
+        }
+
+        private System.Nullable<int> m_Redirect;
+        [DataMember(Name = "addresses", EmitDefaultValue = false)]
+        public Address[] Addresses
+        {
+            get { return m_Addresses; }
+            set { m_Addresses = value; }
+        }
+
+        private Address[] m_Addresses;
+        [DataMember(Name = "parameters", EmitDefaultValue = false)]
+        public RouteParameters Parameters
+        {
+            get { return m_Parameters; }
+            set { m_Parameters = value; }
+        }
+
+        private RouteParameters m_Parameters;
+    }
+
+    public DataObject AddOrdersToOptimization(OptimizationParameters rQueryParams, Address[] addresses, RouteParameters rParams, out string errorString)
+    {
+        AddOrdersToOptimizationRequest request = new AddOrdersToOptimizationRequest
+        {
+            OptimizationProblemId = rQueryParams.OptimizationProblemID,
+            Redirect = rQueryParams.Redirect==true ? 1 : 0,
+            Addresses = addresses,
+            Parameters = rParams
+        };
+
+        DataObject response = GetJsonObjectFromAPI<DataObject>(request, R4MEInfrastructureSettings.ApiHost, HttpMethodType.Put, false, out errorString);
+
+        return response;
+    }
+
     #endregion
 
     #endregion
