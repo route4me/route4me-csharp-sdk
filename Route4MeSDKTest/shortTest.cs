@@ -14,9 +14,14 @@ namespace Route4MeSDKTest
 
             // Note run an example by uncommenting code lines between appropriate //=======.... lines
 
-            //======== Get an Order Details by order_id ===========================
-            string scheduledDate = "2016-12-20";
-            examples.GetOrderByScheduledDate(scheduledDate);
+            //======== Show the Orders using values of the specified fields  =======
+            string CustomFields = "order_id,member_id";
+            examples.GetOrdersByCustomFields(CustomFields);
+            //======================================================================
+
+            //======== Get the Orders by Scheduled Date ===========================
+            //string scheduledDate = "2016-12-20";
+            //examples.GetOrderByScheduledDate(scheduledDate);
             //======================================================================
 
             //======== Get the Orders by Inserted Date ===========================
