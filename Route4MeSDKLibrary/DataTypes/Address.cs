@@ -17,6 +17,22 @@ namespace Route4MeSDK.DataTypes
     [DataMember(Name = "member_id", EmitDefaultValue = false)]
     public string MemberId { get; set; }
 
+    [DataMember(Name = "first_name", EmitDefaultValue = false)]
+    public string FirstName
+    {
+        get { return m_FirstName; }
+        set { m_FirstName = value; }
+    }
+    private string m_FirstName;
+
+    [DataMember(Name = "last_name", EmitDefaultValue = false)]
+    public string LastName
+    {
+        get { return m_LastName; }
+        set { m_LastName = value; }
+    }
+    private string m_LastName;
+
     [DataMember(Name = "address")]
     public string AddressString { get; set; }
 
@@ -64,7 +80,6 @@ namespace Route4MeSDK.DataTypes
     [DataMember(Name = "contact_id", EmitDefaultValue = false)]
     public int? ContactId { get; set; }
 
-
     //status flag to mark an address as visited (aka check in)
     [DataMember(Name = "is_visited", EmitDefaultValue = false)]
     public bool? IsVisited { get; set; }
@@ -101,6 +116,14 @@ namespace Route4MeSDK.DataTypes
     [DataMember(Name = "order_no", EmitDefaultValue = false)]
     public object OrderNo { get; set; }
 
+    [DataMember(Name = "order_id", EmitDefaultValue = false)]
+    public System.Nullable<int> OrderId
+    {
+        get { return m_OrderId; }
+        set { m_OrderId = value; }
+    }
+    private System.Nullable<int> m_OrderId;
+
     [DataMember(Name = "weight", EmitDefaultValue = false)]
     public object Weight { get; set; }
 
@@ -109,7 +132,6 @@ namespace Route4MeSDK.DataTypes
 
     [DataMember(Name = "revenue", EmitDefaultValue = false)]
     public object Revenue { get; set; }
-
 
     //the cubic volume that this destination/order/line-item consumes/contains
     //this is how much space it will take up on a vehicle

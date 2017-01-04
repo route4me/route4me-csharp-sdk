@@ -216,7 +216,6 @@ namespace Route4MeSDK
       return result;
     }
 
-
     [DataContract]
     private sealed class DuplicateRouteResponse
     {
@@ -1039,6 +1038,58 @@ namespace Route4MeSDK
       {
         return false;
       }
+    }
+
+    [DataContract()]
+    private sealed class AddOrdersToRouteRequest : GenericParameters
+    {
+        [HttpQueryMemberAttribute(Name = "route_id", EmitDefaultValue = false)]
+        public string RouteId
+        {
+            get { return m_RouteId; }
+            set { m_RouteId = value; }
+        }
+
+        private string m_RouteId;
+        [HttpQueryMemberAttribute(Name = "redirect", EmitDefaultValue = false)]
+        public System.Nullable<int> Redirect
+        {
+            get { return m_Redirect; }
+            set { m_Redirect = value; }
+        }
+
+        private System.Nullable<int> m_Redirect;
+        [DataMember(Name = "addresses", EmitDefaultValue = false)]
+        public Address[] Addresses
+        {
+            get { return m_Addresses; }
+            set { m_Addresses = value; }
+        }
+
+        private Address[] m_Addresses;
+        [DataMember(Name = "parameters", EmitDefaultValue = false)]
+        public RouteParameters Parameters
+        {
+            get { return m_Parameters; }
+            set { m_Parameters = value; }
+        }
+
+        private RouteParameters m_Parameters;
+    }
+
+    public RouteResponse AddOrdersToRoute(RouteParametersQuery rQueryParams, Address[] addresses, RouteParameters rParams, out string errorString)
+    {
+        AddOrdersToRouteRequest request = new AddOrdersToRouteRequest
+        {
+            RouteId = rQueryParams.RouteId,
+            Redirect = rQueryParams.Redirect==true ? 1: 0,
+            Addresses = addresses,
+            Parameters = rParams
+        };
+
+        RouteResponse response = GetJsonObjectFromAPI<RouteResponse>(request, R4MEInfrastructureSettings.RouteHost, HttpMethodType.Put, false, out errorString);
+
+        return response;
     }
 
     #endregion

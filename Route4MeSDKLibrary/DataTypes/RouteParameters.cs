@@ -57,7 +57,6 @@ namespace Route4MeSDK.DataTypes
     [DataMember(Name = "distance_unit", EmitDefaultValue = false)]
     public string DistanceUnit { get; set; }
 
-
     [DataMember(Name = "travel_mode", EmitDefaultValue = false)]
     public string TravelMode { get; set; }
 
@@ -106,7 +105,6 @@ namespace Route4MeSDK.DataTypes
     //5 = ROUTE4ME_METRIC_EXACT_2D (use exact rectilinear distance)
     [DataMember(Name = "metric", EmitDefaultValue = false)]
     public Metric Metric { get; set; }
-
 
     //the type of algorithm to use when optimizing the route
     [DataMember(Name = "algorithm_type", EmitDefaultValue = false)]

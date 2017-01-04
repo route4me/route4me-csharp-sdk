@@ -124,6 +124,17 @@ namespace Route4MeSDK.QueryTypes
     private System.Nullable<int> m_RouteDestinationId;
 
     /// <summary>
+    /// If true will be redirected
+    /// </summary>
+    [IgnoreDataMember()]
+    [HttpQueryMemberAttribute(Name = "redirect", EmitDefaultValue = false)]
+    public System.Nullable<bool> Redirect {
+	    get { return m_Redirect; }
+	    set { m_Redirect = value; }
+    }
+    private System.Nullable<bool> m_Redirect;
+
+    /// <summary>
     /// Route Parameters to update.
     /// (After a PUT there is no guarantee that the route_destination_id values are preserved! It may create copies resulting in new destination IDs, especially when dealing with multiple depots.)
     /// </summary>
