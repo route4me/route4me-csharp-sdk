@@ -14,12 +14,16 @@ namespace Route4MeSDKTest
 
             // Note run an example by uncommenting code lines between appropriate //=======.... lines
 
+            // ======== Rapid Stret Data Limited ===========================
+            examples.RapidStreetDataLimited();
+            // ======================================================================
+
             // ======== Rapid Stret Data All ===========================
-            examples.RapidStreetDataAll();
+            //examples.RapidStreetDataAll();
             //======================================================================
 
             // ======== Reverse Geocoding ===========================
-            //examples.ReverseGeocoding();
+            //xexamples.ReverseGeocoding();
             //=======================================================
 
             // ======== Forward Geocoding ===========================
