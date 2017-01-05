@@ -1432,7 +1432,46 @@ namespace Route4MeSDK
 	    if (geoParams.Zipcode != null) {
 		    url = url + "/" + geoParams.Zipcode + "/";
 	    } else {
-            errorString = "Zipcode not defined!...";
+            errorString = "Zipcode is not defined!...";
+		    return result;
+	    }
+	    if (geoParams.Offset > 0 | geoParams.Limit > 0) {
+		    url = url + geoParams.Offset + "/" + geoParams.Limit + "/";
+	    }
+
+	    RapidStreetResponse[] response = GetJsonObjectFromAPI<RapidStreetResponse[]>(request, url, HttpMethodType.Get, (HttpContent)null, false, out errorString);
+	    if ((response != null)) {
+		    foreach (var resp1 in response) {
+			    Dictionary<string, string> dresult = new Dictionary<string, string>();
+			    dresult["zipcode"] = resp1.Zipcode;
+			    dresult["street_name"] = resp1.StreetName;
+			    result.Add(dresult);
+		    }
+	    }
+
+	    return result;
+    }
+
+    public ArrayList RapidStreetService(GeocodingParameters geoParams, out string errorString)
+    {
+	    GeocodingRequest request = new GeocodingRequest {
+		    Addresses = geoParams.Addresses,
+		    Format = geoParams.Format
+	    };
+	    string url = R4MEInfrastructureSettings.RapidStreetService;
+
+	    ArrayList result = new ArrayList();
+
+	    if (geoParams.Zipcode != null) {
+		    url = url + "/" + geoParams.Zipcode + "/";
+	    } else {
+            errorString = "Zipcode is not defined!...";
+		    return result;
+	    }
+	    if (geoParams.Housenumber != null) {
+		    url = url + geoParams.Housenumber + "/";
+	    } else {
+            errorString = "Housenumber is not defined!...";
 		    return result;
 	    }
 	    if (geoParams.Offset > 0 | geoParams.Limit > 0) {
