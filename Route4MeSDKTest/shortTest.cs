@@ -14,13 +14,17 @@ namespace Route4MeSDKTest
 
             // Note run an example by uncommenting code lines between appropriate //=======.... lines
 
+            // ======== Reverse Geocoding ===========================
+            examples.ReverseGeocoding();
+            //=======================================================
+
             // ======== Forward Geocoding ===========================
-            GeocodingParameters geoParams = new GeocodingParameters
-            {
-                Addresses = "Los20%Angeles20%International20%Airport,20%CA",
-                Format = "xml"
-            };
-            examples.GeocodingForward(geoParams);
+            //GeocodingParameters geoParams = new GeocodingParameters
+            //{
+            //    Addresses = "Los20%Angeles20%International20%Airport,20%CA",
+            //    Format = "xml"
+            //};
+            //examples.GeocodingForward(geoParams);
             //======================================================================
 
             // ======== Mark Address As Marked As Departed ===========================
