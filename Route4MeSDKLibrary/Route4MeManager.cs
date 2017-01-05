@@ -856,6 +856,59 @@ namespace Route4MeSDK
         } else return 0;
     }
 
+    [DataContract()]
+    private sealed class MarkAddressAsMarkedAsDepartedRequest : GenericParameters
+    {
+
+        [HttpQueryMemberAttribute(Name = "route_id", EmitDefaultValue = false)]
+        public string RouteId
+        {
+            get { return m_RouteId; }
+            set { m_RouteId = value; }
+        }
+
+        private string m_RouteId;
+        [HttpQueryMemberAttribute(Name = "route_destination_id", EmitDefaultValue = false)]
+        public System.Nullable<int> RouteDestinationId
+        {
+            get { return m_RouteDestinationId; }
+            set { m_RouteDestinationId = value; }
+        }
+
+        private System.Nullable<int> m_RouteDestinationId;
+        [IgnoreDataMember()]
+        [DataMember(Name = "is_departed")]
+        public bool IsDeparted
+        {
+            get { return m_IsDeparted; }
+            set { m_IsDeparted = value; }
+        }
+
+        private bool m_IsDeparted;
+        [IgnoreDataMember()]
+        [DataMember(Name = "is_visited")]
+        public bool IsVisited
+        {
+            get { return m_IsVisited; }
+            set { m_IsVisited = value; }
+        }
+        private bool m_IsVisited;
+    }
+
+    public Address MarkAddressAsMarkedAsVisited(AddressParameters aParams, out string errorString)
+    {
+        MarkAddressAsMarkedAsDepartedRequest request = new MarkAddressAsMarkedAsDepartedRequest
+        {
+            RouteId = aParams.RouteId,
+            RouteDestinationId = aParams.RouteDestinationId,
+            IsVisited = aParams.IsVisited
+        };
+
+        Address response = GetJsonObjectFromAPI<Address>(request, R4MEInfrastructureSettings.GetAddress, HttpMethodType.Put, out errorString);
+
+        return response;
+    }
+
     #endregion
 
     #region Address Book
