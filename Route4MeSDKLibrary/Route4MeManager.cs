@@ -2,6 +2,7 @@
 using Route4MeSDK.QueryTypes;
 using Route4MeSDKLibrary.DataTypes;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
@@ -1379,6 +1380,43 @@ namespace Route4MeSDK
         string response = GetXmlObjectFromAPI<string>(request, R4MEInfrastructureSettings.Geocoder, HttpMethodType.Post, (HttpContent)null, true, out errorString);
 
         return response.ToString();
+    }
+
+    public ArrayList RapidStreetData(GeocodingParameters geoParams, out string errorString)
+    {
+	    GeocodingRequest request = new GeocodingRequest {
+		    Addresses = geoParams.Addresses,
+		    Format = geoParams.Format
+	    };
+	    string url = R4MEInfrastructureSettings.RapidStreetData;
+
+	    ArrayList result = new ArrayList();
+
+	    if (geoParams.Pk > 0) {
+		    url = url + "/" + geoParams.Pk + "/";
+		    RapidStreetResponse response = GetJsonObjectFromAPI<RapidStreetResponse>(request, url, HttpMethodType.Get, (HttpContent)null, false, out errorString);
+		    Dictionary<string, string> dresult = new Dictionary<string, string>();
+		    if ((response != null)) {
+			    dresult["zipcode"] = response.Zipcode;
+			    dresult["street_name"] = response.StreetName;
+			    result.Add(dresult);
+		    }
+	    } else {
+		    if (geoParams.Offset > 0 | geoParams.Limit > 0) {
+			    url = url + "/" + geoParams.Offset + "/" + geoParams.Limit + "/";
+		    }
+		    RapidStreetResponse[] response = GetJsonObjectFromAPI<RapidStreetResponse[]>(request, url, HttpMethodType.Get, (HttpContent)null, false, out errorString);
+		    if ((response != null)) {
+			    foreach (var resp1 in response) {
+				    Dictionary<string, string> dresult = new Dictionary<string, string>();
+				    dresult["zipcode"] = resp1.Zipcode;
+				    dresult["street_name"] = resp1.StreetName;
+				    result.Add(dresult);
+			    }
+		    }
+	    }
+
+	    return result;
     }
 
     #endregion
