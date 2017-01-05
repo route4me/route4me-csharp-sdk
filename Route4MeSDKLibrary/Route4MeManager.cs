@@ -1419,6 +1419,39 @@ namespace Route4MeSDK
 	    return result;
     }
 
+    public ArrayList RapidStreetZipcode(GeocodingParameters geoParams, out string errorString)
+    {
+	    GeocodingRequest request = new GeocodingRequest {
+		    Addresses = geoParams.Addresses,
+		    Format = geoParams.Format
+	    };
+	    string url = R4MEInfrastructureSettings.RapidStreetZipcode;
+
+	    ArrayList result = new ArrayList();
+
+	    if (geoParams.Zipcode != null) {
+		    url = url + "/" + geoParams.Zipcode + "/";
+	    } else {
+            errorString = "Zipcode not defined!...";
+		    return result;
+	    }
+	    if (geoParams.Offset > 0 | geoParams.Limit > 0) {
+		    url = url + geoParams.Offset + "/" + geoParams.Limit + "/";
+	    }
+
+	    RapidStreetResponse[] response = GetJsonObjectFromAPI<RapidStreetResponse[]>(request, url, HttpMethodType.Get, (HttpContent)null, false, out errorString);
+	    if ((response != null)) {
+		    foreach (var resp1 in response) {
+			    Dictionary<string, string> dresult = new Dictionary<string, string>();
+			    dresult["zipcode"] = resp1.Zipcode;
+			    dresult["street_name"] = resp1.StreetName;
+			    result.Add(dresult);
+		    }
+	    }
+
+	    return result;
+    }
+
     #endregion
 
     #endregion
