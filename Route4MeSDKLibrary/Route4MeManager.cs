@@ -909,6 +909,20 @@ namespace Route4MeSDK
         return response;
     }
 
+    public Address MarkAddressAsMarkedAsDeparted(AddressParameters aParams, out string errorString)
+    {
+        MarkAddressAsMarkedAsDepartedRequest request = new MarkAddressAsMarkedAsDepartedRequest
+        {
+            RouteId = aParams.RouteId,
+            RouteDestinationId = aParams.RouteDestinationId,
+            IsDeparted = aParams.IsDeparted
+        };
+
+        Address response = GetJsonObjectFromAPI<Address>(request, R4MEInfrastructureSettings.GetAddress, HttpMethodType.Put, out errorString);
+
+        return response;
+    }
+
     #endregion
 
     #region Address Book

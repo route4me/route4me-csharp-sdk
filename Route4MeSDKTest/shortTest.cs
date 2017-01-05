@@ -14,14 +14,24 @@ namespace Route4MeSDKTest
 
             // Note run an example by uncommenting code lines between appropriate //=======.... lines
 
-            // ======== Mark Address As Marked As Visited ===========================
+            // ======== Mark Address As Marked As Departed ===========================
             AddressParameters aParams = new AddressParameters
             {
                 RouteId = "241466F15515D67D3F951E2DA38DE76D",
                 RouteDestinationId = 167899269,
-                IsVisited = true
+                IsDeparted = true
             };
-            examples.MarkAddressAsMarkedAsVisited(aParams);
+            examples.MarkAddressAsMarkedAsDeparted(aParams);
+            //======================================================================
+
+            // ======== Mark Address As Marked As Visited ===========================
+            //AddressParameters aParams = new AddressParameters
+            //{
+            //    RouteId = "241466F15515D67D3F951E2DA38DE76D",
+            //    RouteDestinationId = 167899269,
+            //    IsVisited = true
+            //};
+            //examples.MarkAddressAsMarkedAsVisited(aParams);
             //======================================================================
 
             // ======== Mark Address As Departed ===========================
