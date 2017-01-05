@@ -14,8 +14,12 @@ namespace Route4MeSDKTest
 
             // Note run an example by uncommenting code lines between appropriate //=======.... lines
 
+            // ======== Rapid Stret Service Limited ===========================
+            examples.RapidStreetServiceLimited();
+            // =====================================================================
+
             // ======== Rapid Stret Service All ===========================
-            examples.RapidStreetServiceAll();
+            //examples.RapidStreetServiceAll();
             // ======================================================================
 
             // ======== Rapid Stret Zipcode Limited ===========================
