@@ -14,9 +14,19 @@ namespace Route4MeSDKTest
 
             // Note run an example by uncommenting code lines between appropriate //=======.... lines
 
+            // ======== Mark Address As Visited ===========================
+            AddressParameters aParams = new AddressParameters
+            {
+                RouteId = "DD376C7148E7FEE36CFABE2BD9978BDD",
+                AddressId = 183045808,
+                IsVisited = true
+            };
+            examples.MarkAddressVisited(aParams);
+            //======================================================================
+
             //======== Get the Orders by containing specified text in any field =======
-            string query = "Luzerne";
-            examples.GetOrdersBySpecifiedText(query);
+            //string query = "Luzerne";
+            //examples.GetOrdersBySpecifiedText(query);
             //======================================================================
 
             //======== Show the Orders using values of the specified fields  =======

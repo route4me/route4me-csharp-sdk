@@ -29,6 +29,9 @@ namespace Route4MeSDK
     public const string RouteReoptimize = MainHost + "/api.v3/route/reoptimize_2.php";
     public const string RouteSharing = MainHost + "/actions/route/share_route.php";
 
+    public const string MarkAddressDeparted = MainHost + "/api/route/mark_address_departed.php";
+    public const string MarkAddressVisited = MainHost + "/actions/address/update_address_visited.php";
+
     #endregion
   }
 }

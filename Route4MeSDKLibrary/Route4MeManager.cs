@@ -766,6 +766,68 @@ namespace Route4MeSDK
       return false;
     }
 
+    [DataContract]
+    private sealed class MarkAddressDepartedRequest : GenericParameters
+    {
+        [HttpQueryMemberAttribute(Name = "route_id", EmitDefaultValue = false)]
+        public string RouteId
+        {
+            get { return m_RouteId; }
+            set { m_RouteId = value; }
+        }
+        private string m_RouteId;
+
+        [HttpQueryMemberAttribute(Name = "address_id", EmitDefaultValue = false)]
+        public System.Nullable<int> AddressId
+        {
+            get { return m_AddressId; }
+            set { m_AddressId = value; }
+        }
+        private System.Nullable<int> m_AddressId;
+
+        [IgnoreDataMember()]
+        [HttpQueryMemberAttribute(Name = "is_departed", EmitDefaultValue = false)]
+        public bool IsDeparted
+        {
+            get { return m_IsDeparted; }
+            set { m_IsDeparted = value; }
+        }
+        private bool m_IsDeparted;
+
+        [IgnoreDataMember()]
+        [HttpQueryMemberAttribute(Name = "is_visited", EmitDefaultValue = false)]
+        public bool IsVisited
+        {
+            get { return m_IsVisited; }
+            set { m_IsVisited = value; }
+        }
+        private bool m_IsVisited;
+
+        [HttpQueryMemberAttribute(Name = "member_id", EmitDefaultValue = false)]
+        public System.Nullable<int> MemberId
+        {
+            get { return m_MemberId; }
+            set { m_MemberId = value; }
+        }
+        private System.Nullable<int> m_MemberId;
+    }
+
+    public int MarkAddressVisited(AddressParameters aParams, out string errorString)
+    {
+        MarkAddressDepartedRequest request = new MarkAddressDepartedRequest
+        {
+            RouteId = aParams.RouteId,
+            AddressId = aParams.AddressId,
+            IsVisited = aParams.IsVisited,
+            MemberId = 1
+        };
+
+        string response = GetJsonObjectFromAPI<string>(request, R4MEInfrastructureSettings.MarkAddressVisited, HttpMethodType.Get, out errorString);
+        int iResponse = 0;
+        if (int.TryParse(response.ToString(), out iResponse)) iResponse = Convert.ToInt32(response);
+        return iResponse;
+    }
+
     #endregion
 
     #region Address Book
