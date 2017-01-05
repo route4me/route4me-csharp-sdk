@@ -32,6 +32,12 @@ namespace Route4MeSDK
     public const string MarkAddressDeparted = MainHost + "/api/route/mark_address_departed.php";
     public const string MarkAddressVisited = MainHost + "/actions/address/update_address_visited.php";
 
+    public const string Geocoder = MainHost + "/api/geocoder.php";
+    public const string RapidStreetData = "https://rapid.route4me.com/street_data";
+    public const string RapidStreetZipcode = "https://rapid.route4me.com/street_data/zipcode";
+    public const string RapidStreetService = "https://rapid.route4me.com/street_data/service";
+
+
     #endregion
   }
 }

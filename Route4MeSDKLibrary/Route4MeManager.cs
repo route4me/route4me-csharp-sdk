@@ -9,6 +9,8 @@ using System.Net.Http.Headers;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
+
 
 namespace Route4MeSDK
 {
@@ -1322,6 +1324,65 @@ namespace Route4MeSDK
 
     #endregion
 
+    #region Geocoding
+
+    [DataContract()]
+    private sealed class GeocodingRequest : GenericParameters
+    {
+
+        [HttpQueryMemberAttribute(Name = "addresses", EmitDefaultValue = false)]
+        public string Addresses
+        {
+            get { return m_Addresses; }
+            set { m_Addresses = value; }
+        }
+
+        private string m_Addresses;
+        [HttpQueryMemberAttribute(Name = "format", EmitDefaultValue = false)]
+        public string Format
+        {
+            get { return m_Format; }
+            set { m_Format = value; }
+        }
+
+        private string m_Format;
+    }
+
+    [DataContract()]
+    private sealed class RapidStreetResponse
+    {
+        [DataMember(Name = "zipcode")]
+        public string Zipcode
+        {
+            get { return m_Zipcode; }
+            set { m_Zipcode = value; }
+        }
+
+        private string m_Zipcode;
+        [DataMember(Name = "street_name")]
+        public string StreetName
+        {
+            get { return m_StreetName; }
+            set { m_StreetName = value; }
+        }
+        private string m_StreetName;
+    }
+
+    public string Geocoding(GeocodingParameters geoParams, out string errorString)
+    {
+        GeocodingRequest request = new GeocodingRequest
+        {
+            Addresses = geoParams.Addresses,
+            Format = geoParams.Format
+        };
+
+        string response = GetXmlObjectFromAPI<string>(request, R4MEInfrastructureSettings.Geocoder, HttpMethodType.Post, (HttpContent)null, true, out errorString);
+
+        return response.ToString();
+    }
+
+    #endregion
+
     #endregion
 
     #region Generic Methods
@@ -1524,6 +1585,144 @@ namespace Route4MeSDK
       }
 
       return result;
+    }
+
+    private string GetXmlObjectFromAPI<T>(GenericParameters optimizationParameters, string url, HttpMethodType httpMethod__1, HttpContent httpContent, bool isString, out string errorMessage) where T : class
+    {
+        string result = string.Empty;
+        errorMessage = string.Empty;
+
+        try
+        {
+            using (HttpClient httpClient = CreateHttpClient(url))
+            {
+                // Get the parameters
+                string parametersURI = optimizationParameters.Serialize(m_ApiKey);
+
+                switch (httpMethod__1)
+                {
+                    case HttpMethodType.Get:
+                        if (true)
+                        {
+                            var response = httpClient.GetStreamAsync(parametersURI);
+                            response.Wait();
+
+                            if (response.IsCompleted)
+                            {
+                                //var test = m_isTestMode ? response.Result.ReadString() : null;
+                                result = isString ? response.Result.ReadString() as String : response.Result.ReadObject<String>(); // Oleg T -> String
+                            }
+
+                            break; // TODO: might not be correct. Was : Exit Select
+                        }
+                        break;
+                    case HttpMethodType.Post:
+                        break;
+                    case HttpMethodType.Put:
+                        break;
+                    case HttpMethodType.Delete:
+                        if (true)
+                        {
+                            bool isPut = httpMethod__1 == HttpMethodType.Put;
+                            bool isDelete = httpMethod__1 == HttpMethodType.Delete;
+                            HttpContent content = null;
+                            if (httpContent != null)
+                            {
+                                content = httpContent;
+                            }
+                            else
+                            {
+                                string jsonString = R4MeUtils.SerializeObjectToJson(optimizationParameters);
+                                content = new StringContent(jsonString);
+                            }
+
+                            Task<HttpResponseMessage> response = null;
+                            if (isPut)
+                            {
+                                response = httpClient.PutAsync(parametersURI, content);
+                            }
+                            else if (isDelete)
+                            {
+                                HttpRequestMessage request = new HttpRequestMessage
+                                {
+                                    Content = content,
+                                    Method = HttpMethod.Delete,
+                                    RequestUri = new Uri(parametersURI, UriKind.Relative)
+                                };
+                                response = httpClient.SendAsync(request);
+                            }
+                            else
+                            {
+                                response = httpClient.PostAsync(parametersURI, content);
+                            }
+
+                            // Wait for response
+                            response.Wait();
+
+                            // Check if successful
+                            if (response.IsCompleted && response.Result.IsSuccessStatusCode && response.Result.Content is StreamContent)
+                            {
+                                var streamTask = ((StreamContent)response.Result.Content).ReadAsStreamAsync();
+                                streamTask.Wait();
+
+                                if (streamTask.IsCompleted)
+                                {
+                                    //var test = m_isTestMode ? streamTask.Result.ReadString() : null;
+                                    //var test = streamTask.Result.ReadString();
+                                    result = streamTask.Result.ReadString();
+                                    //result = If(isString, TryCast(streamTask.Result.ReadString(), XmlDocument), streamTask.Result.ReadObject(Of XmlDocument)())
+                                }
+                            }
+                            else
+                            {
+                                var streamTask = ((StreamContent)response.Result.Content).ReadAsStreamAsync();
+                                streamTask.Wait();
+                                ErrorResponse errorResponse = null;
+                                try
+                                {
+                                    errorResponse = streamTask.Result.ReadObject<ErrorResponse>();
+                                }
+                                catch
+                                {
+                                    // (Exception e)
+                                    errorResponse = null;
+                                }
+                                if (errorResponse != null && errorResponse.Errors != null && errorResponse.Errors.Count > 0)
+                                {
+                                    foreach (String error in errorResponse.Errors)
+                                    {
+                                        if (errorMessage.Length > 0)
+                                        {
+                                            errorMessage += "; ";
+                                        }
+                                        errorMessage += error;
+                                    }
+                                }
+                                else
+                                {
+                                    var responseStream = response.Result.Content.ReadAsStringAsync();
+                                    responseStream.Wait();
+                                    String responseString = responseStream.Result;
+                                    if (responseString != null)
+                                    {
+                                        errorMessage = "Response: " + responseString;
+                                    }
+                                }
+                            }
+
+                            break; // TODO: might not be correct. Was : Exit Select
+                        }
+                        break;
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            errorMessage = e is AggregateException ? e.InnerException.Message : e.Message;
+            result = null;
+        }
+
+        return result;
     }
 
     private HttpClient CreateHttpClient(string url)

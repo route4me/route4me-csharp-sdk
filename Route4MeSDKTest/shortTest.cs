@@ -14,14 +14,23 @@ namespace Route4MeSDKTest
 
             // Note run an example by uncommenting code lines between appropriate //=======.... lines
 
-            // ======== Mark Address As Marked As Departed ===========================
-            AddressParameters aParams = new AddressParameters
+            // ======== Forward Geocoding ===========================
+            GeocodingParameters geoParams = new GeocodingParameters
             {
-                RouteId = "241466F15515D67D3F951E2DA38DE76D",
-                RouteDestinationId = 167899269,
-                IsDeparted = true
+                Addresses = "Los20%Angeles20%International20%Airport,20%CA",
+                Format = "xml"
             };
-            examples.MarkAddressAsMarkedAsDeparted(aParams);
+            examples.GeocodingForward(geoParams);
+            //======================================================================
+
+            // ======== Mark Address As Marked As Departed ===========================
+            //AddressParameters aParams = new AddressParameters
+            //{
+            //    RouteId = "241466F15515D67D3F951E2DA38DE76D",
+            //    RouteDestinationId = 167899269,
+            //    IsDeparted = true
+            //};
+            //examples.MarkAddressAsMarkedAsDeparted(aParams);
             //======================================================================
 
             // ======== Mark Address As Marked As Visited ===========================
