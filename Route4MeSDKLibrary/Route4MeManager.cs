@@ -828,6 +828,34 @@ namespace Route4MeSDK
         return iResponse;
     }
 
+    [DataContract]
+    private sealed class MarkAddressDepartedResponse
+    {
+        [DataMember(Name = "status")]
+        public Boolean Status { get; set; }
+
+        [DataMember(Name = "error")]
+        public string error { get; set; }
+    }
+
+    public int MarkAddressDeparted(AddressParameters aParams, out string errorString)
+    {
+        MarkAddressDepartedRequest request = new MarkAddressDepartedRequest
+        {
+            RouteId = aParams.RouteId,
+            AddressId = aParams.AddressId,
+            IsDeparted = aParams.IsDeparted,
+            MemberId = 1
+        };
+
+        MarkAddressDepartedResponse response = GetJsonObjectFromAPI<MarkAddressDepartedResponse>(request, R4MEInfrastructureSettings.MarkAddressDeparted, HttpMethodType.Get, out errorString);
+
+        if (response != null)
+        {
+            if (response.Status) return 1; else return 0;
+        } else return 0;
+    }
+
     #endregion
 
     #region Address Book
