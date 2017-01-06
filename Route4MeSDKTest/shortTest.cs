@@ -14,8 +14,12 @@ namespace Route4MeSDKTest
 
             // Note run an example by uncommenting code lines between appropriate //=======.... lines
 
+            // ======== Delete an User  ===========================
+            examples.DeleteUser();
+            // ======================================================================
+
             // ======== Create an User  ===========================
-            examples.CreateUser();
+            //examples.CreateUser();
             // ======================================================================
 
             // ======== Get Device History from Time Range  ============

@@ -518,6 +518,27 @@ namespace Route4MeSDK
         return response;
     }
 
+    [DataContract()]
+    public sealed class USerDeleteResponse
+    {
+        [DataMember(Name = "status")]
+        public bool Status
+        {
+            get { return m_Status; }
+            set { m_Status = value; }
+        }
+        private bool m_Status;
+    }
+
+    public bool UserDelete(MemberParametersV4 memParams, out string errorString)
+    {
+        USerDeleteResponse response = GetJsonObjectFromAPI<USerDeleteResponse>(memParams, R4MEInfrastructureSettings.GetUsersHost, HttpMethodType.Delete, out errorString);
+
+        if (response == null) return false;
+
+        if (response.Status) return true; else return false;
+    }
+
     #endregion
 
     #region Address Notes
