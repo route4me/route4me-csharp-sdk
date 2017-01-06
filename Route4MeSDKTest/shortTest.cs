@@ -14,8 +14,12 @@ namespace Route4MeSDKTest
 
             // Note run an example by uncommenting code lines between appropriate //=======.... lines
 
+            // ======== Get USer By ID  ===========================
+            examples.GetUserById();
+            // ======================================================================
+
             // ======== Delete an User  ===========================
-            examples.DeleteUser();
+            //examples.DeleteUser();
             // ======================================================================
 
             // ======== Create an User  ===========================

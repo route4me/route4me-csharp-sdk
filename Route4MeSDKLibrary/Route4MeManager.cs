@@ -539,6 +539,12 @@ namespace Route4MeSDK
         if (response.Status) return true; else return false;
     }
 
+    public MemberResponseV4 GetUserById(MemberParametersV4 memParams, out string errorString)
+    {
+        MemberResponseV4 response = GetJsonObjectFromAPI<MemberResponseV4>(memParams, R4MEInfrastructureSettings.GetUsersHost, HttpMethodType.Get, out errorString);
+        return response;
+    }
+
     #endregion
 
     #region Address Notes
