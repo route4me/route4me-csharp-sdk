@@ -33,24 +33,21 @@ namespace Route4MeSDK.Examples
             };
 
             // Run the query
+            string errorString = "";
+            MemberResponseV4 result = route4Me.CreateUser(@params, out errorString);
 
+            Console.WriteLine("");
+
+            if (result != null)
             {
-                string errorString = "";
-                MemberResponseV4 result = route4Me.CreateUser(@params, out errorString);
-
-                Console.WriteLine("");
-
-                if (result != null)
-                {
-                    Console.WriteLine("UserRegistration executed successfully");
-                    Console.WriteLine("User: " + result.member_first_name + " " + result.member_last_name);
-                    Console.WriteLine("member_id: " + result.member_id);
-                    Console.WriteLine("---------------------------");
-                }
-                else
-                {
-                    Console.WriteLine("UserRegistration error: {0}", errorString);
-                }
+                Console.WriteLine("UserRegistration executed successfully");
+                Console.WriteLine("User: " + result.member_first_name + " " + result.member_last_name);
+                Console.WriteLine("member_id: " + result.member_id);
+                Console.WriteLine("---------------------------");
+            }
+            else
+            {
+                Console.WriteLine("UserRegistration error: {0}", errorString);
             }
         }
     }
