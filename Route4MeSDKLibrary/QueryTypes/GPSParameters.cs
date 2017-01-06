@@ -35,6 +35,18 @@ namespace Route4MeSDK.QueryTypes
     [HttpQueryMemberAttribute(Name = "lng")]
     public double Longitude { get; set; }
 
+    [HttpQueryMemberAttribute(Name = "last_position")]
+    public bool last_position { get; set; }
+
+    [HttpQueryMemberAttribute(Name = "time_period")]
+    public string time_period { get; set; }
+
+    [HttpQueryMemberAttribute(Name = "start_date")]
+    public int start_date { get; set; }
+
+    [HttpQueryMemberAttribute(Name = "end_date")]
+    public int end_date { get; set; }
+
     [HttpQueryMemberAttribute(Name = "altitude", EmitDefaultValue = false)]
     public double Altitude { get; set; }
 
@@ -49,5 +61,7 @@ namespace Route4MeSDK.QueryTypes
 
     [HttpQueryMemberAttribute(Name = "app_version", EmitDefaultValue = false)]
     public string AppVersion { get; set; }
+
+
   }
 }

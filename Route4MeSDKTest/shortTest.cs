@@ -14,8 +14,12 @@ namespace Route4MeSDKTest
 
             // Note run an example by uncommenting code lines between appropriate //=======.... lines
 
+            // ======== Get Device History from Time Range  ============
+            examples.GetDeviceHistoryTimeRange("814FB49CEA8188D134E9D4D4B8B0DAF7");
+            // ======================================================================
+
             // ======== Find Asset (Asset Tracking) ===========================
-            examples.FindAsset();
+            //examples.FindAsset();
             // ======================================================================
 
             // ======== Rapid Stret Service Limited ===========================
