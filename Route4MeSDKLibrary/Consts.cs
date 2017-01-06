@@ -37,6 +37,8 @@ namespace Route4MeSDK
     public const string RapidStreetZipcode = "https://rapid.route4me.com/street_data/zipcode";
     public const string RapidStreetService = "https://rapid.route4me.com/street_data/service";
 
+    public const string AssetTracking = MainHost + "/api/asset/find_route.php";
+    public const string ViewVehicles = MainHost + "/api/vehicles/view_vehicles.php";
 
     #endregion
   }

@@ -14,8 +14,12 @@ namespace Route4MeSDKTest
 
             // Note run an example by uncommenting code lines between appropriate //=======.... lines
 
+            // ======== Find Asset (Asset Tracking) ===========================
+            examples.FindAsset();
+            // ======================================================================
+
             // ======== Rapid Stret Service Limited ===========================
-            examples.RapidStreetServiceLimited();
+            //examples.RapidStreetServiceLimited();
             // =====================================================================
 
             // ======== Rapid Stret Service All ===========================

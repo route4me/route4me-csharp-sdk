@@ -429,6 +429,75 @@ namespace Route4MeSDK
       return result;
     }
 
+    [DataContract()]
+    private sealed class FindAssetResponse
+    {
+        [DataMember(Name = "status")]
+        public Boolean Status
+        {
+            get { return m_Status; }
+            set { m_Status = value; }
+        }
+        private Boolean m_Status;
+
+        [DataMember(Name = "route_id")]
+        public string RouteId
+        {
+            get { return m_RouteId; }
+            set { m_RouteId = value; }
+        }
+        private string m_RouteId;
+
+        [DataMember(Name = "sequence_no")]
+        public System.Nullable<int> SequenceNo
+        {
+            get { return m_SequenceNo; }
+            set { m_SequenceNo = value; }
+        }
+        private System.Nullable<int> m_SequenceNo;
+
+        [DataMember(Name = "last_scanned_timestamp")]
+        public System.Nullable<int> LastScannedTimestamp
+        {
+            get { return m_LastScannedTimestamp; }
+            set { m_LastScannedTimestamp = value; }
+        }
+        private System.Nullable<int> m_LastScannedTimestamp;
+    }
+
+    [DataContract()]
+    private sealed class FindAssetRequest : GenericParameters
+    {
+
+        [HttpQueryMemberAttribute(Name = "query", EmitDefaultValue = false)]
+        public string Query
+        {
+            get { return m_Query; }
+            set { m_Query = value; }
+        }
+
+        private string m_Query;
+    }
+
+    public Dictionary<string, string> FindAsset(string query, out string errorString)
+    {
+        FindAssetRequest request = new FindAssetRequest { Query = query };
+
+        FindAssetResponse result = GetJsonObjectFromAPI<FindAssetResponse>(request, R4MEInfrastructureSettings.AssetTracking, HttpMethodType.Get, false, out errorString);
+
+        Dictionary<string, string> response = new Dictionary<string, string>();
+
+        if ((result != null))
+        {
+            response["route_id"] = result.RouteId;
+            response["sequence_no"] = result.SequenceNo.ToString();
+            System.DateTime mDateTime = new System.DateTime(1970, 1, 1, 0, 0, 0, 0);
+            mDateTime = mDateTime.AddSeconds((double)result.LastScannedTimestamp);
+            response["mDateTime"] = mDateTime.ToString();
+        }
+        return response;
+    }
+
     #endregion
 
     #region Users
