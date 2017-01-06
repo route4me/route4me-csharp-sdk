@@ -551,6 +551,22 @@ namespace Route4MeSDK
         return response;
     }
 
+    public MemberResponse UserAuthentication(MemberParameters memParams, out string errorString)
+    {
+        MemberParameters roParams = new MemberParameters();
+
+        var keyValues = new List<KeyValuePair<string, string>>();
+        keyValues.Add(new KeyValuePair<string, string>("strEmail", memParams.StrEmail));
+        keyValues.Add(new KeyValuePair<string, string>("strPassword", memParams.StrPassword));
+        keyValues.Add(new KeyValuePair<string, string>("format", memParams.Format));
+
+        HttpContent httpContent = new FormUrlEncodedContent(keyValues);
+
+        MemberResponse response = GetJsonObjectFromAPI<MemberResponse>(roParams, R4MEInfrastructureSettings.UserAuthentication, HttpMethodType.Post, httpContent, out errorString);
+
+        return response;
+    }
+
     #endregion
 
     #region Address Notes

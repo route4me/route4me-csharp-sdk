@@ -14,8 +14,12 @@ namespace Route4MeSDKTest
 
             // Note run an example by uncommenting code lines between appropriate //=======.... lines
 
+            // ======== User Authentication ===========================
+            examples.UserAuthentication();
+            // ======================================================================
+
             // ======== Update an User  ===========================
-            examples.UpdateUser();
+            //examples.UpdateUser();
             // ======================================================================
 
             // ======== Get USer By ID  ===========================
