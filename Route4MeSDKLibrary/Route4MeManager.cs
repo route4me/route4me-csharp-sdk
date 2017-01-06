@@ -512,6 +512,12 @@ namespace Route4MeSDK
       return result;
     }
 
+    public MemberResponseV4 CreateUser(MemberParametersV4 memParams, out string errorString)
+    {
+        MemberResponseV4 response = GetJsonObjectFromAPI<MemberResponseV4>(memParams, R4MEInfrastructureSettings.GetUsersHost, HttpMethodType.Post, out errorString);
+        return response;
+    }
+
     #endregion
 
     #region Address Notes
