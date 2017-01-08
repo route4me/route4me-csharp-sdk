@@ -14,8 +14,12 @@ namespace Route4MeSDKTest
 
             // Note run an example by uncommenting code lines between appropriate //=======.... lines
 
+            // ======== Get Team Activities on a Route  ===========================
+             examples.GetRouteTeamActivities();
+            // ======================================================================
+
             // ======== Search Area Added Activiities ===========================
-             examples.SearchAreaAdded();
+            // examples.SearchAreaAdded();
             // ======================================================================
 
             // ======== Get Vehicles ===========================
