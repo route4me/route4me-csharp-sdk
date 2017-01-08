@@ -14,8 +14,12 @@ namespace Route4MeSDKTest
 
             // Note run an example by uncommenting code lines between appropriate //=======.... lines
 
+            // ======== Get Vehicles ===========================
+             examples.GetVehicles();
+            // ======================================================================
+
             // ======== Validate Session ===========================
-             examples.ValidateSession();
+            // examples.ValidateSession();
             // ======================================================================
 
             // ======== User Registratin ===========================

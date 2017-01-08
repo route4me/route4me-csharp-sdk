@@ -1685,6 +1685,24 @@ namespace Route4MeSDK
 
     #endregion
 
+    #region Vehicles
+
+    /// <summary>
+    /// Get Vehicles
+    /// </summary>
+    /// <param name="vehParams"> Parameters for request </param>
+    /// <param name="total"> out: Total number of Vehicles </param>
+    /// <param name="errorString"> out: Error as string </param>
+    /// <returns> Vehicle object list </returns>
+    public VehicleResponse[] GetVehicles(VehicleParameters vehParams, out string errorString)
+    {
+        VehicleResponse[] response = GetJsonObjectFromAPI<VehicleResponse[]>(vehParams, R4MEInfrastructureSettings.ViewVehicles, HttpMethodType.Get, out errorString);
+
+        return response;
+    }
+
+    #endregion
+
     #endregion
 
     #region Generic Methods
