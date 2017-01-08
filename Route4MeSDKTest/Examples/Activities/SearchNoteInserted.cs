@@ -35,7 +35,6 @@ namespace Route4MeSDK.Examples
                 {
                     Console.WriteLine("Activity ID: {0}", Activity.ActivityId);
                 }
-
                 Console.WriteLine("");
             }
             else
