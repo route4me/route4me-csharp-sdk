@@ -567,6 +567,30 @@ namespace Route4MeSDK
         return response;
     }
 
+    public MemberResponse UserRegistration(MemberParameters memParams, out string errorString)
+    {
+        MemberParameters roParams = new MemberParameters();
+        roParams.Plan = memParams.Plan;
+        roParams.MemberType = memParams.MemberType;
+
+        var keyValues = new List<KeyValuePair<string, string>>();
+        keyValues.Add(new KeyValuePair<string, string>("strIndustry", memParams.StrIndustry));
+        keyValues.Add(new KeyValuePair<string, string>("strFirstName", memParams.StrFirstName));
+        keyValues.Add(new KeyValuePair<string, string>("strLastName", memParams.StrLastName));
+        keyValues.Add(new KeyValuePair<string, string>("strEmail", memParams.StrEmail));
+        keyValues.Add(new KeyValuePair<string, string>("format", memParams.Format));
+        keyValues.Add(new KeyValuePair<string, string>("chkTerms", memParams.ChkTerms==1 ? "1" : "0"));
+        keyValues.Add(new KeyValuePair<string, string>("device_type", memParams.DeviceType));
+        keyValues.Add(new KeyValuePair<string, string>("strPassword_1", memParams.StrPassword_1));
+        keyValues.Add(new KeyValuePair<string, string>("strPassword_2", memParams.StrPassword_2));
+
+        HttpContent httpContent = new FormUrlEncodedContent(keyValues);
+
+        MemberResponse response = GetJsonObjectFromAPI<MemberResponse>(roParams, R4MEInfrastructureSettings.UserRegistration, HttpMethodType.Post, httpContent, out errorString);
+
+        return response;
+    }
+
     #endregion
 
     #region Address Notes

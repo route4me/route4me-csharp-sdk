@@ -36,6 +36,14 @@ namespace Route4MeSDK.QueryTypes
         }
         private string m_Plan;
 
+        [HttpQueryMemberAttribute(Name = "member_type", EmitDefaultValue = false)]
+        public System.Nullable<int> MemberType
+        {
+            get { return m_MemberType; }
+            set { m_MemberType = value; }
+        }
+        private System.Nullable<int> m_MemberType;
+
         [DataMember(Name = "strEmail", EmitDefaultValue = false)]
         public string StrEmail
         {
@@ -115,5 +123,7 @@ namespace Route4MeSDK.QueryTypes
             set { m_StrPassword2 = value; }
         }
         private string m_StrPassword2;
+
+
     }
 }
