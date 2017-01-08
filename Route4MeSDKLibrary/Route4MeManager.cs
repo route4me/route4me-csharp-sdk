@@ -591,6 +591,50 @@ namespace Route4MeSDK
         return response;
     }
 
+    [DataContract()]
+    private sealed class ValidateSessionRequest : GenericParameters
+    {
+
+        [HttpQueryMemberAttribute(Name = "session_guid", EmitDefaultValue = false)]
+        public string SessionGuid
+        {
+            get { return m_SessionGuid; }
+            set { m_SessionGuid = value; }
+        }
+
+        private string m_SessionGuid;
+        [HttpQueryMemberAttribute(Name = "member_id", EmitDefaultValue = false)]
+        public System.Nullable<int> MemberId
+        {
+            get { return m_MemberId; }
+            set { m_MemberId = value; }
+        }
+
+        private System.Nullable<int> m_MemberId;
+        [HttpQueryMemberAttribute(Name = "format", EmitDefaultValue = false)]
+        public string Format
+        {
+            get { return m_Format; }
+            set { m_Format = value; }
+        }
+
+        private string m_Format;
+    }
+
+    public MemberResponse ValidateSession(MemberParameters memParams, out string errorString)
+    {
+        ValidateSessionRequest request = new ValidateSessionRequest
+        {
+            SessionGuid = memParams.SessionGuid,
+            MemberId = memParams.MemberId,
+            Format = memParams.Format
+        };
+
+        MemberResponse result = GetJsonObjectFromAPI<MemberResponse>(request, R4MEInfrastructureSettings.ValidateSession, HttpMethodType.Get, false, out errorString);
+
+        return result;
+    }
+
     #endregion
 
     #region Address Notes
