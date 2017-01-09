@@ -1829,6 +1829,18 @@ namespace Route4MeSDK
         return territories;
     }
 
+    /// <summary>
+    /// Get territory by parameters (territory id, device id, addresses)
+    /// </summary>
+    /// <param name="territoryQuery"> Parameters for request </param>
+    /// <param name="errorString"> out: Error as string </param>
+    /// <returns> Territory zone Object </returns>
+    public TerritoryZone GetTerritory(TerritoryQuery territoryQuery, out string errorString)
+    {
+        TerritoryZone territory = GetJsonObjectFromAPI<TerritoryZone>(territoryQuery, R4MEInfrastructureSettings.Territory, HttpMethodType.Get, out errorString);
+        return territory;
+    }
+
     #endregion
 
     #endregion

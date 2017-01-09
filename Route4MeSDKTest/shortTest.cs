@@ -14,8 +14,12 @@ namespace Route4MeSDKTest
 
             // Note run an example by uncommenting code lines between appropriate //=======.... lines
 
+            // ======== Get Territory ===================================
+             examples.GetTerritory();
+            // ======================================================================
+
             // ======== Get Territories ===================================
-             examples.GetTerritories();
+            // examples.GetTerritories();
             // ======================================================================
 
             // ======== Create a Territory with Rectangular Shape ===================

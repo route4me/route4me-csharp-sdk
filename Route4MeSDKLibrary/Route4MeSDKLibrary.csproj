@@ -59,6 +59,7 @@
     <Compile Include="DataTypes\RouteParameters.cs" />
     <Compile Include="DataTypes\RouteResponse.cs" />
     <Compile Include="DataTypes\Territory.cs" />
+    <Compile Include="DataTypes\TerritoryZone.cs" />
     <Compile Include="DataTypes\TrackingHistory.cs" />
     <Compile Include="DataTypes\User.cs" />
     <Compile Include="DataTypes\VehicleResponse.cs" />
@@ -78,6 +79,7 @@
     <Compile Include="QueryTypes\OptimizationParameters.cs" />
     <Compile Include="QueryTypes\OrderParameters.cs" />
     <Compile Include="QueryTypes\RouteParametersQuery.cs" />
+    <Compile Include="QueryTypes\TerritoryQuery.cs" />
     <Compile Include="QueryTypes\VehicleParameters.cs" />
     <Compile Include="Route4MeManager.cs" />
     <Compile Include="Types.cs" />
