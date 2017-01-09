@@ -14,8 +14,12 @@ namespace Route4MeSDKTest
 
             // Note run an example by uncommenting code lines between appropriate //=======.... lines
 
+            // ======== Search Locations By IDs  ===========================
+             examples.SearchLocationsByIDs();
+            // ======================================================================
+
             // ======== Get Addressbook Specified Fields Filtered by Text in Any Field  ===========================
-             examples.GetSpecifiedFieldsSearchText();
+            // examples.GetSpecifiedFieldsSearchText();
             // ======================================================================
 
             // ======== Get Addressbook Locations By Text In Any Field ===========================
