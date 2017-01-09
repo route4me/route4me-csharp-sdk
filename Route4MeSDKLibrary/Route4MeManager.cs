@@ -1162,6 +1162,93 @@ namespace Route4MeSDK
         return result;
     }
 
+    [DataContract()]
+    private sealed class SearchAddressBookLocationRequest : GenericParameters
+    {
+        [HttpQueryMemberAttribute(Name = "query", EmitDefaultValue = false)]
+        public string Query
+        {
+            get { return m_Query; }
+            set { m_Query = value; }
+        }
+
+        private string m_Query;
+        [HttpQueryMemberAttribute(Name = "fields", EmitDefaultValue = false)]
+        public string Fields
+        {
+            get { return m_Fields; }
+            set { m_Fields = value; }
+        }
+
+        private string m_Fields;
+        [HttpQueryMemberAttribute(Name = "offset", EmitDefaultValue = false)]
+        public System.Nullable<int> Offset
+        {
+            get { return m_Offset; }
+            set { m_Offset = value; }
+        }
+
+        private System.Nullable<int> m_Offset;
+        [HttpQueryMemberAttribute(Name = "limit", EmitDefaultValue = false)]
+        public System.Nullable<int> Limit
+        {
+            get { return m_Limit; }
+            set { m_Limit = value; }
+        }
+
+        private System.Nullable<int> m_Limit;
+    }
+
+    [DataContract()]
+    private sealed class SearchAddressBookLocationResponse
+    {
+        [DataMember(Name = "results")]
+        public List<string[]> Results
+        {
+            get { return m_Results; }
+            set { m_Results = value; }
+        }
+
+        private List<string[]> m_Results;
+        [DataMember(Name = "total")]
+        public uint Total
+        {
+            get { return m_Total; }
+            set { m_Total = value; }
+        }
+
+        private uint m_Total;
+        [DataMember(Name = "fields")]
+        public string[] Fields
+        {
+            get { return m_Fields; }
+            set { m_Fields = value; }
+        }
+        private string[] m_Fields;
+    }
+
+    public List<string[]> SearchAddressBookLocation(AddressBookParameters addressBookParameters, out uint total, out string errorString)
+    {
+        total = 0;
+
+        SearchAddressBookLocationRequest request = new SearchAddressBookLocationRequest
+        {
+            Query = addressBookParameters.Query,
+            Fields = addressBookParameters.Fields,
+            Offset = addressBookParameters.Offset >= 0 ? (int)addressBookParameters.Offset : 0,
+            Limit = addressBookParameters.Limit >= 0 ? (int)addressBookParameters.Limit : 0
+        };
+
+        var response = GetJsonObjectFromAPI<SearchAddressBookLocationResponse>(request, R4MEInfrastructureSettings.AddressBook, HttpMethodType.Get, out errorString);
+        List<string[]> result = null;
+        if (response != null)
+        {
+            result = response.Results;
+            total = response.Total;
+        }
+        return result;
+    }
+
     public AddressBookContact AddAddressBookContact(AddressBookContact contact, out string errorString)
     {
       contact.PrepareForSerialization();
