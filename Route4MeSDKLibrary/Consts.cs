@@ -18,6 +18,9 @@ namespace Route4MeSDK
     public const string SetGpsHost    = MainHost + "/track/set.php";
     public const string GetUsersHost = MainHost + "/api.v4/user.php";
     public const string UserAuthentication = MainHost + "/actions/authenticate.php";
+    public const string ValidateSession = MainHost + "/datafeed/session/validate_session.php";
+    public const string UserRegistration = MainHost + "/actions/register_action.php";
+    public const string UserConfiguration = MainHost + "/api.v4/configuration-settings.php";
     public const string AddRouteNotesHost = MainHost + "/actions/addRouteNotes.php";
     public const string ActivityFeedHost = MainHost + "/api.v4/activity_feed.php";
     public const string GetAddress = MainHost + "/api.v4/address.php";
@@ -25,6 +28,7 @@ namespace Route4MeSDK
     public const string MoveRouteDestination = MainHost + "/actions/route/move_route_destination.php";
     public const string AddressBook = MainHost + "/api.v4/address_book.php";
     public const string Avoidance = MainHost + "/api.v4/avoidance.php";
+    public const string Territory = MainHost + "/api.v4/territory.php";
     public const string Order = MainHost + "/api.v4/order.php";
     public const string MergeRoutes = MainHost + "/actions/merge_routes.php";
     public const string RouteReoptimize = MainHost + "/api.v3/route/reoptimize_2.php";

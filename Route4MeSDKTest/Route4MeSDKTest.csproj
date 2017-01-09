@@ -57,6 +57,8 @@
     <Compile Include="Examples\Addresses\MarkAddressVisited.cs" />
     <Compile Include="Examples\Addresses\RemoveDestinationFromOptimization.cs" />
     <Compile Include="Examples\Addresses\ResequenceRouteDestinations.cs" />
+    <Compile Include="Examples\AvoidanceZones\AddPolygonAvoidanceZone.cs" />
+    <Compile Include="Examples\AvoidanceZones\AddRectAvoidanceZone.cs" />
     <Compile Include="Examples\Geocoding\GeocodingForward.cs" />
     <Compile Include="Examples\Geocoding\RapidStreetDataAll.cs" />
     <Compile Include="Examples\Geocoding\RapidStreetDataLimited.cs" />
@@ -113,6 +115,7 @@
     <Compile Include="Examples\Routes\SearchRoutesForText.cs" />
     <Compile Include="Examples\Routes\UpdateRoute.cs" />
     <Compile Include="Examples\Routes\UpdateRouteCustomData.cs" />
+    <Compile Include="Examples\Territories\CreateTerritory.cs" />
     <Compile Include="Examples\Tracking\FindAsset.cs" />
     <Compile Include="Examples\Tracking\GetDeviceHistoryTimeRange.cs" />
     <Compile Include="Examples\Users\CreateUser.cs" />

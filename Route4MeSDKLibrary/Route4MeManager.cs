@@ -1804,6 +1804,22 @@ namespace Route4MeSDK
 
     #endregion
 
+    #region Territories
+    /// <summary>
+    /// Create territory
+    /// </summary>
+    /// <param name="avoidanceZoneParameters"> Parameters for request </param>
+    /// <param name="errorString"> out: Error as string </param>
+    /// <returns> Territory Object </returns>
+    public AvoidanceZone CreateTerritory(AvoidanceZoneParameters avoidanceZoneParameters, out string errorString)
+    {
+        AvoidanceZone avoidanceZone = GetJsonObjectFromAPI<AvoidanceZone>(avoidanceZoneParameters, R4MEInfrastructureSettings.Territory, HttpMethodType.Post, out errorString);
+        return avoidanceZone;
+    }
+
+
+    #endregion
+
     #endregion
 
     #region Generic Methods

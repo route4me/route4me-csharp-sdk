@@ -14,8 +14,12 @@ namespace Route4MeSDKTest
 
             // Note run an example by uncommenting code lines between appropriate //=======.... lines
             
+            // ======== Create a Territory  ===========================
+             examples.CreateTerritory();
+            // ======================================================================
+
             // ======== Add Rectangular Avoidance Zone  ===========================
-             examples.AddRectAvoidanceZone();
+            // examples.AddRectAvoidanceZone();
             // ======================================================================
 
             // ======== Add Polygon Avoidance Zone  ===========================
