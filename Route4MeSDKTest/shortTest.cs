@@ -13,9 +13,17 @@ namespace Route4MeSDKTest
             Route4MeExamples examples = new Route4MeExamples();
 
             // Note run an example by uncommenting code lines between appropriate //=======.... lines
+            
+            // ======== Add Rectangular Avoidance Zone  ===========================
+             examples.AddRectAvoidanceZone();
+            // ======================================================================
+
+            // ======== Add Polygon Avoidance Zone  ===========================
+            // examples.AddPolygonAvoidanceZone();
+            // ======================================================================
 
             // ======== Search Routed Locations  ===========================
-              examples.SearchRoutedLocations();
+            //  examples.SearchRoutedLocations();
             // ======================================================================
 
             // ======== Search Locations By IDs  ===========================
