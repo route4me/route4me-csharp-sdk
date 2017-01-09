@@ -1817,6 +1817,17 @@ namespace Route4MeSDK
         return avoidanceZone;
     }
 
+    /// <summary>
+    /// Get territories by parameters
+    /// </summary>
+    /// <param name="avoidanceZoneQuery"> Parameters for request </param>
+    /// <param name="errorString"> out: Error as string </param>
+    /// <returns> Territory zone Objects </returns>
+    public AvoidanceZone[] GetTerritories(AvoidanceZoneQuery avoidanceZoneQuery, out string errorString)
+    {
+        AvoidanceZone[] territories = GetJsonObjectFromAPI<AvoidanceZone[]>(avoidanceZoneQuery, R4MEInfrastructureSettings.Territory, HttpMethodType.Get, out errorString);
+        return territories;
+    }
 
     #endregion
 

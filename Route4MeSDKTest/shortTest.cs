@@ -13,9 +13,21 @@ namespace Route4MeSDKTest
             Route4MeExamples examples = new Route4MeExamples();
 
             // Note run an example by uncommenting code lines between appropriate //=======.... lines
-            
-            // ======== Create a Territory  ===========================
-             examples.CreateTerritory();
+
+            // ======== Get Territories ===================================
+             examples.GetTerritories();
+            // ======================================================================
+
+            // ======== Create a Territory with Rectangular Shape ===================
+            // examples.CreateRectTerritory();
+            // ======================================================================
+
+            // ======== Create a Territory with Polygon Shape ===========================
+            // examples.CreatePolygonTerritory();
+            // ======================================================================
+
+            // ======== Create a Territory with Circular Shape ===========================
+            // examples.CreateTerritory();
             // ======================================================================
 
             // ======== Add Rectangular Avoidance Zone  ===========================

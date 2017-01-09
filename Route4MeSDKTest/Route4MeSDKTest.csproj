@@ -115,7 +115,10 @@
     <Compile Include="Examples\Routes\SearchRoutesForText.cs" />
     <Compile Include="Examples\Routes\UpdateRoute.cs" />
     <Compile Include="Examples\Routes\UpdateRouteCustomData.cs" />
+    <Compile Include="Examples\Territories\CreateRectTerritory.cs" />
+    <Compile Include="Examples\Territories\CreatePolygonTerritory.cs" />
     <Compile Include="Examples\Territories\CreateTerritory.cs" />
+    <Compile Include="Examples\Territories\GetTerritories.cs" />
     <Compile Include="Examples\Tracking\FindAsset.cs" />
     <Compile Include="Examples\Tracking\GetDeviceHistoryTimeRange.cs" />
     <Compile Include="Examples\Users\CreateUser.cs" />
