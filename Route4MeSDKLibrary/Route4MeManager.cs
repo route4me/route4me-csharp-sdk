@@ -1841,6 +1841,18 @@ namespace Route4MeSDK
         return territory;
     }
 
+    /// <summary>
+    /// Remove Territory (by territory id, device id)
+    /// </summary>
+    /// <param name="territoryQuery"> Parameters for request </param>
+    /// <param name="errorString"> out: Error as string </param>
+    /// <returns> Result status true/false </returns>
+    public bool RemoveTerritory(AvoidanceZoneQuery territoryQuery, out string errorString)
+    {
+        GetJsonObjectFromAPI<AvoidanceZone>(territoryQuery, R4MEInfrastructureSettings.Territory, HttpMethodType.Delete, out errorString);
+        return !string.IsNullOrEmpty(errorString);
+    }
+
     #endregion
 
     #endregion

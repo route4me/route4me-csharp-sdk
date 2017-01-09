@@ -14,8 +14,12 @@ namespace Route4MeSDKTest
 
             // Note run an example by uncommenting code lines between appropriate //=======.... lines
 
+            // ======== Remove Territory ===================================
+             examples.RemoveTerritory();
+            // ======================================================================
+
             // ======== Get Territory ===================================
-             examples.GetTerritory();
+            // examples.GetTerritory();
             // ======================================================================
 
             // ======== Get Territories ===================================
