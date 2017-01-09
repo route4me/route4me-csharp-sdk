@@ -49,6 +49,8 @@
     <Compile Include="Examples\AddressBook\AddAddressBookContact.cs" />
     <Compile Include="Examples\AddressBook\GetAddressbookLocation.cs" />
     <Compile Include="Examples\AddressBook\GetSpecifiedFieldsSearchText.cs" />
+    <Compile Include="Examples\AddressBook\SearchLocationsByIDs.cs" />
+    <Compile Include="Examples\AddressBook\SearchRoutedLocations.cs" />
     <Compile Include="Examples\Addresses\MarkAddressAsMarkedAsDeparted.cs" />
     <Compile Include="Examples\Addresses\MarkAddressAsMarkedAsVisited.cs" />
     <Compile Include="Examples\Addresses\MarkAddressDeparted.cs" />
