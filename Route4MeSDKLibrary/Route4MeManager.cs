@@ -1148,6 +1148,20 @@ namespace Route4MeSDK
       return result;
     }
 
+    public AddressBookContact[] GetAddressBookLocation(AddressBookParameters addressBookParameters, out uint total, out string errorString)
+    {
+        total = 0;
+
+        var response = GetJsonObjectFromAPI<GetAddressBookContactsResponse>(addressBookParameters, R4MEInfrastructureSettings.AddressBook, HttpMethodType.Get, out errorString);
+        AddressBookContact[] result = null;
+        if (response != null)
+        {
+            result = response.Results;
+            total = response.Total;
+        }
+        return result;
+    }
+
     public AddressBookContact AddAddressBookContact(AddressBookContact contact, out string errorString)
     {
       contact.PrepareForSerialization();

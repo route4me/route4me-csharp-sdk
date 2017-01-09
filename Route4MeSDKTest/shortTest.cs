@@ -14,8 +14,12 @@ namespace Route4MeSDKTest
 
             // Note run an example by uncommenting code lines between appropriate //=======.... lines
 
+            // ======== Get Addressbook Locations By Text In Any Field ===========================
+             examples.GetAddressbookLocation();
+            // ======================================================================
+
             // ======== Get Team Activities on a Route  ===========================
-             examples.GetRouteTeamActivities();
+            // examples.GetRouteTeamActivities();
             // ======================================================================
 
             // ======== Search Area Added Activiities ===========================
