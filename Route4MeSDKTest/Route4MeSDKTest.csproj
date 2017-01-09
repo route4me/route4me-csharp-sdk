@@ -121,6 +121,7 @@
     <Compile Include="Examples\Territories\GetTerritories.cs" />
     <Compile Include="Examples\Territories\GetTerritory.cs" />
     <Compile Include="Examples\Territories\RemoveTerritory.cs" />
+    <Compile Include="Examples\Territories\UpdateTerritory.cs" />
     <Compile Include="Examples\Tracking\FindAsset.cs" />
     <Compile Include="Examples\Tracking\GetDeviceHistoryTimeRange.cs" />
     <Compile Include="Examples\Users\CreateUser.cs" />

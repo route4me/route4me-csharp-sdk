@@ -1853,6 +1853,18 @@ namespace Route4MeSDK
         return !string.IsNullOrEmpty(errorString);
     }
 
+    /// <summary>
+    /// Update Territory (by territory id, device id)
+    /// </summary>
+    /// <param name="tereritoryParameters"> Parameters for request </param>
+    /// <param name="errorString"> out: Error as string </param>
+    /// <returns> Territory Object </returns>
+    public AvoidanceZone UpdateTerritory(AvoidanceZoneParameters tereritoryParameters, out string errorString)
+    {
+        AvoidanceZone territory = GetJsonObjectFromAPI<AvoidanceZone>(tereritoryParameters, R4MEInfrastructureSettings.Territory, HttpMethodType.Put, out errorString);
+        return territory;
+    }
+
     #endregion
 
     #endregion
