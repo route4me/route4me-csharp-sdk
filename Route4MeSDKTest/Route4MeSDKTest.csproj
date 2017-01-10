@@ -68,6 +68,7 @@
     <Compile Include="Examples\Geocoding\RapidStreetZipcodeAll.cs" />
     <Compile Include="Examples\Geocoding\RapidStreetZipcodeLimited.cs" />
     <Compile Include="Examples\Geocoding\ReverseGeocoding.cs" />
+    <Compile Include="Examples\MemberConfiguration\AddNewConfigurationKey.cs" />
     <Compile Include="Examples\Notes\AddAddressNote.cs" />
     <Compile Include="Examples\AvoidanceZones\AddAvoidanceZone.cs" />
     <Compile Include="Examples\Addresses\AddDestinationToOptimization.cs" />

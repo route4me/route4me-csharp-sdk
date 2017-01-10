@@ -52,6 +52,7 @@
     <Compile Include="DataTypes\ErrorResponse.cs" />
     <Compile Include="DataTypes\GeoPoint.cs" />
     <Compile Include="DataTypes\Links.cs" />
+    <Compile Include="DataTypes\MemberConfigurationResponse.cs" />
     <Compile Include="DataTypes\MemberResponse.cs" />
     <Compile Include="DataTypes\MemberResponseV4.cs" />
     <Compile Include="DataTypes\Order.cs" />
@@ -73,6 +74,7 @@
     <Compile Include="QueryTypes\GeocodingParameters.cs" />
     <Compile Include="QueryTypes\GPSParameters.cs" />
     <Compile Include="QueryTypes\HttpQueryMemberAttribute.cs" />
+    <Compile Include="QueryTypes\MemberConfigurationParameters.cs" />
     <Compile Include="QueryTypes\MemberParameters.cs" />
     <Compile Include="QueryTypes\MemberParametersV4.cs" />
     <Compile Include="QueryTypes\NoteParameters.cs" />

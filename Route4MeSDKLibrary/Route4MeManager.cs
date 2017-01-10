@@ -635,6 +635,20 @@ namespace Route4MeSDK
         return result;
     }
 
+    public MemberConfigurationResponse CreateNewConfigurationKey(MemberConfigurationParameters confParams, out string errorString)
+    {
+        MemberConfigurationResponse response = GetJsonObjectFromAPI<MemberConfigurationResponse>(confParams, R4MEInfrastructureSettings.UserConfiguration, HttpMethodType.Post, out errorString);
+
+        return response;
+    }
+
+    public MemberConfigurationResponse RemoveConfigurationKey(MemberConfigurationParameters confParams, out string errorString)
+    {
+        MemberConfigurationResponse response = GetJsonObjectFromAPI<MemberConfigurationResponse>(confParams, R4MEInfrastructureSettings.UserConfiguration, HttpMethodType.Delete, out errorString);
+
+        return response;
+    }
+
     #endregion
 
     #region Address Notes
