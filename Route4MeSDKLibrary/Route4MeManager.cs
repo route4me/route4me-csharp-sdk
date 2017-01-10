@@ -649,6 +649,34 @@ namespace Route4MeSDK
         return response;
     }
 
+    [DataContract()]
+    private sealed class GetConfigurationDataRequest : GenericParameters
+    {
+
+        [HttpQueryMemberAttribute(Name = "config_key", EmitDefaultValue = false)]
+        public string config_key
+        {
+            get { return m_config_key; }
+            set { m_config_key = value; }
+        }
+
+        private string m_config_key;
+    }
+
+    public MemberConfigurationDataRersponse GetConfigurationData(MemberConfigurationParameters confParams, out string errorString)
+    {
+        GetConfigurationDataRequest mParams = default(GetConfigurationDataRequest);
+        mParams = new GetConfigurationDataRequest();
+        if ((confParams != null))
+        {
+            mParams.config_key = confParams.config_key;
+        }
+
+        MemberConfigurationDataRersponse response = GetJsonObjectFromAPI<MemberConfigurationDataRersponse>(mParams, R4MEInfrastructureSettings.UserConfiguration, HttpMethodType.Get, out errorString);
+
+        return response;
+    }
+
     #endregion
 
     #region Address Notes

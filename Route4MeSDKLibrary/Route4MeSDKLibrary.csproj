@@ -52,6 +52,8 @@
     <Compile Include="DataTypes\ErrorResponse.cs" />
     <Compile Include="DataTypes\GeoPoint.cs" />
     <Compile Include="DataTypes\Links.cs" />
+    <Compile Include="DataTypes\MemberConfigurationData.cs" />
+    <Compile Include="DataTypes\MemberConfigurationDataRersponse.cs" />
     <Compile Include="DataTypes\MemberConfigurationResponse.cs" />
     <Compile Include="DataTypes\MemberResponse.cs" />
     <Compile Include="DataTypes\MemberResponseV4.cs" />
