@@ -14,11 +14,15 @@ namespace Route4MeSDKTest
 
             // Note run an example by uncommenting code lines between appropriate //=======.... lines
 
-            // ======== Remove Territory ===================================
-            examples.RemoveConfigurationKey();
+            // ======== Update Configuration Key ===================================
+              examples.UpdateConfigurationKey();
             // ==============================================================
 
-            // ======== Remove Territory ===================================
+            // ======== Remove Configuration Key ===================================
+            // examples.RemoveConfigurationKey();
+            // ==============================================================
+
+            // ======== Get Specific Configuration Key Data =================
             // examples.GetSpecificConfigurationKeyData();
             // ==============================================================
 

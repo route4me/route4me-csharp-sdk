@@ -677,6 +677,13 @@ namespace Route4MeSDK
         return response;
     }
 
+    public MemberConfigurationResponse UpdateConfigurationKey(MemberConfigurationParameters confParams, out string errorString)
+    {
+        MemberConfigurationResponse response = GetJsonObjectFromAPI<MemberConfigurationResponse>(confParams, R4MEInfrastructureSettings.UserConfiguration, HttpMethodType.Put, out errorString);
+
+        return response;
+    }
+
     #endregion
 
     #region Address Notes

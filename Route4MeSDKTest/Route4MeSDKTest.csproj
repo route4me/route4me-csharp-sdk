@@ -72,6 +72,7 @@
     <Compile Include="Examples\MemberConfiguration\GetAllConfigurationData.cs" />
     <Compile Include="Examples\MemberConfiguration\GetSpecificConfigurationKeyData.cs" />
     <Compile Include="Examples\MemberConfiguration\RemoveConfigurationKey.cs" />
+    <Compile Include="Examples\MemberConfiguration\UpdateConfigurationKey.cs" />
     <Compile Include="Examples\Notes\AddAddressNote.cs" />
     <Compile Include="Examples\AvoidanceZones\AddAvoidanceZone.cs" />
     <Compile Include="Examples\Addresses\AddDestinationToOptimization.cs" />
