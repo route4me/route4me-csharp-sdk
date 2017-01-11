@@ -19,7 +19,7 @@ namespace Route4MeSDK.QueryTypes
     /// <summary>
     /// Territory Id
     /// </summary>
-    [DataMember(Name = "territory_id")]
+    [HttpQueryMemberAttribute(Name = "territory_id", EmitDefaultValue = false)]
     public string TerritoryId { get; set; }
 
     /// <summary>
