@@ -50,6 +50,7 @@
     <Compile Include="DataTypes\DirectionStep.cs" />
     <Compile Include="DataTypes\Enums.cs" />
     <Compile Include="DataTypes\ErrorResponse.cs" />
+    <Compile Include="DataTypes\FindAssetResponse.cs" />
     <Compile Include="DataTypes\GeoPoint.cs" />
     <Compile Include="DataTypes\Links.cs" />
     <Compile Include="DataTypes\MemberConfigurationData.cs" />

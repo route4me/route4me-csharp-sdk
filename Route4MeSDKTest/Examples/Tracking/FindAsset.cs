@@ -14,20 +14,35 @@ namespace Route4MeSDK.Examples
         {
             // Create the manager with the api key
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
-
-            string query = "2121541";
+            string tracking = "Q7G9P1L9";
             // Run the query
             string errorString = "";
-            Dictionary<string, string> result = route4Me.FindAsset(query, out errorString);
-
+            FindAssetResponse result = route4Me.FindAsset(tracking, out errorString);
+            DateTime nDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0);
             Console.WriteLine("");
 
             if (result != null)
             {
                 Console.WriteLine("FindAsset executed successfully");
-                Console.WriteLine("route_id: " + result["route_id"]);
-                Console.WriteLine("sequence_no: " + result["sequence_no"]);
-                Console.WriteLine("datetime: " + result["mDateTime"]);
+                Console.WriteLine("tracking_number: " + result.TrackingNumber);
+                foreach (FindAssetResponseLocations loc1 in result.Locations)
+                {
+                    Console.WriteLine("lat: " + loc1.Latitude);
+                    Console.WriteLine("lng: " + loc1.Longitude);
+                    Console.WriteLine("icon: " + loc1.Icon);
+                }
+
+                foreach (KeyValuePair<string, string> kvp in result.CustomData)
+                {
+                    Console.WriteLine(kvp.Key + ": " + kvp.Value);
+                }
+
+                foreach (FindAssetResponseArrival arriv1 in result.Arrival)
+                {
+                    Console.WriteLine("from_unix_timestamp: " + nDateTime.AddSeconds(arriv1.FromUnixTimestamp>=0 ? (double)arriv1.FromUnixTimestamp : 0));
+                    Console.WriteLine("to_unix_timestamp: " + nDateTime.AddSeconds(arriv1.ToUnixTimestamp>=0 ? (double)arriv1.ToUnixTimestamp : 0));
+                }
+                Console.WriteLine("delivered: " + result.Delivered);
                 Console.WriteLine("---------------------------");
             }
             else

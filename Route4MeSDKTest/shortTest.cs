@@ -15,7 +15,7 @@ namespace Route4MeSDKTest
             // Note run an example by uncommenting code lines between appropriate //=======.... lines
 
             // ======== Update Configuration Key ===================================
-              examples.UpdateConfigurationKey();
+            //  examples.UpdateConfigurationKey();
             // ==============================================================
 
             // ======== Remove Configuration Key ===================================
@@ -131,7 +131,7 @@ namespace Route4MeSDKTest
             // ======================================================================
 
             // ======== Find Asset (Asset Tracking) ===========================
-            //examples.FindAsset();
+             examples.FindAsset();
             // ======================================================================
 
             // ======== Rapid Stret Service Limited ===========================
