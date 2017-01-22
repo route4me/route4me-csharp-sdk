@@ -472,7 +472,7 @@ namespace Route4MeSDK
     }
 
     [DataContract()]
-    public sealed class USerDeleteResponse
+    public sealed class UserDeleteResponse
     {
         [DataMember(Name = "status")]
         public bool Status
@@ -485,7 +485,7 @@ namespace Route4MeSDK
 
     public bool UserDelete(MemberParametersV4 memParams, out string errorString)
     {
-        USerDeleteResponse response = GetJsonObjectFromAPI<USerDeleteResponse>(memParams, R4MEInfrastructureSettings.GetUsersHost, HttpMethodType.Delete, out errorString);
+        UserDeleteResponse response = GetJsonObjectFromAPI<UserDeleteResponse>(memParams, R4MEInfrastructureSettings.GetUsersHost, HttpMethodType.Delete, out errorString);
 
         if (response == null) return false;
 
