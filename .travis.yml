@@ -9,15 +9,10 @@ sudo: false
 language: csharp
 solution: Route4MeSDK.sln
 
-matrix:
-  include:
-    - dotnet: 1.0.0-preview2-003121
-      mono: none
-      env: DOTNETCORE=1
-    - mono:
-      - latest
-      - 3.8.0
-      - 2.10.8
+mono:
+  - latest
+  - 3.8.0
+  - 2.10.8
 
 # dotnet:
 #   - 1.0.0-preview2-003121
@@ -26,5 +21,6 @@ cache:
   directories:
     - packages
 
-# script:
-#   - xbuild /p:Configuration=Release Route4MeSDK.sln
+script:
+  - xbuild /p:Configuration=Release Route4MeSDK.sln
+  - mono ./packages/NUnit.ConsoleRunner.3.6.0/tools/nunit3-console.exe ./Route4MeSDKTest/bin/Release/Route4MeSDKTest.exe
