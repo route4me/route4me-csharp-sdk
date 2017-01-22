@@ -36,6 +36,9 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml" />
+    <Reference Include="nunit.framework">
+      <HintPath>..\packages\NUnit.3.6.0\lib\net45\nunit.framework.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Examples\Activities\SearchRouteOwnerChanged.cs" />
@@ -157,10 +160,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Route4MeSDKLibrary\Route4MeSDKLibrary.csproj">
-      <Project>{37e5d3fc-bbf7-4bd8-98e6-a58dc9138d98}</Project>
+      <Project>{37E5D3FC-BBF7-4BD8-98E6-A58DC9138D98}</Project>
       <Name>Route4MeSDKLibrary</Name>
     </ProjectReference>
   </ItemGroup>
