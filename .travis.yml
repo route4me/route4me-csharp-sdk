@@ -20,3 +20,6 @@ dotnet:
 cache:
   directories:
     - packages
+
+script:
+  - xbuild /p:Configuration=Release Route4MeSDK.sln
