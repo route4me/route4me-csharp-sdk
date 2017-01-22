@@ -2,9 +2,20 @@
 using Route4MeSDK.Examples;
 using System;
 using System.Collections.Generic;
+using NUnit.Framework;
 
 namespace Route4MeSDKTest
 {
+  [TestFixture]
+  public class DumbTest
+  {
+    [Test]
+    public void TestNothing()
+    {
+      Assert.That(true, Is.True);
+    }
+  }
+
   internal sealed class Program
   {
     static void Main(string[] args)
