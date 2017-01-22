@@ -1,5 +1,6 @@
 # Route4Me Route Optimization SaaS C# SDK
 
+[![Build Status](https://travis-ci.org/route4me/route4me-csharp-sdk.svg?branch=master)](https://travis-ci.org/route4me/route4me-csharp-sdk)
 
 ### What does the Route4Me SDK permit me to do?
 This SDK makes it easier for you use the Route4Me API, which creates optimally sequenced driving routes for many drivers.

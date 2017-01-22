@@ -12,7 +12,7 @@ solution: Route4MeSDK.sln
 mono:
   - latest
   - 3.8.0
-  - 2.10.8
+#  - 2.10.8 # fails: https://travis-ci.org/maxkoryukov/route4me-csharp-sdk/jobs/194265821
 
 # dotnet:
 #   - 1.0.0-preview2-003121
