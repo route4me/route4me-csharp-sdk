@@ -1,0 +1,22 @@
+# =============================================================================
+# Access Route4Me's logistics-as-a-service API using our C# SDK
+#
+# Copyright (C) 2016-2017 Route4Me
+#
+# =============================================================================
+
+sudo: false
+language: csharp
+solution: Route4MeSDK.sln
+
+mono:
+  - latest
+  - 3.12.0
+  - 3.10.0
+
+dotnet:
+  - 1.0.0-preview2-003121
+
+cache:
+  directories:
+    - packages
