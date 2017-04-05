@@ -1,0 +1,5 @@
+Route4MeSDK.sln
+Route4MeSDKTest/Route4MeSDKTest.csproj
+*.userprefs
+/**/obj/
+/packages/

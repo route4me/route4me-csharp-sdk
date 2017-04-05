@@ -1,0 +1,26 @@
+# =============================================================================
+# Access Route4Me's logistics-as-a-service API using our C# SDK
+#
+# Copyright (C) 2016-2017 Route4Me
+#
+# =============================================================================
+
+sudo: false
+language: csharp
+solution: Route4MeSDK.sln
+
+mono:
+  - latest
+  - 3.8.0
+#  - 2.10.8 # fails: https://travis-ci.org/maxkoryukov/route4me-csharp-sdk/jobs/194265821
+
+# dotnet:
+#   - 1.0.0-preview2-003121
+
+cache:
+  directories:
+    - packages
+
+script:
+  - xbuild /p:Configuration=Release Route4MeSDK.sln
+  - mono ./packages/NUnit.ConsoleRunner.3.6.0/tools/nunit3-console.exe ./Route4MeSDKTest/bin/Debug/Route4MeSDKTest.exe
