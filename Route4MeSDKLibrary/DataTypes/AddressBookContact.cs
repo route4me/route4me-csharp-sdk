@@ -65,23 +65,13 @@ namespace Route4MeSDK.DataTypes
     public string address_zip { get; set; }
 
     [DataMember(Name = "address_custom_data", EmitDefaultValue = false)]
-    public object address_custom_data
-    {
-        get {
-            if (m_address_custom_data == null) return null;
-            string sTypeName = m_address_custom_data.GetType().Name;
-            if (sTypeName == "Object[]") return new Dictionary<string, object>();
-            return (Dictionary<string, object>)m_address_custom_data;
-        }
-        set { m_address_custom_data = value; }
-    }
-    private object m_address_custom_data;
+    public object address_custom_data { get; set; }
 
     [DataMember(Name = "schedule", EmitDefaultValue = false)]
     public IList<Schedule> schedule { get; set; }
 
     [DataMember(Name = "schedule_blacklist", EmitDefaultValue = false)]
-    public string[] schedule_blacklist { get; set; }
+    public object schedule_blacklist { get; set; }
 
     [DataMember(Name = "service_time", EmitDefaultValue = false)]
     public int? service_time { get; set; }

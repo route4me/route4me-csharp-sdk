@@ -156,19 +156,8 @@ namespace Route4MeSDK.DataTypes
     /// Custom data
     /// </summary>
     [DataMember(Name = "EXT_FIELD_custom_data", EmitDefaultValue = false)]
-    public object EXT_FIELD_custom_data
-    {
-        get
-        {
-            if (m_EXT_FIELD_custom_data == null) return null;
-            string sTypeName = m_EXT_FIELD_custom_data.GetType().Name;
-            if (sTypeName == "Object[]") return new Dictionary<string, object>();
-            return (Dictionary<string, object>)m_EXT_FIELD_custom_data;
-        }
-        set { m_EXT_FIELD_custom_data = value; }
-    }
-    private object m_EXT_FIELD_custom_data;
-
+    public object EXT_FIELD_custom_data {get; set;}
+    
     /// <summary>
     /// Local timezone string
     /// </summary>

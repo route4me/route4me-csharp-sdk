@@ -113,17 +113,31 @@ namespace Route4MeSDK
       public bool Removed { get; set; }
     }
 
+    [DataContract()]
+    private sealed class RemoveOptimizationRequest : GenericParameters
+    {
+        [HttpQueryMemberAttribute(Name = "redirect", EmitDefaultValue = false)]
+        public int redirect {get; set;}
+
+        [DataMember(Name = "optimization_problem_ids", EmitDefaultValue = false)]
+        public string[] optimization_problem_ids { get; set; }
+    }
+
     /// <summary>
     /// Remove an existing optimization belonging to an user.
     /// </summary>
     /// <param name="optimizationProblemID"> Optimization Problem ID </param>
     /// <param name="errorString"> out: Error as string </param>
     /// <returns> Result status true/false </returns>
-    public bool RemoveOptimization(string optimizationProblemID, out string errorString)
+    public bool RemoveOptimization(string[] optimizationProblemIDs, out string errorString)
     {
-      GenericParameters genericParameters = new GenericParameters();
-      genericParameters.ParametersCollection.Add("optimization_problem_id", optimizationProblemID);
-      RemoveOptimizationResponse response = GetJsonObjectFromAPI<RemoveOptimizationResponse>(genericParameters,
+        RemoveOptimizationRequest remParameters = new RemoveOptimizationRequest()
+        {
+            redirect = 0,
+            optimization_problem_ids = optimizationProblemIDs
+        };
+
+        RemoveOptimizationResponse response = GetJsonObjectFromAPI<RemoveOptimizationResponse>(remParameters,
                                                              R4MEInfrastructureSettings.ApiHost,
                                                              HttpMethodType.Delete,
                                                              out errorString);
@@ -1335,13 +1349,13 @@ namespace Route4MeSDK
     #region Address Book
 
     [DataContract]
-    private sealed class GetAddressBookContactsResponse
+    private sealed class GetAddressBookContactsResponse : GenericParameters
     {
-      [DataMember(Name = "results")]
-      public AddressBookContact[] Results { get; set; }
+      [DataMember(Name = "results", IsRequired = false)]
+      public AddressBookContact[] results { get; set; }
 
-      [DataMember(Name = "total")]
-      public uint Total { get; set; }
+      [DataMember(Name = "total", IsRequired = false)]
+      public uint total { get; set; }
     }
 
     public AddressBookContact[] GetAddressBookContacts(AddressBookParameters addressBookParameters, out uint total, out string errorString)
@@ -1354,8 +1368,8 @@ namespace Route4MeSDK
       AddressBookContact[] result = null;
       if (response != null)
       {
-        result = response.Results;
-        total = response.Total;
+        result = response.results;
+        total = response.total;
       }
       return result;
     }
@@ -1368,8 +1382,8 @@ namespace Route4MeSDK
         AddressBookContact[] result = null;
         if (response != null)
         {
-            result = response.Results;
-            total = response.Total;
+            result = response.results;
+            total = response.total;
         }
         return result;
     }

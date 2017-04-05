@@ -14,6 +14,43 @@ namespace Route4MeSDKTest
 
             // Note run an example by uncommenting code lines between appropriate //=======.... lines
 
+            // ======== Remove Optimization ============================
+            //examples.ReoptimizeRoute("BAD35EEE32BFF8E20C2077AC53761BC7");
+            //
+
+            // ======== Remove Optimization ============================
+            //examples.MoveDestinationToRoute("BAD35EEE32BFF8E20C2077AC53761BC7", 184611093, 184611074);
+            //
+
+            // ======== Remove Optimization ============================
+            // examples.SingleDriverRoundTrip();
+            //
+
+            // ======== Remove Optimization ============================
+            // examples.SingleDriverRoundTripGeneric();
+            //
+
+            // ======== Remove Optimization ============================
+            //AddressBookContact contact1 = examples.AddAddressBookContact();
+            //examples.UpdateAddressBookContact(contact1);
+            //
+
+            // ======== Remove Optimization ============================
+             //examples.GetAddressBookContacts();
+            //
+
+            // ======== Remove Optimization ============================
+             // examples.GetAddressbookLocation();
+            //
+
+            // ======== Remove Optimization ============================
+            // examples.RemoveOptimization(new string[]{"7482443A5F177DA36DE8B9840C1B046E"});
+            //
+
+            // ======== Update Route Destination ============================
+            //  examples.UpdateRouteDestination();
+            //
+
             // ======== COnverting XML file to JSON string ================
                 //Dictionary<string, string> customData = new Dictionary<string,string>();
                 //customData.Add("BatchId","e7c672b1-a356-4a97-803e-97db88fdcf99");
@@ -22,7 +59,7 @@ namespace Route4MeSDKTest
                 //customData.Add("DeliveryInvoices", "<?xml version=\"1.0\" encoding=\"utf-16\"?>\u000d\u000a<!DOCTYPE PAMSDelivery SYSTEM \"PAMSDelivery.dtd\">\u000d\u000a<ArrayOfRouteDeliveryInvoice>\u000d\u000a  <RouteDeliveryInvoice>\u000d\u000a    <InvoiceNumber>945822</InvoiceNumber>\u000d\u000a    <InventoryIds>\u000d\u000a      <string>1790908</string>\u000d\u000a    </InventoryIds>\u000d\u000a    <IsRA>false</IsRA>\u000d\u000a    <IsDT>false</IsDT>\u000d\u000a    <IsINC>true</IsINC>\u000d\u000a    <IsPO>false</IsPO>\u000d\u000a    <IsPOPickup>false</IsPOPickup>\u000d\u000a  </RouteDeliveryInvoice>\u000d\u000a</ArrayOfRouteDeliveryInvoice>");
                 //customData.Add("DeliveryNotes", "");
                 //customData.Add("RouteId", "20191");
-                examples.UpdateRouteDestination();
+                //examples.UpdateRouteDestination();
             //
 
             // ======== Converting XML file to JSON string ================
@@ -61,9 +98,9 @@ namespace Route4MeSDKTest
             //
 
             // ======== Generating the SQL server tables ================
-                //examples.GenerateSqlDatabase(DB_Type.MySQL);
-                //examples.GenerateSqlDatabase(DB_Type.MSSQL);
-                //examples.GenerateSqlDatabase(DB_Type.PostgreSQL);
+            //examples.GenerateSqlDatabase(DB_Type.MySQL);
+            //examples.GenerateSqlDatabase(DB_Type.MSSQL);
+            //examples.GenerateSqlDatabase(DB_Type.PostgreSQL);
             //
 
             // ======== Upload orders csv file to the SQL server ================

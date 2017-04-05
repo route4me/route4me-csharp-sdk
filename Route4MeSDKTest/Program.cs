@@ -197,9 +197,13 @@ namespace Route4MeSDKTest
 
       // Remove optimization
       if (optimizationProblemID != null)
-        examples.RemoveOptimization(optimizationProblemID);
+      {
+          List<string> lsOptIDs = new List<string>();
+          lsOptIDs.Add(optimizationProblemID);
+          examples.RemoveOptimization(lsOptIDs.ToArray());
+      }
       else
-        System.Console.WriteLine("RemoveOptimization not called. optimizationProblemID == null.");
+          System.Console.WriteLine("RemoveOptimization not called. optimizationProblemID == null.");
 
 
       // Address Book
