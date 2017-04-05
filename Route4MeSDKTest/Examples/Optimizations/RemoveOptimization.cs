@@ -6,22 +6,24 @@ namespace Route4MeSDK.Examples
 {
   public sealed partial class Route4MeExamples
   {
-    public void RemoveOptimization(string optimizationProblemID)
+    public void RemoveOptimization(string[] optimizationProblemIDs)
     {
       // Create the manager with the api key
       Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
       // Run the query
       string errorString;
-      bool removed = route4Me.RemoveOptimization(optimizationProblemID, out errorString);
+      bool removed = route4Me.RemoveOptimization(optimizationProblemIDs, out errorString);
 
       Console.WriteLine("");
 
       if (removed)
       {
         Console.WriteLine("RemoveOptimization executed successfully");
-
-        Console.WriteLine("Optimization Problem ID: {0}", optimizationProblemID);
+        foreach (string optid in optimizationProblemIDs)
+        {
+            Console.WriteLine("Removed Optimization Problem ID: {0}", optid);
+        }
       }
       else
       {
