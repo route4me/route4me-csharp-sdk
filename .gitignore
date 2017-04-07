@@ -4,3 +4,4 @@ shortTest.cs
 *.userprefs
 /**/obj/
 /packages/
+/TestResults/
