@@ -47,7 +47,7 @@ namespace Route4MeSDK.Examples
                     oAddress.Cost = 5;
                     oAddress.InvoiceNo = 945825;
                     // etc fill the necessary address parameters
-                    oAddress.CustomFields = CustomData;
+                    oAddress.CustomFields = new Dictionary<string,string>{{"Test Custom Fields","Test custom Data"}};
 
                     errorString = "";
                     Address address = route4Me.UpdateRouteDestination(oAddress, out errorString);
