@@ -460,6 +460,9 @@ namespace Route4MeSDK
         [DataMember(Name = "address", EmitDefaultValue = false)]
         public string AddressString { get; set; }
 
+        [DataMember(Name = "address_stop_type", EmitDefaultValue = false)]
+        public string AddressStopType { get; set; }
+
         [DataMember(Name = "is_depot", EmitDefaultValue = false)]
         public bool? IsDepot { get; set; }
 
@@ -489,6 +492,9 @@ namespace Route4MeSDK
         //the last known departed timestamp of this address
         [DataMember(Name = "timestamp_last_departed", EmitDefaultValue = false)]
         public uint? TimestampLastDeparted { get; set; }
+
+        [DataMember(Name = "group", EmitDefaultValue = false)]
+        public object Group { get; set; }
 
         //pass-through data about this route destination
         //the data will be visible on the manifest, website, and mobile apps
@@ -547,9 +553,6 @@ namespace Route4MeSDK
         [DataMember(Name = "time", EmitDefaultValue = false)]
         public int? Time { get; set; }
 
-        [DataMember(Name = "notes", EmitDefaultValue = false)]
-        public AddressNote[] Notes { get; set; }
-
         //if present, the priority will sequence addresses in all the optimal routes so that
         //higher priority addresses are general at the beginning of the route sequence
         //1 is the highest priority, 100000 is the lowest
@@ -591,6 +594,7 @@ namespace Route4MeSDK
         if (addressParameters.FirstName != null) request.FirstName = addressParameters.FirstName;
         if (addressParameters.LastName != null) request.LastName = addressParameters.LastName;
         if (addressParameters.AddressString != null) request.AddressString = addressParameters.AddressString;
+        if (addressParameters.AddressStopType != null) request.AddressStopType = addressParameters.AddressStopType;
         if (addressParameters.IsDepot != null) request.IsDepot = addressParameters.IsDepot;
         if (addressParameters.Latitude != null) request.Latitude = addressParameters.Latitude;
         if (addressParameters.Longitude != null) request.Longitude = addressParameters.Longitude;
@@ -600,6 +604,7 @@ namespace Route4MeSDK
         if (addressParameters.IsDeparted != null) request.IsDeparted = addressParameters.IsDeparted;
         if (addressParameters.TimestampLastVisited != null) request.TimestampLastVisited = addressParameters.TimestampLastVisited;
         if (addressParameters.TimestampLastDeparted != null) request.TimestampLastDeparted = addressParameters.TimestampLastDeparted;
+        if (addressParameters.Group != null) request.Group = addressParameters.Group;
         if (addressParameters.CustomerPo != null) request.CustomerPo = addressParameters.CustomerPo;
         if (addressParameters.InvoiceNo != null) request.InvoiceNo = addressParameters.InvoiceNo;
         if (addressParameters.ReferenceNo != null) request.ReferenceNo = addressParameters.ReferenceNo;
@@ -614,7 +619,7 @@ namespace Route4MeSDK
 
         if (addressParameters.TimeWindowStart != null) request.TimeWindowStart = addressParameters.TimeWindowStart;
         if (addressParameters.TimeWindowEnd != null) request.TimeWindowEnd = addressParameters.TimeWindowEnd;
-        if (addressParameters.Notes != null) request.Notes = addressParameters.Notes;
+
         if (addressParameters.Priority != null) request.Priority = addressParameters.Priority;
         if (addressParameters.CurbsideLatitude != null) request.CurbsideLatitude = addressParameters.CurbsideLatitude;
         if (addressParameters.CurbsideLongitude != null) request.CurbsideLongitude = addressParameters.CurbsideLongitude;

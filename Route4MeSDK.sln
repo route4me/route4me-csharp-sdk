@@ -10,6 +10,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{8BA18B
 		.nuget\packages.config = .nuget\packages.config
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Route4MeSDKUnitTest", "Route4MeSDKUnitTest\Route4MeSDKUnitTest.csproj", "{2F85C71C-685A-4353-9A1B-7A1E3C409325}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,6 +26,10 @@ Global
 		{DBA0AA41-4223-4404-B3E6-4948FE147A40}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DBA0AA41-4223-4404-B3E6-4948FE147A40}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DBA0AA41-4223-4404-B3E6-4948FE147A40}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F85C71C-685A-4353-9A1B-7A1E3C409325}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F85C71C-685A-4353-9A1B-7A1E3C409325}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F85C71C-685A-4353-9A1B-7A1E3C409325}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F85C71C-685A-4353-9A1B-7A1E3C409325}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
