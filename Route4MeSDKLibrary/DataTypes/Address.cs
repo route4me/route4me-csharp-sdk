@@ -36,6 +36,9 @@ namespace Route4MeSDK.DataTypes
     [DataMember(Name = "address")]
     public string AddressString { get; set; }
 
+    [DataMember(Name = "address_stop_type")]
+    public string AddressStopType { get; set; }
+
     //designate this stop as a depot
     //a route may have multiple depots/points of origin
     [DataMember(Name = "is_depot", EmitDefaultValue = false)]
@@ -95,6 +98,9 @@ namespace Route4MeSDK.DataTypes
     //the last known departed timestamp of this address
     [DataMember(Name = "timestamp_last_departed", EmitDefaultValue = false)]
     public uint? TimestampLastDeparted { get; set; }
+
+    [DataMember(Name = "group", EmitDefaultValue = false)]
+    public string Group { get; set; }
 
     //pass-through data about this route destination
     //the data will be visible on the manifest, website, and mobile apps
