@@ -26,6 +26,3 @@ C:\Users\Odin641\Documents\GitHub\route4me\route4me-csharp-sdk\Route4MeSDKTest\b
 C:\Users\Odin641\Documents\GitHub\route4me\route4me-csharp-sdk\Route4MeSDKTest\obj\Debug\Route4MeSDKTest.csprojResolveAssemblyReference.cache
 C:\Users\Odin641\Documents\GitHub\route4me\route4me-csharp-sdk\Route4MeSDKTest\obj\Debug\Route4MeSDKTest.Properties.Resources.resources
 C:\Users\Odin641\Documents\GitHub\route4me\route4me-csharp-sdk\Route4MeSDKTest\obj\Debug\Route4MeSDKTest.csproj.GenerateResource.Cache
-C:\Users\Odin62\Documents\GitHub\Route4Me\route4me-csharp-sdk\Route4MeSDKTest\bin\Debug\Route4MeSDKTest.exe.config
-C:\Users\Odin62\Documents\GitHub\Route4Me\route4me-csharp-sdk\Route4MeSDKTest\obj\Debug\Route4MeSDKTest.exe
-C:\Users\Odin62\Documents\GitHub\Route4Me\route4me-csharp-sdk\Route4MeSDKTest\obj\Debug\Route4MeSDKTest.pdb
