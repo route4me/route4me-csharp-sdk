@@ -24,6 +24,13 @@ namespace Route4MeSDK.Examples
         ActivityType = StatusUpdateType.DropOff.Description()
       };
 
+      string[] names = Assembly.GetExecutingAssembly().GetManifestResourceNames();
+
+      foreach (string nm in names)
+      {
+          Console.WriteLine(nm);
+      }
+
       string tempFilePath = null;
       using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Route4MeSDKTest.Resources.test.png"))
       {
