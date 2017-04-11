@@ -30,7 +30,7 @@ namespace Route4MeSDK.Examples
 
             // Run the query
             string errorString = "";
-            AvoidanceZone territory = route4Me.CreateTerritory(territoryParameters, out errorString);
+            TerritoryZone territory = route4Me.CreateTerritory(territoryParameters, out errorString);
 
             Console.WriteLine("");
 
