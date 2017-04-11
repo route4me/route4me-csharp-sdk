@@ -21,7 +21,7 @@ namespace Route4MeSDK.Examples
                 OptimizationProblemID = "7988378F70C533283BAD5024E6E37201",
                 Redirect = false
             };
-
+            #region Addresses
             Address[] addresses = new Address[] {
 		    new Address {
 			    AddressString = "273 Canal St, New York, NY 10013, USA",
@@ -84,8 +84,9 @@ namespace Route4MeSDK.Examples
 			    OrderId = 7205703
 		    }
 	    };
+            #endregion
 
-        RouteParameters rParams = new RouteParameters()
+            RouteParameters rParams = new RouteParameters()
         {
             RouteName = "Wednesday 15th of June 2016 07:01 PM (+03:00)",
             RouteDate = 1465948800,
