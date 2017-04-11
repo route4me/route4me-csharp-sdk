@@ -22,6 +22,6 @@ cache:
     - packages
 
 script:
-  - xbuild /p:Configuration=Release Route./Route4MeSDKLibrary/4MeSDKLibrary.csproj
+  - xbuild /p:Configuration=Release ./Route4MeSDKLibrary/Route4MeSDKLibrary.csproj
   - xbuild /p:Configuration=Release ./Route4MeSDKTest/Route4MeSDKTest.csproj
   - mono ./packages/NUnit.ConsoleRunner.3.6.0/tools/nunit3-console.exe ./Route4MeSDKTest/bin/Debug/Route4MeSDKTest.exe
