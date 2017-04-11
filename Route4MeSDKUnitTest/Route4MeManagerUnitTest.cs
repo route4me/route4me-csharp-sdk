@@ -652,6 +652,103 @@ namespace Route4MeSDKUnitTest
             Assert.IsTrue(removed, "RemoveDestinationFromOptimizationTest failed...");
         }
 
+        public void AddOrdersToOptimizationTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            OptimizationParameters rQueryParams = new OptimizationParameters()
+            {
+                OptimizationProblemID = optimizationProblemID,
+                Redirect = false
+            };
+
+            #region Addresses
+            Address[] addresses = new Address[] {
+		    new Address {
+			    AddressString = "273 Canal St, New York, NY 10013, USA",
+			    Latitude = 40.7191558,
+			    Longitude = -74.0011966,
+			    Alias = "",
+			    CurbsideLatitude = 40.7191558,
+			    CurbsideLongitude = -74.0011966,
+			    IsDepot = true
+		    },
+		    new Address {
+			    AddressString = "106 Liberty St, New York, NY 10006, USA",
+			    Alias = "BK Restaurant #: 2446",
+			    Latitude = 40.709637,
+			    Longitude = -74.011912,
+			    CurbsideLatitude = 40.709637,
+			    CurbsideLongitude = -74.011912,
+			    Email = "",
+			    Phone = "(917) 338-1887",
+			    FirstName = "",
+			    LastName = "",
+			    CustomFields = new Dictionary<string, string> { {"icon", null} },
+			    Time = 0,
+			    TimeWindowStart = 1472544000,
+			    TimeWindowEnd = 1472544300,
+			    OrderId = 7205705
+		    },
+		    new Address {
+			    AddressString = "325 Broadway, New York, NY 10007, USA",
+			    Alias = "BK Restaurant #: 20333",
+			    Latitude = 40.71615,
+			    Longitude = -74.00505,
+			    CurbsideLatitude = 40.71615,
+			    CurbsideLongitude = -74.00505,
+			    Email = "",
+			    Phone = "(212) 227-7535",
+			    FirstName = "",
+			    LastName = "",
+			    CustomFields = new Dictionary<string, string> { {"icon", null} },
+			    Time = 0,
+			    TimeWindowStart = 1472545000,
+			    TimeWindowEnd = 1472545300,
+			    OrderId = 7205704
+		    },
+		    new Address {
+			    AddressString = "106 Fulton St, Farmingdale, NY 11735, USA",
+			    Alias = "BK Restaurant #: 17871",
+			    Latitude = 40.73073,
+			    Longitude = -73.459283,
+			    CurbsideLatitude = 40.73073,
+			    CurbsideLongitude = -73.459283,
+			    Email = "",
+			    Phone = "(212) 566-5132",
+			    FirstName = "",
+			    LastName = "",
+			    CustomFields = new Dictionary<string, string> { {"icon", null} },
+			    Time = 0,
+			    TimeWindowStart = 1472546000,
+			    TimeWindowEnd = 1472546300,
+			    OrderId = 7205703
+		    }
+	    };
+            #endregion
+
+            RouteParameters rParams = new RouteParameters()
+            {
+                RouteName = "Wednesday 15th of June 2016 07:01 PM (+03:00)",
+                RouteDate = 1465948800,
+                RouteTime = 14400,
+                Optimize = "Time",
+                RouteType = "single",
+                AlgorithmType = AlgorithmType.TSP,
+                RT = false,
+                LockLast = false,
+                MemberId = "1",
+                VehicleId = "",
+                DisableOptimization = false
+            };
+
+            string errorString = "";
+            DataObject dataObject = route4Me.AddOrdersToOptimization(rQueryParams, addresses, rParams, out errorString);
+
+            Assert.IsNotNull(dataObject, "AddOrdersToOptimizationTest failed... " + errorString);
+
+        }
+
         public void RemoveOptimizationTest()
         {
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
@@ -904,6 +1001,86 @@ namespace Route4MeSDKUnitTest
             AddressNote[] notes = route4Me.GetAddressNotes(noteParameters, out errorString);
 
             Assert.IsInstanceOfType(notes, typeof(AddressNote[]), "GetAddressNotesTest failed... " + errorString);
+        }
+
+        public void AddOrdersToRouteTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            RouteParametersQuery rQueryParams = new RouteParametersQuery()
+            {
+                RouteId = routeId_SingleDriverRoundTrip,
+                Redirect = false
+            };
+
+            #region Addresses
+            Address[] addresses = new Address[] {
+		        new Address {
+			        AddressString = "273 Canal St, New York, NY 10013, USA",
+			        Latitude = 40.7191558,
+			        Longitude = -74.0011966,
+			        Alias = "",
+			        CurbsideLatitude = 40.7191558,
+			        CurbsideLongitude = -74.0011966
+		        },
+		        new Address {
+			        AddressString = "106 Liberty St, New York, NY 10006, USA",
+			        Alias = "BK Restaurant #: 2446",
+			        Latitude = 40.709637,
+			        Longitude = -74.011912,
+			        CurbsideLatitude = 40.709637,
+			        CurbsideLongitude = -74.011912,
+			        Email = "",
+			        Phone = "(917) 338-1887",
+			        FirstName = "",
+			        LastName = "",
+			        CustomFields = new Dictionary<string, string> { {
+				        "icon",
+				        null
+			        } },
+			        Time = 0,
+			        OrderId = 7205705
+		        },
+		        new Address {
+			        AddressString = "106 Fulton St, Farmingdale, NY 11735, USA",
+			        Alias = "BK Restaurant #: 17871",
+			        Latitude = 40.73073,
+			        Longitude = -73.459283,
+			        CurbsideLatitude = 40.73073,
+			        CurbsideLongitude = -73.459283,
+			        Email = "",
+			        Phone = "(212) 566-5132",
+			        FirstName = "",
+			        LastName = "",
+			        CustomFields = new Dictionary<string, string> { {
+				        "icon",
+				        null
+			        } },
+			        Time = 0,
+			        OrderId = 7205703
+		        }
+	        };
+            #endregion
+
+            RouteParameters rParams = new RouteParameters()
+            {
+                RouteName = "Wednesday 15th of June 2016 07:01 PM (+03:00)",
+                RouteDate = 1465948800,
+                RouteTime = 14400,
+                Optimize = "Time",
+                RouteType = "single",
+                AlgorithmType = AlgorithmType.TSP,
+                RT = false,
+                LockLast = false,
+                MemberId = "1",
+                VehicleId = "",
+                DisableOptimization = false
+            };
+
+            string errorString;
+            RouteResponse result = route4Me.AddOrdersToRoute(rQueryParams, addresses, rParams, out errorString);
+
+            Assert.IsNotNull(result, "AddOrdersToRouteTest failed... " + errorString);
         }
 
         public void DeleteRoutesTest()
@@ -4156,7 +4333,10 @@ namespace Route4MeSDKUnitTest
 
         static AddressBookContact contact1, contact2;
 
+        static List<int> lsRemoveContacts=new List<int>();
+
         [TestMethod]
+        [TestInitialize]
         public void AddAddressBookContactsTest()
         {
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
@@ -4175,6 +4355,9 @@ namespace Route4MeSDKUnitTest
 
             Assert.IsNotNull(contact1, "AddAddressBookContactsTest failed... " + errorString);
 
+            int location1 = contact1.address_id != null ? Convert.ToInt32(contact1.address_id) : -1;
+            if (location1 > 0) lsRemoveContacts.Add(location1);
+
             contact = new AddressBookContact()
             {
                 first_name = "Test FirstName " + (new Random()).Next().ToString(),
@@ -4186,9 +4369,494 @@ namespace Route4MeSDKUnitTest
             contact2 = route4Me.AddAddressBookContact(contact, out errorString);
 
             Assert.IsNotNull(contact2, "AddAddressBookContactsTest failed... " + errorString);
+
+            int location2 = contact2.address_id != null ? Convert.ToInt32(contact2.address_id) : -1;
+            if (location2 > 0) lsRemoveContacts.Add(location2);
         }
 
+        [TestMethod]
+        public void UpdateAddressBookContactTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
+            Assert.IsNotNull(contact1, "contact1 is null..");
+
+            contact1.address_group = "Updated";
+            // Run the query
+            string errorString;
+            AddressBookContact updatedContact = route4Me.UpdateAddressBookContact(contact1, out errorString);
+
+            Assert.IsNotNull(updatedContact, "UpdateAddressBookContactTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void SearchLocationsByTextTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            AddressBookParameters addressBookParameters = new AddressBookParameters
+            {
+                Query = "Test Address1",
+                Offset = 0,
+                Limit = 20
+            };
+
+            // Run the query
+            uint total = 0;
+            string errorString = "";
+            AddressBookContact[] contacts = route4Me.GetAddressBookLocation(addressBookParameters, out total, out errorString);
+
+            Assert.IsInstanceOfType(contacts, typeof(AddressBookContact[]), "SearchLocationsByTextTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void SearchLocationsByIDsTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            Assert.IsNotNull(contact1, "contact1 is null..."); 
+            Assert.IsNotNull(contact2, "contact2 is null...");
+
+            string addresses = contact1.address_id + "," + contact2.address_id;
+
+            AddressBookParameters addressBookParameters = new AddressBookParameters
+            {
+                AddressId = addresses
+            };
+
+            // Run the query
+            uint total = 0;
+            string errorString = "";
+            AddressBookContact[] contacts = route4Me.GetAddressBookLocation(addressBookParameters, out total, out errorString);
+
+            Assert.IsInstanceOfType(contacts, typeof(AddressBookContact[]), "SearchLocationsByIDsTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void GetSpecifiedFieldsSearchTextTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            AddressBookParameters addressBookParameters = new AddressBookParameters
+            {
+                Query = "Test Address1",
+                Fields = "first_name,address_email",
+                Offset = 0,
+                Limit = 20
+            };
+
+            // Run the query
+            uint total = 0;
+            string errorString = "";
+            AddressBookContact[] contacts = route4Me.GetAddressBookLocation(addressBookParameters, out total, out errorString);
+
+            Assert.IsInstanceOfType(contacts, typeof(AddressBookContact[]), "GetSpecifiedFieldsSearchTextTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void SearchRoutedLocationsTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            AddressBookParameters addressBookParameters = new AddressBookParameters
+            {
+                Display = "routed",
+                Offset = 0,
+                Limit = 20
+            };
+
+            // Run the query
+            uint total = 0;
+            string errorString = "";
+            AddressBookContact[] contacts = route4Me.GetAddressBookLocation(addressBookParameters, out total, out errorString);
+
+            Assert.IsInstanceOfType(contacts, typeof(AddressBookContact[]), "SearchRoutedLocationsTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        [TestCleanup]
+        public void RemoveAddressBookContactsTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            List<string> lsRemLocations = new List<string>();
+            if (lsRemoveContacts.Count > 0)
+            {
+                foreach (int loc1 in lsRemoveContacts) lsRemLocations.Add(loc1.ToString());
+
+                string errorString;
+                bool removed = route4Me.RemoveAddressBookContacts(lsRemLocations.ToArray(), out errorString);
+
+                Assert.IsTrue(removed, "RemoveAddressBookContactsTest failed... " + errorString);
+            }
+        }
+    }
+
+    [TestClass]
+    public class AvoidanseZonesGroup
+    {
+        static string c_ApiKey = "11111111111111111111111111111111";
+
+        static List<string> lsAvoidanceZones = new List<string>();
+
+        [TestMethod]
+        [TestInitialize]
+        public void AddAvoidanceZonesTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            AvoidanceZoneParameters circleAvoidanceZoneParameters = new AvoidanceZoneParameters()
+            {
+                TerritoryName = "Test Circle Territory",
+                TerritoryColor = "ff0000",
+                Territory = new Territory()
+                {
+                    Type = TerritoryType.Circle.Description(),
+                    Data = new string[] { "37.569752822786455,-77.47833251953125",
+                                "5000"}
+                }
+            };
+
+            string errorString;
+            AvoidanceZone circleAvoidanceZone = route4Me.AddAvoidanceZone(circleAvoidanceZoneParameters, out errorString);
+
+            if (circleAvoidanceZone!=null) lsAvoidanceZones.Add(circleAvoidanceZone.TerritoryId);
+
+            Assert.IsNotNull(circleAvoidanceZone, "Add Circle Avoidance Zone test failed... " + errorString);
+
+            AvoidanceZoneParameters polyAvoidanceZoneParameters = new AvoidanceZoneParameters()
+            {
+                TerritoryName = "Test Poly Territory",
+                TerritoryColor = "ff0000",
+                Territory = new Territory
+                {
+                    Type = TerritoryType.Poly.Description(),
+                    Data = new string[] {
+			            "37.569752822786455,-77.47833251953125",
+			            "37.75886716305343,-77.68974800109863",
+			            "37.74763966054455,-77.6917221069336",
+			            "37.74655084306813,-77.68863220214844",
+			            "37.7502255383101,-77.68125076293945",
+			            "37.74797991274437,-77.67498512268066",
+			            "37.73327960206065,-77.6411678314209",
+			            "37.74430510679532,-77.63172645568848",
+			            "37.76641925847049,-77.66846199035645"
+		            }
+                }
+            };
+
+            AvoidanceZone polyAvoidanceZone = route4Me.AddAvoidanceZone(polyAvoidanceZoneParameters, out errorString);
+
+            Assert.IsNotNull(polyAvoidanceZone, "Add Polygon Avoidance Zone test failed... " + errorString);
+
+            if (polyAvoidanceZone != null) lsAvoidanceZones.Add(polyAvoidanceZone.TerritoryId);
+
+            AvoidanceZoneParameters rectAvoidanceZoneParameters = new AvoidanceZoneParameters
+            {
+                TerritoryName = "Test Rect Territory",
+                TerritoryColor = "ff0000",
+                Territory = new Territory
+                {
+                    Type = TerritoryType.Rect.Description(),
+                    Data = new string[] {
+			            "43.51668853502909,-109.3798828125",
+			            "46.98025235521883,-101.865234375"
+		            }
+                }
+            };
+
+            AvoidanceZone rectAvoidanceZone = route4Me.AddAvoidanceZone(rectAvoidanceZoneParameters, out errorString);
+
+            Assert.IsNotNull(rectAvoidanceZone, "Add Rectangular Avoidance Zone test failed... " + errorString);
+
+            if (lsAvoidanceZones != null) lsAvoidanceZones.Add(rectAvoidanceZone.TerritoryId);
+        }
+
+        [TestMethod]
+        public void GetAvoidanceZonesTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            AvoidanceZoneQuery avoidanceZoneQuery = new AvoidanceZoneQuery()
+            {
+
+            };
+
+            // Run the query
+            string errorString;
+            AvoidanceZone[] avoidanceZones = route4Me.GetAvoidanceZones(avoidanceZoneQuery, out errorString);
+
+            Assert.IsInstanceOfType(avoidanceZones, typeof(AvoidanceZone[]), "GetAvoidanceZonesTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void GetAvoidanceZoneTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            string territoryId = "";
+            if (lsAvoidanceZones.Count > 0) territoryId = lsAvoidanceZones[0];
+            AvoidanceZoneQuery avoidanceZoneQuery = new AvoidanceZoneQuery()
+            {
+                TerritoryId = territoryId
+            };
+
+            // Run the query
+            string errorString;
+            AvoidanceZone avoidanceZone = route4Me.GetAvoidanceZone(avoidanceZoneQuery, out errorString);
+
+            Assert.IsNotNull(avoidanceZone, "GetAvoidanceZonesTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void UpdateAvoidanceZoneTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            string territoryId = "";
+            if (lsAvoidanceZones.Count > 0) territoryId = lsAvoidanceZones[0];
+
+            AvoidanceZoneParameters avoidanceZoneParameters = new AvoidanceZoneParameters()
+            {
+                TerritoryId = territoryId,
+                TerritoryName = "Test Territory Updated",
+                TerritoryColor = "ff00ff",
+                Territory = new Territory()
+                {
+                    Type = TerritoryType.Circle.Description(),
+                    Data = new string[] { "38.41322259056806,-78.501953234",
+                                "3000"}
+                }
+            };
+
+            // Run the query
+            string errorString;
+            AvoidanceZone avoidanceZone = route4Me.UpdateAvoidanceZone(avoidanceZoneParameters, out errorString);
+
+            Assert.IsNotNull(avoidanceZone, "UpdateAvoidanceZoneTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        [ClassCleanup]
+        public static void RemoveAvoidanceZoneTest()
+        {
+            foreach (string territoryId in lsAvoidanceZones)
+            {
+                Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+                AvoidanceZoneQuery avoidanceZoneQuery = new AvoidanceZoneQuery()
+                {
+                    TerritoryId = territoryId
+                };
+
+                // Run the query
+                string errorString;
+                bool result = route4Me.DeleteAvoidanceZone(avoidanceZoneQuery, out errorString);
+
+                Assert.IsTrue(result, "RemoveAvoidanceZoneTest failed... " + errorString);
+            }
+        }
+    }
+
+    [TestClass]
+    public class TerritoriesGroup
+    {
+        static string c_ApiKey = "11111111111111111111111111111111";
+
+        static List<string> lsTerritories = new List<string>();
+
+        [TestMethod]
+        [TestInitialize]
+        public void AddTerritoriesTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            AvoidanceZoneParameters circleTerritoryParameters = new AvoidanceZoneParameters()
+            {
+                TerritoryName = "Test Circle Territory",
+                TerritoryColor = "ff0000",
+                Territory = new Territory()
+                {
+                    Type = TerritoryType.Circle.Description(),
+                    Data = new string[] { "37.569752822786455,-77.47833251953125",
+                                "5000"}
+                }
+            };
+
+            string errorString;
+            TerritoryZone circleTerritory = route4Me.CreateTerritory(circleTerritoryParameters, out errorString);
+
+            if (circleTerritory != null) lsTerritories.Add(circleTerritory.TerritoryId);
+
+            Assert.IsNotNull(circleTerritory, "Add Circle Territory test failed... " + errorString);
+
+            AvoidanceZoneParameters polyTerritoryParameters = new AvoidanceZoneParameters()
+            {
+                TerritoryName = "Test Poly Territory",
+                TerritoryColor = "ff0000",
+                Territory = new Territory
+                {
+                    Type = TerritoryType.Poly.Description(),
+                    Data = new string[] {
+			            "37.569752822786455,-77.47833251953125",
+			            "37.75886716305343,-77.68974800109863",
+			            "37.74763966054455,-77.6917221069336",
+			            "37.74655084306813,-77.68863220214844",
+			            "37.7502255383101,-77.68125076293945",
+			            "37.74797991274437,-77.67498512268066",
+			            "37.73327960206065,-77.6411678314209",
+			            "37.74430510679532,-77.63172645568848",
+			            "37.76641925847049,-77.66846199035645"
+		            }
+                }
+            };
+
+            TerritoryZone polyTerritory = route4Me.CreateTerritory(polyTerritoryParameters, out errorString);
+
+            Assert.IsNotNull(polyTerritory, "Add Polygon Territory test failed... " + errorString);
+
+            if (polyTerritory != null) lsTerritories.Add(polyTerritory.TerritoryId);
+
+            AvoidanceZoneParameters rectTerritoryParameters = new AvoidanceZoneParameters
+            {
+                TerritoryName = "Test Rect Territory",
+                TerritoryColor = "ff0000",
+                Territory = new Territory
+                {
+                    Type = TerritoryType.Rect.Description(),
+                    Data = new string[] {
+			            "43.51668853502909,-109.3798828125",
+			            "46.98025235521883,-101.865234375"
+		            }
+                }
+            };
+
+            TerritoryZone rectTerritory = route4Me.CreateTerritory(rectTerritoryParameters, out errorString);
+
+            Assert.IsNotNull(rectTerritory, "Add Rectangular Avoidance Zone test failed... " + errorString);
+
+            if (lsTerritories != null) lsTerritories.Add(rectTerritory.TerritoryId);
+        }
+
+        [TestMethod]
+        public void GetTerritoriesTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            AvoidanceZoneQuery territoryQuery = new AvoidanceZoneQuery()
+            {
+
+            };
+
+            // Run the query
+            string errorString;
+            AvoidanceZone[] territories = route4Me.GetTerritories(territoryQuery, out errorString);
+
+            Assert.IsInstanceOfType(territories, typeof(AvoidanceZone[]), "GetTerritoriesTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void GetTerritoryTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            string territoryId = "";
+            if (lsTerritories.Count > 0) territoryId = lsTerritories[0];
+            TerritoryQuery territoryQuery = new TerritoryQuery()
+            {
+                TerritoryId = territoryId
+            };
+
+            // Run the query
+            string errorString;
+            TerritoryZone territory = route4Me.GetTerritory(territoryQuery, out errorString);
+
+            Assert.IsNotNull(territory, "GetTerritoryTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void UpdateTerritoryTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            string territoryId = "";
+            if (lsTerritories.Count > 0) territoryId = lsTerritories[0];
+
+            AvoidanceZoneParameters territoryParameters = new AvoidanceZoneParameters()
+            {
+                TerritoryId = territoryId,
+                TerritoryName = "Test Territory Updated",
+                TerritoryColor = "ff00ff",
+                Territory = new Territory()
+                {
+                    Type = TerritoryType.Circle.Description(),
+                    Data = new string[] { "38.41322259056806,-78.501953234",
+                                "3000"}
+                }
+            };
+
+            // Run the query
+            string errorString;
+            AvoidanceZone territory = route4Me.UpdateTerritory(territoryParameters, out errorString);
+
+            Assert.IsNotNull(territory, "UpdateTerritoryTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        [ClassCleanup]
+        public static void RemoveTerritoriesTest()
+        {
+            foreach (string territoryId in lsTerritories)
+            {
+                Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+                AvoidanceZoneQuery territoryQuery = new AvoidanceZoneQuery()
+                {
+                    TerritoryId = territoryId
+                };
+
+                // Run the query
+                string errorString;
+                bool result = route4Me.RemoveTerritory(territoryQuery, out errorString);
+
+                Assert.IsTrue(result, "RemoveTerritoriesTest failed... " + errorString);
+            }
+        }
+    }
+
+    [TestClass]
+    public class OrdersGroup
+    {
+        static string c_ApiKey = "11111111111111111111111111111111";
+
+        static List<string> lsOrders = new List<string>();
+
+        [TestMethod]
+        [TestInitialize]
+        public void CreateOrderTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            Order order = new Order()
+            {
+                address_1 = "Test Address1 " + (new Random()).Next().ToString(),
+                address_alias = "Test AddressAlias " + (new Random()).Next().ToString(),
+                cached_lat = 37.773972,
+                cached_lng = -122.431297
+            };
+
+            // Run the query
+            string errorString;
+            Order resultOrder = route4Me.AddOrder(order, out errorString);
+
+            Assert.IsNotNull(resultOrder, "CreateOrderTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void GetOrdersTest()
+        {
+
+        }
     }
 
     #region Types
