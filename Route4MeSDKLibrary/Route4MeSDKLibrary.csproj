@@ -90,6 +90,7 @@
     <Compile Include="QueryTypes\MemberConfigurationParameters.cs" />
     <Compile Include="QueryTypes\MemberParameters.cs" />
     <Compile Include="QueryTypes\MemberParametersV4.cs" />
+    <Compile Include="QueryTypes\MergeRoutesQuery.cs" />
     <Compile Include="QueryTypes\NoteParameters.cs" />
     <Compile Include="QueryTypes\OptimizationParameters.cs" />
     <Compile Include="QueryTypes\OrderParameters.cs" />

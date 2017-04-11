@@ -135,7 +135,7 @@ namespace Route4MeSDK.DataTypes
             {
                 if (_con.State != ConnectionState.Open) _con.Open();
             }
-            catch (Exception ex) { Console.WriteLine("Connection not established!.."); }
+            catch (Exception ex) { Console.WriteLine("Connection not established!.. "+ex.Message); }
         }
 
         public void CloseConnection()
@@ -150,11 +150,11 @@ namespace Route4MeSDK.DataTypes
          * */
         public int ExecuteMulticoomandSql(string sQuery)
         {
+            int iRet = 0;
             try
             {
                 sQuery = sQuery.Replace(";", ";^");
                 string[] arCommands = sQuery.Split('^');
-                int iRet = 0; 
                 _transaction = _con.BeginTransaction(IsolationLevel.Unspecified);
                 _cmd.Connection = _con;
                 _cmd.CommandType = CommandType.Text;
@@ -573,7 +573,7 @@ namespace Route4MeSDK.DataTypes
 
                 foreach (DataRow dictRow in tblDictionary.Rows)
                 {
-                    string sCsvFieldName = dictRow["r4m_csv_field_name"].ToString();
+                    //string sCsvFieldName = dictRow["r4m_csv_field_name"].ToString();
 
                     string sApiFieldName = dictRow["api_field_name"].ToString();
 
@@ -712,7 +712,8 @@ namespace Route4MeSDK.DataTypes
                     {
                         dt1900 = Convert.ToDateTime(oValue);
                         return dt1900.ToShortDateString();
-                    } else return null;
+                    }
+                    else sQueryValue=null;
                     break;
                 case "EXT_FIELD_custom_data":
                     System.Text.StringBuilder sbOrderCustom = new System.Text.StringBuilder();
@@ -743,7 +744,6 @@ namespace Route4MeSDK.DataTypes
                     sQueryValue += "}";
                     break;
                 case "schedule":
-                    System.Text.StringBuilder sb = new System.Text.StringBuilder();
                     DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(IList<Schedule>));
                     
                     using (MemoryStream ms = new MemoryStream())
@@ -776,12 +776,12 @@ namespace Route4MeSDK.DataTypes
                 Console.WriteLine("The file " + sFileName + " doesn't exist..."); return;
             }
 
-            string pathOnly = System.IO.Path.GetDirectoryName(sFileName);
-            string fileName = System.IO.Path.GetFileName(sFileName);
+            //string pathOnly = System.IO.Path.GetDirectoryName(sFileName);
+            //string fileName = System.IO.Path.GetFileName(sFileName);
 
             string jsonContent = File.ReadAllText(sFileName);
 
-            DataTable tblTempTable = new DataTable();
+            //DataTable tblTempTable = new DataTable();
             
             var jsSerializer = new System.Web.Script.Serialization.JavaScriptSerializer();
 
@@ -852,7 +852,7 @@ namespace Route4MeSDK.DataTypes
                             sSet = sSet.TrimEnd(',');
                             sQuery += sSet + " WHERE address_id=" + address_id;
                         }
-                        int iSuccess = ExecuteNon(sQuery);
+                        ExecuteNon(sQuery);
                         
                     }
                     break;
@@ -923,7 +923,7 @@ namespace Route4MeSDK.DataTypes
                             sSet = sSet.TrimEnd(',');
                             sQuery += sSet + " WHERE order_id=" + order_id;
                         }
-                        int iOrderSuccess = ExecuteNon(sQuery);
+                        ExecuteNon(sQuery);
                     }
                     
                     break;
@@ -1055,7 +1055,7 @@ namespace Route4MeSDK.DataTypes
 
                 return dtbElements;
             }
-            catch (Exception ex) { Console.WriteLine(""); return dtbElements; }
+            catch (Exception ex) { Console.WriteLine(ex.Message); return dtbElements; }
             finally
             {
                 CloseConnection();
