@@ -934,7 +934,7 @@ namespace Route4MeSDKUnitTest
         static string routeId_MultipleDepotMultipleDriverWith24StopsTimeWindow;
         static string routeId_SingleDriverMultipleTimeWindows;
 
-        static DataObject dataObject;
+        static DataObject dataObject, dataObjectMDMD24;
 
         [TestMethod]
         public void MultipleDepotMultipleDriverTest()
@@ -3823,13 +3823,77 @@ namespace Route4MeSDKUnitTest
 
             // Run the query
             string errorString;
-            dataObject = route4Me.RunOptimization(optimizationParameters, out errorString);
+            dataObjectMDMD24 = route4Me.RunOptimization(optimizationParameters, out errorString);
 
-            routeId_MultipleDepotMultipleDriverWith24StopsTimeWindow = (dataObject != null && dataObject.Routes != null && dataObject.Routes.Length > 0) ? dataObject.Routes[0].RouteID : null;
+            routeId_MultipleDepotMultipleDriverWith24StopsTimeWindow = (dataObjectMDMD24 != null && dataObjectMDMD24.Routes != null && dataObjectMDMD24.Routes.Length > 0) ? dataObjectMDMD24.Routes[0].RouteID : null;
 
-            Assert.IsNotNull(dataObject, "MultipleDepotMultipleDriverWith24StopsTimeWindowTest failed... " + errorString);
+            Assert.IsNotNull(dataObjectMDMD24, "MultipleDepotMultipleDriverWith24StopsTimeWindowTest failed... " + errorString);
+
+            MoveDestinationToRouteTest();
+
+            MergeRoutesTest();
 
             DeleteRoutesTest(routeId_MultipleDepotMultipleDriverWith24StopsTimeWindow);
+        }
+
+        public void MoveDestinationToRouteTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            Assert.IsNotNull(dataObjectMDMD24, "dataObjectMDMD24 is null...");
+
+            Assert.IsTrue(dataObjectMDMD24.Routes.Length >= 2, "There is no 2 routes for moving a destination to other route...");
+
+            DataObjectRoute route1 = dataObjectMDMD24.Routes[0];
+
+            Assert.IsTrue(route1.Addresses.Length >= 2, "There is less than 2 addresses in the generated route...");
+
+            int routeDestinationIdToMove = route1.Addresses[1].RouteDestinationId != null ? Convert.ToInt32(route1.Addresses[1].RouteDestinationId) : -1;
+
+            Assert.IsTrue(routeDestinationIdToMove > 0, "Wrong destination_id to move: " + routeDestinationIdToMove);
+
+            DataObjectRoute route2 = dataObjectMDMD24.Routes[1];
+
+            Assert.IsTrue(route1.Addresses.Length >= 2, "There is less than 2 addresses in the generated route...");
+
+            int afterDestinationIdToMoveAfter = route2.Addresses[1].RouteDestinationId != null ? Convert.ToInt32(route2.Addresses[1].RouteDestinationId) : -1;
+
+            Assert.IsTrue(afterDestinationIdToMoveAfter > 0, "Wrong destination_id to move after: " + afterDestinationIdToMoveAfter);
+
+            string errorString;
+
+            bool result = route4Me.MoveDestinationToRoute(route2.RouteID, routeDestinationIdToMove, afterDestinationIdToMoveAfter, out errorString);
+
+            Assert.IsTrue(result, "MoveDestinationToRouteTest failed... " + errorString);
+        }
+
+        public void MergeRoutesTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            Assert.IsNotNull(dataObjectMDMD24, "dataObjectMDMD24 is null...");
+
+            Assert.IsTrue(dataObjectMDMD24.Routes.Length >= 2, "There is no 2 routes for moving a destination to other route...");
+
+            DataObjectRoute route1 = dataObjectMDMD24.Routes[0];
+
+            Assert.IsTrue(route1.Addresses.Length >= 2, "There is less than 2 addresses in the generated route...");
+
+            DataObjectRoute route2 = dataObjectMDMD24.Routes[1];
+
+            MergeRoutesQuery mergeRoutesParameters = new MergeRoutesQuery()
+            {
+                RouteIds = route1.RouteID + "," + route2.RouteID,
+                DepotAddress = route1.Addresses[0].AddressString.ToString(),
+                RemoveOrigin = false,
+                DepotLat = route1.Addresses[0].Latitude,
+                DepotLng = route1.Addresses[0].Longitude
+            };
+
+            string errorString;
+            bool result = route4Me.MergeRoutes(mergeRoutesParameters, out errorString);
+
+            Assert.IsTrue(result, "MergeRoutesTest failed... " + errorString);
         }
 
         [TestMethod]
