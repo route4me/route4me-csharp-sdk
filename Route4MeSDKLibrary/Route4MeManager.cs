@@ -316,21 +316,32 @@ namespace Route4MeSDK
       return deletedRouteIds;
     }
 
-    public void MergeRoutes(string[] routeIds, out string errorString)
+    public bool MergeRoutes(MergeRoutesQuery mergeRoutesParameters, out string errorString)
     {
-      string str_route_ids = "";
-      foreach (string routeId in routeIds)
-      {
-        if (str_route_ids.Length > 0)
-          str_route_ids += ",";
-        str_route_ids += routeId;
-      }
-      GenericParameters genericParameters = new GenericParameters();
-      genericParameters.ParametersCollection.Add("route_ids", str_route_ids);
-      DataObject result = GetJsonObjectFromAPI<DataObject>(genericParameters,
-                                                             R4MEInfrastructureSettings.MergeRoutes,
-                                                             HttpMethodType.Post,
-                                                             out errorString);
+        GenericParameters roParames = new GenericParameters();
+
+        List<KeyValuePair<string, string>> keyValues = new List<KeyValuePair<string, string>>();
+
+        keyValues.Add(new KeyValuePair<string, string>("route_ids", mergeRoutesParameters.RouteIds));
+        keyValues.Add(new KeyValuePair<string, string>("depot_address", mergeRoutesParameters.DepotAddress));
+        keyValues.Add(new KeyValuePair<string, string>("remove_origin", mergeRoutesParameters.RemoveOrigin.ToString()));
+        keyValues.Add(new KeyValuePair<string, string>("depot_lat", mergeRoutesParameters.DepotLat.ToString()));
+        keyValues.Add(new KeyValuePair<string, string>("depot_lng", mergeRoutesParameters.DepotLng.ToString()));
+
+        HttpContent httpContent = new FormUrlEncodedContent(keyValues);
+
+        ResequenceReoptimizeRouteResponse response = GetJsonObjectFromAPI<ResequenceReoptimizeRouteResponse>
+            (roParames, R4MEInfrastructureSettings.MergeRoutes, 
+            HttpMethodType.Post, httpContent, out errorString);
+
+        if (response != null && response.Status)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     [DataContract()]
@@ -2327,8 +2338,6 @@ namespace Route4MeSDK
                                 //var test = m_isTestMode ? response.Result.ReadString() : null;
                                 result = isString ? response.Result.ReadString() as String : response.Result.ReadObject<String>(); // Oleg T -> String
                             }
-
-                            break; // TODO: might not be correct. Was : Exit Select
                         }
                         break;
                     case HttpMethodType.Post:
@@ -2424,8 +2433,6 @@ namespace Route4MeSDK
                                     }
                                 }
                             }
-
-                            break; // TODO: might not be correct. Was : Exit Select
                         }
                         break;
                 }
