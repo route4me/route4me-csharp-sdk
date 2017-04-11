@@ -2053,9 +2053,9 @@ namespace Route4MeSDK
     /// <param name="avoidanceZoneParameters"> Parameters for request </param>
     /// <param name="errorString"> out: Error as string </param>
     /// <returns> Territory Object </returns>
-    public AvoidanceZone CreateTerritory(AvoidanceZoneParameters avoidanceZoneParameters, out string errorString)
+    public TerritoryZone CreateTerritory(AvoidanceZoneParameters avoidanceZoneParameters, out string errorString)
     {
-        AvoidanceZone avoidanceZone = GetJsonObjectFromAPI<AvoidanceZone>(avoidanceZoneParameters, R4MEInfrastructureSettings.Territory, HttpMethodType.Post, out errorString);
+        TerritoryZone avoidanceZone = GetJsonObjectFromAPI<TerritoryZone>(avoidanceZoneParameters, R4MEInfrastructureSettings.Territory, HttpMethodType.Post, out errorString);
         return avoidanceZone;
     }
 
@@ -2091,7 +2091,7 @@ namespace Route4MeSDK
     /// <returns> Result status true/false </returns>
     public bool RemoveTerritory(AvoidanceZoneQuery territoryQuery, out string errorString)
     {
-        GetJsonObjectFromAPI<AvoidanceZone>(territoryQuery, R4MEInfrastructureSettings.Territory, HttpMethodType.Delete, out errorString);
+        GetJsonObjectFromAPI<TerritoryZone>(territoryQuery, R4MEInfrastructureSettings.Territory, HttpMethodType.Delete, out errorString);
         return !string.IsNullOrEmpty(errorString);
     }
 

@@ -22,6 +22,7 @@ namespace Route4MeSDK.Examples
                 Redirect = false
             };
 
+            #region Addresses
             Address[] addresses = new Address[] {
 		        new Address {
 			        AddressString = "273 Canal St, New York, NY 10013, USA",
@@ -68,6 +69,7 @@ namespace Route4MeSDK.Examples
 			        OrderId = 7205703
 		        }
 	        };
+            #endregion
 
             RouteParameters rParams = new RouteParameters()
             {
