@@ -26,7 +26,7 @@ namespace Route4MeSDK.Examples
 
                 Console.WriteLine("The orders CSV file was uploaded to the SQL server.");
             }
-            catch (Exception ex) { Console.WriteLine("Uploading of the CSV file to the SQL server failed!.."); }
+            catch (Exception ex) { Console.WriteLine("Uploading of the CSV file to the SQL server failed!.. " + ex.Message); }
             finally
             {
                 sqlDB.CloseConnection();

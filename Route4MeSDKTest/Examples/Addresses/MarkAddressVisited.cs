@@ -20,12 +20,13 @@ namespace Route4MeSDK.Examples
 
             {
                 string errorString = "";
-                int result = route4Me.MarkAddressVisited(aParams, out errorString);
+                object oResult = route4Me.MarkAddressVisited(aParams, out errorString);
 
                 Console.WriteLine("");
 
-                if (result != null)
+                if (oResult != null)
                 {
+                    int result = Convert.ToInt32(oResult);
                     if (result==1)
                     {
                         Console.WriteLine("MarkAddressVisited executed successfully");
