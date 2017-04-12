@@ -18,27 +18,25 @@ namespace Route4MeSDK.Examples
 
             // Run the query
 
+            string errorString = "";
+            int result = route4Me.MarkAddressVisited(aParams, out errorString);
+
+            Console.WriteLine("");
+
+            if (result != null)
             {
-                string errorString = "";
-                int result = route4Me.MarkAddressVisited(aParams, out errorString);
-
-                Console.WriteLine("");
-
-                if (result != null)
+                if (result == 1)
                 {
-                    if (result == 1)
-                    {
-                        Console.WriteLine("MarkAddressDeparted executed successfully");
-                    }
-                    else
-                    {
-                        Console.WriteLine("MarkAddressDeparted error: {0}", errorString);
-                    }
+                    Console.WriteLine("MarkAddressDeparted executed successfully");
                 }
                 else
                 {
-                    Console.WriteLine("MarkAddressVisited error: {0}", errorString);
+                    Console.WriteLine("MarkAddressDeparted error: {0}", errorString);
                 }
+            }
+            else
+            {
+                Console.WriteLine("MarkAddressVisited error: {0}", errorString);
             }
         }
     }

@@ -16,7 +16,7 @@ namespace Route4MeSDK.Examples
 
             OrderParameters orderParameters = new OrderParameters()
             {
-                OrderId = orderIds
+                order_id = orderIds
             };
 
             string errorString;

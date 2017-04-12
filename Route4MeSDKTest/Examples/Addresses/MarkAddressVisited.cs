@@ -17,29 +17,26 @@ namespace Route4MeSDK.Examples
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
             // Run the query
+            string errorString = "";
+            object oResult = route4Me.MarkAddressVisited(aParams, out errorString);
 
+            Console.WriteLine("");
+
+            if (oResult != null)
             {
-                string errorString = "";
-                object oResult = route4Me.MarkAddressVisited(aParams, out errorString);
-
-                Console.WriteLine("");
-
-                if (oResult != null)
+                int result = Convert.ToInt32(oResult);
+                if (result==1)
                 {
-                    int result = Convert.ToInt32(oResult);
-                    if (result==1)
-                    {
-                        Console.WriteLine("MarkAddressVisited executed successfully");
-                    }
-                    else
-                    {
-                        Console.WriteLine("MarkAddressVisited error: {0}", errorString);
-                    }
+                    Console.WriteLine("MarkAddressVisited executed successfully");
                 }
                 else
                 {
                     Console.WriteLine("MarkAddressVisited error: {0}", errorString);
                 }
+            }
+            else
+            {
+                Console.WriteLine("MarkAddressVisited error: {0}", errorString);
             }
         }
     }
