@@ -38,12 +38,12 @@ namespace Route4MeSDK.QueryTypes
     /// Order ID.
     /// </summary>
     [HttpQueryMemberAttribute(Name = "order_id", EmitDefaultValue = false)]
-    public string OrderId
-    {
-        get { return m_OrderId; }
-        set { m_OrderId = value; }
-    }
-    private string m_OrderId;
+    public string order_id {get; set; }
+    //{
+    //    get { return m_OrderId; }
+    //    set { m_OrderId = value; }
+    //}
+    //private string m_OrderId;
 
     /// <summary>
     /// Date an order was inserted
