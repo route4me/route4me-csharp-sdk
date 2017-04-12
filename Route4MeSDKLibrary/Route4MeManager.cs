@@ -1665,6 +1665,8 @@ namespace Route4MeSDK
 
     public Order[] GetOrderByID(OrderParameters orderQuery, out string errorString)
     {
+        string[] ids = orderQuery.order_id.Split(',');
+        if (ids.Length == 1) orderQuery.order_id = orderQuery.order_id + "," + orderQuery.order_id;
         GetOrdersResponse response = GetJsonObjectFromAPI<GetOrdersResponse>(orderQuery, R4MEInfrastructureSettings.Order, HttpMethodType.Get, out errorString);
 
         return response.Results;
