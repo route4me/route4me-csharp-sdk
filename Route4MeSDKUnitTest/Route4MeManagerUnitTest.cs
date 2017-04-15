@@ -1,12 +1,13 @@
 ﻿using Moq;
 using System;
+using System.Data;
 using System.IO;
 using System.Runtime.Serialization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-//using NUnit.Framework;
 using Route4MeSDK;
 using Route4MeSDK.DataTypes;
 using Route4MeSDK.QueryTypes;
+using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.CodeDom.Compiler;
@@ -5511,6 +5512,876 @@ namespace Route4MeSDKUnitTest
 
             Assert.IsTrue(result, "Removing of the testing optimization problem failed...");
         }
+    }
+
+    [TestClass]
+    public class TrackingGroup
+    {
+        static string c_ApiKey = "11111111111111111111111111111111";
+
+        static TestDataRepository tdr;
+        static List<string> lsOptimizationIDs;
+
+        [ClassInitialize()]
+        public static void TrackingGroupInitialize(TestContext context)
+        {
+            lsOptimizationIDs = new List<string>();
+
+            tdr = new TestDataRepository();
+            bool result = tdr.SingleDriverRoundTripTest();
+
+            Assert.IsTrue(result, "Single Driver Round Trip generation failed...");
+
+            Assert.IsTrue(tdr.SDRT_route.Addresses.Length > 0, "The route has no addresses...");
+
+            lsOptimizationIDs.Add(tdr.SDRT_optimization_problem_id);
+        }
+
+        [TestMethod]
+        public void FindAssetTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            string tracking = tdr.SDRT_route != null ? (tdr.SDRT_route.Addresses.Length > 1 ? (tdr.SDRT_route.Addresses[1].tracking_number != null ? tdr.SDRT_route.Addresses[1].tracking_number : "") : "") : "";
+
+            Assert.IsTrue(tracking != "", "Can not find valid tracking number in the newly generated route's second destination...");
+
+            // Run the query
+            string errorString = "";
+            FindAssetResponse result = route4Me.FindAsset(tracking, out errorString);
+
+            Assert.IsInstanceOfType(result, typeof(FindAssetResponse), "FindAssetTest failed... " + errorString);
+
+            SetGPSPositionTest();
+        }
+
+        [TestMethod]
+        public void SetGPSPositionTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            double lat = tdr.SDRT_route.Addresses.Length > 1 ? tdr.SDRT_route.Addresses[1].Latitude : 33.14384;
+            double lng = tdr.SDRT_route.Addresses.Length > 1 ? tdr.SDRT_route.Addresses[1].Longitude : -83.22466;
+            // Create the gps parametes
+            GPSParameters gpsParameters = new GPSParameters()
+            {
+                Format = Format.Csv.Description(),
+                RouteId = tdr.SDRT_route_id,
+                Latitude = lat,
+                Longitude = lng,
+                Course = 1,
+                Speed = 120,
+                DeviceType = DeviceType.IPhone.Description(),
+                MemberId = 1,
+                DeviceGuid = "TEST_GPS",
+                DeviceTimestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+            };
+
+            string errorString;
+            string response = route4Me.SetGPS(gpsParameters, out errorString);
+
+            Assert.IsNotNull(response, "SetGPSPositionTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void GetDeviceHistoryTimeRangeTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            int uStartTime = 0;
+            int uEndTime = 0;
+            uStartTime = (int)(new DateTime(DateTime.Now.Year, 1, 1, 0, 0, 0) - (new DateTime(1970, 1, 1, 0, 0, 0))).TotalSeconds;
+            uEndTime = (int)(DateTime.Now - (new DateTime(1970, 1, 1, 0, 0, 0))).TotalSeconds;
+
+            GPSParameters gpsParameters = new GPSParameters
+            {
+                Format = "csv",
+                RouteId = tdr.SDRT_route_id,
+                time_period = "custom",
+                start_date = uStartTime,
+                end_date = uEndTime
+            };
+
+            string errorString = "";
+            string response = route4Me.SetGPS(gpsParameters, out errorString);
+
+            Assert.IsNotNull(response, "GetDeviceHistoryTimeRangeTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void TrackDeviceLastLocationHistoryTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            GenericParameters genericParameters = new GenericParameters();
+            genericParameters.ParametersCollection.Add("route_id", tdr.SDRT_route_id);
+            genericParameters.ParametersCollection.Add("device_tracking_history", "1");
+
+            string errorString;
+            var dataObject = route4Me.GetLastLocation(genericParameters, out errorString);
+
+            Assert.IsNotNull(dataObject, "TrackDeviceLastLocationHistoryTest failed... " + errorString);
+        }
+
+        [ClassCleanup()]
+        public static void TrackingGroupCleanup()
+        {
+            bool result = tdr.RemoveOptimization(lsOptimizationIDs.ToArray());
+
+            Assert.IsTrue(result, "Removing of the testing optimization problem failed...");
+        }
+    }
+
+    [TestClass]
+    public class UsersGroup
+    {
+        static string c_ApiKey = "11111111111111111111111111111111";
+
+        [TestMethod]
+        public void CreateUserTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            MemberParametersV4 @params = new MemberParametersV4
+            {
+                HIDE_ROUTED_ADDRESSES = false,
+                member_phone = "571-259-5939",
+                member_zipcode = "22102",
+                member_email = "aaaaaaaa@gmail.com",
+                HIDE_VISITED_ADDRESSES = false,
+                READONLY_USER = false,
+                member_type = "SUB_ACCOUNT_DISPATCHER",
+                date_of_birth = "2010",
+                member_first_name = "Clay",
+                member_password = "123456",
+                HIDE_NONFUTURE_ROUTES = false,
+                member_last_name = "Abraham",
+                SHOW_ALL_VEHICLES = false,
+                SHOW_ALL_DRIVERS = false
+            };
+
+            // Run the query
+            string errorString = "";
+            var result = route4Me.CreateUser(@params, out errorString);
+
+            //For successful testing of an user creating, you shuld provide valid email address, otherwise you'll get error "Email is used in system"
+            string rightResponse = result != null ? "ok" : ((errorString == "Email is used in system" || errorString == "Registration: The e-mail address is missing or invalid.") ? "ok" : "");
+
+            Assert.IsTrue(rightResponse == "ok", "CreateUserTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void GetUserByIdTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            MemberParametersV4 @params = new MemberParametersV4 { member_id = 1 };
+
+            // Run the query
+            string errorString = "";
+            MemberResponseV4 result = route4Me.GetUserById(@params, out errorString);
+
+            Assert.IsNotNull(result, "GetUserByIdTest... " + errorString);
+        }
+
+        [TestMethod]
+        public void GetUsersTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            GenericParameters parameters = new GenericParameters()
+            {
+            };
+
+            // Run the query
+            string errorString;
+            User[] dataObjects = route4Me.GetUsers(parameters, out errorString);
+
+            Assert.IsInstanceOfType(dataObjects,typeof(User[]), "GetUsersTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void UpdateUserTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            MemberParametersV4 @params = new MemberParametersV4
+            {
+                member_id = 220461,
+                member_phone = "571-259-5939"
+            };
+
+            // Run the query
+            string errorString = "";
+            MemberResponseV4 result = route4Me.UserUpdate(@params, out errorString);
+
+            Assert.IsNotNull(result, "UpdateUserTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void UserAuthenticationTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            MemberParameters @params = new MemberParameters
+            {
+                StrEmail = "aaaaaaaa@gmail.com",
+                StrPassword = "11111111111",
+                Format = "json"
+            };
+            // Run the query
+            string errorString = "";
+            MemberResponse result = route4Me.UserAuthentication(@params, out errorString);
+
+            // result is always non null object, but in case of successful autentication object properties have non nul values
+            Assert.IsNotNull(result, "UserAuthenticationTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void UserRegistrationTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            MemberParameters @params = new MemberParameters
+            {
+                StrEmail = "thewelco@gmail.com",
+                StrPassword_1 = "11111111",
+                StrPassword_2 = "11111111",
+                StrFirstName = "Olman",
+                StrLastName = "Progman",
+                StrIndustry = "Transportation",
+                Format = "json",
+                ChkTerms = 1,
+                DeviceType = "web",
+                Plan = "free",
+                MemberType = 5
+            };
+            // Run the query
+            string errorString = "";
+            MemberResponse result = route4Me.UserRegistration(@params, out errorString);
+
+            // result is always non null object, but in case of successful autentication object property Status=true
+            Assert.IsNotNull(result, "UserRegistrationTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void ValidateSessionTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            MemberParameters @params = new MemberParameters
+            {
+                SessionGuid = "ad9001f33ed6875b5f0e75bce52cbc34",
+                MemberId = 1,
+                Format = "json"
+            };
+            // Run the query
+            string errorString = "";
+            MemberResponse result = route4Me.ValidateSession(@params, out errorString);
+
+            // result is always non null object, but in case of successful autentication object properties have non nul values
+            Assert.IsNotNull(result, "ValidateSessionTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void DeleteUserTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            MemberParametersV4 @params = new MemberParametersV4 { member_id = 147824 };
+
+            // Run the query
+            string errorString = "";
+            bool result = route4Me.UserDelete(@params, out errorString);
+
+            Assert.IsNotNull(result, "DeleteUserTest failed... " + errorString);
+        }
+    }
+
+    [TestClass]
+    public class MemberConfigurationGroup
+    {
+        static string c_ApiKey = "11111111111111111111111111111111";
+
+        [ClassInitialize()]
+        public static void MemberConfigurationGroupInitialize(TestContext context)
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            MemberConfigurationParameters @params = new MemberConfigurationParameters
+            {
+                config_key = "My height",
+                config_value = "value"
+            };
+
+            // Run the query
+            string errorString = "";
+            MemberConfigurationResponse result = route4Me.CreateNewConfigurationKey(@params, out errorString);
+
+            Assert.IsNotNull(result, "AddNewConfigurationKeyTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void AddNewConfigurationKeyTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            MemberConfigurationParameters @params = new MemberConfigurationParameters
+            {
+                config_key = "destination_icon_uri",
+                config_value = "value"
+            };
+
+            // Run the query
+            string errorString = "";
+            MemberConfigurationResponse result = route4Me.CreateNewConfigurationKey(@params, out errorString);
+
+            Assert.IsNotNull(result, "AddNewConfigurationKeyTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void GetAllConfigurationDataTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            MemberConfigurationParameters @params = new MemberConfigurationParameters();
+
+            // Run the query
+            string errorString = "";
+            MemberConfigurationDataRersponse result = route4Me.GetConfigurationData(@params, out errorString);
+
+            Assert.IsNotNull(result, "GetAllConfigurationDataTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void GetSpecificConfigurationKeyDataTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            MemberConfigurationParameters @params = new MemberConfigurationParameters { config_key = "destination_icon_uri" };
+
+            // Run the query
+            string errorString = "";
+            MemberConfigurationDataRersponse result = route4Me.GetConfigurationData(@params, out errorString);
+
+            Assert.IsNotNull(result, "GetSpecificConfigurationKeyDataTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void UpdateConfigurationKeyTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            MemberConfigurationParameters @params = new MemberConfigurationParameters
+            {
+                config_key = "destination_icon_uri",
+                config_value = "444"
+            };
+
+            // Run the query
+            string errorString = "";
+            MemberConfigurationResponse result = route4Me.UpdateConfigurationKey(@params, out errorString);
+
+            Assert.IsNotNull(result, "UpdateConfigurationKeyTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void RemoveConfigurationKeyTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            MemberConfigurationParameters @params = new MemberConfigurationParameters { config_key = "My height" };
+
+            // Run the query
+            string errorString = "";
+            MemberConfigurationResponse result = route4Me.RemoveConfigurationKey(@params, out errorString);
+
+            Assert.IsNotNull(result, "RemoveConfigurationKeyTest failed... " + errorString);
+        }
+
+        [ClassCleanup()]
+        public static void MemberConfigurationGroupCleanup()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            MemberConfigurationParameters @params = new MemberConfigurationParameters { config_key = "destination_icon_uri" };
+
+            // Run the query
+            string errorString = "";
+            MemberConfigurationResponse result = route4Me.RemoveConfigurationKey(@params, out errorString);
+
+            Assert.IsNotNull(result, "MemberConfigurationGroupCleanup failed...");
+        }
+    }
+
+    [TestClass]
+    public class VehiclesGroup
+    {
+        static string c_ApiKey = "11111111111111111111111111111111";
+
+        [TestMethod]
+        public void GetVehiclesTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            VehicleParameters vehicleParameters = new VehicleParameters
+            {
+                Limit = 10,
+                Offset = 0
+            };
+
+            // Run the query
+            string errorString = "";
+            VehicleResponse[] vehicles = route4Me.GetVehicles(vehicleParameters, out errorString);
+
+            Assert.IsInstanceOfType(vehicles, typeof(VehicleResponse[]), "VehiclesGroup failed... " + errorString);
+        }
+    }
+
+    [TestClass]
+    public class GeocodingGroup
+    {
+        static string c_ApiKey = "11111111111111111111111111111111";
+
+        [TestMethod]
+        public void GeocodingForwardTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            GeocodingParameters geoParams = new GeocodingParameters
+            {
+                Addresses = "Los20%Angeles20%International20%Airport,20%CA",
+                Format = "xml"
+            };
+
+            //Run the query
+            string errorString = "";
+            string result = route4Me.Geocoding(geoParams, out errorString);
+
+            Assert.IsNotNull(result, "GeocodingForwardTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void RapidStreetDataAllTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            GeocodingParameters geoParams = new GeocodingParameters();
+            // Run the query
+            string errorString = "";
+            ArrayList result = route4Me.RapidStreetData(geoParams, out errorString);
+
+            Assert.IsNotNull(result, "RapidStreetDataAllTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void RapidStreetDataLimitedTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            GeocodingParameters geoParams = new GeocodingParameters()
+            {
+                Offset = 10,
+                Limit = 10
+            };
+            // Run the query
+            string errorString = "";
+            ArrayList result = route4Me.RapidStreetData(geoParams, out errorString);
+
+            Assert.IsNotNull(result, "RapidStreetDataLimitedTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void RapidStreetDataSingleTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            GeocodingParameters geoParams = new GeocodingParameters()
+            {
+                Pk = 4
+            };
+            // Run the query
+            string errorString = "";
+            ArrayList result = route4Me.RapidStreetData(geoParams, out errorString);
+
+            Assert.IsNotNull(result, "RapidStreetDataSingleTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void RapidStreetServiceAllTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            GeocodingParameters geoParams = new GeocodingParameters()
+            {
+                Zipcode = "00601",
+                Housenumber = "17"
+            };
+            // Run the query
+            string errorString = "";
+            ArrayList result = route4Me.RapidStreetService(geoParams, out errorString);
+
+            Assert.IsNotNull(result, "RapidStreetServiceAllTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void RapidStreetServiceLimitedTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            GeocodingParameters geoParams = new GeocodingParameters()
+            {
+                Zipcode = "00601",
+                Housenumber = "17",
+                Offset = 1,
+                Limit = 10
+            };
+            // Run the query
+            string errorString = "";
+            ArrayList result = route4Me.RapidStreetService(geoParams, out errorString);
+
+            Assert.IsNotNull(result, "RapidStreetServiceLimitedTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void RapidStreetZipcodeAllTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            GeocodingParameters geoParams = new GeocodingParameters()
+            {
+                Zipcode = "00601"
+            };
+            // Run the query
+            string errorString = "";
+            ArrayList result = route4Me.RapidStreetZipcode(geoParams, out errorString);
+
+            Assert.IsNotNull(result, "RapidStreetZipcodeAllTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void RapidStreetZipcodeLimitedTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            GeocodingParameters geoParams = new GeocodingParameters()
+            {
+                Zipcode = "00601",
+                Offset = 1,
+                Limit = 10
+            };
+            // Run the query
+            string errorString = "";
+            ArrayList result = route4Me.RapidStreetZipcode(geoParams, out errorString);
+
+            Assert.IsNotNull(result, "RapidStreetZipcodeLimitedTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void ReverseGeocodingTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            GeocodingParameters geoParams = new GeocodingParameters { Addresses = "42.35863,-71.05670" };
+            // Run the query
+            string errorString = "";
+            string result = route4Me.Geocoding(geoParams, out errorString);
+
+            Assert.IsNotNull(result, "ReverseGeocodingTest failed... " + errorString);
+        }
+    }
+
+    [TestClass]
+    public class DatabasesGroup
+    {
+        static string c_ApiKey = "11111111111111111111111111111111";
+        static DB_Type db_type;
+
+        private static TestContext _testContext;
+        public TestContext TestContext
+        {
+            get { return _testContext; }
+
+            set { _testContext = value; }
+        }
+
+        [ClassInitialize()]
+        public static void DatabasesGroupInitialize(TestContext testContext)
+        {
+            _testContext = testContext;
+            db_type = DB_Type.SQLCE;
+        }
+
+
+        [TestMethod]
+        public void GenerateMySQLDatabaseTest()
+        {
+            cDatabase sqlDB = new cDatabase(DB_Type.MySQL);
+
+            try
+            {
+                string sAddressbookSqlCom = "";
+                string sOrdersSqlCom = "";
+                string sDictionaryDDLSqlCom = "";
+                string sDictionaryDMLSqlCom = "";
+
+                sAddressbookSqlCom = File.ReadAllText(@"Data/SQL/MySQL/addressbook_v4.sql");
+                sOrdersSqlCom = File.ReadAllText(@"Data/SQL/MySQL/orders.sql");
+                sDictionaryDDLSqlCom = File.ReadAllText(@"Data/SQL/MySQL/csv_to_api_dictionary_DDL.sql");
+                sDictionaryDMLSqlCom = File.ReadAllText(@"Data/SQL/MySQL/csv_to_api_dictionary_DML.sql");
+
+                sqlDB.OpenConnection();
+
+                Console.WriteLine("Connection opened");
+
+                int iResult = sqlDB.ExecuteMulticoomandSql(sAddressbookSqlCom);
+                if (iResult > 0) Console.WriteLine(":) The SQL table 'addressbook_v4' created successfuly!!!"); else Console.WriteLine(":( Creating of the SQL table 'addressbook_v4' failed...");
+
+                iResult = sqlDB.ExecuteMulticoomandSql(sOrdersSqlCom);
+                if (iResult > 0) Console.WriteLine(":) The SQL table 'orders' created successfuly!!!"); else Console.WriteLine(":( Creating of the SQL table 'orders' failed...");
+
+                iResult = sqlDB.ExecuteMulticoomandSql(sDictionaryDDLSqlCom);
+                if (iResult > 0)
+                {
+                    Console.WriteLine(":) The SQL table 'csv_to_api_dictionary' created successfuly!!!");
+
+                    iResult = sqlDB.ExecuteMulticoomandSql(sDictionaryDMLSqlCom);
+                    if (iResult > 0) Console.WriteLine(":) The data was inserted into SQL table 'csv_to_api_dictionary' successfuly!!!"); else Console.WriteLine(":( Inserting of the data in the SQL table 'csv_to_api_dictionary' failed...");
+                }
+                else Console.WriteLine(":( Creating of the SQL table 'csv_to_api_dictionary' failed...");
+
+                Assert.IsTrue(1 > 0, "");
+            }
+            catch (Exception ex) 
+            { 
+                Console.WriteLine("Generating of the SQL tables failed!.. " + ex.Message);
+                Assert.IsTrue(0 > 1, "GenerateMySQLDatabaseTest failed... " + ex.Message);
+            }
+            finally
+            {
+                sqlDB.CloseConnection();
+            }
+        }
+
+        [TestMethod]
+        public void GenerateMsSQLDatabaseTest()
+        {
+            cDatabase sqlDB = new cDatabase(DB_Type.MSSQL);
+
+            try
+            {
+                string sAddressbookSqlCom = "";
+                string sOrdersSqlCom = "";
+                string sDictionaryDDLSqlCom = "";
+                string sDictionaryDMLSqlCom = "";
+
+                sAddressbookSqlCom = File.ReadAllText(@"Data/SQL/MSSQL/addressbook_v4.sql");
+                sOrdersSqlCom = File.ReadAllText(@"Data/SQL/MSSQL/orders.sql");
+                sDictionaryDDLSqlCom = File.ReadAllText(@"Data/SQL/MSSQL/csv_to_api_dictionary_DDL.sql");
+                sDictionaryDMLSqlCom = File.ReadAllText(@"Data/SQL/MSSQL/csv_to_api_dictionary_DML.sql");
+
+                sqlDB.OpenConnection();
+
+                Console.WriteLine("Connection opened");
+
+                int iResult = sqlDB.ExecuteMulticoomandSql(sAddressbookSqlCom);
+                if (iResult > 0) Console.WriteLine(":) The SQL table 'addressbook_v4' created successfuly!!!"); else Console.WriteLine(":( Creating of the SQL table 'addressbook_v4' failed...");
+
+                iResult = sqlDB.ExecuteMulticoomandSql(sOrdersSqlCom);
+                if (iResult > 0) Console.WriteLine(":) The SQL table 'orders' created successfuly!!!"); else Console.WriteLine(":( Creating of the SQL table 'orders' failed...");
+
+                iResult = sqlDB.ExecuteMulticoomandSql(sDictionaryDDLSqlCom);
+                if (iResult > 0)
+                {
+                    Console.WriteLine(":) The SQL table 'csv_to_api_dictionary' created successfuly!!!");
+
+                    iResult = sqlDB.ExecuteMulticoomandSql(sDictionaryDMLSqlCom);
+                    if (iResult > 0) Console.WriteLine(":) The data was inserted into SQL table 'csv_to_api_dictionary' successfuly!!!"); else Console.WriteLine(":( Inserting of the data in the SQL table 'csv_to_api_dictionary' failed...");
+                }
+                else Console.WriteLine(":( Creating of the SQL table 'csv_to_api_dictionary' failed...");
+
+                Assert.IsTrue(1 > 0, "");
+            }
+            catch (Exception ex) 
+            { 
+                Console.WriteLine("Generating of the SQL tables failed!.. " + ex.Message);
+                Assert.IsTrue(0 > 1, "GenerateMsSQLDatabaseTest failed... " + ex.Message);
+            }
+            finally
+            {
+                sqlDB.CloseConnection();
+            }
+        }
+
+        [TestMethod]
+        public void GenerateSQLCEDatabaseTest()
+        {
+            cDatabase sqlDB = new cDatabase(DB_Type.SQLCE);
+
+            try
+            {
+                string sAddressbookSqlCom = "";
+                string sOrdersSqlCom = "";
+                string sDictionaryDDLSqlCom = "";
+                string sDictionaryDMLSqlCom = "";
+
+                sAddressbookSqlCom = File.ReadAllText(@"Data/SQL/SQLCE/addressbook_v4.sql");
+                sOrdersSqlCom = File.ReadAllText(@"Data/SQL/SQLCE/orders.sql");
+                sDictionaryDDLSqlCom = File.ReadAllText(@"Data/SQL/SQLCE/csv_to_api_dictionary_DDL.sql");
+                sDictionaryDMLSqlCom = File.ReadAllText(@"Data/SQL/SQLCE/csv_to_api_dictionary_DML.sql");
+
+                sqlDB.OpenConnection();
+
+                Console.WriteLine("Connection opened");
+
+                dropSQLCEtable("addressbook_v4", sqlDB);
+
+                int iResult = sqlDB.ExecuteMulticoomandSql(sAddressbookSqlCom);
+                Assert.IsTrue(iResult > 0, "Creating of the SQL table 'addressbook_v4' failed...");
+
+                dropSQLCEtable("orders", sqlDB);
+
+                iResult = sqlDB.ExecuteMulticoomandSql(sOrdersSqlCom);
+                Assert.IsTrue(iResult > 0, "Creating of the SQL table 'orders' failed...");
+
+                dropSQLCEtable("csv_to_api_dictionary", sqlDB);
+
+                iResult = sqlDB.ExecuteMulticoomandSql(sDictionaryDDLSqlCom);
+                Assert.IsTrue(iResult > 0, "Creating of the SQL table 'csv_to_api_dictionary' failed...");
+
+                if (iResult > 0)
+                {
+                    iResult = sqlDB.ExecuteMulticoomandSql(sDictionaryDMLSqlCom);
+                    Assert.IsTrue(iResult > 0, "Inserting of the data in the SQL table 'csv_to_api_dictionary' failed...");
+                }
+            }
+            catch (Exception ex) 
+            { 
+                Console.WriteLine("Generating of the SQL tables failed!.. " + ex.Message);
+                Assert.IsTrue(0 > 1, "GenerateSQLCEDatabaseTest failed... " + ex.Message);
+            }
+            finally
+            {
+                sqlDB.CloseConnection();
+            }
+        }
+
+        public void dropSQLCEtable(string tableName, cDatabase sqlDB)
+        {
+            object oExists = sqlDB.ExecuteScalar(@"SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '" + tableName + "'");
+            Assert.IsNotNull(oExists, "Query about table existing failed...");
+
+            if (oExists.ToString() == "1")
+            {
+                int iDroRresult = sqlDB.ExecuteNon("DROP TABLE " + tableName);
+            }
+        }
+
+        [TestMethod]
+        public void GeneratePostgreSQLDatabaseTest()
+        {
+            cDatabase sqlDB = new cDatabase(DB_Type.PostgreSQL);
+
+            try
+            {
+                string sAddressbookSqlCom = "";
+                string sOrdersSqlCom = "";
+                string sDictionaryDDLSqlCom = "";
+                string sDictionaryDMLSqlCom = "";
+
+                sAddressbookSqlCom = File.ReadAllText(@"Data/SQL/PostgreSQL/addressbook_v4.sql");
+                sOrdersSqlCom = File.ReadAllText(@"Data/SQL/PostgreSQL/orders.sql");
+                sDictionaryDDLSqlCom = File.ReadAllText(@"Data/SQL/PostgreSQL/csv_to_api_dictionary_DDL.sql");
+                sDictionaryDMLSqlCom = File.ReadAllText(@"Data/SQL/PostgreSQL/csv_to_api_dictionary_DML.sql");
+
+                sqlDB.OpenConnection();
+
+                Console.WriteLine("Connection opened");
+
+                int iResult = sqlDB.ExecuteMulticoomandSql(sAddressbookSqlCom);
+                if (iResult > 0) Console.WriteLine(":) The SQL table 'addressbook_v4' created successfuly!!!"); else Console.WriteLine(":( Creating of the SQL table 'addressbook_v4' failed...");
+
+                iResult = sqlDB.ExecuteMulticoomandSql(sOrdersSqlCom);
+                if (iResult > 0) Console.WriteLine(":) The SQL table 'orders' created successfuly!!!"); else Console.WriteLine(":( Creating of the SQL table 'orders' failed...");
+
+                iResult = sqlDB.ExecuteMulticoomandSql(sDictionaryDDLSqlCom);
+                if (iResult > 0)
+                {
+                    Console.WriteLine(":) The SQL table 'csv_to_api_dictionary' created successfuly!!!");
+
+                    iResult = sqlDB.ExecuteMulticoomandSql(sDictionaryDMLSqlCom);
+                    if (iResult > 0) Console.WriteLine(":) The data was inserted into SQL table 'csv_to_api_dictionary' successfuly!!!"); else Console.WriteLine(":( Inserting of the data in the SQL table 'csv_to_api_dictionary' failed...");
+                }
+                else Console.WriteLine(":( Creating of the SQL table 'csv_to_api_dictionary' failed...");
+
+                Assert.IsTrue(1 > 0, "");
+            }
+            catch (Exception ex) 
+            { 
+                Console.WriteLine("Generating of the SQL tables failed!.. " + ex.Message);
+                Assert.IsTrue(0 > 1, "GeneratePostgreSQLDatabaseTest failed... " + ex.Message);
+            }
+            finally
+            {
+                sqlDB.CloseConnection();
+            }
+        }
+
+        [TestMethod]
+        public void MakeAddressbookCSVsampleTest()
+        {
+            cDatabase sqlDB = new cDatabase(db_type);
+
+            try
+            {
+                sqlDB.OpenConnection();
+
+                Console.WriteLine("Connection opened");
+
+                sqlDB.Table2Csv(@"Data/CSV/addressbook v4.csv", "addressbook_v4", true);
+                Console.WriteLine("The file addressbook v4.csv was created.");
+                Assert.IsTrue(1>0,"");
+            }
+            catch (Exception ex) 
+            {
+                Console.WriteLine("Making of a addressbook csv file failed!.. " + ex.Message);
+                Assert.IsTrue(0 > 1, "MakeAddressbookCSVsampleTest failed... " + ex.Message);
+            }
+            finally
+            {
+                sqlDB.CloseConnection();
+            }
+        }
+
+        [TestMethod]
+        public void UploadAddressbookJSONtoSQLTest()
+        {
+            cDatabase sqlDB = new cDatabase(db_type);
+
+            try
+            {
+                sqlDB.OpenConnection();
+
+                Console.WriteLine("Connection opened");
+
+                sqlDB.Json2Table(@"Data/JSON/Addressbook Get Contacts RESPONSE.json", "addressbook_v4", "id", R4M_DataType.Addressbook);
+
+                Console.WriteLine("The file 'Addressbook Get Contacts RESPONSE.json' was uploaded to the SQL server.");
+
+                Assert.IsTrue(1 > 0, "");
+            }
+            catch (Exception ex) 
+            { 
+                Console.WriteLine("Uploading of the JSON file to the SQL server failed!.. " + ex.Message);
+                Assert.IsTrue(0 > 1, "UploadAddressbookJSONtoSQLTest failed... " + ex.Message);
+            }
+            finally
+            {
+                sqlDB.CloseConnection();
+            }
+        }
+
+
     }
 
     // **** Data repository for the tests ********
