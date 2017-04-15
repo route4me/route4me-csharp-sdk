@@ -220,5 +220,9 @@ namespace Route4MeSDK.DataTypes
 
     [DataMember(Name = "custom_fields", EmitDefaultValue = false)]
     public Dictionary<string, string> CustomFields { get; set; }
+
+    //Systemwide unique code, which permits end-users (recipients) to track the status of their order
+    [DataMember(Name = "tracking_number", EmitDefaultValue = false)]
+    public string tracking_number { get; set; }
   }
 }
