@@ -7,3 +7,5 @@ C:\Users\Odin641\Documents\GitHub\route4me\route4me-csharp-sdk\Route4MeSDKLibrar
 C:\Users\Odin641\Documents\GitHub\route4me\route4me-csharp-sdk\Route4MeSDKLibrary\obj\Debug\Route4MeSDKLibrary.csprojResolveAssemblyReference.cache
 C:\Users\Odin641\Documents\GitHub\route4me\route4me-csharp-sdk\Route4MeSDKLibrary\obj\Debug\Route4MeSDKLibrary.dll
 C:\Users\Odin641\Documents\GitHub\route4me\route4me-csharp-sdk\Route4MeSDKLibrary\obj\Debug\Route4MeSDKLibrary.pdb
+C:\Oleg_Route4Me\route4me-csharp-sdk\Route4MeSDKLibrary\obj\Debug\Route4MeSDKLibrary.csprojResolveAssemblyReference.cache
+C:\Oleg_Route4Me\route4me-csharp-sdk\Route4MeSDKLibrary\bin\Debug\System.Data.SqlServerCe.dll

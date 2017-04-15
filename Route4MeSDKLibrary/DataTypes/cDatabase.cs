@@ -7,6 +7,7 @@ using System.Data;
 using System.Data.Common;
 using System.Configuration;
 using System.Data.OleDb;
+using System.Data.SqlServerCe;
 using System.Web.Script;
 
 namespace Route4MeSDK.DataTypes
@@ -29,6 +30,7 @@ namespace Route4MeSDK.DataTypes
     public enum DB_Type
     {
         MSSQL,
+        SQLCE,
         MySQL,
         PostgreSQL,
         SQLite,
@@ -60,6 +62,9 @@ namespace Route4MeSDK.DataTypes
                     break;
                 case DB_Type.MSSQL:
                     _conStngInstitute = ConfigurationManager.ConnectionStrings["conMSSQL"];
+                    break;
+                case DB_Type.SQLCE:
+                    _conStngInstitute = ConfigurationManager.ConnectionStrings["conSQLCE"];
                     break;
                 case DB_Type.PostgreSQL:
                     _conStngInstitute = ConfigurationManager.ConnectionStrings["conPostgreSQL"];
@@ -155,6 +160,7 @@ namespace Route4MeSDK.DataTypes
             {
                 sQuery = sQuery.Replace(";", ";^");
                 string[] arCommands = sQuery.Split('^');
+                if (_con.State != ConnectionState.Open) OpenConnection();
                 _transaction = _con.BeginTransaction(IsolationLevel.Unspecified);
                 _cmd.Connection = _con;
                 _cmd.CommandType = CommandType.Text;
