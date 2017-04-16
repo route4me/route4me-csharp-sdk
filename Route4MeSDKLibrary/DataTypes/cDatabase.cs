@@ -204,9 +204,10 @@ namespace Route4MeSDK.DataTypes
                     }
                 }
                 _transaction.Commit();
-                return 1;
+                iRet = 1;
+                return iRet;
             }
-            catch (Exception ex) { Console.WriteLine(":( Transaction failed... " + ex.Message); _transaction.Rollback(); return 0; }
+            catch (Exception ex) { Console.WriteLine(":( Transaction failed... " + ex.Message); _transaction.Rollback(); iRet = 0; return iRet; }
             
         }
 
