@@ -15,157 +15,111 @@ using System.CodeDom.Compiler;
 namespace Route4MeSDKUnitTest
 {
     [TestClass]
-    public class SingleDriverRoute10StopsGrgoup
+    public class RoutesGroup
     {
-        static DataObject dataObject1, dataObject, dataObject2;
-        static DataObjectRoute routeSingleDriverRoute10Stops;
-        static string routeId_SingleDriverRoute10Stops;
-        static int removeRouteDestinationID;
-        
-        static string routeId_DuplicateRoute;
-
         static string c_ApiKey = "11111111111111111111111111111111";
 
-        [TestMethod]
-        public void RunOptimizationSingleDriverRoute10StopsTest()
+        static TestDataRepository tdr;
+        static List<string> lsOptimizationIDs;
+
+        [ClassInitialize()]
+        public static void RoutesGroupInitialize(TestContext context)
         {
-            Route4MeManager r4mm = new Route4MeManager(c_ApiKey);
+            lsOptimizationIDs = new List<string>();
 
-            // Prepare the addresses
-            Address[] addresses = new Address[]
+            tdr = new TestDataRepository();
+            bool result = tdr.RunOptimizationSingleDriverRoute10Stops();
+
+            Assert.IsTrue(result, "Single Driver 10 Stops generation failed...");
+
+            Assert.IsTrue(tdr.SD10Stops_route.Addresses.Length > 0, "The route has no addresses...");
+
+            lsOptimizationIDs.Add(tdr.SD10Stops_optimization_problem_id);
+        }
+
+        [TestMethod]
+        public void GetRoutesTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            RouteParametersQuery routeParameters = new RouteParametersQuery()
             {
-            #region Addresses
-
-            new Address() { AddressString = "151 Arbor Way Milledgeville GA 31061",
-                            //indicate that this is a departure stop
-                            //single depot routes can only have one departure depot 
-                            IsDepot = true, 
-                        
-                            //required coordinates for every departure and stop on the route
-                            Latitude = 33.132675170898,
-                            Longitude = -83.244743347168,
-                        
-                            //the expected time on site, in seconds. this value is incorporated into the optimization engine
-                            //it also adjusts the estimated and dynamic eta's for a route
-                            Time = 0, 
-                        
-                        
-                            //input as many custom fields as needed, custom data is passed through to mobile devices and to the manifest
-                            CustomFields = new Dictionary<string, string>() {{"color", "red"}, {"size", "huge"}}
-            },
-
-            new Address() { AddressString = "230 Arbor Way Milledgeville GA 31061",
-                            Latitude = 33.129695892334,
-                            Longitude = -83.24577331543,
-                            Time = 0 },
-
-            new Address() { AddressString = "148 Bass Rd NE Milledgeville GA 31061",
-                            Latitude = 33.143497,
-                            Longitude = -83.224487,
-                            Time = 0 },
-
-            new Address() { AddressString = "117 Bill Johnson Rd NE Milledgeville GA 31061",
-                            Latitude = 33.141784667969,
-                            Longitude = -83.237518310547,
-                            Time = 0 },
-
-            new Address() { AddressString = "119 Bill Johnson Rd NE Milledgeville GA 31061",
-                            Latitude = 33.141086578369,
-                            Longitude = -83.238258361816,
-                            Time = 0 },
-
-            new Address() { AddressString =  "131 Bill Johnson Rd NE Milledgeville GA 31061",
-                            Latitude = 33.142036437988,
-                            Longitude = -83.238845825195,
-                            Time = 0 },
-
-            new Address() { AddressString =  "138 Bill Johnson Rd NE Milledgeville GA 31061",
-                            Latitude = 33.14307,
-                            Longitude = -83.239334,
-                            Time = 0 },
-
-            new Address() { AddressString =  "139 Bill Johnson Rd NE Milledgeville GA 31061",
-                            Latitude = 33.142734527588,
-                            Longitude = -83.237442016602,
-                            Time = 0 },
-
-            new Address() { AddressString =  "145 Bill Johnson Rd NE Milledgeville GA 31061",
-                            Latitude = 33.143871307373,
-                            Longitude = -83.237342834473,
-                            Time = 0 },
-
-            new Address() { AddressString =  "221 Blake Cir Milledgeville GA 31061",
-                            Latitude = 33.081462860107,
-                            Longitude = -83.208511352539,
-                            Time = 0 }
-
-            #endregion
-            };
-
-            // Set parameters
-            RouteParameters parameters = new RouteParameters()
-            {
-                AlgorithmType = AlgorithmType.TSP,
-                StoreRoute = false,
-                RouteName = "Single Driver Route 10 Stops Test",
-
-                RouteDate = R4MeUtils.ConvertToUnixTimestamp(DateTime.UtcNow.Date.AddDays(1)),
-                RouteTime = 60 * 60 * 7,
-                Optimize = Optimize.Distance.Description(),
-                DistanceUnit = DistanceUnit.MI.Description(),
-                DeviceType = DeviceType.Web.Description()
-            };
-
-            OptimizationParameters optimizationParameters = new OptimizationParameters()
-            {
-                Addresses = addresses,
-                Parameters = parameters
+                Limit = 10,
+                Offset = 5
             };
 
             // Run the query
             string errorString;
-            dataObject1 = r4mm.RunOptimization(optimizationParameters, out errorString);
+            DataObjectRoute[] dataObjects = route4Me.GetRoutes(routeParameters, out errorString);
 
-            Assert.IsNotNull(dataObject1, "Run optimization test with Single Driver Route 10 Stops failed... " + errorString);
-
-            routeSingleDriverRoute10Stops = (dataObject1 != null && dataObject1.Routes != null && dataObject1.Routes.Length > 0) ? dataObject1.Routes[0] : null;
-
-            Assert.IsNotNull(routeSingleDriverRoute10Stops, "Run optimization test with Single Driver Route 10 Stops failed...");
-            
-            routeId_SingleDriverRoute10Stops = (routeSingleDriverRoute10Stops != null) ? routeSingleDriverRoute10Stops.RouteID : null;
-
-            Assert.IsInstanceOfType(routeId_SingleDriverRoute10Stops,typeof(System.String));
-
-            Assert.IsNotNull(routeId_SingleDriverRoute10Stops, "The optimization problem ID is wrong in Single Driver Route 10 Stops test...");
-
-            ResequenceRouteDestinationsTest();
-
-            ResequenceReoptimizeRouteTest();
-
-            AddRouteDestinationsTest();
-
-            RemoveRouteDestinationTest();
-
-            UpdateRouteTest();
-
-            ReoptimizeRouteTest();
-
-            GetRouteDirectionsTest();
-
-            GetRoutePathPointsTest();
-
-            LogCustomActivityTest();
-
-            GetRouteTimeActivitiesTest();
-
-            DuplicateRouteTest();
-
-            DeleteRoutesTest();
+            Assert.IsInstanceOfType(dataObjects, typeof(DataObjectRoute[]), "GetRoutesTest failed... " + errorString);
         }
 
-        public void ResequenceRouteDestinationsTest( )
+        [TestMethod]
+        public void GetRouteTest()
         {
-            DataObjectRoute route = routeSingleDriverRoute10Stops;
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            RouteParametersQuery routeParameters = new RouteParametersQuery()
+            {
+                RouteId = tdr.SD10Stops_route_id
+            };
+
+            // Run the query
+            string errorString;
+            DataObjectRoute dataObject = route4Me.GetRoute(routeParameters, out errorString);
+
+            Assert.IsNotNull(dataObject, "GetRouteTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void GetRouteDirectionsTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            string routeId = tdr.SD10Stops_route_id;
+            Assert.IsNotNull(routeId, "routeId_SingleDriverRoute10Stops is null...");
+
+            RouteParametersQuery routeParameters = new RouteParametersQuery()
+            {
+                RouteId = routeId
+            };
+
+            routeParameters.Directions = true;
+
+            // Run the query
+            string errorString;
+            DataObjectRoute dataObject = route4Me.GetRoute(routeParameters, out errorString);
+
+            Assert.IsNotNull(dataObject, "GetRouteDirectionsTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void GetRoutePathPointsTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            string routeId = tdr.SD10Stops_route_id;
+            Assert.IsNotNull(routeId, "routeId_SingleDriverRoute10Stops is null...");
+
+            RouteParametersQuery routeParameters = new RouteParametersQuery()
+            {
+                RouteId = routeId
+            };
+
+            routeParameters.RoutePathOutput = RoutePathOutput.Points.ToString();
+
+            // Run the query
+            string errorString;
+            DataObjectRoute dataObject = route4Me.GetRoute(routeParameters, out errorString);
+
+            Assert.IsNotNull(dataObject, "GetRoutePathPointsTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void ResequenceRouteDestinationsTest()
+        {
+            DataObjectRoute route = tdr.SD10Stops_route;
             Assert.IsNotNull(route, "Route for the test Route Destinations Resequence is null...");
 
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
@@ -197,11 +151,12 @@ namespace Route4MeSDKUnitTest
             Assert.IsNotNull(route1, "ResequenceRouteDestinationsTest failed...");
         }
 
+        [TestMethod]
         public void ResequenceReoptimizeRouteTest()
         {
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
-            string route_id = routeId_SingleDriverRoute10Stops;
+            string route_id = tdr.SD10Stops_route_id;
 
             Assert.IsNotNull(route_id, "rote_id is null...");
 
@@ -219,62 +174,12 @@ namespace Route4MeSDKUnitTest
             Assert.IsTrue(result, "ResequenceReoptimizeRouteTest failed...");
         }
 
-        public void AddRouteDestinationsTest()
-        {
-            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
-
-            string route_id = routeId_SingleDriverRoute10Stops;
-
-            Assert.IsNotNull(route_id, "rote_id is null...");
-
-            // Prepare the addresses
-            #region Addresses
-            Address[] addresses = new Address[]
-            {
-                new Address() { AddressString =  "146 Bill Johnson Rd NE Milledgeville GA 31061",
-                                Latitude = 	33.143526,
-                                Longitude = -83.240354,
-                                Time = 0 },
-
-                new Address() { AddressString =  "222 Blake Cir Milledgeville GA 31061",
-                                Latitude = 	33.177852,
-                                Longitude = -83.263535,
-                                Time = 0 }
-            };
-            #endregion
-
-            // Run the query
-            bool optimalPosition = true;
-            string errorString;
-            int[] destinationIds = route4Me.AddRouteDestinations(route_id, addresses, optimalPosition, out errorString);
-
-            Assert.IsInstanceOfType(destinationIds, typeof(System.Int32[]), "AddRouteDestinationsTest failed...");
-
-            removeRouteDestinationID = destinationIds[0];
-        }
-
-        public void RemoveRouteDestinationTest()
-        {
-            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
-
-            string route_id = routeId_SingleDriverRoute10Stops;
-            Assert.IsNotNull(route_id, "rote_id is null...");
-
-            int destination_id = removeRouteDestinationID;
-            Assert.IsNotNull(destination_id, "destination_id is null...");
-
-            // Run the query
-            string errorString;
-            bool deleted = route4Me.RemoveRouteDestination(route_id, destination_id, out errorString);
-
-            Assert.IsTrue(deleted, "RemoveRouteDestinationTest");
-        }
-
+        [TestMethod]
         public void UpdateRouteTest()
         {
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
-            string routeId = routeId_SingleDriverRoute10Stops;
+            string routeId = tdr.SD10Stops_route_id;
             Assert.IsNotNull(routeId, "routeId_SingleDriverRoute10Stops is null...");
 
             RouteParameters parametersNew = new RouteParameters()
@@ -289,16 +194,17 @@ namespace Route4MeSDKUnitTest
             };
 
             string errorString;
-            dataObject = route4Me.UpdateRoute(routeParameters, out errorString);
+            DataObjectRoute dataObject = route4Me.UpdateRoute(routeParameters, out errorString);
 
             Assert.IsNotNull(dataObject, "UpdateRouteTest failed... " + errorString);
         }
 
+        [TestMethod]
         public void ReoptimizeRouteTest()
         {
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
-            string routeId = routeId_SingleDriverRoute10Stops;
+            string routeId = tdr.SD10Stops_route_id;
             Assert.IsNotNull(routeId, "routeId_SingleDriverRoute10Stops is null...");
 
             RouteParametersQuery routeParameters = new RouteParametersQuery()
@@ -309,103 +215,17 @@ namespace Route4MeSDKUnitTest
 
             // Run the query
             string errorString;
-            dataObject = route4Me.UpdateRoute(routeParameters, out errorString);
+            DataObjectRoute dataObject = route4Me.UpdateRoute(routeParameters, out errorString);
 
             Assert.IsNotNull(dataObject, "ReoptimizeRouteTest failed... " + errorString);
         }
 
-        public void GetRouteDirectionsTest()
-        {
-            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
-
-            string routeId = routeId_SingleDriverRoute10Stops;
-            Assert.IsNotNull(routeId, "routeId_SingleDriverRoute10Stops is null...");
-
-            RouteParametersQuery routeParameters = new RouteParametersQuery()
-            {
-                RouteId = routeId
-            };
-
-            routeParameters.Directions = true;
-
-            // Run the query
-            string errorString;
-            dataObject = route4Me.GetRoute(routeParameters, out errorString);
-
-            Assert.IsNotNull(dataObject, "GetRouteDirectionsTest failed... " + errorString);
-        }
-
-        public void GetRoutePathPointsTest()
-        {
-            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
-
-            string routeId = routeId_SingleDriverRoute10Stops;
-            Assert.IsNotNull(routeId, "routeId_SingleDriverRoute10Stops is null...");
-
-            RouteParametersQuery routeParameters = new RouteParametersQuery()
-            {
-                RouteId = routeId
-            };
-
-            routeParameters.RoutePathOutput = RoutePathOutput.Points.ToString();
-
-            // Run the query
-            string errorString;
-            dataObject = route4Me.GetRoute(routeParameters, out errorString);
-
-            Assert.IsNotNull(dataObject, "GetRoutePathPointsTest failed... " + errorString);
-        }
-
-        public void LogCustomActivityTest()
-        {
-            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
-
-            string routeId = routeId_SingleDriverRoute10Stops;
-            Assert.IsNotNull(routeId, "routeId_SingleDriverRoute10Stops is null...");
-
-            string message = "Test User Activity " + DateTime.Now.ToString();
-
-            Activity activity = new Activity()
-            {
-                ActivityType = "user_message",
-                ActivityMessage = message,
-                RouteId = routeId
-            };
-
-            // Run the query
-            string errorString;
-            bool added = route4Me.LogCustomActivity(activity, out errorString);
-
-            Assert.IsTrue(added, "LogCustomActivityTest failed... " + errorString);
-        }
-
-        public void GetRouteTimeActivitiesTest()
-        {
-            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
-
-            string routeId = routeId_SingleDriverRoute10Stops;
-            Assert.IsNotNull(routeId, "routeId_SingleDriverRoute10Stops is null...");
-
-            ActivityParameters activityParameters = new ActivityParameters()
-            {
-                RouteId = routeId,
-                Team = "true",
-                Limit = 10,
-                Offset = 0
-            };
-
-            // Run the query
-            string errorString;
-            Activity[] activities = route4Me.GetActivityFeed(activityParameters, out errorString);
-
-            Assert.IsInstanceOfType(activities, typeof(Activity[]), "GetActivitiesTest failed... " + errorString);
-        }
-
+        [TestMethod]
         public void DuplicateRouteTest()
         {
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
-            string routeId = routeId_SingleDriverRoute10Stops;
+            string routeId = tdr.SD10Stops_route_id;
             Assert.IsNotNull(routeId, "routeId is null...");
 
             RouteParametersQuery routeParameters = new RouteParametersQuery()
@@ -415,19 +235,22 @@ namespace Route4MeSDKUnitTest
 
             // Run the query
             string errorString;
-            routeId_DuplicateRoute = route4Me.DuplicateRoute(routeParameters, out errorString);
+            string routeId_DuplicateRoute = route4Me.DuplicateRoute(routeParameters, out errorString);
 
             Assert.IsNotNull(routeId_DuplicateRoute, "DuplicateRouteTest failed... " + errorString);
         }
 
+        [TestMethod]
         public void DeleteRoutesTest()
         {
             List<string> routeIdsToDelete = new List<string>();
 
-            if (routeId_SingleDriverRoute10Stops != null)
-                routeIdsToDelete.Add(routeId_SingleDriverRoute10Stops);
-            if (routeId_DuplicateRoute != null)
-                routeIdsToDelete.Add(routeId_DuplicateRoute);
+            bool result = tdr.SingleDriverRoundTripTest();
+
+            Assert.IsTrue(result, "Single Driver Round Trip generation failed...");
+
+            if (tdr.SDRT_route_id != null)
+                routeIdsToDelete.Add(tdr.SDRT_route_id);
 
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
@@ -438,413 +261,58 @@ namespace Route4MeSDKUnitTest
             Assert.IsInstanceOfType(deletedRouteIds, typeof(string[]), "DeleteRoutesTest failed... " + errorString);
         }
 
+        [ClassCleanup()]
+        public static void AddressGroupCleanup()
+        {
+            bool result = tdr.RemoveOptimization(lsOptimizationIDs.ToArray());
+
+            Assert.IsTrue(result, "Removing of the testing optimization problem failed...");
+        }
     }
 
     [TestClass]
-    public class SingleDriverRoundTripGeneric
-    {
-        static string optimizationProblemID;
-
-        static string c_ApiKey = "11111111111111111111111111111111";
-
-        static DataObject dataObject;
-
-        [TestMethod]
-        public void SingleDriverRoundTripGenericTest()
-        {
-            const string uri = R4MEInfrastructureSettings.MainHost + "/api.v4/optimization_problem.php";
-            const string myApiKey = "11111111111111111111111111111111";
-
-            // Create the manager with the api key
-            Route4MeManager route4Me = new Route4MeManager(myApiKey);
-
-            // Prepare the addresses
-            // Using the defined class, can use user-defined class instead
-            Address[] addresses = new Address[]
-              {
-                #region Addresses
-
-                new Address() { AddressString = "754 5th Ave New York, NY 10019",
-                                Alias         = "Bergdorf Goodman",
-                                IsDepot       = true,
-                                Latitude      = 40.7636197,
-                                Longitude     = -73.9744388,
-                                Time          = 0 },
-
-                new Address() { AddressString = "717 5th Ave New York, NY 10022",
-                                Alias         = "Giorgio Armani",
-                                Latitude      = 40.7669692,
-                                Longitude     = -73.9693864,
-                                Time          = 0 },
-
-                new Address() { AddressString = "888 Madison Ave New York, NY 10014",
-                                Alias         = "Ralph Lauren Women's and Home",
-                                Latitude      = 40.7715154,
-                                Longitude     = -73.9669241,
-                                Time          = 0 },
-
-                new Address() { AddressString = "1011 Madison Ave New York, NY 10075",
-                                Alias         = "Yigal Azrou'l",
-                                Latitude      = 40.7772129,
-                                Longitude     = -73.9669,
-                                Time          = 0 },
-
-                 new Address() { AddressString = "440 Columbus Ave New York, NY 10024",
-                                Alias         = "Frank Stella Clothier",
-                                Latitude      = 40.7808364,
-                                Longitude     = -73.9732729,
-                                Time          = 0 },
-
-                new Address() { AddressString = "324 Columbus Ave #1 New York, NY 10023",
-                                Alias         = "Liana",
-                                Latitude      = 40.7803123,
-                                Longitude     = -73.9793079,
-                                Time          = 0 },
-
-                new Address() { AddressString = "110 W End Ave New York, NY 10023",
-                                Alias         = "Toga Bike Shop",
-                                Latitude      = 40.7753077,
-                                Longitude     = -73.9861529,
-                                Time          = 0 }, 
-
-                new Address() { AddressString = "555 W 57th St New York, NY 10019",
-                                Alias         = "BMW of Manhattan",
-                                Latitude      = 40.7718005,
-                                Longitude     = -73.9897716,
-                                Time          = 0 },
-
-                new Address() { AddressString = "57 W 57th St New York, NY 10019",
-                                Alias         = "Verizon Wireless",
-                                Latitude      = 40.7558695,
-                                Longitude     = -73.9862019,
-                                Time          = 0 },
-
-                #endregion
-              };
-
-            // Set parameters
-            // Using the defined class, can use user-defined class instead
-            RouteParameters parameters = new RouteParameters()
-            {
-                AlgorithmType = AlgorithmType.TSP,
-                StoreRoute = false,
-                RouteName = "Single Driver Round Trip",
-
-                RouteDate = R4MeUtils.ConvertToUnixTimestamp(DateTime.UtcNow.Date.AddDays(1)),
-                RouteTime = 60 * 60 * 7,
-                RouteMaxDuration = 86400,
-                VehicleCapacity = "1",
-                VehicleMaxDistanceMI = "10000",
-
-                Optimize = Optimize.Distance.Description(),
-                DistanceUnit = DistanceUnit.MI.Description(),
-                DeviceType = DeviceType.Web.Description(),
-                TravelMode = TravelMode.Driving.Description(),
-            };
-
-            MyAddressAndParametersHolder myParameters = new MyAddressAndParametersHolder()
-            {
-                addresses = addresses,
-                parameters = parameters
-            };
-
-            // Run the query
-            string errorString;
-            MyDataObjectGeneric dataObject0 = route4Me.GetJsonObjectFromAPI<MyDataObjectGeneric>
-               (myParameters, uri, HttpMethodType.Post, out errorString);
-
-            optimizationProblemID = dataObject0.OptimizationProblemId;
-
-            Assert.IsNotNull(dataObject0, "SingleDriverRoundTripGenericTest failed...");
-
-            GetOptimizationTest();
-
-            ReOptimizationTest();
-
-            RemoveOptimizationTest();
-        }
-
-        public void GetOptimizationTest()
-        {
-            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
-
-            OptimizationParameters optimizationParameters = new OptimizationParameters()
-            {
-                OptimizationProblemID = optimizationProblemID
-            };
-
-            // Run the query
-            string errorString;
-            dataObject = route4Me.GetOptimization(optimizationParameters, out errorString);
-
-            Assert.IsNotNull(dataObject, "GetOptimizationTest failed... " + errorString);
-        }
-        
-        public void ReOptimizationTest()
-        {
-            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
-
-            OptimizationParameters optimizationParameters = new OptimizationParameters()
-            {
-                OptimizationProblemID = optimizationProblemID,
-                ReOptimize = true
-            };
-
-            // Run the query
-            string errorString;
-            dataObject = route4Me.UpdateOptimization(optimizationParameters, out errorString);
-
-            Assert.IsNotNull(dataObject, "ReOptimizationTest failed... " + errorString);
-        }
-
-        public void AddOrdersToOptimizationTest()
-        {
-            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
-
-            OptimizationParameters rQueryParams = new OptimizationParameters()
-            {
-                OptimizationProblemID = optimizationProblemID,
-                Redirect = false
-            };
-
-            #region Addresses
-            Address[] addresses = new Address[] {
-		    new Address {
-			    AddressString = "273 Canal St, New York, NY 10013, USA",
-			    Latitude = 40.7191558,
-			    Longitude = -74.0011966,
-			    Alias = "",
-			    CurbsideLatitude = 40.7191558,
-			    CurbsideLongitude = -74.0011966,
-			    IsDepot = true
-		    },
-		    new Address {
-			    AddressString = "106 Liberty St, New York, NY 10006, USA",
-			    Alias = "BK Restaurant #: 2446",
-			    Latitude = 40.709637,
-			    Longitude = -74.011912,
-			    CurbsideLatitude = 40.709637,
-			    CurbsideLongitude = -74.011912,
-			    Email = "",
-			    Phone = "(917) 338-1887",
-			    FirstName = "",
-			    LastName = "",
-			    CustomFields = new Dictionary<string, string> { {"icon", null} },
-			    Time = 0,
-			    TimeWindowStart = 1472544000,
-			    TimeWindowEnd = 1472544300,
-			    OrderId = 7205705
-		    },
-		    new Address {
-			    AddressString = "325 Broadway, New York, NY 10007, USA",
-			    Alias = "BK Restaurant #: 20333",
-			    Latitude = 40.71615,
-			    Longitude = -74.00505,
-			    CurbsideLatitude = 40.71615,
-			    CurbsideLongitude = -74.00505,
-			    Email = "",
-			    Phone = "(212) 227-7535",
-			    FirstName = "",
-			    LastName = "",
-			    CustomFields = new Dictionary<string, string> { {"icon", null} },
-			    Time = 0,
-			    TimeWindowStart = 1472545000,
-			    TimeWindowEnd = 1472545300,
-			    OrderId = 7205704
-		    },
-		    new Address {
-			    AddressString = "106 Fulton St, Farmingdale, NY 11735, USA",
-			    Alias = "BK Restaurant #: 17871",
-			    Latitude = 40.73073,
-			    Longitude = -73.459283,
-			    CurbsideLatitude = 40.73073,
-			    CurbsideLongitude = -73.459283,
-			    Email = "",
-			    Phone = "(212) 566-5132",
-			    FirstName = "",
-			    LastName = "",
-			    CustomFields = new Dictionary<string, string> { {"icon", null} },
-			    Time = 0,
-			    TimeWindowStart = 1472546000,
-			    TimeWindowEnd = 1472546300,
-			    OrderId = 7205703
-		    }
-	    };
-            #endregion
-
-            RouteParameters rParams = new RouteParameters()
-            {
-                RouteName = "Wednesday 15th of June 2016 07:01 PM (+03:00)",
-                RouteDate = 1465948800,
-                RouteTime = 14400,
-                Optimize = "Time",
-                RouteType = "single",
-                AlgorithmType = AlgorithmType.TSP,
-                RT = false,
-                LockLast = false,
-                MemberId = "1",
-                VehicleId = "",
-                DisableOptimization = false
-            };
-
-            string errorString = "";
-            DataObject dataObject = route4Me.AddOrdersToOptimization(rQueryParams, addresses, rParams, out errorString);
-
-            Assert.IsNotNull(dataObject, "AddOrdersToOptimizationTest failed... " + errorString);
-
-        }
-
-        public void RemoveOptimizationTest()
-        {
-            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
-
-            string opt_id = optimizationProblemID;
-            Assert.IsNotNull(opt_id, "optimizationProblemID is null...");
-
-            List<string> lsOptIDs = new List<string>();
-            lsOptIDs.Add(optimizationProblemID);
-
-            // Run the query
-            string errorString;
-            bool removed = route4Me.RemoveOptimization(lsOptIDs.ToArray(), out errorString);
-
-            Assert.IsTrue(removed, "RemoveOptimizationTest failed... " + errorString);
-        }
-
-    }
-
-    [TestClass]
-    public class SingleDriverRoundTrip
+    public class NotesGroup
     {
         static string c_ApiKey = "11111111111111111111111111111111";
-        static DataObject dataObject2;
-        static string routeId_SingleDriverRoundTrip;
+        static TestDataRepository tdr;
+        static List<string> lsOptimizationIDs;
 
-        [TestMethod]
-        public void SingleDriverRoundTripTest()
+        [ClassInitialize()]
+        public static void NotesGroupInitialize(TestContext context)
         {
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
-            // Prepare the addresses
-            Address[] addresses = new Address[]
-              {
-                #region Addresses
+            lsOptimizationIDs = new List<string>();
 
-                new Address() { AddressString = "754 5th Ave New York, NY 10019",
-                                Alias         = "Bergdorf Goodman",
-                                IsDepot       = true,
-                                Latitude      = 40.7636197,
-                                Longitude     = -73.9744388,
-                                Time          = 0 },
+            tdr = new TestDataRepository();
+            bool result = tdr.SingleDriverRoundTripTest();
 
-                new Address() { AddressString = "717 5th Ave New York, NY 10022",
-                                Alias         = "Giorgio Armani",
-                                Latitude      = 40.7669692,
-                                Longitude     = -73.9693864,
-                                Time          = 0 },
+            Assert.IsTrue(result, "Single Driver Round Trip generation failed...");
 
-                new Address() { AddressString = "888 Madison Ave New York, NY 10014",
-                                Alias         = "Ralph Lauren Women's and Home",
-                                Latitude      = 40.7715154,
-                                Longitude     = -73.9669241,
-                                Time          = 0 },
+            Assert.IsTrue(tdr.SDRT_route.Addresses.Length > 0, "The route has no addresses...");
 
-                new Address() { AddressString = "1011 Madison Ave New York, NY 10075",
-                                Alias         = "Yigal Azrou'l",
-                                Latitude      = 40.7772129,
-                                Longitude     = -73.9669,
-                                Time          = 0 },
-
-                 new Address() { AddressString = "440 Columbus Ave New York, NY 10024",
-                                Alias         = "Frank Stella Clothier",
-                                Latitude      = 40.7808364,
-                                Longitude     = -73.9732729,
-                                Time          = 0 },
-
-                new Address() { AddressString = "324 Columbus Ave #1 New York, NY 10023",
-                                Alias         = "Liana",
-                                Latitude      = 40.7803123,
-                                Longitude     = -73.9793079,
-                                Time          = 0 },
-
-                new Address() { AddressString = "110 W End Ave New York, NY 10023",
-                                Alias         = "Toga Bike Shop",
-                                Latitude      = 40.7753077,
-                                Longitude     = -73.9861529,
-                                Time          = 0 }, 
-
-                new Address() { AddressString = "555 W 57th St New York, NY 10019",
-                                Alias         = "BMW of Manhattan",
-                                Latitude      = 40.7718005,
-                                Longitude     = -73.9897716,
-                                Time          = 0 },
-
-                new Address() { AddressString = "57 W 57th St New York, NY 10019",
-                                Alias         = "Verizon Wireless",
-                                Latitude      = 40.7558695,
-                                Longitude     = -73.9862019,
-                                Time          = 0 },
-
-                #endregion
-              };
-
-            // Set parameters
-            RouteParameters parameters = new RouteParameters()
-            {
-                AlgorithmType = AlgorithmType.TSP,
-                StoreRoute = false,
-                RouteName = "Single Driver Round Trip",
-
-                RouteDate = R4MeUtils.ConvertToUnixTimestamp(DateTime.UtcNow.Date.AddDays(1)),
-                RouteTime = 60 * 60 * 7,
-                RouteMaxDuration = 86400,
-                VehicleCapacity = "1",
-                VehicleMaxDistanceMI = "10000",
-
-                Optimize = Optimize.Distance.Description(),
-                DistanceUnit = DistanceUnit.MI.Description(),
-                DeviceType = DeviceType.Web.Description(),
-                TravelMode = TravelMode.Driving.Description(),
-            };
-
-            OptimizationParameters optimizationParameters = new OptimizationParameters()
-            {
-                Addresses = addresses,
-                Parameters = parameters
-            };
-
-            // Run the query
-            string errorString;
-            dataObject2 = route4Me.RunOptimization(optimizationParameters, out errorString);
-
-            routeId_SingleDriverRoundTrip = (dataObject2 != null && dataObject2.Routes != null && dataObject2.Routes.Length > 0) ? dataObject2.Routes[0].RouteID : null;
-
-            Assert.IsNotNull(dataObject2, "SingleDriverRoundTripTest failed... " + errorString);
-
-            AddAddressNoteTest();
-
-            AddAddressNoteWithFileTest();
-
-            GetAddressNotesTest();
-
-            DeleteRoutesTest();
+            lsOptimizationIDs.Add(tdr.SDRT_optimization_problem_id);
         }
-        
+
+        [TestMethod]
         public void AddAddressNoteTest()
         {
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
-            string routeIdToMoveTo = routeId_SingleDriverRoundTrip;
+            string routeIdToMoveTo = tdr.SDRT_route_id;
             Assert.IsNotNull(routeIdToMoveTo, "routeId_SingleDriverRoundTrip is null...");
 
-            int addressId = (dataObject2 != null && dataObject2.Routes != null && dataObject2.Routes.Length > 0 && dataObject2.Routes[0].Addresses.Length > 1 && dataObject2.Routes[0].Addresses[1].RouteDestinationId != null) ? dataObject2.Routes[0].Addresses[1].RouteDestinationId.Value : 0;
+            int addressId = (tdr.dataObjectSDRT != null && tdr.SDRT_route != null && tdr.SDRT_route.Addresses.Length > 1 && tdr.SDRT_route.Addresses[1].RouteDestinationId != null) ? tdr.SDRT_route.Addresses[1].RouteDestinationId.Value : 0;
+
+            double lat = tdr.SDRT_route.Addresses.Length > 1 ? tdr.SDRT_route.Addresses[1].Latitude : 33.132675170898;
+            double lng = tdr.SDRT_route.Addresses.Length > 1 ? tdr.SDRT_route.Addresses[1].Longitude : -83.244743347168;
 
             NoteParameters noteParameters = new NoteParameters()
             {
                 RouteId = routeIdToMoveTo,
                 AddressId = addressId,
-                Latitude = 33.132675170898,
-                Longitude = -83.244743347168,
+                Latitude = lat,
+                Longitude = lng,
                 DeviceType = DeviceType.Web.Description(),
                 ActivityType = StatusUpdateType.DropOff.Description()
             };
@@ -857,23 +325,27 @@ namespace Route4MeSDKUnitTest
             Assert.IsNotNull(note, "AddAddressNoteTest failed... " + errorString);
         }
 
+        [TestMethod]
         public void AddAddressNoteWithFileTest()
         {
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
-            string routeId = routeId_SingleDriverRoundTrip;
+            string routeId = tdr.SDRT_route_id;
 
             Assert.IsNotNull(routeId, "routeId_SingleDriverRoundTrip is null...");
 
-            int addressId = (dataObject2 != null && dataObject2.Routes != null && dataObject2.Routes.Length > 0 && dataObject2.Routes[0].Addresses.Length > 1 && dataObject2.Routes[0].Addresses[1].RouteDestinationId != null) ? dataObject2.Routes[0].Addresses[1].RouteDestinationId.Value : 0;
-            addressId = 162916895;
+            int addressId = (tdr.dataObjectSDRT != null && tdr.SDRT_route != null && tdr.SDRT_route.Addresses.Length > 1 && tdr.SDRT_route.Addresses[1].RouteDestinationId != null) ? tdr.SDRT_route.Addresses[1].RouteDestinationId.Value : 0;
+            //addressId = 162916895;
+
+            double lat = tdr.SDRT_route.Addresses.Length > 1 ? tdr.SDRT_route.Addresses[1].Latitude : 33.132675170898;
+            double lng = tdr.SDRT_route.Addresses.Length > 1 ? tdr.SDRT_route.Addresses[1].Longitude : -83.244743347168;
 
             NoteParameters noteParameters = new NoteParameters()
             {
                 RouteId = routeId,
                 AddressId = addressId,
-                Latitude = 33.132675170898,
-                Longitude = -83.244743347168,
+                Latitude = lat,
+                Longitude = lng,
                 DeviceType = DeviceType.Web.Description(),
                 ActivityType = StatusUpdateType.DropOff.Description()
             };
@@ -901,14 +373,15 @@ namespace Route4MeSDKUnitTest
 
         }
 
+        [TestMethod]
         public void GetAddressNotesTest()
         {
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
-            string routeId = routeId_SingleDriverRoundTrip;
+            string routeId = tdr.SDRT_route_id;
             Assert.IsNotNull(routeId, "routeId_SingleDriverRoundTrip is null...");
 
-            int routeDestinationId = (dataObject2 != null && dataObject2.Routes != null && dataObject2.Routes.Length > 0 && dataObject2.Routes[0].Addresses.Length > 1 && dataObject2.Routes[0].Addresses[1].RouteDestinationId != null) ? dataObject2.Routes[0].Addresses[1].RouteDestinationId.Value : 0;
+            int routeDestinationId = (tdr.dataObjectSDRT != null && tdr.SDRT_route != null && tdr.SDRT_route.Addresses.Length > 1 && tdr.SDRT_route.Addresses[1].RouteDestinationId != null) ? tdr.SDRT_route.Addresses[1].RouteDestinationId.Value : 0;
 
             NoteParameters noteParameters = new NoteParameters()
             {
@@ -923,113 +396,20 @@ namespace Route4MeSDKUnitTest
             Assert.IsInstanceOfType(notes, typeof(AddressNote[]), "GetAddressNotesTest failed... " + errorString);
         }
 
-        public void AddOrdersToRouteTest()
+        [ClassCleanup()]
+        public static void NotesGroupCleanup()
         {
-            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+            bool result = tdr.RemoveOptimization(lsOptimizationIDs.ToArray());
 
-            RouteParametersQuery rQueryParams = new RouteParametersQuery()
-            {
-                RouteId = routeId_SingleDriverRoundTrip,
-                Redirect = false
-            };
-
-            #region Addresses
-            Address[] addresses = new Address[] {
-		        new Address {
-			        AddressString = "273 Canal St, New York, NY 10013, USA",
-			        Latitude = 40.7191558,
-			        Longitude = -74.0011966,
-			        Alias = "",
-			        CurbsideLatitude = 40.7191558,
-			        CurbsideLongitude = -74.0011966
-		        },
-		        new Address {
-			        AddressString = "106 Liberty St, New York, NY 10006, USA",
-			        Alias = "BK Restaurant #: 2446",
-			        Latitude = 40.709637,
-			        Longitude = -74.011912,
-			        CurbsideLatitude = 40.709637,
-			        CurbsideLongitude = -74.011912,
-			        Email = "",
-			        Phone = "(917) 338-1887",
-			        FirstName = "",
-			        LastName = "",
-			        CustomFields = new Dictionary<string, string> { {
-				        "icon",
-				        null
-			        } },
-			        Time = 0,
-			        OrderId = 7205705
-		        },
-		        new Address {
-			        AddressString = "106 Fulton St, Farmingdale, NY 11735, USA",
-			        Alias = "BK Restaurant #: 17871",
-			        Latitude = 40.73073,
-			        Longitude = -73.459283,
-			        CurbsideLatitude = 40.73073,
-			        CurbsideLongitude = -73.459283,
-			        Email = "",
-			        Phone = "(212) 566-5132",
-			        FirstName = "",
-			        LastName = "",
-			        CustomFields = new Dictionary<string, string> { {
-				        "icon",
-				        null
-			        } },
-			        Time = 0,
-			        OrderId = 7205703
-		        }
-	        };
-            #endregion
-
-            RouteParameters rParams = new RouteParameters()
-            {
-                RouteName = "Wednesday 15th of June 2016 07:01 PM (+03:00)",
-                RouteDate = 1465948800,
-                RouteTime = 14400,
-                Optimize = "Time",
-                RouteType = "single",
-                AlgorithmType = AlgorithmType.TSP,
-                RT = false,
-                LockLast = false,
-                MemberId = "1",
-                VehicleId = "",
-                DisableOptimization = false
-            };
-
-            string errorString;
-            RouteResponse result = route4Me.AddOrdersToRoute(rQueryParams, addresses, rParams, out errorString);
-
-            Assert.IsNotNull(result, "AddOrdersToRouteTest failed... " + errorString);
-        }
-
-        public void DeleteRoutesTest()
-        {
-            List<string> routeIdsToDelete = new List<string>();
-
-            if (routeId_SingleDriverRoundTrip != null)
-                routeIdsToDelete.Add(routeId_SingleDriverRoundTrip);
-
-            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
-
-            // Run the query
-            string errorString;
-            string[] deletedRouteIds = route4Me.DeleteRoutes(routeIdsToDelete.ToArray(), out errorString);
-
-            Assert.IsInstanceOfType(deletedRouteIds, typeof(string[]), "DeleteRoutesTest failed... " + errorString);
+            Assert.IsTrue(result, "Removing of the optimization with 24 stops failed...");
         }
     }
 
     [TestClass]
-    public class OtherRouteTypesGroup
+    public class RouteTypesGroup
     {
         static string c_ApiKey = "11111111111111111111111111111111";
-
-        static string routeId_MultipleDepotMultipleDriver;
-        static string routeId_MultipleDepotMultipleDriverTimeWindow;
-        static string routeId_SingleDepotMultipleDriverNoTimeWindow;
-        static string routeId_MultipleDepotMultipleDriverWith24StopsTimeWindow;
-        static string routeId_SingleDriverMultipleTimeWindows;
+        static TestDataRepository tdr=new TestDataRepository();
 
         static DataObject dataObject, dataObjectMDMD24;
 
@@ -1206,11 +586,9 @@ namespace Route4MeSDKUnitTest
             string errorString;
             dataObject = route4Me.RunOptimization(optimizationParameters, out errorString);
 
-            routeId_MultipleDepotMultipleDriver = (dataObject != null && dataObject.Routes != null && dataObject.Routes.Length > 0) ? dataObject.Routes[0].RouteID : null;
-
             Assert.IsNotNull(dataObject, "MultipleDepotMultipleDriverTest failed... " + errorString);
 
-            DeleteRoutesTest(routeId_MultipleDepotMultipleDriver);
+            tdr.RemoveOptimization(new string[]{dataObject.OptimizationProblemId});
         }
 
         [TestMethod]
@@ -1897,11 +1275,9 @@ namespace Route4MeSDKUnitTest
             string errorString;
             dataObject = route4Me.RunOptimization(optimizationParameters, out errorString);
 
-            routeId_MultipleDepotMultipleDriverTimeWindow = (dataObject != null && dataObject.Routes != null && dataObject.Routes.Length > 0) ? dataObject.Routes[0].RouteID : null;
-
             Assert.IsNotNull(dataObject, "MultipleDepotMultipleDriverTimeWindowTest failed... " + errorString);
 
-            DeleteRoutesTest(routeId_MultipleDepotMultipleDriverTimeWindow);
+            tdr.RemoveOptimization(new string[]{dataObject.OptimizationProblemId});
         }
 
         [TestMethod]
@@ -3700,14 +3076,12 @@ namespace Route4MeSDKUnitTest
             string errorString;
             dataObject = route4Me.RunOptimization(optimizationParameters, out errorString);
 
-            routeId_SingleDepotMultipleDriverNoTimeWindow = (dataObject != null && dataObject.Routes != null && dataObject.Routes.Length > 0) ? dataObject.Routes[0].RouteID : null;
-
             //Note: The addresses of this test aren't permited for api_key=11111111111111111111111111111111. 
             // If you put in the parameter api_key your valid key, the test will be finished successfuly.
 
             Assert.IsNull(dataObject, "SingleDepotMultipleDriverNoTimeWindowTest failed... " + errorString);
 
-            //DeleteRoutesTest(routeId_SingleDepotMultipleDriverNoTimeWindow);
+            //tdr.RemoveOptimization(new string[] { dataObject.OptimizationProblemId });
         }
 
         [TestMethod]
@@ -3922,15 +3296,11 @@ namespace Route4MeSDKUnitTest
             string errorString;
             dataObjectMDMD24 = route4Me.RunOptimization(optimizationParameters, out errorString);
 
-            routeId_MultipleDepotMultipleDriverWith24StopsTimeWindow = (dataObjectMDMD24 != null && dataObjectMDMD24.Routes != null && dataObjectMDMD24.Routes.Length > 0) ? dataObjectMDMD24.Routes[0].RouteID : null;
-
             Assert.IsNotNull(dataObjectMDMD24, "MultipleDepotMultipleDriverWith24StopsTimeWindowTest failed... " + errorString);
 
             MoveDestinationToRouteTest();
 
             MergeRoutesTest();
-
-            DeleteRoutesTest(routeId_MultipleDepotMultipleDriverWith24StopsTimeWindow);
         }
 
         public void MoveDestinationToRouteTest()
@@ -4163,86 +3533,334 @@ namespace Route4MeSDKUnitTest
             string errorString;
             dataObject = route4Me.RunOptimization(optimizationParameters, out errorString);
 
-            routeId_SingleDriverMultipleTimeWindows = (dataObject != null && dataObject.Routes != null && dataObject.Routes.Length > 0) ? dataObject.Routes[0].RouteID : null;
-
             Assert.IsNotNull(dataObject, "SingleDriverMultipleTimeWindowsTest failed... " + errorString);
 
-            DeleteRoutesTest(routeId_SingleDriverMultipleTimeWindows);
+            tdr.RemoveOptimization(new string[]{dataObject.OptimizationProblemId});
         }
-
-        public void DeleteRoutesTest(string routeId)
-        {
-            List<string> routeIdsToDelete = new List<string>();
-
-            if (routeId != null)
-                routeIdsToDelete.Add(routeId);
-
-            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
-
-            // Run the query
-            string errorString;
-            string[] deletedRouteIds = route4Me.DeleteRoutes(routeIdsToDelete.ToArray(), out errorString);
-
-            Assert.IsInstanceOfType(deletedRouteIds, typeof(string[]), "DeleteRoutesTest failed... " + errorString);
-        }
-    }
-
-    [TestClass]
-    public class IndpedentTestsGroup
-    {
-        static string c_ApiKey = "11111111111111111111111111111111";
 
         [TestMethod]
-        public void GetUsersTest()
+        public void SingleDriverRoundTripGenericTest()
         {
-            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+            const string uri = R4MEInfrastructureSettings.MainHost + "/api.v4/optimization_problem.php";
+            const string myApiKey = "11111111111111111111111111111111";
 
-            GenericParameters parameters = new GenericParameters()
+            // Create the manager with the api key
+            Route4MeManager route4Me = new Route4MeManager(myApiKey);
+
+            // Prepare the addresses
+            // Using the defined class, can use user-defined class instead
+            Address[] addresses = new Address[]
+              {
+                #region Addresses
+
+                new Address() { AddressString = "754 5th Ave New York, NY 10019",
+                                Alias         = "Bergdorf Goodman",
+                                IsDepot       = true,
+                                Latitude      = 40.7636197,
+                                Longitude     = -73.9744388,
+                                Time          = 0 },
+
+                new Address() { AddressString = "717 5th Ave New York, NY 10022",
+                                Alias         = "Giorgio Armani",
+                                Latitude      = 40.7669692,
+                                Longitude     = -73.9693864,
+                                Time          = 0 },
+
+                new Address() { AddressString = "888 Madison Ave New York, NY 10014",
+                                Alias         = "Ralph Lauren Women's and Home",
+                                Latitude      = 40.7715154,
+                                Longitude     = -73.9669241,
+                                Time          = 0 },
+
+                new Address() { AddressString = "1011 Madison Ave New York, NY 10075",
+                                Alias         = "Yigal Azrou'l",
+                                Latitude      = 40.7772129,
+                                Longitude     = -73.9669,
+                                Time          = 0 },
+
+                 new Address() { AddressString = "440 Columbus Ave New York, NY 10024",
+                                Alias         = "Frank Stella Clothier",
+                                Latitude      = 40.7808364,
+                                Longitude     = -73.9732729,
+                                Time          = 0 },
+
+                new Address() { AddressString = "324 Columbus Ave #1 New York, NY 10023",
+                                Alias         = "Liana",
+                                Latitude      = 40.7803123,
+                                Longitude     = -73.9793079,
+                                Time          = 0 },
+
+                new Address() { AddressString = "110 W End Ave New York, NY 10023",
+                                Alias         = "Toga Bike Shop",
+                                Latitude      = 40.7753077,
+                                Longitude     = -73.9861529,
+                                Time          = 0 }, 
+
+                new Address() { AddressString = "555 W 57th St New York, NY 10019",
+                                Alias         = "BMW of Manhattan",
+                                Latitude      = 40.7718005,
+                                Longitude     = -73.9897716,
+                                Time          = 0 },
+
+                new Address() { AddressString = "57 W 57th St New York, NY 10019",
+                                Alias         = "Verizon Wireless",
+                                Latitude      = 40.7558695,
+                                Longitude     = -73.9862019,
+                                Time          = 0 },
+
+                #endregion
+              };
+
+            // Set parameters
+            // Using the defined class, can use user-defined class instead
+            RouteParameters parameters = new RouteParameters()
             {
+                AlgorithmType = AlgorithmType.TSP,
+                StoreRoute = false,
+                RouteName = "Single Driver Round Trip",
+
+                RouteDate = R4MeUtils.ConvertToUnixTimestamp(DateTime.UtcNow.Date.AddDays(1)),
+                RouteTime = 60 * 60 * 7,
+                RouteMaxDuration = 86400,
+                VehicleCapacity = "1",
+                VehicleMaxDistanceMI = "10000",
+
+                Optimize = Optimize.Distance.Description(),
+                DistanceUnit = DistanceUnit.MI.Description(),
+                DeviceType = DeviceType.Web.Description(),
+                TravelMode = TravelMode.Driving.Description(),
+            };
+
+            MyAddressAndParametersHolder myParameters = new MyAddressAndParametersHolder()
+            {
+                addresses = addresses,
+                parameters = parameters
             };
 
             // Run the query
             string errorString;
-            User[] dataObjects = route4Me.GetUsers(parameters, out errorString);
+            MyDataObjectGeneric dataObject0 = route4Me.GetJsonObjectFromAPI<MyDataObjectGeneric>
+               (myParameters, uri, HttpMethodType.Post, out errorString);
 
-            Assert.IsInstanceOfType(dataObjects, typeof(User[]), "GetUsersTest failed... " + errorString);
+            Assert.IsNotNull(dataObject0, "SingleDriverRoundTripGenericTest failed...");
+
+            tdr.RemoveOptimization(new string[]{dataObject0.OptimizationProblemId});
         }
 
         [TestMethod]
-        public void GetOptimizationsTest()
+        public void SingleDriverRoundTripTest()
         {
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
-            RouteParametersQuery queryParameters = new RouteParametersQuery()
+            // Prepare the addresses
+            Address[] addresses = new Address[]
+              {
+                #region Addresses
+
+                new Address() { AddressString = "754 5th Ave New York, NY 10019",
+                                Alias         = "Bergdorf Goodman",
+                                IsDepot       = true,
+                                Latitude      = 40.7636197,
+                                Longitude     = -73.9744388,
+                                Time          = 0 },
+
+                new Address() { AddressString = "717 5th Ave New York, NY 10022",
+                                Alias         = "Giorgio Armani",
+                                Latitude      = 40.7669692,
+                                Longitude     = -73.9693864,
+                                Time          = 0 },
+
+                new Address() { AddressString = "888 Madison Ave New York, NY 10014",
+                                Alias         = "Ralph Lauren Women's and Home",
+                                Latitude      = 40.7715154,
+                                Longitude     = -73.9669241,
+                                Time          = 0 },
+
+                new Address() { AddressString = "1011 Madison Ave New York, NY 10075",
+                                Alias         = "Yigal Azrou'l",
+                                Latitude      = 40.7772129,
+                                Longitude     = -73.9669,
+                                Time          = 0 },
+
+                 new Address() { AddressString = "440 Columbus Ave New York, NY 10024",
+                                Alias         = "Frank Stella Clothier",
+                                Latitude      = 40.7808364,
+                                Longitude     = -73.9732729,
+                                Time          = 0 },
+
+                new Address() { AddressString = "324 Columbus Ave #1 New York, NY 10023",
+                                Alias         = "Liana",
+                                Latitude      = 40.7803123,
+                                Longitude     = -73.9793079,
+                                Time          = 0 },
+
+                new Address() { AddressString = "110 W End Ave New York, NY 10023",
+                                Alias         = "Toga Bike Shop",
+                                Latitude      = 40.7753077,
+                                Longitude     = -73.9861529,
+                                Time          = 0 }, 
+
+                new Address() { AddressString = "555 W 57th St New York, NY 10019",
+                                Alias         = "BMW of Manhattan",
+                                Latitude      = 40.7718005,
+                                Longitude     = -73.9897716,
+                                Time          = 0 },
+
+                new Address() { AddressString = "57 W 57th St New York, NY 10019",
+                                Alias         = "Verizon Wireless",
+                                Latitude      = 40.7558695,
+                                Longitude     = -73.9862019,
+                                Time          = 0 },
+
+                #endregion
+              };
+
+            // Set parameters
+            RouteParameters parameters = new RouteParameters()
             {
-                Limit = 10,
-                Offset = 5
+                AlgorithmType = AlgorithmType.TSP,
+                StoreRoute = false,
+                RouteName = "Single Driver Round Trip",
+
+                RouteDate = R4MeUtils.ConvertToUnixTimestamp(DateTime.UtcNow.Date.AddDays(1)),
+                RouteTime = 60 * 60 * 7,
+                RouteMaxDuration = 86400,
+                VehicleCapacity = "1",
+                VehicleMaxDistanceMI = "10000",
+
+                Optimize = Optimize.Distance.Description(),
+                DistanceUnit = DistanceUnit.MI.Description(),
+                DeviceType = DeviceType.Web.Description(),
+                TravelMode = TravelMode.Driving.Description(),
+            };
+
+            OptimizationParameters optimizationParameters = new OptimizationParameters()
+            {
+                Addresses = addresses,
+                Parameters = parameters
             };
 
             // Run the query
             string errorString;
-            DataObject[] dataObjects = route4Me.GetOptimizations(queryParameters, out errorString);
+            dataObject = route4Me.RunOptimization(optimizationParameters, out errorString);
 
-            Assert.IsInstanceOfType(dataObjects, typeof(DataObject[]), "GetOptimizationsTest failed... " + errorString);
+            Assert.IsNotNull(dataObject, "SingleDriverRoundTripTest failed... " + errorString);
+
+            tdr.RemoveOptimization(new string[] { dataObject.OptimizationProblemId });
         }
 
         [TestMethod]
-        public void GetAddressBookContactsTest()
+        public void RunOptimizationSingleDriverRoute10StopsTest()
         {
-            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+            Route4MeManager r4mm = new Route4MeManager(c_ApiKey);
 
-            AddressBookParameters addressBookParameters = new AddressBookParameters()
+            // Prepare the addresses
+            Address[] addresses = new Address[]
             {
-                Limit = 10,
-                Offset = 0
+            #region Addresses
+
+            new Address() { AddressString = "151 Arbor Way Milledgeville GA 31061",
+                            //indicate that this is a departure stop
+                            //single depot routes can only have one departure depot 
+                            IsDepot = true, 
+                        
+                            //required coordinates for every departure and stop on the route
+                            Latitude = 33.132675170898,
+                            Longitude = -83.244743347168,
+                        
+                            //the expected time on site, in seconds. this value is incorporated into the optimization engine
+                            //it also adjusts the estimated and dynamic eta's for a route
+                            Time = 0, 
+                        
+                        
+                            //input as many custom fields as needed, custom data is passed through to mobile devices and to the manifest
+                            CustomFields = new Dictionary<string, string>() {{"color", "red"}, {"size", "huge"}}
+            },
+
+            new Address() { AddressString = "230 Arbor Way Milledgeville GA 31061",
+                            Latitude = 33.129695892334,
+                            Longitude = -83.24577331543,
+                            Time = 0 },
+
+            new Address() { AddressString = "148 Bass Rd NE Milledgeville GA 31061",
+                            Latitude = 33.143497,
+                            Longitude = -83.224487,
+                            Time = 0 },
+
+            new Address() { AddressString = "117 Bill Johnson Rd NE Milledgeville GA 31061",
+                            Latitude = 33.141784667969,
+                            Longitude = -83.237518310547,
+                            Time = 0 },
+
+            new Address() { AddressString = "119 Bill Johnson Rd NE Milledgeville GA 31061",
+                            Latitude = 33.141086578369,
+                            Longitude = -83.238258361816,
+                            Time = 0 },
+
+            new Address() { AddressString =  "131 Bill Johnson Rd NE Milledgeville GA 31061",
+                            Latitude = 33.142036437988,
+                            Longitude = -83.238845825195,
+                            Time = 0 },
+
+            new Address() { AddressString =  "138 Bill Johnson Rd NE Milledgeville GA 31061",
+                            Latitude = 33.14307,
+                            Longitude = -83.239334,
+                            Time = 0 },
+
+            new Address() { AddressString =  "139 Bill Johnson Rd NE Milledgeville GA 31061",
+                            Latitude = 33.142734527588,
+                            Longitude = -83.237442016602,
+                            Time = 0 },
+
+            new Address() { AddressString =  "145 Bill Johnson Rd NE Milledgeville GA 31061",
+                            Latitude = 33.143871307373,
+                            Longitude = -83.237342834473,
+                            Time = 0 },
+
+            new Address() { AddressString =  "221 Blake Cir Milledgeville GA 31061",
+                            Latitude = 33.081462860107,
+                            Longitude = -83.208511352539,
+                            Time = 0 }
+
+            #endregion
+            };
+
+            // Set parameters
+            RouteParameters parameters = new RouteParameters()
+            {
+                AlgorithmType = AlgorithmType.TSP,
+                StoreRoute = false,
+                RouteName = "Single Driver Route 10 Stops Test",
+
+                RouteDate = R4MeUtils.ConvertToUnixTimestamp(DateTime.UtcNow.Date.AddDays(1)),
+                RouteTime = 60 * 60 * 7,
+                Optimize = Optimize.Distance.Description(),
+                DistanceUnit = DistanceUnit.MI.Description(),
+                DeviceType = DeviceType.Web.Description()
+            };
+
+            OptimizationParameters optimizationParameters = new OptimizationParameters()
+            {
+                Addresses = addresses,
+                Parameters = parameters
             };
 
             // Run the query
-            uint total;
             string errorString;
-            AddressBookContact[] contacts = route4Me.GetAddressBookLocation(addressBookParameters, out total, out errorString);
+            DataObject dataObject1 = r4mm.RunOptimization(optimizationParameters, out errorString);
 
-            Assert.IsInstanceOfType(contacts, typeof(AddressBookContact[]), "GetAddressBookContactsTest failed... " + errorString);
+            Assert.IsNotNull(dataObject1, "Run optimization test with Single Driver Route 10 Stops failed... " + errorString);
+
+            tdr.RemoveOptimization(new string[] { dataObject1.OptimizationProblemId });
+
+        }
+
+        [ClassCleanup()]
+        public static void RouteTypesGroupCleanup()
+        {
+            bool result = tdr.RemoveOptimization(new string[] { dataObjectMDMD24.OptimizationProblemId });
+
+            Assert.IsTrue(result, "Removing of the optimization with 24 stops failed...");
         }
     }
 
@@ -4370,6 +3988,25 @@ namespace Route4MeSDKUnitTest
             AddressBookContact[] contacts = route4Me.GetAddressBookLocation(addressBookParameters, out total, out errorString);
 
             Assert.IsInstanceOfType(contacts, typeof(AddressBookContact[]), "GetSpecifiedFieldsSearchTextTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void GetAddressBookContactsTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            AddressBookParameters addressBookParameters = new AddressBookParameters()
+            {
+                Limit = 10,
+                Offset = 0
+            };
+
+            // Run the query
+            uint total;
+            string errorString;
+            AddressBookContact[] contacts = route4Me.GetAddressBookLocation(addressBookParameters, out total, out errorString);
+
+            Assert.IsInstanceOfType(contacts, typeof(AddressBookContact[]), "GetAddressBookContactsTest failed... " + errorString);
         }
 
         [TestMethod]
@@ -4747,13 +4384,25 @@ namespace Route4MeSDKUnitTest
     public class OrdersGroup
     {
         static string c_ApiKey = "11111111111111111111111111111111";
-
+        static TestDataRepository tdr;
+        static List<string> lsOptimizationIDs;
         static List<string> lsOrders = new List<string>();
 
         [ClassInitialize()]
         public static void CreateOrderTest(TestContext context)
         {
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            lsOptimizationIDs = new List<string>();
+
+            tdr = new TestDataRepository();
+            bool result = tdr.SingleDriverRoundTripTest();
+
+            Assert.IsTrue(result, "Single Driver Round Trip generation failed...");
+
+            Assert.IsTrue(tdr.SDRT_route.Addresses.Length > 0, "The route has no addresses...");
+
+            lsOptimizationIDs.Add(tdr.SDRT_optimization_problem_id);
 
             DateTime dtTomorrow = DateTime.Now+(new TimeSpan(1,0,0,0));
             Order order = new Order()
@@ -4913,6 +4562,185 @@ namespace Route4MeSDKUnitTest
         }
 
         [TestMethod]
+        public void AddOrdersToOptimizationTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            OptimizationParameters rQueryParams = new OptimizationParameters()
+            {
+                OptimizationProblemID = tdr.SDRT_optimization_problem_id,
+                Redirect = false
+            };
+
+            #region Addresses
+            Address[] addresses = new Address[] {
+		    new Address {
+			    AddressString = "273 Canal St, New York, NY 10013, USA",
+			    Latitude = 40.7191558,
+			    Longitude = -74.0011966,
+			    Alias = "",
+			    CurbsideLatitude = 40.7191558,
+			    CurbsideLongitude = -74.0011966,
+			    IsDepot = true
+		    },
+		    new Address {
+			    AddressString = "106 Liberty St, New York, NY 10006, USA",
+			    Alias = "BK Restaurant #: 2446",
+			    Latitude = 40.709637,
+			    Longitude = -74.011912,
+			    CurbsideLatitude = 40.709637,
+			    CurbsideLongitude = -74.011912,
+			    Email = "",
+			    Phone = "(917) 338-1887",
+			    FirstName = "",
+			    LastName = "",
+			    CustomFields = new Dictionary<string, string> { {"icon", null} },
+			    Time = 0,
+			    TimeWindowStart = 1472544000,
+			    TimeWindowEnd = 1472544300,
+			    OrderId = 7205705
+		    },
+		    new Address {
+			    AddressString = "325 Broadway, New York, NY 10007, USA",
+			    Alias = "BK Restaurant #: 20333",
+			    Latitude = 40.71615,
+			    Longitude = -74.00505,
+			    CurbsideLatitude = 40.71615,
+			    CurbsideLongitude = -74.00505,
+			    Email = "",
+			    Phone = "(212) 227-7535",
+			    FirstName = "",
+			    LastName = "",
+			    CustomFields = new Dictionary<string, string> { {"icon", null} },
+			    Time = 0,
+			    TimeWindowStart = 1472545000,
+			    TimeWindowEnd = 1472545300,
+			    OrderId = 7205704
+		    },
+		    new Address {
+			    AddressString = "106 Fulton St, Farmingdale, NY 11735, USA",
+			    Alias = "BK Restaurant #: 17871",
+			    Latitude = 40.73073,
+			    Longitude = -73.459283,
+			    CurbsideLatitude = 40.73073,
+			    CurbsideLongitude = -73.459283,
+			    Email = "",
+			    Phone = "(212) 566-5132",
+			    FirstName = "",
+			    LastName = "",
+			    CustomFields = new Dictionary<string, string> { {"icon", null} },
+			    Time = 0,
+			    TimeWindowStart = 1472546000,
+			    TimeWindowEnd = 1472546300,
+			    OrderId = 7205703
+		    }
+	    };
+            #endregion
+
+            RouteParameters rParams = new RouteParameters()
+            {
+                RouteName = "Wednesday 15th of June 2016 07:01 PM (+03:00)",
+                RouteDate = 1465948800,
+                RouteTime = 14400,
+                Optimize = "Time",
+                RouteType = "single",
+                AlgorithmType = AlgorithmType.TSP,
+                RT = false,
+                LockLast = false,
+                MemberId = "1",
+                VehicleId = "",
+                DisableOptimization = false
+            };
+
+            string errorString = "";
+            DataObject dataObject = route4Me.AddOrdersToOptimization(rQueryParams, addresses, rParams, out errorString);
+
+            Assert.IsNotNull(dataObject, "AddOrdersToOptimizationTest failed... " + errorString);
+
+        }
+
+        [TestMethod]
+        public void AddOrdersToRouteTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            RouteParametersQuery rQueryParams = new RouteParametersQuery()
+            {
+                RouteId = tdr.SDRT_route_id,
+                Redirect = false
+            };
+
+            #region Addresses
+            Address[] addresses = new Address[] {
+		        new Address {
+			        AddressString = "273 Canal St, New York, NY 10013, USA",
+			        Latitude = 40.7191558,
+			        Longitude = -74.0011966,
+			        Alias = "",
+			        CurbsideLatitude = 40.7191558,
+			        CurbsideLongitude = -74.0011966
+		        },
+		        new Address {
+			        AddressString = "106 Liberty St, New York, NY 10006, USA",
+			        Alias = "BK Restaurant #: 2446",
+			        Latitude = 40.709637,
+			        Longitude = -74.011912,
+			        CurbsideLatitude = 40.709637,
+			        CurbsideLongitude = -74.011912,
+			        Email = "",
+			        Phone = "(917) 338-1887",
+			        FirstName = "",
+			        LastName = "",
+			        CustomFields = new Dictionary<string, string> { {
+				        "icon",
+				        null
+			        } },
+			        Time = 0,
+			        OrderId = 7205705
+		        },
+		        new Address {
+			        AddressString = "106 Fulton St, Farmingdale, NY 11735, USA",
+			        Alias = "BK Restaurant #: 17871",
+			        Latitude = 40.73073,
+			        Longitude = -73.459283,
+			        CurbsideLatitude = 40.73073,
+			        CurbsideLongitude = -73.459283,
+			        Email = "",
+			        Phone = "(212) 566-5132",
+			        FirstName = "",
+			        LastName = "",
+			        CustomFields = new Dictionary<string, string> { {
+				        "icon",
+				        null
+			        } },
+			        Time = 0,
+			        OrderId = 7205703
+		        }
+	        };
+            #endregion
+
+            RouteParameters rParams = new RouteParameters()
+            {
+                RouteName = "Wednesday 15th of June 2016 07:01 PM (+03:00)",
+                RouteDate = 1465948800,
+                RouteTime = 14400,
+                Optimize = "Time",
+                RouteType = "single",
+                AlgorithmType = AlgorithmType.TSP,
+                RT = false,
+                LockLast = false,
+                MemberId = "1",
+                VehicleId = "",
+                DisableOptimization = false
+            };
+
+            string errorString;
+            RouteResponse result = route4Me.AddOrdersToRoute(rQueryParams, addresses, rParams, out errorString);
+
+            Assert.IsNotNull(result, "AddOrdersToRouteTest failed... " + errorString);
+        }
+
+        [TestMethod]
         [ClassCleanup]
         public static void RemoveOrdersTest()
         {
@@ -4923,6 +4751,10 @@ namespace Route4MeSDKUnitTest
             bool removed = route4Me.RemoveOrders(lsOrders.ToArray(), out errorString);
 
             Assert.IsTrue(removed, "RemoveOrdersTest failed... " + errorString);
+
+            bool result = tdr.RemoveOptimization(lsOptimizationIDs.ToArray());
+
+            Assert.IsTrue(result, "Removing of the testing optimization problem failed...");
         }
     }
 
@@ -4930,6 +4762,71 @@ namespace Route4MeSDKUnitTest
     public class ActivitiesGroup
     {
         static string c_ApiKey = "11111111111111111111111111111111";
+
+        static TestDataRepository tdr;
+        static List<string> lsOptimizationIDs;
+
+        [ClassInitialize()]
+        public static void ActivitiesGroupInitialize(TestContext context)
+        {
+            lsOptimizationIDs = new List<string>();
+
+            tdr = new TestDataRepository();
+            bool result = tdr.RunOptimizationSingleDriverRoute10Stops();
+
+            Assert.IsTrue(result, "Single Driver 10 Stops generation failed...");
+
+            Assert.IsTrue(tdr.SD10Stops_route.Addresses.Length > 0, "The route has no addresses...");
+
+            lsOptimizationIDs.Add(tdr.SD10Stops_optimization_problem_id);
+        }
+
+        [TestMethod]
+        public void LogCustomActivityTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            string routeId = tdr.SD10Stops_route_id;
+            Assert.IsNotNull(routeId, "routeId_SingleDriverRoute10Stops is null...");
+
+            string message = "Test User Activity " + DateTime.Now.ToString();
+
+            Activity activity = new Activity()
+            {
+                ActivityType = "user_message",
+                ActivityMessage = message,
+                RouteId = routeId
+            };
+
+            // Run the query
+            string errorString;
+            bool added = route4Me.LogCustomActivity(activity, out errorString);
+
+            Assert.IsTrue(added, "LogCustomActivityTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void GetRouteTimeActivitiesTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            string routeId = tdr.SD10Stops_route_id;
+            Assert.IsNotNull(routeId, "routeId_SingleDriverRoute10Stops is null...");
+
+            ActivityParameters activityParameters = new ActivityParameters()
+            {
+                RouteId = routeId,
+                Team = "true",
+                Limit = 10,
+                Offset = 0
+            };
+
+            // Run the query
+            string errorString;
+            Activity[] activities = route4Me.GetActivityFeed(activityParameters, out errorString);
+
+            Assert.IsInstanceOfType(activities, typeof(Activity[]), "GetActivitiesTest failed... " + errorString);
+        }
 
         [TestMethod]
         public void GetActivitiesTest()
@@ -5318,6 +5215,14 @@ namespace Route4MeSDKUnitTest
 
             Assert.IsInstanceOfType(activities, typeof(Activity[]), "SearchRouteOwnerChanged failed... " + errorString);
         }
+
+        [ClassCleanup()]
+        public static void ActivitiesGroupCleanup()
+        {
+            bool result = tdr.RemoveOptimization(lsOptimizationIDs.ToArray());
+
+            Assert.IsTrue(result, "Removing of the testing optimization problem failed...");
+        }
     }
 
     [TestClass]
@@ -5424,6 +5329,60 @@ namespace Route4MeSDKUnitTest
             bool removed = route4Me.RemoveDestinationFromOptimization(OptimizationProblemId, destinationId, out errorString);
 
             Assert.IsTrue(removed, "RemoveDestinationFromOptimizationTest failed... "+errorString);
+        }
+
+        [TestMethod]
+        public void AddRouteDestinationsTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            string route_id = tdr.SDRT_route_id;
+
+            Assert.IsNotNull(route_id, "rote_id is null...");
+
+            // Prepare the addresses
+            #region Addresses
+            Address[] addresses = new Address[]
+            {
+                new Address() { AddressString =  "146 Bill Johnson Rd NE Milledgeville GA 31061",
+                                Latitude = 	33.143526,
+                                Longitude = -83.240354,
+                                Time = 0 },
+
+                new Address() { AddressString =  "222 Blake Cir Milledgeville GA 31061",
+                                Latitude = 	33.177852,
+                                Longitude = -83.263535,
+                                Time = 0 }
+            };
+            #endregion
+
+            // Run the query
+            bool optimalPosition = true;
+            string errorString;
+            int[] destinationIds = route4Me.AddRouteDestinations(route_id, addresses, optimalPosition, out errorString);
+
+            Assert.IsInstanceOfType(destinationIds, typeof(System.Int32[]), "AddRouteDestinationsTest failed...");
+
+        }
+
+        [TestMethod]
+        public void RemoveRouteDestinationTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            string route_id = tdr.SDRT_route_id; ;
+            Assert.IsNotNull(route_id, "rote_id is null...");
+
+            object oDestinationId = tdr.SDRT_route.Addresses[tdr.SDRT_route.Addresses.Length - 1].RouteDestinationId;
+
+            int destination_id = oDestinationId != null ? Convert.ToInt32(oDestinationId) : -1;
+            Assert.IsNotNull(oDestinationId, "destination_id is null...");
+
+            // Run the query
+            string errorString;
+            bool deleted = route4Me.RemoveRouteDestination(route_id, destination_id, out errorString);
+
+            Assert.IsTrue(deleted, "RemoveRouteDestinationTest");
         }
 
         [TestMethod]
@@ -6462,6 +6421,113 @@ namespace Route4MeSDKUnitTest
             {
                 sqlDB.CloseConnection();
             }
+        }
+    }
+
+    [TestClass]
+    public class OptimizationsGroup
+    {
+        static string c_ApiKey = "11111111111111111111111111111111";
+        static TestDataRepository tdr;
+        static List<string> lsOptimizationIDs;
+
+        [ClassInitialize()]
+        public static void OptimizationsGroupInitialize(TestContext context)
+        {
+            lsOptimizationIDs = new List<string>();
+
+            tdr = new TestDataRepository();
+            bool result = tdr.RunOptimizationSingleDriverRoute10Stops();
+
+            Assert.IsTrue(result, "Single Driver 10 stops generation failed...");
+
+            Assert.IsTrue(tdr.SD10Stops_route.Addresses.Length > 0, "The route has no addresses...");
+
+            lsOptimizationIDs.Add(tdr.dataObjectSD10Stops.OptimizationProblemId);
+        }
+
+        [TestMethod]
+        public void GetOptimizationsTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            RouteParametersQuery queryParameters = new RouteParametersQuery()
+            {
+                Limit = 10,
+                Offset = 5
+            };
+
+            // Run the query
+            string errorString;
+            DataObject[] dataObjects = route4Me.GetOptimizations(queryParameters, out errorString);
+
+            Assert.IsInstanceOfType(dataObjects, typeof(DataObject[]), "GetOptimizationsTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void GetOptimizationTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            OptimizationParameters optimizationParameters = new OptimizationParameters()
+            {
+                OptimizationProblemID = tdr.SD10Stops_optimization_problem_id
+            };
+
+            // Run the query
+            string errorString;
+            DataObject dataObject = route4Me.GetOptimization(optimizationParameters, out errorString);
+
+            Assert.IsNotNull(dataObject, "GetOptimizationTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void ReOptimizationTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            OptimizationParameters optimizationParameters = new OptimizationParameters()
+            {
+                OptimizationProblemID = tdr.SD10Stops_optimization_problem_id,
+                ReOptimize = true
+            };
+
+            // Run the query
+            string errorString;
+            DataObject dataObject = route4Me.UpdateOptimization(optimizationParameters, out errorString);
+
+            lsOptimizationIDs.Add(dataObject.OptimizationProblemId);
+
+            Assert.IsNotNull(dataObject, "ReOptimizationTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void RemoveOptimizationTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            bool result = tdr.SingleDriverRoundTripTest();
+
+            Assert.IsTrue(result, "Generation of the route Single Driver Round Trip failed...");
+
+            string opt_id = tdr.SDRT_optimization_problem_id;
+            Assert.IsNotNull(opt_id, "optimizationProblemID is null...");
+
+            string[] OptIDs = new string[]{opt_id};
+ 
+            // Run the query
+            string errorString;
+            bool removed = route4Me.RemoveOptimization(OptIDs, out errorString);
+
+            Assert.IsTrue(removed, "RemoveOptimizationTest failed... " + errorString);
+        }
+
+        [ClassCleanup()]
+        public static void OptimizationsGroupCleanup()
+        {
+            bool result = tdr.RemoveOptimization(lsOptimizationIDs.ToArray());
+
+            Assert.IsTrue(result, "Removing of the testing optimization problem failed...");
         }
     }
 
