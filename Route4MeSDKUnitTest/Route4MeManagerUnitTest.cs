@@ -6097,6 +6097,8 @@ namespace Route4MeSDKUnitTest
         static string c_ApiKey = "11111111111111111111111111111111";
         static DB_Type db_type;
 
+        static TestDataRepository tdr;
+
         private static TestContext _testContext;
         public TestContext TestContext
         {
@@ -6110,10 +6112,15 @@ namespace Route4MeSDKUnitTest
         {
             _testContext = testContext;
             db_type = DB_Type.SQLCE;
+
+            tdr = new TestDataRepository();
+            bool result = tdr.GenerateSQLCEDatabaseTest();
+
+            Assert.IsTrue(result, "Generation of the SQL tables failed...");
         }
 
-
-        [TestMethod]
+        // Uncoment line below if you have indicated valid MySQL connnection parameters in the App.config file.
+        //[TestMethod] 
         public void GenerateMySQLDatabaseTest()
         {
             cDatabase sqlDB = new cDatabase(DB_Type.MySQL);
@@ -6234,17 +6241,17 @@ namespace Route4MeSDKUnitTest
 
                 Console.WriteLine("Connection opened");
 
-                dropSQLCEtable("addressbook_v4", sqlDB);
+                tdr.dropSQLCEtable("addressbook_v4", sqlDB);
 
                 int iResult = sqlDB.ExecuteMulticoomandSql(sAddressbookSqlCom);
                 Assert.IsTrue(iResult > 0, "Creating of the SQL table 'addressbook_v4' failed...");
 
-                dropSQLCEtable("orders", sqlDB);
+                tdr.dropSQLCEtable("orders", sqlDB);
 
                 iResult = sqlDB.ExecuteMulticoomandSql(sOrdersSqlCom);
                 Assert.IsTrue(iResult > 0, "Creating of the SQL table 'orders' failed...");
 
-                dropSQLCEtable("csv_to_api_dictionary", sqlDB);
+                tdr.dropSQLCEtable("csv_to_api_dictionary", sqlDB);
 
                 iResult = sqlDB.ExecuteMulticoomandSql(sDictionaryDDLSqlCom);
                 Assert.IsTrue(iResult > 0, "Creating of the SQL table 'csv_to_api_dictionary' failed...");
@@ -6263,17 +6270,6 @@ namespace Route4MeSDKUnitTest
             finally
             {
                 sqlDB.CloseConnection();
-            }
-        }
-
-        public void dropSQLCEtable(string tableName, cDatabase sqlDB)
-        {
-            object oExists = sqlDB.ExecuteScalar(@"SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '" + tableName + "'");
-            Assert.IsNotNull(oExists, "Query about table existing failed...");
-
-            if (oExists.ToString() == "1")
-            {
-                int iDroRresult = sqlDB.ExecuteNon("DROP TABLE " + tableName);
             }
         }
 
@@ -6381,7 +6377,89 @@ namespace Route4MeSDKUnitTest
             }
         }
 
+        [TestMethod]
+        public void UploadCsvToAddressbookV4Test()
+        {
+            cDatabase sqlDB = new cDatabase(db_type);
 
+            try
+            {
+                sqlDB.OpenConnection();
+
+                Console.WriteLine("Connection opened");
+
+                sqlDB.Csv2Table(@"Data/CSV/Route4Me Address Book 03-09-2017.csv", "addressbook_v4", "id", 33, true);
+
+                Console.WriteLine("The file orders.csv was uploaded to the SQL server.");
+
+                Assert.IsTrue(1 > 0, "");
+            }
+            catch (Exception ex) 
+            { 
+                Console.WriteLine("Uploading of the CSV file to the SQL server failed!.. " + ex.Message);
+                Assert.IsTrue(0 > 1, "UploadCsvToAddressbookV4Test failed... " + ex.Message);
+            }
+            finally
+            {
+                sqlDB.CloseConnection();
+            }
+        }
+
+        [TestMethod]
+        public void UploadCsvToOrdersTest()
+        {
+            cDatabase sqlDB = new cDatabase(db_type);
+
+            try
+            {
+                sqlDB.OpenConnection();
+
+                Console.WriteLine("Connection opened");
+
+                sqlDB.Csv2Table(@"Data/CSV/orders 1000 with order id.csv", "orders", "order_id", 10, true);
+
+                Console.WriteLine("The orders CSV file was uploaded to the SQL server.");
+
+                Assert.IsTrue(1 > 0, "");
+            }
+            catch (Exception ex) 
+            { 
+                Console.WriteLine("Uploading of the CSV file to the SQL server failed!.. " + ex.Message);
+                Assert.IsTrue(0 > 1, "UploadCsvToOrdersTest failed... " + ex.Message);
+            }
+            finally
+            {
+                sqlDB.CloseConnection();
+            }
+        }
+
+        [TestMethod]
+        public void UploadOrdersJSONtoSQLTest()
+        {
+            cDatabase sqlDB = new cDatabase(db_type);
+
+            try
+            {
+                sqlDB.OpenConnection();
+
+                Console.WriteLine("Connection opened");
+
+                sqlDB.Json2Table(@"Data/JSON/get orders RESPONSE.json", "orders", "id", R4M_DataType.Order);
+
+                Console.WriteLine("The JSON file was uploaded to the SQL server.");
+
+                Assert.IsTrue(1 > 0, "");
+            }
+            catch (Exception ex) 
+            { 
+                Console.WriteLine("Uploading of the JSON file to the SQL server failed!.. " + ex.Message);
+                Assert.IsTrue(0 > 1, "UploadOrdersJSONtoSQLTest failed... " + ex.Message);
+            }
+            finally
+            {
+                sqlDB.CloseConnection();
+            }
+        }
     }
 
     // **** Data repository for the tests ********
@@ -6882,7 +6960,70 @@ namespace Route4MeSDKUnitTest
 
         }
 
+        public bool GenerateSQLCEDatabaseTest()
+        {
+            cDatabase sqlDB = new cDatabase(DB_Type.SQLCE);
 
+            try
+            {
+                string sAddressbookSqlCom = "";
+                string sOrdersSqlCom = "";
+                string sDictionaryDDLSqlCom = "";
+                string sDictionaryDMLSqlCom = "";
+
+                sAddressbookSqlCom = File.ReadAllText(@"Data/SQL/SQLCE/addressbook_v4.sql");
+                sOrdersSqlCom = File.ReadAllText(@"Data/SQL/SQLCE/orders.sql");
+                sDictionaryDDLSqlCom = File.ReadAllText(@"Data/SQL/SQLCE/csv_to_api_dictionary_DDL.sql");
+                sDictionaryDMLSqlCom = File.ReadAllText(@"Data/SQL/SQLCE/csv_to_api_dictionary_DML.sql");
+
+                sqlDB.OpenConnection();
+
+                Console.WriteLine("Connection opened");
+
+                dropSQLCEtable("addressbook_v4", sqlDB);
+
+                int iResult = sqlDB.ExecuteMulticoomandSql(sAddressbookSqlCom);
+                if (iResult < 1) return false;
+
+                dropSQLCEtable("orders", sqlDB);
+
+                iResult = sqlDB.ExecuteMulticoomandSql(sOrdersSqlCom);
+                if (iResult < 1) return false;
+
+                dropSQLCEtable("csv_to_api_dictionary", sqlDB);
+
+                iResult = sqlDB.ExecuteMulticoomandSql(sDictionaryDDLSqlCom);
+                if (iResult < 1) return false;
+
+                if (iResult > 0)
+                {
+                    iResult = sqlDB.ExecuteMulticoomandSql(sDictionaryDMLSqlCom);
+                    if (iResult < 1) return false;
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Generating of the SQL tables failed!.. " + ex.Message);
+                return false;
+            }
+            finally
+            {
+                sqlDB.CloseConnection();
+            }
+        }
+
+        public void dropSQLCEtable(string tableName, cDatabase sqlDB)
+        {
+            object oExists = sqlDB.ExecuteScalar(@"SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '" + tableName + "'");
+            Assert.IsNotNull(oExists, "Query about table existing failed...");
+
+            if (oExists.ToString() == "1")
+            {
+                int iDroRresult = sqlDB.ExecuteNon("DROP TABLE " + tableName);
+            }
+        }
     }
 
     #region Types
