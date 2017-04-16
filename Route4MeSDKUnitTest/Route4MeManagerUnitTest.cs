@@ -6111,7 +6111,8 @@ namespace Route4MeSDKUnitTest
         public static void DatabasesGroupInitialize(TestContext testContext)
         {
             _testContext = testContext;
-            db_type = DB_Type.SQLCE;
+
+            db_type = DB_Type.SQLCE; // you can choose other types of the database engine.
 
             tdr = new TestDataRepository();
             bool result = tdr.GenerateSQLCEDatabaseTest();
@@ -6119,7 +6120,7 @@ namespace Route4MeSDKUnitTest
             Assert.IsTrue(result, "Generation of the SQL tables failed...");
         }
 
-        // Uncoment line below if you have indicated valid MySQL connnection parameters in the App.config file.
+        // Uncomment line below if you have indicated valid MySQL connection parameters in the App.config file.
         //[TestMethod] 
         public void GenerateMySQLDatabaseTest()
         {
@@ -6170,7 +6171,8 @@ namespace Route4MeSDKUnitTest
             }
         }
 
-        [TestMethod]
+        // Uncomment line below if you have indicated valid MsSQL connection parameters in the App.config file.
+        //[TestMethod]
         public void GenerateMsSQLDatabaseTest()
         {
             cDatabase sqlDB = new cDatabase(DB_Type.MSSQL);
@@ -6273,7 +6275,8 @@ namespace Route4MeSDKUnitTest
             }
         }
 
-        [TestMethod]
+        // Uncomment line below if you have indicated valid PostgreSQL connection parameters in the App.config file.
+        //[TestMethod]
         public void GeneratePostgreSQLDatabaseTest()
         {
             cDatabase sqlDB = new cDatabase(DB_Type.PostgreSQL);
