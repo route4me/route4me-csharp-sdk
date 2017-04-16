@@ -30,3 +30,15 @@ C:\Oleg_Route4Me\route4me-csharp-sdk\Route4MeSDKTest\bin\Debug\System.Data.SqlSe
 C:\Users\Odin62\Documents\GitHub\Route4Me\route4me-csharp-sdk\Route4MeSDKTest\bin\Debug\Route4MeSDKTest.exe.config
 C:\Users\Odin62\Documents\GitHub\Route4Me\route4me-csharp-sdk\Route4MeSDKTest\obj\Debug\Route4MeSDKTest.exe
 C:\Users\Odin62\Documents\GitHub\Route4Me\route4me-csharp-sdk\Route4MeSDKTest\obj\Debug\Route4MeSDKTest.pdb
+C:\Users\Odin62\Documents\GitHub\Route4Me\route4me-csharp-sdk\Route4MeSDKTest\bin\Debug\Route4MeSDKTest.exe
+C:\Users\Odin62\Documents\GitHub\Route4Me\route4me-csharp-sdk\Route4MeSDKTest\bin\Debug\Route4MeSDKTest.pdb
+C:\Users\Odin62\Documents\GitHub\Route4Me\route4me-csharp-sdk\Route4MeSDKTest\bin\Debug\CsvHelper.dll
+C:\Users\Odin62\Documents\GitHub\Route4Me\route4me-csharp-sdk\Route4MeSDKTest\bin\Debug\nunit.framework.dll
+C:\Users\Odin62\Documents\GitHub\Route4Me\route4me-csharp-sdk\Route4MeSDKTest\bin\Debug\Route4MeSDKLibrary.dll
+C:\Users\Odin62\Documents\GitHub\Route4Me\route4me-csharp-sdk\Route4MeSDKTest\bin\Debug\System.Data.SqlServerCe.dll
+C:\Users\Odin62\Documents\GitHub\Route4Me\route4me-csharp-sdk\Route4MeSDKTest\bin\Debug\Route4MeSDKLibrary.pdb
+C:\Users\Odin62\Documents\GitHub\Route4Me\route4me-csharp-sdk\Route4MeSDKTest\bin\Debug\CsvHelper.xml
+C:\Users\Odin62\Documents\GitHub\Route4Me\route4me-csharp-sdk\Route4MeSDKTest\bin\Debug\nunit.framework.xml
+C:\Users\Odin62\Documents\GitHub\Route4Me\route4me-csharp-sdk\Route4MeSDKTest\obj\Debug\Route4MeSDKTest.csprojResolveAssemblyReference.cache
+C:\Users\Odin62\Documents\GitHub\Route4Me\route4me-csharp-sdk\Route4MeSDKTest\obj\Debug\Route4MeSDKTest.Properties.Resources.resources
+C:\Users\Odin62\Documents\GitHub\Route4Me\route4me-csharp-sdk\Route4MeSDKTest\obj\Debug\Route4MeSDKTest.csproj.GenerateResource.Cache
