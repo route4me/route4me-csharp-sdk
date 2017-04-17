@@ -13,7 +13,7 @@ namespace Route4MeSDK.Examples
         public void HybridOptimizationFrom1000Addresses()
         {
             // Create the manager with the api key
-            Route4MeManager route4Me = new Route4MeManager("BD48828717021141485A701453273458");
+            Route4MeManager route4Me = new Route4MeManager("11111111111111111111111111111111");
 
             #region ======= Add scheduled address book locations to an user account ================================
             string sAddressFile = @"Data/addresses_1000.csv";
@@ -171,10 +171,7 @@ namespace Route4MeSDK.Examples
 
                     Thread.Sleep(1000);
 
-                    //iCount++;
-                    //if (iCount == 60) break;
                 }
-
             };
             
             #endregion
