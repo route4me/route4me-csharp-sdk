@@ -1,6 +1,8 @@
 ﻿using Moq;
 using System;
+using System.Threading;
 using System.Data;
+using System.Data.OleDb;
 using System.IO;
 using System.Runtime.Serialization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -11,6 +13,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.CodeDom.Compiler;
+using CsvHelper;
 
 namespace Route4MeSDKUnitTest
 {
@@ -4010,6 +4013,41 @@ namespace Route4MeSDKUnitTest
         }
 
         [TestMethod]
+        public void RemoveAllAddressbookContactsTest()
+        {
+            string ApiKey = "bd48828717021141485a701453273458";
+            Route4MeManager route4Me = new Route4MeManager(ApiKey);
+            TestDataRepository tdr = new TestDataRepository();
+
+            bool blContinue = true;
+
+            int iCurOffset = 0;
+            List<string> lsAddresses = new List<string>();
+
+            while (blContinue)
+            {
+                AddressBookParameters addressBookParameters = new AddressBookParameters()
+                {
+                    Limit = 40,
+                    Offset = (uint)iCurOffset
+                };
+
+                uint total;
+                string errorString;
+                AddressBookContact[] contacts = route4Me.GetAddressBookLocation(addressBookParameters, out total, out errorString);
+                if (contacts.Length == 0) blContinue = false;
+                Assert.IsInstanceOfType(contacts, typeof(AddressBookContact[]), "Getting of the contacts failed..." + errorString);
+
+                foreach (AddressBookContact contact in contacts) lsAddresses.Add(contact.address_id.ToString());
+
+                
+                tdr.RemoveAddressBookContacts(lsAddresses, ApiKey);
+
+                iCurOffset += 40;
+            }
+        }
+
+        [TestMethod]
         public void SearchRoutedLocationsTest()
         {
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
@@ -6430,11 +6468,15 @@ namespace Route4MeSDKUnitTest
         static string c_ApiKey = "11111111111111111111111111111111";
         static TestDataRepository tdr;
         static List<string> lsOptimizationIDs;
+        static List<string> lsAddressbookContacts;
+        static List<string> lsOrders;
 
         [ClassInitialize()]
         public static void OptimizationsGroupInitialize(TestContext context)
         {
             lsOptimizationIDs = new List<string>();
+            lsAddressbookContacts = new List<string>();
+            lsOrders = new List<string>();
 
             tdr = new TestDataRepository();
             bool result = tdr.RunOptimizationSingleDriverRoute10Stops();
@@ -6520,6 +6562,486 @@ namespace Route4MeSDKUnitTest
             bool removed = route4Me.RemoveOptimization(OptIDs, out errorString);
 
             Assert.IsTrue(removed, "RemoveOptimizationTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void HybridOptimizationFrom1000AddressesTest()
+        {
+            string ApiKey = "11111111111111111111111111111111"; // The addresses in this test not allowed for this API key, you shuld put your valid API key.
+
+            // Comment 2 lines bellow if you have put in the above line your valid key.
+            Assert.IsTrue(1 > 0, "");
+            return;
+
+            Route4MeManager route4Me = new Route4MeManager(ApiKey);
+
+            #region ======= Add scheduled address book locations to an user account ================================
+            string sAddressFile = @"Data/CSV/addresses_1000.csv";
+            Schedule sched0 = new Schedule("daily", false);
+            //var csv = new CsvReader(File.OpenText("file.csv"));
+
+            using (TextReader reader = File.OpenText(sAddressFile))
+            {
+                var csv = new CsvReader(reader);
+                //int iCount = 0;
+                while (csv.Read())
+                {
+                    var lng = csv.GetField(0);
+                    var lat = csv.GetField(1);
+                    var alias = csv.GetField(2);
+                    var address1 = csv.GetField(3);
+                    var city = csv.GetField(4);
+                    var state = csv.GetField(5);
+                    var zip = csv.GetField(6);
+                    var phone = csv.GetField(7);
+                    //var sched_date = csv.GetField(8);
+                    var sched_mode = csv.GetField(8);
+                    var sched_enabled = csv.GetField(9);
+                    var sched_every = csv.GetField(10);
+                    var sched_weekdays = csv.GetField(11);
+                    var sched_monthly_mode = csv.GetField(12);
+                    var sched_monthly_dates = csv.GetField(13);
+                    var sched_annually_usenth = csv.GetField(14);
+                    var sched_annually_months = csv.GetField(15);
+                    var sched_nth_n = csv.GetField(16);
+                    var sched_nth_what = csv.GetField(17);
+
+                    string sAddress = "";
+
+                    if (address1 != null) sAddress += address1.ToString().Trim();
+                    if (city != null) sAddress += ", " + city.ToString().Trim();
+                    if (state != null) sAddress += ", " + state.ToString().Trim();
+                    if (zip != null) sAddress += ", " + zip.ToString().Trim();
+
+                    if (sAddress == "") continue;
+
+                    AddressBookContact newLocation = new AddressBookContact();
+
+                    if (lng != null) newLocation.cached_lng = Convert.ToDouble(lng);
+                    if (lat != null) newLocation.cached_lat = Convert.ToDouble(lat);
+                    if (alias != null) newLocation.address_alias = alias.ToString().Trim();
+                    newLocation.address_1 = sAddress;
+                    if (phone != null) newLocation.address_phone_number = phone.ToString().Trim();
+
+                    //newLocation.schedule = new Schedule[]{};
+                    if (!sched0.ValidateScheduleMode(sched_mode)) continue;
+
+                    bool blNth = false;
+                    if (sched0.ValidateScheduleMonthlyMode(sched_monthly_mode))
+                    {
+                        if (sched_monthly_mode == "nth") blNth = true;
+                    }
+                    if (sched0.ValidateScheduleUseNth(sched_annually_usenth))
+                    {
+                        if (sched_annually_usenth.ToString().ToLower() == "true") blNth = true;
+                    }
+
+                    Schedule schedule = new Schedule(sched_mode.ToString(), blNth);
+
+                    DateTime dt = DateTime.Now;
+                    //if (schedule.ValidateScheduleMode(sched_mode))
+                    //{
+                    schedule.mode = sched_mode.ToString();
+                    if (schedule.ValidateScheduleEnabled(sched_enabled))
+                    {
+                        schedule.enabled = Convert.ToBoolean(sched_enabled);
+                        if (schedule.ValidateScheduleEvery(sched_every))
+                        {
+                            int iEvery = Convert.ToInt32(sched_every);
+                            switch (schedule.mode)
+                            {
+                                case "daily":
+                                    schedule.daily.every = iEvery;
+                                    break;
+                                case "weekly":
+                                    if (schedule.ValidateScheduleWeekdays(sched_weekdays))
+                                    {
+                                        schedule.weekly.every = iEvery;
+                                        string[] arWeekdays = sched_weekdays.Split(',');
+                                        List<int> lsWeekdays = new List<int>();
+                                        for (int i = 0; i < arWeekdays.Length; i++)
+                                        {
+                                            lsWeekdays.Add(Convert.ToInt32(arWeekdays[i]));
+                                        }
+                                        schedule.weekly.weekdays = lsWeekdays.ToArray();
+                                    }
+                                    break;
+                                case "monthly":
+                                    if (schedule.ValidateScheduleMonthlyMode(sched_monthly_mode))
+                                    {
+                                        schedule.monthly.every = iEvery;
+                                        schedule.monthly.mode = sched_monthly_mode.ToString();
+                                        switch (schedule.monthly.mode)
+                                        {
+                                            case "dates":
+                                                if (schedule.ValidateScheduleMonthDays(sched_monthly_dates))
+                                                {
+                                                    string[] arMonthdays = sched_monthly_dates.Split(',');
+                                                    List<int> lsMonthdays = new List<int>();
+                                                    for (int i = 0; i < arMonthdays.Length; i++)
+                                                    {
+                                                        lsMonthdays.Add(Convert.ToInt32(arMonthdays[i]));
+                                                    }
+                                                    schedule.monthly.dates = lsMonthdays.ToArray();
+                                                }
+                                                break;
+                                            case "nth":
+                                                if (schedule.ValidateScheduleNthN(sched_nth_n)) schedule.monthly.nth.n = Convert.ToInt32(sched_nth_n);
+                                                if (schedule.ValidateScheduleNthWhat(sched_nth_what)) schedule.monthly.nth.what = Convert.ToInt32(sched_nth_what);
+                                                break;
+                                        }
+                                    }
+                                    break;
+                                case "annually":
+                                    if (schedule.ValidateScheduleUseNth(sched_annually_usenth))
+                                    {
+                                        schedule.annually.every = iEvery;
+                                        schedule.annually.use_nth = Convert.ToBoolean(sched_annually_usenth);
+                                        if (schedule.annually.use_nth)
+                                        {
+                                            if (schedule.ValidateScheduleNthN(sched_nth_n)) schedule.annually.nth.n = Convert.ToInt32(sched_nth_n);
+                                            if (schedule.ValidateScheduleNthWhat(sched_nth_what)) schedule.annually.nth.what = Convert.ToInt32(sched_nth_what);
+                                        }
+                                        else
+                                        {
+                                            if (schedule.ValidateScheduleYearMonths(sched_annually_months))
+                                            {
+                                                string[] arYearmonths = sched_annually_months.Split(',');
+                                                List<int> lsMonths = new List<int>();
+                                                for (int i = 0; i < arYearmonths.Length; i++)
+                                                {
+                                                    lsMonths.Add(Convert.ToInt32(arYearmonths[i]));
+                                                }
+                                                schedule.annually.months = lsMonths.ToArray();
+                                            }
+                                        }
+                                    }
+                                    break;
+                            }
+                        }
+
+                    }
+                    newLocation.schedule = (new List<Schedule>() { schedule }).ToArray();
+                    //}
+
+                    string errorString;
+                    AddressBookContact resultContact = route4Me.AddAddressBookContact(newLocation, out errorString);
+
+                    Assert.IsNotNull(resultContact, "Creation of an addressbook contact failed... " + errorString);
+
+                    if (resultContact != null)
+                    {
+                        string AddressId = resultContact.address_id != null ? resultContact.address_id.ToString() : "";
+                        if (AddressId != "") lsAddressbookContacts.Add(AddressId);
+                    }
+
+                    Thread.Sleep(1000);
+
+                }
+            };
+
+            #endregion
+
+            Thread.Sleep(2000);
+
+            #region ======= Get Hybrid Optimization ================================
+            TimeSpan tsp1day = new TimeSpan(1, 0, 0, 0);
+            List<string> lsScheduledDays = new List<string>();
+            DateTime curDate = DateTime.Now;
+            for (int i = 0; i < 5; i++)
+            {
+                curDate += tsp1day;
+                lsScheduledDays.Add(curDate.ToString("yyyy-MM-dd"));
+            }
+
+            #region Addresses
+            Address[] Depots = new Address[] {
+                new Address {
+			            AddressString = "2017 Ambler Ave, Abilene, TX, 79603-2239",
+			            IsDepot = true,
+                        Latitude = 32.474395,
+                        Longitude = -99.7447021,
+                        CurbsideLatitude = 32.474395,
+                        CurbsideLongitude = -99.7447021
+		            },
+                new Address {
+			            AddressString = "807 Ridge Rd, Alamo, TX, 78516-9596",
+			            IsDepot = true,
+                        Latitude = 26.170834,
+                        Longitude = -98.116201,
+                        CurbsideLatitude = 26.170834,
+                        CurbsideLongitude = -98.116201
+		            },
+                new Address {
+			            AddressString = "1430 W Amarillo Blvd, Amarillo, TX, 79107-5505",
+			            IsDepot = true,
+                        Latitude = 35.221969,
+                        Longitude = -101.835288,
+                        CurbsideLatitude = 35.221969,
+                        CurbsideLongitude = -101.835288
+		            },
+                new Address {
+			            AddressString = "3611 Ne 24Th Ave, Amarillo, TX, 79107-7242",
+			            IsDepot = true,
+                        Latitude = 35.236626,
+                        Longitude = -101.795117,
+                        CurbsideLatitude = 35.236626,
+                        CurbsideLongitude = -101.795117
+		            },
+                new Address {
+			            AddressString = "1525 New York Ave, Arlington, TX, 76010-4723",
+			            IsDepot = true,
+                        Latitude = 32.720524,
+                        Longitude = -97.080195,
+                        CurbsideLatitude = 32.720524,
+                        CurbsideLongitude = -97.080195
+		            }
+            };
+            #endregion
+
+            string errorString1;
+            string errorString2;
+
+            foreach (string ScheduledDay in lsScheduledDays)
+            {
+                HybridOptimizationParameters hparams = new HybridOptimizationParameters()
+                {
+                    target_date_string = ScheduledDay,
+                    timezone_offset_minutes = -240
+                };
+
+                DataObject resultOptimization = route4Me.GetOHybridptimization(hparams, out errorString1);
+
+                Assert.IsNotNull(resultOptimization, "Get Hybrid Optimization failed... " + errorString1);
+
+                string HybridOptimizationId = "";
+
+                if (resultOptimization != null)
+                {
+                    HybridOptimizationId = resultOptimization.OptimizationProblemId;
+                }
+                else
+                {
+                    continue;
+                }
+
+                //============== Reoptimization =================================
+                RouteParameters rParams = new RouteParameters();
+                rParams.AlgorithmType = AlgorithmType.CVRP_TW_SD;
+
+                OptimizationParameters optimizationParameters = new OptimizationParameters()
+                {
+                    OptimizationProblemID = HybridOptimizationId,
+                    ReOptimize = true,
+                    Parameters = rParams,
+                    Addresses = new Address[] { Depots[lsScheduledDays.IndexOf(ScheduledDay)] }
+                };
+
+                DataObject finalOptimization = route4Me.UpdateOptimization(optimizationParameters, out errorString2);
+
+                Assert.IsNotNull(finalOptimization, "Update optimization failed... " + errorString1);
+
+                if (finalOptimization != null) lsOptimizationIDs.Add(finalOptimization.OptimizationProblemId);
+
+                Thread.Sleep(5000);
+                //=================================================================
+            }
+
+            #endregion
+
+            bool removeLocations = tdr.RemoveAddressBookContacts(lsAddressbookContacts, ApiKey);
+
+            Assert.IsTrue(removeLocations, "Removing of the addressbook contacts failed...");
+
+        }
+
+        [TestMethod]
+        public void HybridOptimizationFrom1000OrdersTest()
+        {
+            string ApiKey = "11111111111111111111111111111111"; // The addresses in this test not allowed for this API key, you shuld put your valid API key.
+
+            // Comment 2 lines bellow if you have put in the above line your valid key.
+            Assert.IsTrue(1 > 0, "");
+            return;
+
+            Route4MeManager route4Me = new Route4MeManager(ApiKey);
+
+            #region ======= Add scheduled address book locations to an user account ================================
+            string sAddressFile = @"Data/CSV/orders_1000.csv";
+
+            using (TextReader reader = File.OpenText(sAddressFile))
+            {
+                var csv = new CsvReader(reader);
+                //int iCount = 0;
+                while (csv.Read())
+                {
+                    var lng = csv.GetField(0);
+                    var lat = csv.GetField(1);
+                    var alias = csv.GetField(2);
+                    var address1 = csv.GetField(3);
+                    var city = csv.GetField(4);
+                    var state = csv.GetField(5);
+                    var zip = csv.GetField(6);
+                    var phone = csv.GetField(7);
+                    var sched_date = csv.GetField(8);
+
+                    string sAddress = "";
+
+                    if (address1 != null) sAddress += address1.ToString().Trim();
+                    if (city != null) sAddress += ", " + city.ToString().Trim();
+                    if (state != null) sAddress += ", " + state.ToString().Trim();
+                    if (zip != null) sAddress += ", " + zip.ToString().Trim();
+
+                    if (sAddress == "") continue;
+
+                    Order newOrder = new Order();
+
+                    if (lng != null) newOrder.cached_lat = Convert.ToDouble(lng);
+                    if (lat != null) newOrder.cached_lng = Convert.ToDouble(lat);
+                    if (alias != null) newOrder.address_alias = alias.ToString().Trim();
+                    newOrder.address_1 = sAddress;
+                    if (phone != null) newOrder.EXT_FIELD_phone = phone.ToString().Trim();
+
+                    DateTime dt = DateTime.Now;
+
+                    if (sched_date != null)
+                    {
+                        if (DateTime.TryParse(sched_date.ToString(), out dt))
+                        {
+                            dt = Convert.ToDateTime(sched_date);
+                            newOrder.day_scheduled_for_YYMMDD = dt.ToString("yyyy-MM-dd");
+                        }
+                    }
+
+                    string errorString;
+
+                    Order resultOrder = route4Me.AddOrder(newOrder, out errorString);
+                    Assert.IsNotNull(resultOrder, "Creating of an order failed... " + errorString);
+
+                    if (resultOrder != null)
+                    {
+                        string OrderId = resultOrder.order_id != null ? resultOrder.order_id.ToString() : "";
+                        if (OrderId != "") lsOrders.Add(OrderId);
+                    }
+
+                    Thread.Sleep(1000);
+                }
+
+            };
+
+            #endregion
+
+            Thread.Sleep(2000);
+
+            #region ======= Get Hybrid Optimization ================================
+
+            TimeSpan tsp1day = new TimeSpan(1, 0, 0, 0);
+            List<string> lsScheduledDays = new List<string>();
+            DateTime curDate = DateTime.Now;
+            for (int i = 0; i < 5; i++)
+            {
+                curDate += tsp1day;
+                lsScheduledDays.Add(curDate.ToString("yyyy-MM-dd"));
+            }
+
+            Address[] Depots = new Address[] {
+                new Address {
+			            AddressString = "2017 Ambler Ave, Abilene, TX, 79603-2239",
+			            IsDepot = true,
+                        Latitude = 32.474395,
+                        Longitude = -99.7447021,
+                        CurbsideLatitude = 32.474395,
+                        CurbsideLongitude = -99.7447021
+		            },
+                new Address {
+			            AddressString = "807 Ridge Rd, Alamo, TX, 78516-9596",
+			            IsDepot = true,
+                        Latitude = 26.170834,
+                        Longitude = -98.116201,
+                        CurbsideLatitude = 26.170834,
+                        CurbsideLongitude = -98.116201
+		            },
+                new Address {
+			            AddressString = "1430 W Amarillo Blvd, Amarillo, TX, 79107-5505",
+			            IsDepot = true,
+                        Latitude = 35.221969,
+                        Longitude = -101.835288,
+                        CurbsideLatitude = 35.221969,
+                        CurbsideLongitude = -101.835288
+		            },
+                new Address {
+			            AddressString = "3611 Ne 24Th Ave, Amarillo, TX, 79107-7242",
+			            IsDepot = true,
+                        Latitude = 35.236626,
+                        Longitude = -101.795117,
+                        CurbsideLatitude = 35.236626,
+                        CurbsideLongitude = -101.795117
+		            },
+                new Address {
+			            AddressString = "1525 New York Ave, Arlington, TX, 76010-4723",
+			            IsDepot = true,
+                        Latitude = 32.720524,
+                        Longitude = -97.080195,
+                        CurbsideLatitude = 32.720524,
+                        CurbsideLongitude = -97.080195
+		            }
+            };
+
+            string errorString1;
+            string errorString2;
+
+            foreach (string ScheduledDay in lsScheduledDays)
+            {
+                HybridOptimizationParameters hparams = new HybridOptimizationParameters()
+                {
+                    target_date_string = ScheduledDay,
+                    timezone_offset_minutes = 480
+                };
+
+                DataObject resultOptimization = route4Me.GetOHybridptimization(hparams, out errorString1);
+
+                string HybridOptimizationId = "";
+
+                if (resultOptimization != null)
+                {
+                    HybridOptimizationId = resultOptimization.OptimizationProblemId;
+                    Console.WriteLine("Hybrid optimization generating executed successfully");
+
+                    Console.WriteLine("Generated hybrid optimization ID: {0}", HybridOptimizationId);
+                }
+                else
+                {
+                    Console.WriteLine("Hybrid optimization generating error: {0}", errorString1);
+                    continue;
+                }
+
+                //============== Reoptimization =================================
+                RouteParameters rParams = new RouteParameters();
+                rParams.AlgorithmType = AlgorithmType.CVRP_TW_SD;
+
+                OptimizationParameters optimizationParameters = new OptimizationParameters()
+                {
+                    OptimizationProblemID = HybridOptimizationId,
+                    ReOptimize = true,
+                    Parameters = rParams,
+                    Addresses = new Address[] { Depots[lsScheduledDays.IndexOf(ScheduledDay)] }
+                };
+
+                DataObject finalOptimization = route4Me.UpdateOptimization(optimizationParameters, out errorString2);
+
+                Assert.IsNotNull(finalOptimization, "Update optimization failed... " + errorString1);
+
+                if (finalOptimization != null) lsOptimizationIDs.Add(finalOptimization.OptimizationProblemId);
+
+
+                Thread.Sleep(5000);
+                //=================================================================
+            }
+
+            bool removeOrders = tdr.RemoveOrders(lsOrders, ApiKey);
+
+            Assert.IsTrue(removeOrders, "Removing of the orders failed...");
+            #endregion
         }
 
         [ClassCleanup()]
@@ -7093,6 +7615,33 @@ namespace Route4MeSDKUnitTest
                 int iDroRresult = sqlDB.ExecuteNon("DROP TABLE " + tableName);
             }
         }
+
+        public bool RemoveAddressBookContacts(List<string> lsRemLocations, string ApiKey)
+        {
+            Route4MeManager route4Me = new Route4MeManager(ApiKey);
+
+            if (lsRemLocations.Count > 0)
+            {
+                string errorString;
+                bool removed = route4Me.RemoveAddressBookContacts(lsRemLocations.ToArray(), out errorString);
+
+                return removed;
+            }
+            else return false;
+        }
+
+        public bool RemoveOrders(List<string> lsOrders, string ApiKey)
+        {
+            Route4MeManager route4Me = new Route4MeManager(ApiKey);
+
+            // Run the query
+            string errorString;
+            bool removed = route4Me.RemoveOrders(lsOrders.ToArray(), out errorString);
+
+            return removed;
+
+        }
+
     }
 
     #region Types
