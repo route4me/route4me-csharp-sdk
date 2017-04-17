@@ -171,10 +171,7 @@ namespace Route4MeSDK.Examples
 
                     Thread.Sleep(1000);
 
-                    //iCount++;
-                    //if (iCount == 60) break;
                 }
-
             };
             
             #endregion
