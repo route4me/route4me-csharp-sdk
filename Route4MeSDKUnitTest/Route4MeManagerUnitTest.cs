@@ -295,6 +295,31 @@ namespace Route4MeSDKUnitTest
             Assert.IsTrue(tdr.SDRT_route.Addresses.Length > 0, "The route has no addresses...");
 
             lsOptimizationIDs.Add(tdr.SDRT_optimization_problem_id);
+
+            string routeIdToMoveTo = tdr.SDRT_route_id;
+            Assert.IsNotNull(routeIdToMoveTo, "routeId_SingleDriverRoundTrip is null...");
+
+            int addressId = (tdr.dataObjectSDRT != null && tdr.SDRT_route != null && tdr.SDRT_route.Addresses.Length > 1 && tdr.SDRT_route.Addresses[1].RouteDestinationId != null) ? tdr.SDRT_route.Addresses[1].RouteDestinationId.Value : 0;
+
+            double lat = tdr.SDRT_route.Addresses.Length > 1 ? tdr.SDRT_route.Addresses[1].Latitude : 33.132675170898;
+            double lng = tdr.SDRT_route.Addresses.Length > 1 ? tdr.SDRT_route.Addresses[1].Longitude : -83.244743347168;
+
+            NoteParameters noteParameters = new NoteParameters()
+            {
+                RouteId = routeIdToMoveTo,
+                AddressId = addressId,
+                Latitude = lat,
+                Longitude = lng,
+                DeviceType = DeviceType.Web.Description(),
+                ActivityType = StatusUpdateType.DropOff.Description()
+            };
+
+            // Run the query
+            string errorString;
+            string contents = "Test Note Contents " + DateTime.Now.ToString();
+            AddressNote note = route4Me.AddAddressNote(noteParameters, contents, out errorString);
+
+            Assert.IsNotNull(note, "AddAddressNoteTest failed... " + errorString);
         }
 
         [TestMethod]
@@ -4093,9 +4118,8 @@ namespace Route4MeSDKUnitTest
 
         static List<string> lsAvoidanceZones = new List<string>();
 
-        [TestMethod]
-        [TestInitialize]
-        public void AddAvoidanceZonesTest()
+        [ClassInitialize()]
+        public static void AvoidanseZonesGroupInitialize(TestContext context)
         {
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
@@ -4114,7 +4138,7 @@ namespace Route4MeSDKUnitTest
             string errorString;
             AvoidanceZone circleAvoidanceZone = route4Me.AddAvoidanceZone(circleAvoidanceZoneParameters, out errorString);
 
-            if (circleAvoidanceZone!=null) lsAvoidanceZones.Add(circleAvoidanceZone.TerritoryId);
+            if (circleAvoidanceZone != null) lsAvoidanceZones.Add(circleAvoidanceZone.TerritoryId);
 
             Assert.IsNotNull(circleAvoidanceZone, "Add Circle Avoidance Zone test failed... " + errorString);
 
@@ -4167,6 +4191,31 @@ namespace Route4MeSDKUnitTest
         }
 
         [TestMethod]
+        public void AddAvoidanceZonesTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            AvoidanceZoneParameters circleAvoidanceZoneParameters = new AvoidanceZoneParameters()
+            {
+                TerritoryName = "Test Circle Territory",
+                TerritoryColor = "ff0000",
+                Territory = new Territory()
+                {
+                    Type = TerritoryType.Circle.Description(),
+                    Data = new string[] { "37.569752822786455,-77.47833251953125",
+                                "5000"}
+                }
+            };
+
+            string errorString;
+            AvoidanceZone circleAvoidanceZone = route4Me.AddAvoidanceZone(circleAvoidanceZoneParameters, out errorString);
+
+            if (circleAvoidanceZone!=null) lsAvoidanceZones.Add(circleAvoidanceZone.TerritoryId);
+
+            Assert.IsNotNull(circleAvoidanceZone, "Add Circle Avoidance Zone test failed... " + errorString);
+        }
+
+        [TestMethod]
         public void GetAvoidanceZonesTest()
         {
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
@@ -4189,7 +4238,7 @@ namespace Route4MeSDKUnitTest
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
             string territoryId = "";
-            if (lsAvoidanceZones.Count > 0) territoryId = lsAvoidanceZones[0];
+            if (lsAvoidanceZones.Count > 1) territoryId = lsAvoidanceZones[1];
             AvoidanceZoneQuery avoidanceZoneQuery = new AvoidanceZoneQuery()
             {
                 TerritoryId = territoryId
@@ -4208,7 +4257,7 @@ namespace Route4MeSDKUnitTest
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
             string territoryId = "";
-            if (lsAvoidanceZones.Count > 0) territoryId = lsAvoidanceZones[0];
+            if (lsAvoidanceZones.Count > 1) territoryId = lsAvoidanceZones[1];
 
             AvoidanceZoneParameters avoidanceZoneParameters = new AvoidanceZoneParameters()
             {
@@ -4231,8 +4280,28 @@ namespace Route4MeSDKUnitTest
         }
 
         [TestMethod]
+        public void RemoveAvoidanceZoneTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            string territoryId = "";
+            if (lsAvoidanceZones.Count > 0) territoryId = lsAvoidanceZones[0];
+
+            AvoidanceZoneQuery avoidanceZoneQuery = new AvoidanceZoneQuery()
+            {
+                TerritoryId = territoryId
+            };
+
+            // Run the query
+            string errorString;
+            bool result = route4Me.DeleteAvoidanceZone(avoidanceZoneQuery, out errorString);
+
+            Assert.IsTrue(result, "RemoveAvoidanceZoneTest failed... " + errorString);
+
+        }
+
         [ClassCleanup]
-        public static void RemoveAvoidanceZoneTest()
+        public static void AvoidanseZonesGroupCleanup()
         {
             foreach (string territoryId in lsAvoidanceZones)
             {
@@ -4259,9 +4328,8 @@ namespace Route4MeSDKUnitTest
 
         static List<string> lsTerritories = new List<string>();
 
-        [TestMethod]
-        [TestInitialize]
-        public void AddTerritoriesTest()
+        [ClassInitialize()]
+        public static void TerritoriesGroupInitialize(TestContext context)
         {
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
@@ -4333,6 +4401,31 @@ namespace Route4MeSDKUnitTest
         }
 
         [TestMethod]
+        public void AddTerritoriesTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            AvoidanceZoneParameters circleTerritoryParameters = new AvoidanceZoneParameters()
+            {
+                TerritoryName = "Test Circle Territory",
+                TerritoryColor = "ff0000",
+                Territory = new Territory()
+                {
+                    Type = TerritoryType.Circle.Description(),
+                    Data = new string[] { "37.569752822786455,-77.47833251953125",
+                                "5000"}
+                }
+            };
+
+            string errorString;
+            TerritoryZone circleTerritory = route4Me.CreateTerritory(circleTerritoryParameters, out errorString);
+
+            if (circleTerritory != null) lsTerritories.Add(circleTerritory.TerritoryId);
+
+            Assert.IsNotNull(circleTerritory, "Add Circle Territory test failed... " + errorString);
+        }
+
+        [TestMethod]
         public void GetTerritoriesTest()
         {
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
@@ -4355,7 +4448,7 @@ namespace Route4MeSDKUnitTest
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
             string territoryId = "";
-            if (lsTerritories.Count > 0) territoryId = lsTerritories[0];
+            if (lsTerritories.Count > 1) territoryId = lsTerritories[1];
             TerritoryQuery territoryQuery = new TerritoryQuery()
             {
                 TerritoryId = territoryId
@@ -4374,7 +4467,7 @@ namespace Route4MeSDKUnitTest
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
             string territoryId = "";
-            if (lsTerritories.Count > 0) territoryId = lsTerritories[0];
+            if (lsTerritories.Count > 1) territoryId = lsTerritories[1];
 
             AvoidanceZoneParameters territoryParameters = new AvoidanceZoneParameters()
             {
@@ -4397,8 +4490,27 @@ namespace Route4MeSDKUnitTest
         }
 
         [TestMethod]
+        public void RemoveTerritoryTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            string territoryId = "";
+            if (lsTerritories.Count > 0) territoryId = lsTerritories[0];
+
+            AvoidanceZoneQuery territoryQuery = new AvoidanceZoneQuery()
+            {
+                TerritoryId = territoryId
+            };
+
+            // Run the query
+            string errorString;
+            bool result = route4Me.RemoveTerritory(territoryQuery, out errorString);
+
+            Assert.IsTrue(result, "RemoveTerritoriesTest failed... " + errorString);
+        }
+
         [ClassCleanup]
-        public static void RemoveTerritoriesTest()
+        public static void TerritoriesGroupCleanup()
         {
             foreach (string territoryId in lsTerritories)
             {
@@ -4610,6 +4722,19 @@ namespace Route4MeSDKUnitTest
                 Redirect = false
             };
 
+            List<int> lsTimeWindowStart = new List<int>();
+
+            DateTime dtCurDate = DateTime.Now+(new TimeSpan(1,0,0,0));
+            dtCurDate = new DateTime(dtCurDate.Year, dtCurDate.Month, dtCurDate.Day, 8, 0, 0);
+
+            TimeSpan tsp1000sec = new TimeSpan(0, 0, 1000);
+
+            lsTimeWindowStart.Add((int)R4MeUtils.ConvertToUnixTimestamp(dtCurDate));
+            dtCurDate += tsp1000sec;
+            lsTimeWindowStart.Add((int)R4MeUtils.ConvertToUnixTimestamp(dtCurDate));
+            dtCurDate += tsp1000sec;
+            lsTimeWindowStart.Add((int)R4MeUtils.ConvertToUnixTimestamp(dtCurDate));
+
             #region Addresses
             Address[] addresses = new Address[] {
 		    new Address {
@@ -4634,8 +4759,8 @@ namespace Route4MeSDKUnitTest
 			    LastName = "",
 			    CustomFields = new Dictionary<string, string> { {"icon", null} },
 			    Time = 0,
-			    TimeWindowStart = 1472544000,
-			    TimeWindowEnd = 1472544300,
+			    TimeWindowStart = lsTimeWindowStart[0],
+			    TimeWindowEnd = lsTimeWindowStart[0]+300,
 			    OrderId = 7205705
 		    },
 		    new Address {
@@ -4651,8 +4776,8 @@ namespace Route4MeSDKUnitTest
 			    LastName = "",
 			    CustomFields = new Dictionary<string, string> { {"icon", null} },
 			    Time = 0,
-			    TimeWindowStart = 1472545000,
-			    TimeWindowEnd = 1472545300,
+			    TimeWindowStart = lsTimeWindowStart[1],
+			    TimeWindowEnd = lsTimeWindowStart[1]+300,
 			    OrderId = 7205704
 		    },
 		    new Address {
@@ -4668,8 +4793,8 @@ namespace Route4MeSDKUnitTest
 			    LastName = "",
 			    CustomFields = new Dictionary<string, string> { {"icon", null} },
 			    Time = 0,
-			    TimeWindowStart = 1472546000,
-			    TimeWindowEnd = 1472546300,
+			    TimeWindowStart = lsTimeWindowStart[2],
+			    TimeWindowEnd = lsTimeWindowStart[2]+300,
 			    OrderId = 7205703
 		    }
 	    };
@@ -5549,7 +5674,6 @@ namespace Route4MeSDKUnitTest
 
             Assert.IsInstanceOfType(result, typeof(FindAssetResponse), "FindAssetTest failed... " + errorString);
 
-            SetGPSPositionTest();
         }
 
         [TestMethod]
@@ -6086,6 +6210,8 @@ namespace Route4MeSDKUnitTest
 
             Assert.IsNotNull(result, "ReverseGeocodingTest failed... " + errorString);
         }
+
+
     }
 
     [TestClass]
@@ -7317,7 +7443,7 @@ namespace Route4MeSDKUnitTest
             }
             catch (Exception ex)
             {
-                Console.WriteLine("" + ex.Message); return false;
+                Console.WriteLine("Removing of an optimization failed..." + ex.Message); return false;
                 throw;
             }
            
@@ -7669,19 +7795,16 @@ namespace Route4MeSDKUnitTest
         public AddressInfo[] Addresses { get; set; }
     }
 
-    // Inherit from GenericParameters and add any JSON serializable content
-    // Marked with attribute [DataMember]
     [DataContract]
     class MyAddressAndParametersHolder : GenericParameters
     {
         [DataMember]
-        public Address[] addresses { get; set; } // Using the defined class "Address", can use user-defined class instead
+        public Address[] addresses { get; set; } 
 
         [DataMember]
-        public RouteParameters parameters { get; set; } // Using the defined "RouteParameters", can use user-defined class instead
+        public RouteParameters parameters { get; set; } 
     }
 
-    // Generic class for returned JSON holder
     [DataContract]
     class MyDataObjectGeneric
     {
@@ -7692,10 +7815,10 @@ namespace Route4MeSDKUnitTest
         public int MyState { get; set; }
 
         [DataMember(Name = "addresses")]
-        public Address[] Addresses { get; set; } // Using the defined class "Address", can use user-defined class instead
+        public Address[] Addresses { get; set; } 
 
         [DataMember(Name = "parameters")]
-        public RouteParameters Parameters { get; set; } // Using the defined "RouteParameters", can use user-defined class instead
+        public RouteParameters Parameters { get; set; } 
     }
     #endregion
 }
