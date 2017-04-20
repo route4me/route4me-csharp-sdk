@@ -4298,6 +4298,8 @@ namespace Route4MeSDKUnitTest
 
             Assert.IsTrue(result, "RemoveAvoidanceZoneTest failed... " + errorString);
 
+            if (result) lsAvoidanceZones.RemoveAt(0);
+
         }
 
         [ClassCleanup]
@@ -4507,6 +4509,8 @@ namespace Route4MeSDKUnitTest
             bool result = route4Me.RemoveTerritory(territoryQuery, out errorString);
 
             Assert.IsTrue(result, "RemoveTerritoriesTest failed... " + errorString);
+
+            if (result) lsTerritories.RemoveAt(0);
         }
 
         [ClassCleanup]
