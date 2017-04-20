@@ -1,8 +1,7 @@
 version: 1.0.{build}
 before_build:
   - nuget restore
-Configuration:
-  - Debug
+configuration: Debug
 Platform:
   - Any CPU
 build:
