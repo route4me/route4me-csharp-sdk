@@ -2,8 +2,7 @@ version: 1.0.{build}
 before_build:
   - nuget restore
 configuration: Debug
-Platform:
-  - Any CPU
+platform: Any CPU
 build:
   project: Route4MeSDK.sln 
   verbosity: detailed
