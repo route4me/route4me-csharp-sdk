@@ -4092,9 +4092,8 @@ namespace Route4MeSDKUnitTest
             Assert.IsInstanceOfType(contacts, typeof(AddressBookContact[]), "SearchRoutedLocationsTest failed... " + errorString);
         }
 
-        [TestMethod]
         [ClassCleanup()]
-        public static void RemoveAddressBookContactsTest()
+        public static void AddressbookContactsGroupCleanup()
         {
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
@@ -4907,7 +4906,6 @@ namespace Route4MeSDKUnitTest
             Assert.IsNotNull(result, "AddOrdersToRouteTest failed... " + errorString);
         }
 
-        [TestMethod]
         [ClassCleanup]
         public static void RemoveOrdersTest()
         {
