@@ -1,9 +1,13 @@
 version: 1.0.{build}
 before_build:
   - nuget restore
+Configuration:
+  - Debug
+Platform:
+  - Any CPU
 build:
   project: Route4MeSDK.sln 
-  verbosity: minimal
+  verbosity: detailed
 after_test: 
     - packages\OpenCover.4.6.166\tools\OpenCover.Console.exe -register:user -target:"C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\MSTest.exe" -targetargs:"/noresults /noisolation /testcontainer:"".\Route4MeSDKUnitTest\bin\Debug\Route4MeSDKUnitTest.dll" 
     
