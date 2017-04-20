@@ -1611,6 +1611,13 @@ namespace Route4MeSDK
       return avoidanceZone;
     }
 
+    [DataContract]
+    private sealed class DeleteAvoidanceZoneResponse
+    {
+        [DataMember(Name = "status")]
+        public Boolean status { get; set; }
+
+    }
     /// <summary>
     /// Delete avoidance zone (by territory id, device id)
     /// </summary>
@@ -1619,11 +1626,12 @@ namespace Route4MeSDK
     /// <returns> Result status true/false </returns>
     public bool DeleteAvoidanceZone(AvoidanceZoneQuery avoidanceZoneQuery, out string errorString)
     {
-      GetJsonObjectFromAPI<AvoidanceZone>(avoidanceZoneQuery,
+        var result = GetJsonObjectFromAPI<DeleteAvoidanceZoneResponse>(avoidanceZoneQuery,
                                                              R4MEInfrastructureSettings.Avoidance,
                                                              HttpMethodType.Delete,
                                                              out errorString);
-      return errorString != "";
+
+        return result.status;
     }
 
     #endregion
@@ -2085,6 +2093,13 @@ namespace Route4MeSDK
         return territory;
     }
 
+    [DataContract]
+    private sealed class RemoveTerritoryResponse
+    {
+        [DataMember(Name = "status")]
+        public Boolean status { get; set; }
+
+    }
     /// <summary>
     /// Remove Territory (by territory id, device id)
     /// </summary>
@@ -2093,8 +2108,9 @@ namespace Route4MeSDK
     /// <returns> Result status true/false </returns>
     public bool RemoveTerritory(AvoidanceZoneQuery territoryQuery, out string errorString)
     {
-        GetJsonObjectFromAPI<TerritoryZone>(territoryQuery, R4MEInfrastructureSettings.Territory, HttpMethodType.Delete, out errorString);
-        return !string.IsNullOrEmpty(errorString);
+        var result = GetJsonObjectFromAPI<RemoveTerritoryResponse>(territoryQuery, R4MEInfrastructureSettings.Territory, HttpMethodType.Delete, out errorString);
+
+        return result.status;
     }
 
     /// <summary>
