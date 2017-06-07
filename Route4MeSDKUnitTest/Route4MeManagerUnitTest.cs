@@ -3923,12 +3923,18 @@ namespace Route4MeSDKUnitTest
             int location1 = contact1.address_id != null ? Convert.ToInt32(contact1.address_id) : -1;
             if (location1 > 0) lsRemoveContacts.Add(location1);
 
+            Dictionary<string, string> dCustom = new Dictionary<string, string>()
+            {
+                {"FirstFieldName1", "FirstFieldValue1"},
+                {"FirstFieldName2", "FirstFieldValue2"}
+            };
             contact = new AddressBookContact()
             {
                 first_name = "Test FirstName " + (new Random()).Next().ToString(),
                 address_1 = "Test Address1 " + (new Random()).Next().ToString(),
                 cached_lat = 38.024654,
-                cached_lng = -77.338814
+                cached_lng = -77.338814,
+                address_custom_data = dCustom
             };
 
             contact2 = route4Me.AddAddressBookContact(contact, out errorString);
