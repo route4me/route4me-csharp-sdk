@@ -34,6 +34,18 @@ namespace Route4MeSDK.DataTypes
     [DataMember(Name = "last_name", EmitDefaultValue = false)]
     public string last_name { get; set; }
 
+    [DataMember(Name = "local_time_window_start", EmitDefaultValue = false)]
+    public int? local_time_window_start { get; set; }
+
+    [DataMember(Name = "local_time_window_end", EmitDefaultValue = false)]
+    public int? local_time_window_end { get; set; }
+
+    [DataMember(Name = "local_time_window_start_2", EmitDefaultValue = false)]
+    public int? local_time_window_start_2 { get; set; }
+
+    [DataMember(Name = "local_time_window_end_2", EmitDefaultValue = false)]
+    public int? local_time_window_end_2 { get; set; }
+
     [DataMember(Name = "address_email", EmitDefaultValue = false)]
     public string address_email { get; set; }
 
@@ -64,16 +76,56 @@ namespace Route4MeSDK.DataTypes
     [DataMember(Name = "address_zip", EmitDefaultValue = false)]
     public string address_zip { get; set; }
 
+    //public Dictionary<string, string> address_custom_data { get; set; }
     [DataMember(Name = "address_custom_data", EmitDefaultValue = false)]
-    public object address_custom_data
+    public Dictionary<string, string> address_custom_data
     {
-        get { return _address_custom_data; }
-        set 
+        get 
         {
-            if (value.GetType().ToString() == "System.Collections.Generic.Dictionary") _address_custom_data = value; else _address_custom_data = null;
+            if (_address_custom_data == null)
+            {
+                return null;
+            }
+            else
+            {
+                var v1 = (Dictionary<string, string>)_address_custom_data;
+                
+                Dictionary<string, string> v2 = new Dictionary<string, string>();
+                foreach (KeyValuePair<string, string> kv1 in v1)
+                {
+                    if (kv1.Key != null)
+                    {
+                        if (kv1.Value != null) v2.Add(kv1.Key, kv1.Value.ToString()); else v2.Add(kv1.Key, "");
+                    }
+                    else continue;
+                }
+
+                return v2;
+            }
+        }
+        set
+        {
+            if (value == null)
+            {
+                _address_custom_data = null;
+            }
+            else
+            {
+                var v1 = (Dictionary<string, string>)value;
+                Dictionary<string, string> v2 = new Dictionary<string, string>();
+                foreach (KeyValuePair<string, string> kv1 in v1)
+                {
+                    if (kv1.Key != null)
+                    {
+                        if (kv1.Value != null) v2.Add(kv1.Key, kv1.Value.ToString()); else v2.Add(kv1.Key, "");
+                    }
+                    else continue;
+                }
+                _address_custom_data = v2;
+            }
         }
     }
-    private object _address_custom_data;
+    private Dictionary<string, string> _address_custom_data;
 
     [DataMember(Name = "schedule", EmitDefaultValue = false)]
     public IList<Schedule> schedule { get; set; }
@@ -83,6 +135,9 @@ namespace Route4MeSDK.DataTypes
 
     [DataMember(Name = "service_time", EmitDefaultValue = false)]
     public int? service_time { get; set; }
+
+    [DataMember(Name = "local_timezone_string", EmitDefaultValue = false)]
+    public string local_timezone_string { get; set; }
 
     [DataMember(Name = "color", EmitDefaultValue = false)]
     public string color { get; set; }

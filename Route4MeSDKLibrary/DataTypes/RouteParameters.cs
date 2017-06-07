@@ -63,6 +63,9 @@ namespace Route4MeSDK.DataTypes
     [DataMember(Name = "avoid", EmitDefaultValue = false)]
     public string Avoid { get; set; }
 
+    [DataMember(Name = "avoidance_zones", EmitDefaultValue = false)]
+    public string[] AvoidanceZones { get; set; }
+
     [DataMember(Name = "vehicle_id", EmitDefaultValue = false)]
     public string VehicleId { get; set; }
 
@@ -142,6 +145,9 @@ namespace Route4MeSDK.DataTypes
 
     [DataMember(Name = "parts", EmitDefaultValue = false)]
     public int? Parts { get; set; }
+
+    [DataMember(Name = "parts_min", EmitDefaultValue = false)]
+    public int? PartsMin { get; set; }
 
     //deprecated 
     [DataMember(Name = "device_id", EmitDefaultValue = false)]

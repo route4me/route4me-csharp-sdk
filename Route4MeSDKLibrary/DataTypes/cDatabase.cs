@@ -739,7 +739,7 @@ namespace Route4MeSDK.DataTypes
                 case "address_custom_data":
                     System.Text.StringBuilder sbCustom = new System.Text.StringBuilder();
                     sbCustom.Append("{");
-                    foreach (KeyValuePair<string, object> kvpair in (Dictionary<string, object>)oValue)
+                    foreach (KeyValuePair<string, string> kvpair in (Dictionary<string, string>)oValue)
                     {
                         if (kvpair.Value == null)
                         {
