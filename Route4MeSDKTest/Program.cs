@@ -143,7 +143,7 @@ namespace Route4MeSDKTest
         examples.GetAddress(routeIdToMoveTo, routeDestinationIdToMove);
 
         examples.AddAddressNote(routeIdToMoveTo, routeDestinationIdToMove);
-        examples.AddAddressNoteWithFile(routeIdToMoveTo, routeDestinationIdToMove);
+        //examples.AddAddressNoteWithFile(routeIdToMoveTo, routeDestinationIdToMove); // temporarry removed this test - website refuses it
         examples.GetAddressNotes(routeIdToMoveTo, routeDestinationIdToMove);
       }
       else
