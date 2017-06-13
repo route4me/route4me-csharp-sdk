@@ -353,7 +353,7 @@ namespace Route4MeSDKUnitTest
             Assert.IsNotNull(note, "AddAddressNoteTest failed... " + errorString);
         }
 
-        [TestMethod]
+        //[TestMethod] -- this test excluded because website refuses sending of the file
         public void AddAddressNoteWithFileTest()
         {
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
