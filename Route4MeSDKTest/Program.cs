@@ -21,9 +21,6 @@ namespace Route4MeSDKTest
     static void Main(string[] args)
     {
 
-        shortTest.TestRun();
-        return;
-
       Route4MeExamples examples = new Route4MeExamples();
        
       DataObject dataObject = null;
