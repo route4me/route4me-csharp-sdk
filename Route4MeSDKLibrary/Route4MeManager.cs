@@ -2359,6 +2359,17 @@ namespace Route4MeSDK
                         }
                         break;
                     case HttpMethodType.Post:
+                        if (true)
+                        {
+                            var response = httpClient.GetStreamAsync(parametersURI);
+                            response.Wait();
+
+                            if (response.IsCompleted)
+                            {
+                                //var test = m_isTestMode ? response.Result.ReadString() : null;
+                                result = isString ? response.Result.ReadString() as String : response.Result.ReadObject<String>(); // Oleg T -> String
+                            }
+                        }
                         break;
                     case HttpMethodType.Put:
                         break;
