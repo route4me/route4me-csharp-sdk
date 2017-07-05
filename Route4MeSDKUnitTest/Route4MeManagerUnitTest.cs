@@ -6079,13 +6079,31 @@ namespace Route4MeSDKUnitTest
 
             GeocodingParameters geoParams = new GeocodingParameters
             {
-                Addresses = "Los20%Angeles20%International20%Airport,20%CA",
-                Format = "xml"
+                Addresses = "Los Angeles International Airport, CA||3495 Purdue St, Cuyahoga Falls, OH 44221",
+                Format = "json"
             };
 
             //Run the query
             string errorString = "";
             string result = route4Me.Geocoding(geoParams, out errorString);
+
+            Assert.IsNotNull(result, "GeocodingForwardTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void BatchGeocodingForwardTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            GeocodingParameters geoParams = new GeocodingParameters
+            {
+                Addresses ="Los Angeles International Airport, CA\n3495 Purdue St, Cuyahoga Falls, OH 44221",
+                Format = "json"
+            };
+
+            //Run the query
+            string errorString = "";
+            string result = route4Me.BatchGeocoding(geoParams, out errorString);
 
             Assert.IsNotNull(result, "GeocodingForwardTest failed... " + errorString);
         }
@@ -6211,7 +6229,8 @@ namespace Route4MeSDKUnitTest
         {
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
-            GeocodingParameters geoParams = new GeocodingParameters { Addresses = "42.35863,-71.05670" };
+            GeocodingParameters geoParams = new GeocodingParameters { Addresses = "41.00367151,-81.59846105" };
+            geoParams.Format = "xml";
             // Run the query
             string errorString = "";
             string result = route4Me.Geocoding(geoParams, out errorString);
