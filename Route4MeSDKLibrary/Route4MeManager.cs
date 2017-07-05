@@ -1927,6 +1927,22 @@ namespace Route4MeSDK
         return response.ToString();
     }
 
+    public string BatchGeocoding(GeocodingParameters geoParams, out string errorString)
+    {
+            GeocodingRequest request = new GeocodingRequest { };
+
+            var keyValues = new List<KeyValuePair<string, string>>();
+
+            keyValues.Add(new KeyValuePair<string, string>("strExportFormat", geoParams.Format));
+            keyValues.Add(new KeyValuePair<string, string>("addresses", geoParams.Addresses));
+
+            HttpContent httpContent = new FormUrlEncodedContent(keyValues);
+
+            string response = GetJsonObjectFromAPI<string>(request, R4MEInfrastructureSettings.Geocoder, HttpMethodType.Post, httpContent, true, out errorString);
+
+            return response.ToString();
+        }
+
     public ArrayList RapidStreetData(GeocodingParameters geoParams, out string errorString)
     {
 	    GeocodingRequest request = new GeocodingRequest {
