@@ -1,4 +1,5 @@
 ﻿using System.Runtime.Serialization;
+using System.Collections.Generic;
 
 namespace Route4MeSDK.DataTypes
 {
@@ -171,5 +172,11 @@ namespace Route4MeSDK.DataTypes
             set { m_user_reg_state_id = value; }
         }
         private string m_user_reg_state_id;
+
+        [DataMember(Name = "level")]
+        public int? level { get; set; }
+
+        [DataMember(Name = "custom_data")]
+        public Dictionary<string,string> custom_data { get; set; }
     }
 }
