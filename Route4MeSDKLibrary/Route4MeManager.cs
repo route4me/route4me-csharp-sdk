@@ -691,19 +691,26 @@ namespace Route4MeSDK
         return result;
     }
 
-    #endregion
+        #endregion
 
-    #region Users
+        #region Users
 
-    public User[] GetUsers(GenericParameters parameters, out string errorString)
-    {
-      var result = GetJsonObjectFromAPI<User[]>(parameters,
-                                                           R4MEInfrastructureSettings.GetUsersHost,
-                                                           HttpMethodType.Get,
-                                                           out errorString);
+        [DataContract]
+        public sealed class GetUsersResponse
+        {
+            [DataMember(Name = "results")]
+            public MemberResponseV4[] results { get; set; }
+        }
 
-      return result;
-    }
+        public GetUsersResponse GetUsers(GenericParameters parameters, out string errorString)
+        {
+            var result = GetJsonObjectFromAPI<GetUsersResponse> (parameters,
+                                                                 R4MEInfrastructureSettings.GetUsersHost,
+                                                                 HttpMethodType.Get,
+                                                                 out errorString);
+
+            return result;
+        }
 
     public MemberResponseV4 CreateUser(MemberParametersV4 memParams, out string errorString)
     {

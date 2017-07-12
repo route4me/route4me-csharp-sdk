@@ -1,4 +1,5 @@
 ﻿using System.Runtime.Serialization;
+using System.Collections.Generic;
 
 namespace Route4MeSDK.QueryTypes
 {
@@ -12,55 +13,26 @@ namespace Route4MeSDK.QueryTypes
         }
         private System.Nullable<int> m_member_id;
 
-        [DataMember(Name = "HIDE_ROUTED_ADDRESSES", EmitDefaultValue = false)]
-        public bool HIDE_ROUTED_ADDRESSES
-        {
-            get { return m_HIDE_ROUTED_ADDRESSES; }
-            set { m_HIDE_ROUTED_ADDRESSES = value; }
-        }
-        private bool m_HIDE_ROUTED_ADDRESSES;
+        [HttpQueryMemberAttribute(Name = "device_id", EmitDefaultValue = false)]
+        public string device_id { get; set; }
 
+        [DataMember(Name = "HIDE_ROUTED_ADDRESSES", EmitDefaultValue = false)]
+        public string HIDE_ROUTED_ADDRESSES { get; set; }
 
         [DataMember(Name = "HIDE_VISITED_ADDRESSES", EmitDefaultValue = false)]
-        public bool HIDE_VISITED_ADDRESSES
-        {
-            get { return m_HIDE_VISITED_ADDRESSES; }
-            set { m_HIDE_VISITED_ADDRESSES = value; }
-        }
-        private bool m_HIDE_VISITED_ADDRESSES;
+        public string HIDE_VISITED_ADDRESSES { get; set; }
 
         [DataMember(Name = "READONLY_USER", EmitDefaultValue = false)]
-        public bool READONLY_USER
-        {
-            get { return m_READONLY_USER; }
-            set { m_READONLY_USER = value; }
-        }
-        private bool m_READONLY_USER;
-
+        public string READONLY_USER { get; set; }
 
         [DataMember(Name = "HIDE_NONFUTURE_ROUTES", EmitDefaultValue = false)]
-        public bool HIDE_NONFUTURE_ROUTES
-        {
-            get { return m_HIDE_NONFUTURE_ROUTES; }
-            set { m_HIDE_NONFUTURE_ROUTES = value; }
-        }
-        private bool m_HIDE_NONFUTURE_ROUTES;
+        public string HIDE_NONFUTURE_ROUTES { get; set; }
 
         [DataMember(Name = "SHOW_ALL_VEHICLES", EmitDefaultValue = false)]
-        public bool SHOW_ALL_VEHICLES
-        {
-            get { return m_SHOW_ALL_VEHICLES; }
-            set { m_SHOW_ALL_VEHICLES = value; }
-        }
-        private bool m_SHOW_ALL_VEHICLES;
+        public string SHOW_ALL_VEHICLES { get; set; }
 
         [DataMember(Name = "SHOW_ALL_DRIVERS", EmitDefaultValue = false)]
-        public bool SHOW_ALL_DRIVERS
-        {
-            get { return m_SHOW_ALL_DRIVERS; }
-            set { m_SHOW_ALL_DRIVERS = value; }
-        }
-        private bool m_SHOW_ALL_DRIVERS;
+        public string SHOW_ALL_DRIVERS { get; set; }
 
         [DataMember(Name = "member_phone", EmitDefaultValue = false)]
         public string member_phone
@@ -77,6 +49,24 @@ namespace Route4MeSDK.QueryTypes
             set { m_member_zipcode = value; }
         }
         private string m_member_zipcode;
+
+        [DataMember(Name = "user_reg_country_id", EmitDefaultValue = false)]
+        public int? user_reg_country_id { get; set; }
+
+        [DataMember(Name = "user_reg_state_id", EmitDefaultValue = false)]
+        public int? user_reg_state_id { get; set; }
+
+        [DataMember(Name = "preferred_language", EmitDefaultValue = false)]
+        public string preferred_language { get; set; }
+
+        [DataMember(Name = "preferred_units", EmitDefaultValue = false)]
+        public string preferred_units { get; set; }
+
+        [DataMember(Name = "timezone", EmitDefaultValue = false)]
+        public string timezone { get; set; }
+
+        [DataMember(Name = "custom_data", EmitDefaultValue = false)]
+        public Dictionary<string, string> custom_data { get; set; }
 
         [HttpQueryMemberAttribute(Name = "route_count", EmitDefaultValue = false)]
         public System.Nullable<int> route_count
@@ -125,6 +115,9 @@ namespace Route4MeSDK.QueryTypes
             set { m_member_password = value; }
         }
         private string m_member_password;
+
+        [DataMember(Name = "OWNER_MEMBER_ID", EmitDefaultValue = false)]
+        public int? OWNER_MEMBER_ID { get; set; }
 
         [DataMember(Name = "member_last_name", EmitDefaultValue = false)]
         public string member_last_name
