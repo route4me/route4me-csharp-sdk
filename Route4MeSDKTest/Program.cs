@@ -20,7 +20,6 @@ namespace Route4MeSDKTest
   {
     static void Main(string[] args)
     {
-
       Route4MeExamples examples = new Route4MeExamples();
        
       DataObject dataObject = null;
@@ -143,7 +142,7 @@ namespace Route4MeSDKTest
         examples.GetAddress(routeIdToMoveTo, routeDestinationIdToMove);
 
         examples.AddAddressNote(routeIdToMoveTo, routeDestinationIdToMove);
-        //examples.AddAddressNoteWithFile(routeIdToMoveTo, routeDestinationIdToMove); // temporarry removed this test - website refuses it
+        examples.AddAddressNoteWithFile(routeIdToMoveTo, routeDestinationIdToMove);
         examples.GetAddressNotes(routeIdToMoveTo, routeDestinationIdToMove);
       }
       else
