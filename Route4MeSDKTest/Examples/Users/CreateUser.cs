@@ -16,20 +16,20 @@ namespace Route4MeSDK.Examples
 
             MemberParametersV4 @params = new MemberParametersV4
             {
-                HIDE_ROUTED_ADDRESSES = false,
+                HIDE_ROUTED_ADDRESSES = "FALSE",
                 member_phone = "571-259-5939",
                 member_zipcode = "22102",
                 member_email = "skrynkovskyy+newdispatcher@gmail.com",
-                HIDE_VISITED_ADDRESSES = false,
-                READONLY_USER = false,
+                HIDE_VISITED_ADDRESSES = "FALSE",
+                READONLY_USER = "FALSE",
                 member_type = "SUB_ACCOUNT_DISPATCHER",
                 date_of_birth = "2010",
                 member_first_name = "Clay",
                 member_password = "123456",
-                HIDE_NONFUTURE_ROUTES = false,
+                HIDE_NONFUTURE_ROUTES = "FALSE",
                 member_last_name = "Abraham",
-                SHOW_ALL_VEHICLES = false,
-                SHOW_ALL_DRIVERS = false
+                SHOW_ALL_VEHICLES = "FALSE",
+                SHOW_ALL_DRIVERS = "FALSE"
             };
 
             // Run the query
