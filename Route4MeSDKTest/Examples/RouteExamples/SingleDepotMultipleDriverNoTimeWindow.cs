@@ -1781,8 +1781,8 @@ namespace Route4MeSDK.Examples
         RouteTime = 60 * 60 * 7,
         RT = true,
         RouteMaxDuration = 86400,
-        VehicleCapacity = "20",
-        VehicleMaxDistanceMI = "99999",
+        VehicleCapacity = 20,
+        VehicleMaxDistanceMI = 99999,
         Parts = 4,
 
         Optimize = Optimize.Time.Description(),
