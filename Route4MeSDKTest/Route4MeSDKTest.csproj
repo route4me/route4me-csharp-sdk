@@ -133,6 +133,7 @@
     <Compile Include="Examples\Notes\AddAddressNoteWithFile.cs" />
     <Compile Include="Examples\Optimizations\HybridOptimizationFrom1000Addresses.cs" />
     <Compile Include="Examples\Optimizations\HybridOptimizationFrom1000Orders.cs" />
+    <Compile Include="Examples\Optimizations\OptimizationWithCallbackUrl.cs" />
     <Compile Include="Examples\Optimizations\RemoveOptimization.cs" />
     <Compile Include="Examples\Orders\AddOrder.cs" />
     <Compile Include="Examples\Orders\AddOrdersToOptimization.cs" />

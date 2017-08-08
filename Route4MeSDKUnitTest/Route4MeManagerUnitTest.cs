@@ -43,12 +43,12 @@ namespace Route4MeSDKUnitTest
         [TestMethod]
         public void GetRoutesTest()
         {
-            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+            Route4MeManager route4Me = new Route4MeManager("bd48828717021141485a701453273458");
 
             RouteParametersQuery routeParameters = new RouteParametersQuery()
             {
-                Limit = 10,
-                Offset = 5
+                Limit = 30,
+                Offset = 0
             };
 
             // Run the query
@@ -127,30 +127,48 @@ namespace Route4MeSDKUnitTest
 
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
-            AddressesOrderInfo addressesOrderInfo = new AddressesOrderInfo();
-            addressesOrderInfo.RouteId = route.RouteID;
-            addressesOrderInfo.Addresses = new AddressInfo[0];
-            for (int i = 0; i < route.Addresses.Length; i++)
-            {
-                Address address = route.Addresses[i];
-                AddressInfo addressInfo = new AddressInfo();
-                addressInfo.DestinationId = address.RouteDestinationId.Value;
-                addressInfo.SequenceNo = i;
-                if (i == 1)
-                    addressInfo.SequenceNo = 2;
-                else if (i == 2)
-                    addressInfo.SequenceNo = 1;
-                addressInfo.IsDepot = (addressInfo.SequenceNo == 0);
-                List<AddressInfo> addressesList = new List<AddressInfo>(addressesOrderInfo.Addresses);
-                addressesList.Add(addressInfo);
-                addressesOrderInfo.Addresses = addressesList.ToArray();
-            }
+            //AddressesOrderInfo addressesOrderInfo = new AddressesOrderInfo();
+            //addressesOrderInfo.RouteId = route.RouteID;
+            //addressesOrderInfo.Addresses = new AddressInfo[0];
+            //for (int i = 0; i < route.Addresses.Length; i++)
+            //{
+            //    Address address = route.Addresses[i];
+            //    AddressInfo addressInfo = new AddressInfo();
+            //    addressInfo.DestinationId = address.RouteDestinationId.Value;
+            //    addressInfo.SequenceNo = i;
+            //    if (i == 1)
+            //        addressInfo.SequenceNo = 2;
+            //    else if (i == 2)
+            //        addressInfo.SequenceNo = 1;
+            //    addressInfo.IsDepot = (addressInfo.SequenceNo == 0);
+            //    List<AddressInfo> addressesList = new List<AddressInfo>(addressesOrderInfo.Addresses);
+            //    addressesList.Add(addressInfo);
+            //    addressesOrderInfo.Addresses = addressesList.ToArray();
+            //}
 
-            string errorString1 = "";
-            DataObjectRoute route1 = route4Me.GetJsonObjectFromAPI<DataObjectRoute>(addressesOrderInfo,
-                                                                                                R4MEInfrastructureSettings.RouteHost,
-                                                                                                HttpMethodType.Put,
-                                                                                                out errorString1);
+            //string errorString1 = "";
+            //DataObjectRoute route1 = route4Me.GetJsonObjectFromAPI<DataObjectRoute>(addressesOrderInfo,
+            //                                                                                    R4MEInfrastructureSettings.RouteHost,
+            //                                                                                    HttpMethodType.Put,
+            //                                                                                    out errorString1);
+            RouteParametersQuery rParams = new RouteParametersQuery()
+            {
+                RouteId = route.RouteID
+            };
+
+            List<Address> lsAddresses = new List<Address>();
+            Address address1 = route.Addresses[2];
+            Address address2 = route.Addresses[3];
+
+            address1.SequenceNo = 4;
+            address2.SequenceNo = 3;
+
+            lsAddresses.Add(address1);
+            lsAddresses.Add(address2);
+
+            string errorString="";
+            DataObjectRoute route1 = route4Me.ManualyResequenceRoute(rParams, lsAddresses.ToArray(), out errorString);
+            
             Assert.IsNotNull(route1, "ResequenceRouteDestinationsTest failed...");
         }
 
@@ -594,8 +612,8 @@ namespace Route4MeSDKUnitTest
 
                 //the maximum duration of a route
                 RouteMaxDuration = 86400,
-                VehicleCapacity = "1",
-                VehicleMaxDistanceMI = "10000",
+                VehicleCapacity = 1,
+                VehicleMaxDistanceMI = 10000,
 
                 Optimize = Optimize.Distance.Description(),
                 DistanceUnit = DistanceUnit.MI.Description(),
@@ -1283,8 +1301,8 @@ namespace Route4MeSDKUnitTest
                 RouteTime = 60 * 60 * 7,
                 RT = true,
                 RouteMaxDuration = 86400 * 3,
-                VehicleCapacity = "99",
-                VehicleMaxDistanceMI = "99999",
+                VehicleCapacity = 99,
+                VehicleMaxDistanceMI = 99999,
 
                 Optimize = Optimize.Time.Description(),
                 DistanceUnit = DistanceUnit.MI.Description(),
@@ -3083,8 +3101,8 @@ namespace Route4MeSDKUnitTest
                 RouteTime = 60 * 60 * 7,
                 RT = true,
                 RouteMaxDuration = 86400,
-                VehicleCapacity = "20",
-                VehicleMaxDistanceMI = "99999",
+                VehicleCapacity = 20,
+                VehicleMaxDistanceMI = 99999,
                 Parts = 4,
 
                 Optimize = Optimize.Time.Description(),
@@ -3304,8 +3322,8 @@ namespace Route4MeSDKUnitTest
                 RouteDate = R4MeUtils.ConvertToUnixTimestamp(DateTime.UtcNow.Date.AddDays(1)),
                 RouteTime = 60 * 60 * 7,
                 RouteMaxDuration = 86400,
-                VehicleCapacity = "1",
-                VehicleMaxDistanceMI = "10000",
+                VehicleCapacity = 1,
+                VehicleMaxDistanceMI = 10000,
 
                 Optimize = Optimize.Distance.Description(),
                 DistanceUnit = DistanceUnit.MI.Description(),
@@ -3650,8 +3668,8 @@ namespace Route4MeSDKUnitTest
                 RouteDate = R4MeUtils.ConvertToUnixTimestamp(DateTime.UtcNow.Date.AddDays(1)),
                 RouteTime = 60 * 60 * 7,
                 RouteMaxDuration = 86400,
-                VehicleCapacity = "1",
-                VehicleMaxDistanceMI = "10000",
+                VehicleCapacity = 1,
+                VehicleMaxDistanceMI = 10000,
 
                 Optimize = Optimize.Distance.Description(),
                 DistanceUnit = DistanceUnit.MI.Description(),
@@ -3753,8 +3771,8 @@ namespace Route4MeSDKUnitTest
                 RouteDate = R4MeUtils.ConvertToUnixTimestamp(DateTime.UtcNow.Date.AddDays(1)),
                 RouteTime = 60 * 60 * 7,
                 RouteMaxDuration = 86400,
-                VehicleCapacity = "1",
-                VehicleMaxDistanceMI = "10000",
+                VehicleCapacity = 1,
+                VehicleMaxDistanceMI = 10000,
 
                 Optimize = Optimize.Distance.Description(),
                 DistanceUnit = DistanceUnit.MI.Description(),
@@ -5715,26 +5733,27 @@ namespace Route4MeSDKUnitTest
         [TestMethod]
         public void GetDeviceHistoryTimeRangeTest()
         {
-            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+            Route4MeManager route4Me = new Route4MeManager("bd48828717021141485a701453273458");
 
             int uStartTime = 0;
             int uEndTime = 0;
             uStartTime = (int)(new DateTime(DateTime.Now.Year, 1, 1, 0, 0, 0) - (new DateTime(1970, 1, 1, 0, 0, 0))).TotalSeconds;
+            uStartTime = 0;
             uEndTime = (int)(DateTime.Now - (new DateTime(1970, 1, 1, 0, 0, 0))).TotalSeconds;
 
             GPSParameters gpsParameters = new GPSParameters
             {
-                Format = "csv",
-                RouteId = tdr.SDRT_route_id,
+                Format = "json",
+                RouteId = "8D1A03A79E24D57C9EBEB1A03C12CA6B",
                 time_period = "custom",
                 start_date = uStartTime,
                 end_date = uEndTime
             };
 
             string errorString = "";
-            string response = route4Me.SetGPS(gpsParameters, out errorString);
+            var response = route4Me.GetDeviceLocationHistory(gpsParameters, out errorString);
 
-            Assert.IsNotNull(response, "GetDeviceHistoryTimeRangeTest failed... " + errorString);
+            Assert.IsNotInstanceOfType(response, typeof(String), "GetDeviceHistoryTimeRangeTest failed... " + errorString);
         }
 
         [TestMethod]
@@ -7423,8 +7442,8 @@ namespace Route4MeSDKUnitTest
                 RouteDate = R4MeUtils.ConvertToUnixTimestamp(DateTime.UtcNow.Date.AddDays(1)),
                 RouteTime = 60 * 60 * 7,
                 RouteMaxDuration = 86400,
-                VehicleCapacity = "1",
-                VehicleMaxDistanceMI = "10000",
+                VehicleCapacity = 1,
+                VehicleMaxDistanceMI = 10000,
 
                 Optimize = Optimize.Distance.Description(),
                 DistanceUnit = DistanceUnit.MI.Description(),
@@ -7667,8 +7686,8 @@ namespace Route4MeSDKUnitTest
                 RouteDate = R4MeUtils.ConvertToUnixTimestamp(DateTime.UtcNow.Date.AddDays(1)),
                 RouteTime = 60 * 60 * 7,
                 RouteMaxDuration = 86400,
-                VehicleCapacity = "1",
-                VehicleMaxDistanceMI = "10000",
+                VehicleCapacity = 1,
+                VehicleMaxDistanceMI = 10000,
 
                 Optimize = Optimize.Distance.Description(),
                 DistanceUnit = DistanceUnit.MI.Description(),
