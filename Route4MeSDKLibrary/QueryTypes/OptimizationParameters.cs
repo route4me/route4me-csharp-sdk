@@ -31,6 +31,10 @@ namespace Route4MeSDK.QueryTypes
     [HttpQueryMemberAttribute(Name = "show_directions", EmitDefaultValue = false)]
     public bool? ShowDirections { get; set; }
 
+    [IgnoreDataMember] // Don't serialize as JSON
+    [HttpQueryMemberAttribute(Name = "optimized_callback_url", EmitDefaultValue = false)]
+    public string OptimizedCallbackURL { get; set; }
+
     [DataMember(Name = "parameters", EmitDefaultValue = false)]
     public RouteParameters Parameters { get; set; }
     

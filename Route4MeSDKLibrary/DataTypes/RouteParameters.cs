@@ -48,10 +48,10 @@ namespace Route4MeSDK.DataTypes
 
     
     [DataMember(Name = "vehicle_capacity", EmitDefaultValue = false)]
-    public string VehicleCapacity { get; set; }
+    public int? VehicleCapacity { get; set; }
 
     [DataMember(Name = "vehicle_max_distance_mi", EmitDefaultValue = false)]
-    public string VehicleMaxDistanceMI { get; set; }
+    public int? VehicleMaxDistanceMI { get; set; }
 
     //km or mi, the route4me api will convert all measurements into these units
     [DataMember(Name = "distance_unit", EmitDefaultValue = false)]

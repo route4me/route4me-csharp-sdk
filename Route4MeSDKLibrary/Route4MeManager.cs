@@ -204,7 +204,7 @@ namespace Route4MeSDK
                                                       R4MEInfrastructureSettings.RouteHost,
                                                       HttpMethodType.Get,
                                                       out errorString);
-
+        
         return result;
     }
 
@@ -376,6 +376,59 @@ namespace Route4MeSDK
             return false;
         }
     }
+
+        [DataContract()]
+        private sealed class ManualyResequenceRouteRequest : GenericParameters
+        {
+            [HttpQueryMemberAttribute(Name = "route_id", EmitDefaultValue = false)]
+            public string RouteId { get; set; }
+
+            [DataMember(Name = "addresses")]
+            public AddressInfo[] Addresses { get; set; }
+        }
+
+        [DataContract]
+        class AddressInfo : GenericParameters
+        {
+            [DataMember(Name = "route_destination_id")]
+            public int DestinationId { get; set; }
+
+            [DataMember(Name = "sequence_no")]
+            public int SequenceNo { get; set; }
+
+            [DataMember(Name = "is_depot")]
+            public bool IsDepot { get; set; }
+        }
+
+        public DataObjectRoute ManualyResequenceRoute(RouteParametersQuery rParams,  Address[] addresses, out string errorString)
+        {
+            ManualyResequenceRouteRequest request = new ManualyResequenceRouteRequest()
+            {
+                RouteId = rParams.RouteId
+            };
+
+            List<AddressInfo> lsAddresses = new List<AddressInfo>();
+
+            foreach (var address in addresses)
+            {
+                AddressInfo aInfo = new AddressInfo()
+                {
+                    DestinationId = address.RouteDestinationId!=null ? (int)address.RouteDestinationId : -1,
+                    SequenceNo = address.SequenceNo != null ? (int)address.SequenceNo : -1
+                };
+
+                lsAddresses.Add(aInfo);
+            }
+
+            request.Addresses = lsAddresses.ToArray();
+
+            DataObjectRoute route1 = GetJsonObjectFromAPI<DataObjectRoute>(request,
+                                            R4MEInfrastructureSettings.RouteHost,
+                                            HttpMethodType.Put,
+                                            out errorString);
+
+            return route1;
+        }
 
     public bool RouteSharing(RouteParametersQuery roParames, string Email, out string errorString)
     {
@@ -657,6 +710,35 @@ namespace Route4MeSDK
 
       return result;
     }
+
+        [DataContract]
+        public sealed class GetDeviceLocationHistoryResponse
+        {
+            [DataMember(Name = "data")]
+            public TrackingHistory[] data { get; set; }
+        }
+        /// <summary>
+        /// Get device locationhistory from the specified date range.
+        /// </summary>
+        /// <param name="gpsParameters">Query parameters</param>
+        /// <param name="errorString">Error mesage text</param>
+        /// <returns>If response contains not null data, returns object of the type GetDeviceLocationHistoryResponse.
+        /// If query was without error, but nothing was found, returns null.
+        /// If query failed, return error string.
+        /// </returns>
+        public object GetDeviceLocationHistory(GPSParameters gpsParameters, out string errorString)
+        {
+            var result = GetJsonObjectFromAPI<GetDeviceLocationHistoryResponse>(gpsParameters,
+                                                    R4MEInfrastructureSettings.DeviceLocation,
+                                                    HttpMethodType.Get,
+                                                    false,
+                                                    out errorString);
+
+            if (result == null && errorString != "") return errorString;
+            if (((GetDeviceLocationHistoryResponse)result).data.Length == 0) return null;
+
+            return result;
+        }
 
     public string SetGPS(GPSParameters gpsParameters, out string errorString)
     {
