@@ -17,17 +17,23 @@ namespace Route4MeSDK.DataTypes
   }
 
 
-  public enum TravelMode : uint
-  {
-    [Description("Driving")]
-    Driving,
+    public enum TravelMode : uint
+    {
+        [Description("Driving")]
+        Driving,
 
-    [Description("Walking")]
-    Walking,
+        [Description("Walking")]
+        Walking,
 
-    [Description("Trucking")]
-    Trucking
-  }
+        [Description("Trucking")]
+        Trucking,
+
+        [Description("Cycling")]
+        Cycling,
+
+        [Description("Transit")]
+        Transit
+    }
 
   
   public enum DistanceUnit : uint
