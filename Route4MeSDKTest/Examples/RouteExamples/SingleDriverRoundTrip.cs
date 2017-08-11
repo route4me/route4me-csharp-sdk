@@ -88,7 +88,7 @@ namespace Route4MeSDK.Examples
         VehicleMaxDistanceMI = 10000,
 
         Optimize     = Optimize.Distance.Description(),
-        DistanceUnit = DistanceUnit.MI.Description(),
+        DistanceUnit = DistanceUnit.KM.Description(),
         DeviceType   = DeviceType.Web.Description(),
         TravelMode   = TravelMode.Driving.Description(),
       };
