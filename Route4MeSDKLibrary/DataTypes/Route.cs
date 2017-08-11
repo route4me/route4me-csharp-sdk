@@ -2,8 +2,6 @@
 
 namespace Route4MeSDK.DataTypes
 {
-
-
   [DataContract]
   public sealed class DataObjectRoute : DataObject
   {
@@ -31,8 +29,8 @@ namespace Route4MeSDK.DataTypes
     [DataMember(Name = "net_revenue_per_distance_unit", EmitDefaultValue = false)]
     public double? NetRevenuePerDistanceUnit { get; set; }
 
-    [DataMember(Name = "created_timestamp", EmitDefaultValue = false)]
-    public int? CreatedTimestamp { get; set; }
+    //[DataMember(Name = "created_timestamp", EmitDefaultValue = false)]
+    //public int? CreatedTimestamp { get; set; }
 
     [DataMember(Name = "mpg", EmitDefaultValue = false)]
     public string mpg { get; set; }
@@ -45,5 +43,8 @@ namespace Route4MeSDK.DataTypes
 
     [DataMember(Name = "route_duration_sec", EmitDefaultValue = false)]
     public int? RouteDurationSec { get; set; }
-  }
+
+    [DataMember(Name = "notes", EmitDefaultValue = false)]
+    public AddressNote[] Notes { get; set; }
+    }
 }

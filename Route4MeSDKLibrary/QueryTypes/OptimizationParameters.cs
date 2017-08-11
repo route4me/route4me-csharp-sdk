@@ -35,7 +35,21 @@ namespace Route4MeSDK.QueryTypes
     [HttpQueryMemberAttribute(Name = "optimized_callback_url", EmitDefaultValue = false)]
     public string OptimizedCallbackURL { get; set; }
 
-    [DataMember(Name = "parameters", EmitDefaultValue = false)]
+    /// <summary>
+    /// The number of existing routes that should be returned per response when looking at a list of all the routes.
+    /// </summary>
+    [IgnoreDataMember]
+    [HttpQueryMemberAttribute(Name = "limit", EmitDefaultValue = false)]
+    public uint? Limit { get; set; }
+
+    /// <summary>
+    /// The page number for route listing pagination. Increment the offset by the limit number to move to the next page.
+    /// </summary>
+    [IgnoreDataMember]
+    [HttpQueryMemberAttribute(Name = "offset", EmitDefaultValue = false)]
+    public uint? Offset { get; set; }
+
+        [DataMember(Name = "parameters", EmitDefaultValue = false)]
     public RouteParameters Parameters { get; set; }
     
     [DataMember(Name = "addresses", EmitDefaultValue = false)]
