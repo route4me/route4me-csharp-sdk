@@ -22,6 +22,12 @@ namespace Route4MeSDK.DataTypes
     [DataMember(Name = "sent_to_background")]
     public bool IsSentToBackground { get; set; }
 
+    [DataMember(Name = "created_timestamp", EmitDefaultValue = false)]
+    public long? CreatedTimestamp { get; set; }
+
+    [DataMember(Name = "scheduled_for", EmitDefaultValue = false)]
+    public long? ScheduledFor { get; set; }
+
     [DataMember(Name = "parameters")]
     public RouteParameters Parameters { get; set; }
 
@@ -42,5 +48,8 @@ namespace Route4MeSDK.DataTypes
 
     [DataMember(Name = "path")]
     public DirectionPathPoint[] Path { get; set; }
-  }
+
+    [DataMember(Name = "total_addresses", EmitDefaultValue = false)]
+    public int? TotalAddresses { get; set; }
+    }
 }
