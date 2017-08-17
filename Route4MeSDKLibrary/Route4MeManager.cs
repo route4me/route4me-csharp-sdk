@@ -404,20 +404,25 @@ namespace Route4MeSDK
         {
             ManualyResequenceRouteRequest request = new ManualyResequenceRouteRequest()
             {
-                RouteId = rParams.RouteId
+                RouteId = rParams.RouteId,
+                
             };
 
             List<AddressInfo> lsAddresses = new List<AddressInfo>();
+
+            int iMaxSequenceNumber = 0;
 
             foreach (var address in addresses)
             {
                 AddressInfo aInfo = new AddressInfo()
                 {
                     DestinationId = address.RouteDestinationId!=null ? (int)address.RouteDestinationId : -1,
-                    SequenceNo = address.SequenceNo != null ? (int)address.SequenceNo : -1
+                    SequenceNo = address.SequenceNo != null ? (int)address.SequenceNo : iMaxSequenceNumber
                 };
 
                 lsAddresses.Add(aInfo);
+
+                iMaxSequenceNumber++;
             }
 
             request.Addresses = lsAddresses.ToArray();
@@ -493,158 +498,161 @@ namespace Route4MeSDK
         return result;
     }
 
-    [DataContract()]
-    private sealed class UpdateRouteDestinationRequest : GenericParameters
-    {
-        [HttpQueryMemberAttribute(Name = "route_id", EmitDefaultValue = false)]
-        public string RouteId
+        [DataContract()]
+        private sealed class UpdateRouteDestinationRequest : GenericParameters
         {
-            get { return m_RouteId; }
-            set { m_RouteId = value; }
+            [HttpQueryMemberAttribute(Name = "route_id", EmitDefaultValue = false)]
+            public string RouteId
+            {
+                get { return m_RouteId; }
+                set { m_RouteId = value; }
+            }
+
+            private string m_RouteId;
+            [HttpQueryMemberAttribute(Name = "route_destination_id", EmitDefaultValue = false)]
+            public System.Nullable<int> RouteDestinationId
+            {
+                get { return m_RouteDestinationId; }
+                set { m_RouteDestinationId = value; }
+            }
+            private System.Nullable<int> m_RouteDestinationId;
+
+            [DataMember(Name = "alias", EmitDefaultValue = false)]
+            public string Alias { get; set; }
+
+            [DataMember(Name = "first_name", EmitDefaultValue = false)]
+            public string FirstName { get; set; }
+
+            [DataMember(Name = "last_name", EmitDefaultValue = false)]
+            public string LastName { get; set; }
+
+            [DataMember(Name = "address", EmitDefaultValue = false)]
+            public string AddressString { get; set; }
+
+            [DataMember(Name = "address_stop_type", EmitDefaultValue = false)]
+            public string AddressStopType { get; set; }
+
+            [DataMember(Name = "is_depot", EmitDefaultValue = false)]
+            public bool? IsDepot { get; set; }
+
+            //the latitude of this address
+            [DataMember(Name = "lat", EmitDefaultValue = false)]
+            public double Latitude { get; set; }
+
+            //the longitude of this address
+            [DataMember(Name = "lng", EmitDefaultValue = false)]
+            public double Longitude { get; set; }
+
+            [DataMember(Name = "sequence_no", EmitDefaultValue = false)]
+            public int? SequenceNo { get; set; }
+
+            //status flag to mark an address as visited (aka check in)
+            [DataMember(Name = "is_visited", EmitDefaultValue = false)]
+            public bool? IsVisited { get; set; }
+
+            //status flag to mark an address as departed (aka check out)
+            [DataMember(Name = "is_departed", EmitDefaultValue = false)]
+            public bool? IsDeparted { get; set; }
+
+            //the last known visited timestamp of this address
+            [DataMember(Name = "timestamp_last_visited", EmitDefaultValue = false)]
+            public uint? TimestampLastVisited { get; set; }
+
+            //the last known departed timestamp of this address
+            [DataMember(Name = "timestamp_last_departed", EmitDefaultValue = false)]
+            public uint? TimestampLastDeparted { get; set; }
+
+            [DataMember(Name = "group", EmitDefaultValue = false)]
+            public object Group { get; set; }
+
+            //pass-through data about this route destination
+            //the data will be visible on the manifest, website, and mobile apps
+            [DataMember(Name = "customer_po", EmitDefaultValue = false)]
+            public object CustomerPo { get; set; }
+
+            //pass-through data about this route destination
+            //the data will be visible on the manifest, website, and mobile apps
+            [DataMember(Name = "invoice_no", EmitDefaultValue = false)]
+            public object InvoiceNo { get; set; }
+
+            //pass-through data about this route destination
+            //the data will be visible on the manifest, website, and mobile apps
+            [DataMember(Name = "reference_no", EmitDefaultValue = false)]
+            public object ReferenceNo { get; set; }
+
+            //pass-through data about this route destination
+            //the data will be visible on the manifest, website, and mobile apps
+            [DataMember(Name = "order_no", EmitDefaultValue = false)]
+            public object OrderNo { get; set; }
+
+            [DataMember(Name = "order_id", EmitDefaultValue = false)]
+            public int? OrderId { get; set; }
+
+            [DataMember(Name = "weight", EmitDefaultValue = false)]
+            public object Weight { get; set; }
+
+            [DataMember(Name = "cost", EmitDefaultValue = false)]
+            public object Cost { get; set; }
+
+            [DataMember(Name = "revenue", EmitDefaultValue = false)]
+            public object Revenue { get; set; }
+
+            //the cubic volume that this destination/order/line-item consumes/contains
+            //this is how much space it will take up on a vehicle
+            [DataMember(Name = "cube", EmitDefaultValue = false)]
+            public object Cube { get; set; }
+
+            //the number of pieces/palllets that this destination/order/line-item consumes/contains on a vehicle
+            [DataMember(Name = "pieces", EmitDefaultValue = false)]
+            public object Pieces { get; set; }
+
+            [DataMember(Name = "email", EmitDefaultValue = false)]
+            public string Email { get; set; }
+
+            [DataMember(Name = "phone", EmitDefaultValue = false)]
+            public string Phone { get; set; }
+
+            [DataMember(Name = "time_window_start", EmitDefaultValue = false)]
+            public int? TimeWindowStart { get; set; }
+
+            [DataMember(Name = "time_window_end", EmitDefaultValue = false)]
+            public int? TimeWindowEnd { get; set; }
+
+            //the expected amount of time that will be spent at this address by the driver/user
+            [DataMember(Name = "time", EmitDefaultValue = false)]
+            public int? Time { get; set; }
+
+            //if present, the priority will sequence addresses in all the optimal routes so that
+            //higher priority addresses are general at the beginning of the route sequence
+            //1 is the highest priority, 100000 is the lowest
+            [DataMember(Name = "priority", EmitDefaultValue = false)]
+            public int? Priority { get; set; }
+
+            //generate optimal routes and driving directions to this curbside lat
+            [DataMember(Name = "curbside_lat", EmitDefaultValue = false)]
+            public double? CurbsideLatitude { get; set; }
+
+            //generate optimal routes and driving directions to the curbside lang
+            [DataMember(Name = "curbside_lng", EmitDefaultValue = false)]
+            public double? CurbsideLongitude { get; set; }
+
+            [DataMember(Name = "time_window_start_2", EmitDefaultValue = false)]
+            public int? TimeWindowStart2 { get; set; }
+
+            [DataMember(Name = "time_window_end_2", EmitDefaultValue = false)]
+            public int? TimeWindowEnd2 { get; set; }
+
+            [DataMember(Name = "custom_fields", EmitDefaultValue = false)]
+            public Dictionary<string, string> CustomFields
+            {
+                get { return m_CustomFields; }
+                set { m_CustomFields = value; }
+            }
+            private Dictionary<string, string> m_CustomFields;
+
+            [DataMember(Name = "contact_id", EmitDefaultValue = false)]
+            public int? ContactId { get; set; }
         }
-
-        private string m_RouteId;
-        [HttpQueryMemberAttribute(Name = "route_destination_id", EmitDefaultValue = false)]
-        public System.Nullable<int> RouteDestinationId
-        {
-            get { return m_RouteDestinationId; }
-            set { m_RouteDestinationId = value; }
-        }
-        private System.Nullable<int> m_RouteDestinationId;
-
-        [DataMember(Name = "alias", EmitDefaultValue = false)]
-        public string Alias { get; set; }
-
-        [DataMember(Name = "first_name", EmitDefaultValue = false)]
-        public string FirstName { get; set; }
-
-        [DataMember(Name = "last_name", EmitDefaultValue = false)]
-        public string LastName { get; set; }
-
-        [DataMember(Name = "address", EmitDefaultValue = false)]
-        public string AddressString { get; set; }
-
-        [DataMember(Name = "address_stop_type", EmitDefaultValue = false)]
-        public string AddressStopType { get; set; }
-
-        [DataMember(Name = "is_depot", EmitDefaultValue = false)]
-        public bool? IsDepot { get; set; }
-
-        //the latitude of this address
-        [DataMember(Name = "lat", EmitDefaultValue = false)]
-        public double Latitude { get; set; }
-
-        //the longitude of this address
-        [DataMember(Name = "lng", EmitDefaultValue = false)]
-        public double Longitude { get; set; }
-
-        [DataMember(Name = "sequence_no", EmitDefaultValue = false)]
-        public int? SequenceNo { get; set; }
-
-        //status flag to mark an address as visited (aka check in)
-        [DataMember(Name = "is_visited", EmitDefaultValue = false)]
-        public bool? IsVisited { get; set; }
-
-        //status flag to mark an address as departed (aka check out)
-        [DataMember(Name = "is_departed", EmitDefaultValue = false)]
-        public bool? IsDeparted { get; set; }
-
-        //the last known visited timestamp of this address
-        [DataMember(Name = "timestamp_last_visited", EmitDefaultValue = false)]
-        public uint? TimestampLastVisited { get; set; }
-
-        //the last known departed timestamp of this address
-        [DataMember(Name = "timestamp_last_departed", EmitDefaultValue = false)]
-        public uint? TimestampLastDeparted { get; set; }
-
-        [DataMember(Name = "group", EmitDefaultValue = false)]
-        public object Group { get; set; }
-
-        //pass-through data about this route destination
-        //the data will be visible on the manifest, website, and mobile apps
-        [DataMember(Name = "customer_po", EmitDefaultValue = false)]
-        public object CustomerPo { get; set; }
-
-        //pass-through data about this route destination
-        //the data will be visible on the manifest, website, and mobile apps
-        [DataMember(Name = "invoice_no", EmitDefaultValue = false)]
-        public object InvoiceNo { get; set; }
-
-        //pass-through data about this route destination
-        //the data will be visible on the manifest, website, and mobile apps
-        [DataMember(Name = "reference_no", EmitDefaultValue = false)]
-        public object ReferenceNo { get; set; }
-
-        //pass-through data about this route destination
-        //the data will be visible on the manifest, website, and mobile apps
-        [DataMember(Name = "order_no", EmitDefaultValue = false)]
-        public object OrderNo { get; set; }
-
-        [DataMember(Name = "order_id", EmitDefaultValue = false)]
-        public int? OrderId { get; set; }
-
-        [DataMember(Name = "weight", EmitDefaultValue = false)]
-        public object Weight { get; set; }
-
-        [DataMember(Name = "cost", EmitDefaultValue = false)]
-        public object Cost { get; set; }
-
-        [DataMember(Name = "revenue", EmitDefaultValue = false)]
-        public object Revenue { get; set; }
-
-        //the cubic volume that this destination/order/line-item consumes/contains
-        //this is how much space it will take up on a vehicle
-        [DataMember(Name = "cube", EmitDefaultValue = false)]
-        public object Cube { get; set; }
-
-        //the number of pieces/palllets that this destination/order/line-item consumes/contains on a vehicle
-        [DataMember(Name = "pieces", EmitDefaultValue = false)]
-        public object Pieces { get; set; }
-
-        [DataMember(Name = "email", EmitDefaultValue = false)]
-        public string Email { get; set; }
-
-        [DataMember(Name = "phone", EmitDefaultValue = false)]
-        public string Phone { get; set; }
-
-        [DataMember(Name = "time_window_start", EmitDefaultValue = false)]
-        public int? TimeWindowStart { get; set; }
-
-        [DataMember(Name = "time_window_end", EmitDefaultValue = false)]
-        public int? TimeWindowEnd { get; set; }
-
-        //the expected amount of time that will be spent at this address by the driver/user
-        [DataMember(Name = "time", EmitDefaultValue = false)]
-        public int? Time { get; set; }
-
-        //if present, the priority will sequence addresses in all the optimal routes so that
-        //higher priority addresses are general at the beginning of the route sequence
-        //1 is the highest priority, 100000 is the lowest
-        [DataMember(Name = "priority", EmitDefaultValue = false)]
-        public int? Priority { get; set; }
-
-        //generate optimal routes and driving directions to this curbside lat
-        [DataMember(Name = "curbside_lat", EmitDefaultValue = false)]
-        public double? CurbsideLatitude { get; set; }
-
-        //generate optimal routes and driving directions to the curbside lang
-        [DataMember(Name = "curbside_lng", EmitDefaultValue = false)]
-        public double? CurbsideLongitude { get; set; }
-
-        [DataMember(Name = "time_window_start_2", EmitDefaultValue = false)]
-        public int? TimeWindowStart2 { get; set; }
-
-        [DataMember(Name = "time_window_end_2", EmitDefaultValue = false)]
-        public int? TimeWindowEnd2 { get; set; }
-
-        [DataMember(Name = "custom_fields", EmitDefaultValue = false)]
-        public Dictionary<string, string> CustomFields
-        {
-            get { return m_CustomFields; }
-            set { m_CustomFields = value; }
-        }
-        private Dictionary<string, string> m_CustomFields;
-    }
 
     public Address UpdateRouteDestination(Address addressParameters, out string errorString)
     {
@@ -690,8 +698,9 @@ namespace Route4MeSDK
         if (addressParameters.TimeWindowStart2 != null) request.TimeWindowStart2 = addressParameters.TimeWindowStart2;
         if (addressParameters.TimeWindowEnd2 != null) request.TimeWindowEnd2 = addressParameters.TimeWindowEnd2;
         if (addressParameters.CustomFields != null) request.CustomFields = addressParameters.CustomFields;
+        if (addressParameters.ContactId != null) request.ContactId = addressParameters.ContactId;
 
-        var result = GetJsonObjectFromAPI<Address>(request, R4MEInfrastructureSettings.GetAddress, HttpMethodType.Put, out errorString);
+            var result = GetJsonObjectFromAPI<Address>(request, R4MEInfrastructureSettings.GetAddress, HttpMethodType.Put, out errorString);
 
         return result;
     }
