@@ -11,7 +11,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
-
+using System.Web.Http;
 
 namespace Route4MeSDK
 {
@@ -2436,7 +2436,14 @@ namespace Route4MeSDK
           }
         }
       }
-      catch (Exception e)
+        catch (HttpResponseException e)
+        {
+            errorMessage = e is AggregateException ? e.InnerException.Message : e.Message;
+
+            errorMessage = e.Response.ToString() + " --- " + errorMessage;
+            result = default(T);
+        }
+            catch (Exception e)
       {
         errorMessage = e is AggregateException ? e.InnerException.Message : e.Message;
         result = default(T);
@@ -2581,7 +2588,14 @@ namespace Route4MeSDK
                 }
             }
         }
-        catch (Exception e)
+        catch (HttpResponseException e)
+        {
+            errorMessage = e is AggregateException ? e.InnerException.Message : e.Message;
+
+            errorMessage = e.Response.ToString() + " --- " + errorMessage;
+            result = null;
+        }
+            catch (Exception e)
         {
             errorMessage = e is AggregateException ? e.InnerException.Message : e.Message;
             result = null;
