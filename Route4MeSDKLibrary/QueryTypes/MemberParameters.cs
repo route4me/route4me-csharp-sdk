@@ -123,7 +123,24 @@ namespace Route4MeSDK.QueryTypes
             set { m_StrPassword2 = value; }
         }
         private string m_StrPassword2;
+        public string strSubAccountType { get; set; }
 
+        private bool m_blDisableMarketing = false;
 
+        [DataMember(Name = "blDisableMarketing", EmitDefaultValue = true)]
+        public bool blDisableMarketing
+        {
+            get { return m_blDisableMarketing; }
+            set { m_blDisableMarketing = value; }
+        }
+
+        private bool m_blDisableAccountActivationEmail = false;
+
+        [DataMember(Name = "blDisableAccountActivationEmail", EmitDefaultValue = true)]
+        public bool blDisableAccountActivationEmail
+        {
+            get { return m_blDisableAccountActivationEmail; }
+            set { m_blDisableAccountActivationEmail = value; }
+        }
     }
 }
