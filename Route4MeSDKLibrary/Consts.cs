@@ -49,6 +49,7 @@ namespace Route4MeSDK
         public const string ViewVehicles = MainHost + "/api/vehicles/view_vehicles.php";
 
     public const string HybridOptimization = MainHost + "/api.v4/hybrid_date_optimization.php";
+    public const string HybridDepots = MainHost + "/api/change_hybrid_optimization_depot.php";
 
     #endregion
   }
