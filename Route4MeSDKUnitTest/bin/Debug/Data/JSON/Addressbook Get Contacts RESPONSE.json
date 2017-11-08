@@ -192,6 +192,14 @@
 		"cached_lng": -74.01211,
 		"curbside_lat": 40.719856,
 		"curbside_lng": -74.01211,
+		"schedule": [{
+			"mode": "weekly",
+			"enabled": true,
+			"weekly": {
+				"every": 1,
+				"weekadys": [1,2,3,4,5]
+			}
+		}],
 		"schedule_blacklist": null,
 		"in_route_count": 0,
 		"last_visited_timestamp": 0,
@@ -226,6 +234,15 @@
 		"curbside_lat": 40.719697,
 		"curbside_lng": -74.00661,
 		"schedule_blacklist": null,
+		"schedule": [{
+			"mode": "monthly",
+			"enabled": true,
+			"monthly": {
+				"every": 1,
+				"mode": "dates",
+				"dates": [20,22,23,24,25]
+			}
+		}],
 		"in_route_count": 0,
 		"last_visited_timestamp": 0,
 		"last_routed_timestamp": 0,
@@ -258,6 +275,18 @@
 		"cached_lng": -77.338814,
 		"curbside_lat": 38.024654,
 		"curbside_lng": -77.338814,
+		"schedule": [{
+		"enabled": true,
+		"mode": "monthly",
+		"monthly": {
+					"every": 1,
+					"mode": "nth",
+					"nth": {
+						"n": 1,
+						"what": 4
+					}
+				}
+			}],
 		"in_route_count": 0,
 		"last_visited_timestamp": 0,
 		"last_routed_timestamp": 0,
