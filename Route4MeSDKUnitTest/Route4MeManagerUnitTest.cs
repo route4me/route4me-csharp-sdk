@@ -3917,6 +3917,13 @@ namespace Route4MeSDKUnitTest
 
         static AddressBookContact contact1, contact2;
 
+        static AddressBookContact scheduledContact1, scheduledContact1Response;
+        static AddressBookContact scheduledContact2, scheduledContact2Response;
+        static AddressBookContact scheduledContact3, scheduledContact3Response;
+        static AddressBookContact scheduledContact4, scheduledContact4Response;
+        static AddressBookContact scheduledContact5, scheduledContact5Response;
+        static AddressBookContact scheduledContact6, scheduledContact6Response;
+
         static List<int> lsRemoveContacts=new List<int>();
 
         [ClassInitialize()]
@@ -3961,6 +3968,182 @@ namespace Route4MeSDKUnitTest
 
             int location2 = contact2.address_id != null ? Convert.ToInt32(contact2.address_id) : -1;
             if (location2 > 0) lsRemoveContacts.Add(location2);
+        }
+
+        [TestMethod]
+        public void AddScheduledAddressBookContactsTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            #region // Add a location, scheduled daily.
+            Schedule sched1 = new Schedule("daily", false) 
+            { 
+                enabled = true,
+                mode = "daily",
+                daily = new schedule_daily(1)
+            };
+
+
+            scheduledContact1 = new AddressBookContact()
+            {
+                address_1 = "1604 PARKRIDGE PKWY, Louisville, KY, 40214",
+                address_alias = "1604 PARKRIDGE PKWY 40214",
+                address_group = "Scheduled daily",
+                first_name = "Peter",
+                last_name = "Newman",
+                address_email = "pnewman6564@yahoo.com",
+                address_phone_number = "65432178",
+                cached_lat = 38.141598,
+                cached_lng = -85.793846,
+                address_city = "Louisville",
+                address_custom_data = new Dictionary<string, string>() { { "scheduled", "yes" }, { "service type", "publishing" } },
+                schedule = new List<Schedule>(){ sched1}
+            };
+
+            string errorString;
+            scheduledContact1Response = route4Me.AddAddressBookContact(scheduledContact1, out errorString);
+
+            Assert.IsNotNull(scheduledContact1Response, "AddAddressBookContactsTest failed... " + errorString);
+
+            int location1 = scheduledContact1Response.address_id != null ? Convert.ToInt32(scheduledContact1Response.address_id) : -1;
+            if (location1 > 0) lsRemoveContacts.Add(location1);
+            #endregion
+
+            #region // Add a location, scheduled weekly.
+            Schedule sched2 = new Schedule("weekly", false)
+            {
+                enabled = true,
+                weekly = new schedule_weekly(1, new int[]{1,2,3,4,5})
+            };
+
+            scheduledContact2 = new AddressBookContact()
+            {
+                address_1 = "1407 MCCOY, Louisville, KY, 40215",
+                address_alias = "1407 MCCOY 40215",
+                address_group = "Scheduled weekly",
+                first_name = "Bart",
+                last_name = "Douglas",
+                address_email = "bdouglas9514@yahoo.com",
+                address_phone_number = "95487454",
+                cached_lat = 38.202496,
+                cached_lng = -85.786514,
+                address_city = "Louisville",
+                service_time = 600,
+                schedule = new List<Schedule>() { sched2 }
+            };
+
+            scheduledContact2Response = route4Me.AddAddressBookContact(scheduledContact2, out errorString);
+
+            Assert.IsNotNull(scheduledContact2Response, "AddAddressBookContactsTest failed... " + errorString);
+
+            int location2 = scheduledContact2Response.address_id != null ? Convert.ToInt32(scheduledContact2Response.address_id) : -1;
+            if (location2 > 0) lsRemoveContacts.Add(location2);
+
+            #endregion
+
+            #region // Add a location, scheduled monthly (dates mode).
+            Schedule sched3 = new Schedule("monthly", false)
+            {
+                enabled = true,
+                monthly = new schedule_monthly(_every: 1, _mode: "dates", _dates: new int[] { 20, 22, 23, 24, 25 })
+            };
+
+            scheduledContact3 = new AddressBookContact()
+            {
+                address_1 = "4805 BELLEVUE AVE, Louisville, KY, 40215",
+                address_2 = "4806 BELLEVUE AVE, Louisville, KY, 40215",
+                address_alias = "4805 BELLEVUE AVE 40215",
+                address_group = "Scheduled monthly",
+                first_name = "Bart",
+                last_name = "Douglas",
+                address_email = "bdouglas9514@yahoo.com",
+                address_phone_number = "95487454",
+                cached_lat = 38.178844,
+                cached_lng = -85.774864,
+                address_country_id = "US",
+                address_state_id = "KY",
+                address_zip = "40215",
+                address_city = "Louisville",
+                service_time = 750,
+                schedule = new List<Schedule>() { sched3 },
+                color = "red"
+            };
+
+            scheduledContact3Response = route4Me.AddAddressBookContact(scheduledContact3, out errorString);
+
+            Assert.IsNotNull(scheduledContact3Response, "AddAddressBookContactsTest failed... " + errorString);
+
+            int location3 = scheduledContact3Response.address_id != null ? Convert.ToInt32(scheduledContact3Response.address_id) : -1;
+            if (location3 > 0) lsRemoveContacts.Add(location3);
+            #endregion
+
+            #region // Add a location, scheduled monthly (nth mode).
+            Schedule sched4 = new Schedule("monthly", false)
+            {
+                enabled = true,
+                monthly = new schedule_monthly(_every: 1, _mode: "nth", _nth: new Dictionary<int,int>() {{1,4}})
+            };
+
+            scheduledContact4 = new AddressBookContact()
+            {
+                address_1 = "730 CECIL AVENUE, Louisville, KY, 40211",
+                address_alias = "730 CECIL AVENUE 40211",
+                address_group = "Scheduled monthly",
+                first_name = "David",
+                last_name = "Silvester",
+                address_email = "dsilvester5874@yahoo.com",
+                address_phone_number = "36985214",
+                cached_lat = 38.248684,
+                cached_lng = -85.821121,
+                address_city = "Louisville",
+                service_time = 450,
+                address_custom_data = new Dictionary<string, string>() { { "scheduled", "yes" }, { "service type", "library" } },
+                schedule = new List<Schedule>() { sched4 },
+                address_icon = "emoji/emoji-bus"
+            };
+
+            scheduledContact4Response = route4Me.AddAddressBookContact(scheduledContact4, out errorString);
+
+            Assert.IsNotNull(scheduledContact4Response, "AddAddressBookContactsTest failed... " + errorString);
+
+            int location4 = scheduledContact4Response.address_id != null ? Convert.ToInt32(scheduledContact4Response.address_id) : -1;
+            if (location4 > 0) lsRemoveContacts.Add(location4);
+            #endregion
+
+            #region // Add a location with the daily scheduling and blacklist.
+            Schedule sched5 = new Schedule("daily", false)
+            {
+                enabled = true,
+                mode = "daily",
+                daily = new schedule_daily(1)
+            };
+
+
+            scheduledContact5 = new AddressBookContact()
+            {
+                address_1 = "4629 HILLSIDE DRIVE, Louisville, KY, 40216",
+                address_alias = "4629 HILLSIDE DRIVE 40216",
+                address_group = "Scheduled daily",
+                first_name = "Kim",
+                last_name = "Shandor",
+                address_email = "kshand8524@yahoo.com",
+                address_phone_number = "9874152",
+                cached_lat = 38.176067,
+                cached_lng = -85.824638,
+                address_city = "Louisville",
+                address_custom_data = new Dictionary<string, string>() { { "scheduled", "yes" }, { "service type", "appliance" } },
+                schedule = new List<Schedule>() { sched5 },
+                schedule_blacklist = new string[] { "2017-12-22", "2017-12-23" },
+                service_time = 300
+            };
+
+            scheduledContact5Response = route4Me.AddAddressBookContact(scheduledContact5, out errorString);
+
+            Assert.IsNotNull(scheduledContact5Response, "AddAddressBookContactsTest failed... " + errorString);
+
+            int location5 = scheduledContact5Response.address_id != null ? Convert.ToInt32(scheduledContact5Response.address_id) : -1;
+            if (location5 > 0) lsRemoveContacts.Add(location5);
+            #endregion
         }
 
         [TestMethod]
@@ -4736,6 +4919,40 @@ namespace Route4MeSDKUnitTest
             Order updatedOrder = route4Me.UpdateOrder(order, out errorString);
 
             Assert.IsNotNull(updatedOrder, "UpdateOrderTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void AddScheduledOrderTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            Order orderParams = new Order()
+            {
+                address_1 = "318 S 39th St, Louisville, KY 40212, USA",
+                cached_lat = 38.259326,
+	            cached_lng = -85.814979,
+	            curbside_lat = 38.259326,
+	            curbside_lng = -85.814979,
+	            address_alias = "318 S 39th St 40212",
+	            address_city = "Louisville",
+	            EXT_FIELD_first_name = "Lui",
+	            EXT_FIELD_last_name = "Carol",
+	            EXT_FIELD_email = "lcarol654@yahoo.com",
+	            EXT_FIELD_phone = "897946541",
+	            EXT_FIELD_custom_data = new Dictionary<string, string>() {{"order_type","scheduled order"}},
+	            day_scheduled_for_YYMMDD = "2017-12-20",
+	            local_time_window_end = 39000,
+	            local_time_window_end_2 = 46200,
+	            local_time_window_start = 37800,
+	            local_time_window_start_2 = 45000,
+	            local_timezone_string = "America/New_York",
+	            order_icon = "emoji/emoji-bank"
+            };
+
+            string errorString = "";
+            var newOrder = route4Me.AddOrder(orderParams, out errorString);
+
+            Assert.IsNotNull(newOrder, "AddScheduledOrdersTest failed... " + errorString);
         }
 
         [TestMethod]
@@ -6973,6 +7190,7 @@ namespace Route4MeSDKUnitTest
 
             string errorString1;
             string errorString2;
+            string errorString3;
 
             foreach (string ScheduledDay in lsScheduledDays)
             {
@@ -6997,16 +7215,25 @@ namespace Route4MeSDKUnitTest
                     continue;
                 }
 
-                //============== Reoptimization =================================
-                RouteParameters rParams = new RouteParameters();
-                rParams.AlgorithmType = AlgorithmType.CVRP_TW_SD;
+                //============== Add Depot To Hybrid Optimization ===============
+                HybridDepotParameters hDepotParams = new HybridDepotParameters()
+                {
+                    optimization_problem_id = HybridOptimizationId,
+                    delete_old_depots = true,
+                    new_depots = new Address[] { Depots[lsScheduledDays.IndexOf(ScheduledDay)] }
+                };
 
+                var addDepotResult = route4Me.AddDepotsToHybridOptimization(hDepotParams, out errorString3);
+
+                Assert.IsTrue(addDepotResult, "Adding a depot to the Hybrid Optimization failed... "+errorString3);
+
+                Thread.Sleep(5000);
+
+                //============== Reoptimization =================================
                 OptimizationParameters optimizationParameters = new OptimizationParameters()
                 {
                     OptimizationProblemID = HybridOptimizationId,
-                    ReOptimize = true,
-                    Parameters = rParams,
-                    Addresses = new Address[] { Depots[lsScheduledDays.IndexOf(ScheduledDay)] }
+                    ReOptimize = true
                 };
 
                 DataObject finalOptimization = route4Me.UpdateOptimization(optimizationParameters, out errorString2);
@@ -7161,6 +7388,7 @@ namespace Route4MeSDKUnitTest
 
             string errorString1;
             string errorString2;
+            string errorString3;
 
             foreach (string ScheduledDay in lsScheduledDays)
             {
@@ -7187,16 +7415,23 @@ namespace Route4MeSDKUnitTest
                     continue;
                 }
 
-                //============== Reoptimization =================================
-                RouteParameters rParams = new RouteParameters();
-                rParams.AlgorithmType = AlgorithmType.CVRP_TW_SD;
+                //============== Add Depot To Hybrid Optimization ===============
+                HybridDepotParameters hDepotParams = new HybridDepotParameters()
+                {
+                    optimization_problem_id = HybridOptimizationId,
+                    delete_old_depots = true,
+                    new_depots = new Address[] { Depots[lsScheduledDays.IndexOf(ScheduledDay)] }
+                };
 
+                var addDepotResult = route4Me.AddDepotsToHybridOptimization(hDepotParams, out errorString3);
+
+                Thread.Sleep(5000);
+
+                //============== Reoptimization =================================
                 OptimizationParameters optimizationParameters = new OptimizationParameters()
                 {
                     OptimizationProblemID = HybridOptimizationId,
-                    ReOptimize = true,
-                    Parameters = rParams,
-                    Addresses = new Address[] { Depots[lsScheduledDays.IndexOf(ScheduledDay)] }
+                    ReOptimize = true
                 };
 
                 DataObject finalOptimization = route4Me.UpdateOptimization(optimizationParameters, out errorString2);

@@ -188,12 +188,39 @@ namespace Route4MeSDK
     public DataObject GetOHybridptimization(HybridOptimizationParameters hybridOptimizationParameters, out string errorString)
     {
         var result = GetJsonObjectFromAPI<DataObject>(hybridOptimizationParameters,
-                                                      R4MEInfrastructureSettings.HybridOptimization,
-                                                      HttpMethodType.Get,
-                                                      out errorString);
+                                                        R4MEInfrastructureSettings.HybridOptimization,
+                                                        HttpMethodType.Get,
+                                                        out errorString);
 
         return result;
     }
+
+    [DataContract()]
+    private sealed class AddDepotsToHybridOptimizationResponse
+    {
+        [DataMember(Name = "status")]
+        public Boolean Status { get; set; }
+    }
+
+    public bool AddDepotsToHybridOptimization(HybridDepotParameters hybridDepotParameters, out string errorString)
+    {
+        var result = GetJsonObjectFromAPI<AddDepotsToHybridOptimizationResponse>(hybridDepotParameters,
+                                                        R4MEInfrastructureSettings.HybridDepots,
+                                                        HttpMethodType.Post,
+                                                        out errorString);
+
+        if (result != null)
+        {
+            if (result.GetType()==typeof(AddDepotsToHybridOptimizationResponse))
+            {
+                return ((AddDepotsToHybridOptimizationResponse)result).Status;
+            }
+            else return false;
+        }
+        else return false;
+    }
+
+
     #endregion
 
     #region Routes
@@ -1138,11 +1165,25 @@ namespace Route4MeSDK
       }
     }
 
-    #endregion
+        public Activity[] GetAnalytics(ActivityParameters activityParameters, out string errorString)
+        {
+            GetActivitiesResponse response = GetJsonObjectFromAPI<GetActivitiesResponse>(activityParameters,
+                                                                 R4MEInfrastructureSettings.ActivityFeedHost,
+                                                                 HttpMethodType.Get,
+                                                                 out errorString);
+            Activity[] result = null;
+            if (response != null)
+            {
+                result = response.Results;
+            }
+            return result;
+        }
 
-    #region Destinations
+        #endregion
 
-    public Address GetAddress(AddressParameters addressParameters, out string errorString)
+        #region Destinations
+
+        public Address GetAddress(AddressParameters addressParameters, out string errorString)
     {
       var result = GetJsonObjectFromAPI<Address>(addressParameters,
                                                            R4MEInfrastructureSettings.GetAddress,
@@ -2020,9 +2061,9 @@ namespace Route4MeSDK
             Format = geoParams.Format
         };
 
-        string response = GetXmlObjectFromAPI<string>(request, R4MEInfrastructureSettings.Geocoder, HttpMethodType.Post, (HttpContent)null, true, out errorString);
+        var response = GetXmlObjectFromAPI<string>(request, R4MEInfrastructureSettings.Geocoder, HttpMethodType.Post, (HttpContent)null, true, out errorString);
 
-        return response.ToString();
+            if (response == null) return errorString; else return response.ToString();
     }
 
     public string BatchGeocoding(GeocodingParameters geoParams, out string errorString)
@@ -2436,14 +2477,14 @@ namespace Route4MeSDK
           }
         }
       }
-        catch (HttpResponseException e)
-        {
-            errorMessage = e is AggregateException ? e.InnerException.Message : e.Message;
+    catch (HttpResponseException e)
+    {
+        errorMessage = e is AggregateException ? e.InnerException.Message : e.Message;
 
-            errorMessage = e.Response.ToString() + " --- " + errorMessage;
-            result = default(T);
-        }
-            catch (Exception e)
+        errorMessage = e.Response.ToString() + " --- " + errorMessage;
+        result = null;
+    }
+    catch (Exception e)
       {
         errorMessage = e is AggregateException ? e.InnerException.Message : e.Message;
         result = default(T);
@@ -2463,8 +2504,9 @@ namespace Route4MeSDK
             {
                 // Get the parameters
                 string parametersURI = optimizationParameters.Serialize(m_ApiKey);
-
-                switch (httpMethod__1)
+                    //var notFoundResponse = new HttpResponseMessage(System.Net.HttpStatusCode.NotFound);
+                    //throw new  HttpResponseException(notFoundResponse);
+                    switch (httpMethod__1)
                 {
                     case HttpMethodType.Get:
                         if (true)
@@ -2592,16 +2634,17 @@ namespace Route4MeSDK
         {
             errorMessage = e is AggregateException ? e.InnerException.Message : e.Message;
 
-            errorMessage = e.Response.ToString() + " --- " + errorMessage;
+                errorMessage = e.Response.ToString() + " --- " + errorMessage;
             result = null;
         }
-            catch (Exception e)
+        catch (Exception e)
         {
             errorMessage = e is AggregateException ? e.InnerException.Message : e.Message;
-            result = null;
+
+             result = null;
         }
 
-        return result;
+            return result;
     }
 
     private HttpClient CreateHttpClient(string url)
