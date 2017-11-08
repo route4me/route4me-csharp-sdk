@@ -181,6 +181,11 @@ namespace Route4MeSDK.DataTypes
     [DataContract]
     public class schedule_daily
     {
+        public schedule_daily(int _every=1)
+        {
+            every = _every;
+        }
+
         [DataMember(Name = "every")]
         public int every { get; set; }
     }
@@ -188,6 +193,12 @@ namespace Route4MeSDK.DataTypes
     [DataContract]
     public class schedule_weekly
     {
+        public schedule_weekly(int _every=1, int[] _weekdays=null)
+        {
+            every = _every;
+            if (_weekdays != null) weekdays = _weekdays;
+        }
+
         [DataMember(Name = "every")]
         public int every { get; set; }
 
@@ -198,6 +209,12 @@ namespace Route4MeSDK.DataTypes
     [DataContract]
     public class schedule_monthly_nth
     {
+        public schedule_monthly_nth(int _n=1, int _what=1)
+        {
+            n = _n;
+            what = _what;
+        }
+
         [DataMember(Name = "n", EmitDefaultValue = false), CustomValidation(typeof(PropertyValidation), "ValidateMonthlyNthN")]
         public int n { get; set; }
 
@@ -208,6 +225,27 @@ namespace Route4MeSDK.DataTypes
     [DataContract]
     public class schedule_monthly
     {
+        public schedule_monthly(int _every=1, string _mode="dates", int[] _dates = null, Dictionary<int,int> _nth=null)
+        {
+            every = _every;
+            mode = _mode;
+            if (_dates != null) dates = _dates;
+            if (_nth != null)
+            {
+                int _n = -1;
+                int _what = -1;
+                foreach (KeyValuePair<int, int> kv1 in _nth)
+                {
+                    _n = kv1.Key;
+                    _what = kv1.Value;
+                }
+                if (_n != -1 && _what != -1)
+                {
+                    this.nth = new schedule_monthly_nth(_n, _what);
+                }
+            }
+        }
+
         [DataMember(Name = "every")]
         public int every { get; set; }
 
