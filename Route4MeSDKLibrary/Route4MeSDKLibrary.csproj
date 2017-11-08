@@ -98,6 +98,7 @@
     <Compile Include="QueryTypes\GeocodingParameters.cs" />
     <Compile Include="QueryTypes\GPSParameters.cs" />
     <Compile Include="QueryTypes\HttpQueryMemberAttribute.cs" />
+    <Compile Include="QueryTypes\HybridDepotParameters.cs" />
     <Compile Include="QueryTypes\HybridOptimizationParameters.cs" />
     <Compile Include="QueryTypes\MemberConfigurationParameters.cs" />
     <Compile Include="QueryTypes\MemberParameters.cs" />
