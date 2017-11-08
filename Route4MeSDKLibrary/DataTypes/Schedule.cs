@@ -186,6 +186,8 @@ namespace Route4MeSDK.DataTypes
             every = _every;
         }
 
+        public schedule_daily() { }
+
         [DataMember(Name = "every")]
         public int every { get; set; }
     }
@@ -198,6 +200,8 @@ namespace Route4MeSDK.DataTypes
             every = _every;
             if (_weekdays != null) weekdays = _weekdays;
         }
+
+        public schedule_weekly() { }
 
         [DataMember(Name = "every")]
         public int every { get; set; }
@@ -214,6 +218,8 @@ namespace Route4MeSDK.DataTypes
             n = _n;
             what = _what;
         }
+
+        public schedule_monthly_nth() { }
 
         [DataMember(Name = "n", EmitDefaultValue = false), CustomValidation(typeof(PropertyValidation), "ValidateMonthlyNthN")]
         public int n { get; set; }
@@ -245,6 +251,8 @@ namespace Route4MeSDK.DataTypes
                 }
             }
         }
+
+        public schedule_monthly() { }
 
         [DataMember(Name = "every")]
         public int every { get; set; }
