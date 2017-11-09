@@ -93,6 +93,7 @@
     <Compile Include="Examples\Activities\SearchAreaAdded.cs" />
     <Compile Include="Examples\Activities\SearchDestinationDeleted.cs" />
     <Compile Include="Examples\AddressBook\AddAddressBookContact.cs" />
+    <Compile Include="Examples\AddressBook\AddScheduledAddressBookContact.cs" />
     <Compile Include="Examples\AddressBook\GetAddressbookLocation.cs" />
     <Compile Include="Examples\AddressBook\GetSpecifiedFieldsSearchText.cs" />
     <Compile Include="Examples\AddressBook\SearchLocationsByIDs.cs" />
@@ -138,6 +139,7 @@
     <Compile Include="Examples\Orders\AddOrder.cs" />
     <Compile Include="Examples\Orders\AddOrdersToOptimization.cs" />
     <Compile Include="Examples\Orders\AddOrdersToRoute.cs" />
+    <Compile Include="Examples\Orders\AddScheduledOrders.cs" />
     <Compile Include="Examples\Orders\GetOrderByID.cs" />
     <Compile Include="Examples\Orders\GetOrderByInsertedDate.cs" />
     <Compile Include="Examples\Orders\GetOrderByScheduledDate.cs" />

@@ -79,7 +79,14 @@ namespace Route4MeSDK.Examples
             Thread.Sleep(2000);
 
             #region ======= Get Hybrid Optimization ================================
-            string[] ScheduledDays = new string[] { "2017-03-06", "2017-03-07", "2017-03-08", "2017-03-09", "2017-03-10" };
+            TimeSpan tsp1day = new TimeSpan(1, 0, 0, 0);
+            List<string> lsScheduledDays = new List<string>();
+            DateTime curDate = DateTime.Now;
+            for (int i = 0; i < 5; i++)
+            {
+                curDate += tsp1day;
+                lsScheduledDays.Add(curDate.ToString("yyyy-MM-dd"));
+            }
 
             Address[] Depots = new Address[] {
                 new Address {
@@ -126,8 +133,9 @@ namespace Route4MeSDK.Examples
 
             string errorString1;
             string errorString2;
+            string errorString3;
 
-            foreach (string ScheduledDay in ScheduledDays)
+            foreach (string ScheduledDay in lsScheduledDays)
             {
                 HybridOptimizationParameters hparams = new HybridOptimizationParameters()
                 {
@@ -152,16 +160,23 @@ namespace Route4MeSDK.Examples
                     continue;
                 }
 
-                //============== Reoptimization =================================
-                RouteParameters rParams = new RouteParameters();
-                rParams.AlgorithmType = AlgorithmType.CVRP_TW_SD;
+                //============== Add Depot To Hybrid Optimization ===============
+                HybridDepotParameters hDepotParams = new HybridDepotParameters()
+                {
+                    optimization_problem_id = HybridOptimizationId,
+                    delete_old_depots = true,
+                    new_depots = new Address[] { Depots[lsScheduledDays.IndexOf(ScheduledDay)] }
+                };
 
+                var addDepotResult = route4Me.AddDepotsToHybridOptimization(hDepotParams, out errorString3);
+
+                Thread.Sleep(5000);
+
+                //============== Reoptimization =================================
                 OptimizationParameters optimizationParameters = new OptimizationParameters()
                 {
                     OptimizationProblemID = HybridOptimizationId,
-                    ReOptimize = true,
-                    Parameters = rParams,
-                    Addresses = new Address[] { Depots[Array.IndexOf(ScheduledDays, ScheduledDay)] }
+                    ReOptimize = true
                 };
 
                 DataObject finalOptimization = route4Me.UpdateOptimization(optimizationParameters, out errorString2);
