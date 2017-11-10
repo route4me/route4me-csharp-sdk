@@ -110,7 +110,7 @@ namespace Route4MeSDK
       [DataMember(Name = "status")]
       public bool Status { get; set; }
       [DataMember(Name = "removed")]
-      public bool Removed { get; set; }
+      public int Removed { get; set; }
     }
 
     [DataContract()]
@@ -141,16 +141,16 @@ namespace Route4MeSDK
                                                              R4MEInfrastructureSettings.ApiHost,
                                                              HttpMethodType.Delete,
                                                              out errorString);
-      if (response != null && response.Status && response.Removed)
-      {
-        return true;
-      }
-      else
-      {
-        if (errorString == "")
-          errorString = "Error removing optimization";
-        return false;
-      }
+            if (response != null)
+            {
+                if (response.Status && response.Removed > 0) return true; else return false;
+            }
+            else
+            {
+                if (errorString == "")
+                    errorString = "Error removing optimization";
+                return false;
+            }
     }
 
     [DataContract]
