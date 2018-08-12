@@ -30,7 +30,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>false</SignAssembly>
+    <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>Route4MeExcelAddIn_1_TemporaryKey.pfx</AssemblyOriginatorKeyFile>
@@ -57,9 +57,11 @@
     <Compile Include="DataTypes\Address.cs" />
     <Compile Include="DataTypes\AddressBookContact.cs" />
     <Compile Include="DataTypes\AddressBookContactsResponse.cs" />
+    <Compile Include="DataTypes\AddressCustomNote.cs" />
     <Compile Include="DataTypes\AddressNote.cs" />
     <Compile Include="DataTypes\AvoidanceZone.cs" />
     <Compile Include="DataTypes\cDatabase.cs" />
+    <Compile Include="DataTypes\CustomNoteType.cs" />
     <Compile Include="DataTypes\DataObject.cs" />
     <Compile Include="DataTypes\Direction.cs" />
     <Compile Include="DataTypes\DirectionLocation.cs" />
@@ -87,6 +89,7 @@
     <Compile Include="DataTypes\TrackingHistory.cs" />
     <Compile Include="DataTypes\User.cs" />
     <Compile Include="DataTypes\VehicleResponse.cs" />
+    <Compile Include="DataTypes\VehicleV4Response.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropertyValidation.cs" />
     <Compile Include="QueryTypes\ActivityParameters.cs" />
@@ -110,6 +113,7 @@
     <Compile Include="QueryTypes\RouteParametersQuery.cs" />
     <Compile Include="QueryTypes\TerritoryQuery.cs" />
     <Compile Include="QueryTypes\VehicleParameters.cs" />
+    <Compile Include="QueryTypes\VehicleV4Parameters.cs" />
     <Compile Include="Route4MeManager.cs" />
     <Compile Include="Types.cs" />
     <Compile Include="Utils.cs" />

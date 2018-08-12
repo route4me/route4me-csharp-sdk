@@ -79,7 +79,7 @@ namespace Route4MeSDK
       public DataObject[] Optimizations { get; set; }
     }
 
-    public DataObject[] GetOptimizations(RouteParametersQuery queryParameters, out string errorString)
+    public DataObject[] GetOptimizations(OptimizationParameters queryParameters, out string errorString)
     {
       DataObjectOptimizations dataObjectOptimizations = GetJsonObjectFromAPI<DataObjectOptimizations>(queryParameters,
                                                              R4MEInfrastructureSettings.ApiHost,
@@ -1031,6 +1031,12 @@ namespace Route4MeSDK
       [DataMember(Name = "status")]
       public bool Status { get; set; }
 
+      [DataMember(Name = "note_id")]
+      public string NoteID { get; set; }
+
+      [DataMember(Name = "upload_id")]
+      public string UploadID { get; set; }
+
       [DataMember(Name = "note")]
       public AddressNote Note { get; set; }
     }
@@ -1062,6 +1068,7 @@ namespace Route4MeSDK
         keyValues.Add(new KeyValuePair<string, string>("strNoteContents", noteContents));
         httpContent = new FormUrlEncodedContent(keyValues);
       }
+
       AddAddressNoteResponse response = GetJsonObjectFromAPI<AddAddressNoteResponse>(noteParameters,
                                                            R4MEInfrastructureSettings.AddRouteNotesHost,
                                                            HttpMethodType.Post,
@@ -1099,6 +1106,135 @@ namespace Route4MeSDK
     public AddressNote AddAddressNote(NoteParameters noteParameters, string noteContents, out string errorString)
     {
       return this.AddAddressNote(noteParameters, noteContents, null, out errorString);
+    }
+
+    [DataContract]
+    private sealed class AddCustomNoteTypeRequest : GenericParameters
+    {
+        [DataMember(Name = "type", EmitDefaultValue = false)]
+        public string Type { get; set; }
+
+        [DataMember(Name = "values", EmitDefaultValue = false)]
+        public string[] Values { get; set; }
+    }
+
+    [DataContract]
+    private sealed class AddCustomNoteTypeResponse
+    {
+        [DataMember(Name = "result")]
+        public string Result { get; set; }
+
+        [DataMember(Name = "affected")]
+        public int Affected { get; set; }
+    }
+
+    //if succefful, returns non-negative affected number, otherwise: -1
+    public object AddCustomNoteType(string customType, string[] values, out string errorString)
+    {
+        AddCustomNoteTypeRequest request = new AddCustomNoteTypeRequest()
+        {
+            Type = customType,
+            Values = values
+        };
+
+        AddCustomNoteTypeResponse response = GetJsonObjectFromAPI<AddCustomNoteTypeResponse>(request,
+                                                             R4MEInfrastructureSettings.CustomNoteType,
+                                                             HttpMethodType.Post,
+                                                                out errorString);
+        if (response!=null) 
+        {
+            return response.Result == "OK" ? response.Affected : -1;
+        } else return errorString;
+        
+    }
+
+    [DataContract]
+    private sealed class removeCustomNoteTypeRequest : GenericParameters
+    {
+        [DataMember(Name = "id", EmitDefaultValue = false)]
+        public int id { get; set; }
+    }
+
+    //if succefful, returns non-negative affected number, otherwise: -1
+    public object removeCustomNoteType(int customNoteId, out string errorString)
+    {
+        removeCustomNoteTypeRequest request = new removeCustomNoteTypeRequest() { id = customNoteId };
+
+        AddCustomNoteTypeResponse response = GetJsonObjectFromAPI<AddCustomNoteTypeResponse>(request,
+                                                            R4MEInfrastructureSettings.CustomNoteType,
+                                                            HttpMethodType.Delete,
+                                                               out errorString);
+
+        if (response != null)
+        {
+            return response.Result == "OK" ? response.Affected : -1;
+        }
+        else return errorString;
+    }
+
+    [DataContract]
+    private sealed class getAllCustomNoteTypesRequest : GenericParameters
+    {  }
+
+    public object getAllCustomNoteTypes(out string errorString)
+    {
+        getAllCustomNoteTypesRequest request = new getAllCustomNoteTypesRequest();
+
+        CustomNoteType[] response = GetJsonObjectFromAPI<CustomNoteType[]>(request,
+                                                            R4MEInfrastructureSettings.CustomNoteType,
+                                                            HttpMethodType.Get,
+                                                               out errorString);
+
+        if (response != null)
+        {
+            return response;
+        }
+        else return errorString;
+    }
+
+    [DataContract]
+    private sealed class addCustomNoteToRouteRequest : GenericParameters
+    {
+        [HttpQueryMemberAttribute(Name = "route_id", EmitDefaultValue = false)]
+        public string RouteId { get; set; }
+
+        [HttpQueryMemberAttribute(Name = "address_id", EmitDefaultValue = false)]
+        public int AddressId { get; set; }
+
+        [HttpQueryMemberAttribute(Name = "dev_lat")]
+        public double Latitude { get; set; }
+
+        [HttpQueryMemberAttribute(Name = "dev_lng")]
+        public double Longitude { get; set; }
+
+        [HttpQueryMemberAttribute(Name = "format")]
+        public double Format { get; set; }
+
+
+    }
+
+    public object addCustomNoteToRoute(NoteParameters noteParameters, Dictionary<string,string> customNotes, out string errorString)
+    {
+        var keyValues = new List<KeyValuePair<string, string>>();
+
+        foreach (KeyValuePair<string,string> kv1 in customNotes)
+        {
+            keyValues.Add(new KeyValuePair<string, string>(kv1.Key, kv1.Value));
+        }
+
+        HttpContent httpContent = new FormUrlEncodedContent(keyValues);
+
+        AddAddressNoteResponse response = GetJsonObjectFromAPI<AddAddressNoteResponse>(noteParameters,
+                                                           R4MEInfrastructureSettings.AddRouteNotesHost,
+                                                           HttpMethodType.Post,
+                                                           httpContent,
+                                                           out errorString);
+
+        if (response == null) return errorString;
+
+        if (response.GetType() != typeof(AddAddressNoteResponse)) return "Can not add custom note to the route";
+
+        if (response.Status) return response.Note; else return "Can not add custom note to the route";
     }
 
     #endregion
@@ -2194,6 +2330,19 @@ namespace Route4MeSDK
     #endregion
 
     #region Vehicles
+    /// <summary>
+    /// Create vehicle
+    /// </summary>
+    /// <param name="vehicle"> Parameters for request </param>
+    /// <param name="errorString"> out: Error as string </param>
+    /// <returns> VehicleV4Response Object </returns>
+    public VehicleV4Response CreateVehicle(VehicleV4Parameters vehicle, out string errorString)
+    {
+        VehicleV4Response newVehicle = GetJsonObjectFromAPI<VehicleV4Response>(vehicle, R4MEInfrastructureSettings.Vehicle_V4, HttpMethodType.Post, out errorString);
+
+        return newVehicle;
+    }
+
 
     /// <summary>
     /// Get Vehicles
@@ -2202,12 +2351,68 @@ namespace Route4MeSDK
     /// <param name="total"> out: Total number of Vehicles </param>
     /// <param name="errorString"> out: Error as string </param>
     /// <returns> Vehicle object list </returns>
-    public VehicleResponse[] GetVehicles(VehicleParameters vehParams, out string errorString)
+    public VehicleV4Response[] GetVehicles(VehicleParameters vehParams, out string errorString)
     {
-        VehicleResponse[] response = GetJsonObjectFromAPI<VehicleResponse[]>(vehParams, R4MEInfrastructureSettings.ViewVehicles, HttpMethodType.Get, out errorString);
+        //VehicleResponse[] response = GetJsonObjectFromAPI<VehicleResponse[]>(vehParams, R4MEInfrastructureSettings.ViewVehicles, HttpMethodType.Get, out errorString);
+        VehicleV4Response[] response = GetJsonObjectFromAPI<VehicleV4Response[]>(vehParams,
+                                                           R4MEInfrastructureSettings.Vehicle_V4,
+                                                           HttpMethodType.Get,
+                                                           out errorString);
 
         return response;
     }
+
+    /// <summary>
+    /// Get a Vehicle
+    /// </summary>
+    /// <param name="vehParams"> Parameters for request </param>
+    /// <param name="errorString"> out: Error as string </param>
+    /// <returns> VehicleV4Response Objectt </returns>
+    public VehicleV4Response GetVehicle(VehicleParameters vehParams, out string errorString)
+    {
+        //VehicleResponse[] response = GetJsonObjectFromAPI<VehicleResponse[]>(vehParams, R4MEInfrastructureSettings.ViewVehicles, HttpMethodType.Get, out errorString);
+        VehicleV4Response response = GetJsonObjectFromAPI<VehicleV4Response>(vehParams,
+                                                           R4MEInfrastructureSettings.Vehicle_V4,
+                                                           HttpMethodType.Get,
+                                                           out errorString);
+
+        return response;
+    }
+
+    public VehicleV4Response updateVehicle(VehicleV4Parameters vehParams, out string errorString)
+    {
+
+        VehicleV4Response response = GetJsonObjectFromAPI<VehicleV4Response>(vehParams,
+                                                          R4MEInfrastructureSettings.Vehicle_V4+"/"+vehParams.VehicleId
+                                                          ,
+                                                          HttpMethodType.Put,
+                                                          out errorString);
+
+        return response;
+    }
+
+    public VehicleV4Response deleteVehicle(VehicleV4Parameters vehParams, out string errorString)
+    {
+
+        VehicleV4Response response = GetJsonObjectFromAPI<VehicleV4Response>(vehParams,
+                                                          R4MEInfrastructureSettings.Vehicle_V4 + "/" + vehParams.VehicleId
+                                                          ,
+                                                          HttpMethodType.Delete,
+                                                          out errorString);
+
+        return response;
+    }
+
+    public VehicleV4Response deleteVehicle(VehicleParameters vehParams, out string errorString)
+    {
+        VehicleV4Response response = GetJsonObjectFromAPI<VehicleV4Response>(vehParams,
+                                                          R4MEInfrastructureSettings.Vehicle_V4,
+                                                          HttpMethodType.Get,
+                                                          out errorString);
+
+        return response;
+    }
+    
 
     #endregion
 
@@ -2366,7 +2571,7 @@ namespace Route4MeSDK
         {
           // Get the parameters
           string parametersURI = optimizationParameters.Serialize(m_ApiKey);
-
+          
           switch (httpMethod)
           {
             case HttpMethodType.Get:
@@ -2399,6 +2604,7 @@ namespace Route4MeSDK
               {
                 string jsonString = R4MeUtils.SerializeObjectToJson(optimizationParameters);
                 content = new StringContent(jsonString);
+                content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
               }
 
               Task<HttpResponseMessage> response = null;
