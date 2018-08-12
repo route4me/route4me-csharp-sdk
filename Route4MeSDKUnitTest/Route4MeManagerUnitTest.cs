@@ -297,6 +297,8 @@ namespace Route4MeSDKUnitTest
         static string c_ApiKey = "11111111111111111111111111111111";
         static TestDataRepository tdr;
         static List<string> lsOptimizationIDs;
+        static int lastCustomNoteTypeID;
+        static int firstCustomNoteTypeID;
 
         [ClassInitialize()]
         public static void NotesGroupInitialize(TestContext context)
@@ -329,7 +331,8 @@ namespace Route4MeSDKUnitTest
                 Latitude = lat,
                 Longitude = lng,
                 DeviceType = DeviceType.Web.Description(),
-                ActivityType = StatusUpdateType.DropOff.Description()
+                ActivityType = StatusUpdateType.DropOff.Description(),
+                Format="json"
             };
 
             // Run the query
@@ -338,6 +341,16 @@ namespace Route4MeSDKUnitTest
             AddressNote note = route4Me.AddAddressNote(noteParameters, contents, out errorString);
 
             Assert.IsNotNull(note, "AddAddressNoteTest failed... " + errorString);
+
+            var response = route4Me.getAllCustomNoteTypes(out errorString);
+
+            Assert.IsTrue(response.GetType() == typeof(CustomNoteType[]), errorString);
+
+            Assert.IsTrue(((CustomNoteType[])response).Length > 0, "Can not find custom note type in the account");
+
+            lastCustomNoteTypeID = ((CustomNoteType[])response)[((CustomNoteType[])response).Length - 1].NoteCustomTypeID;
+
+            firstCustomNoteTypeID = ((CustomNoteType[])response)[0].NoteCustomTypeID;
         }
 
         [TestMethod]
@@ -440,6 +453,85 @@ namespace Route4MeSDKUnitTest
             AddressNote[] notes = route4Me.GetAddressNotes(noteParameters, out errorString);
 
             Assert.IsInstanceOfType(notes, typeof(AddressNote[]), "GetAddressNotesTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void AddCustomNoteTypeTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            string customType = "To Do";
+            string[] values = new string[] { "Pass a package", "Pickup package", "Do a service" };
+
+            // Run the query
+            string errorString;
+
+            var response = route4Me.AddCustomNoteType(customType, values, out errorString);
+
+            Assert.IsTrue(response.GetType() != typeof(String), errorString);
+
+            Assert.IsTrue(Convert.ToInt32(response) >= 0, "Can not create new custom note type");
+
+        }
+
+        [TestMethod]
+        public void RemoveCustomNoteTypeTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            // Run the query
+            string errorString;
+
+            var response = route4Me.removeCustomNoteType(lastCustomNoteTypeID, out errorString);
+
+            Assert.IsTrue(response.GetType() != typeof(String), errorString);
+
+            Assert.IsTrue(Convert.ToInt32(response) >= 0, "Can not remove the custom note type");
+        } 
+
+        [TestMethod]
+        public void GetAllCustomNoteTypesTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            string errorString;
+
+            var response = route4Me.getAllCustomNoteTypes(out errorString);
+
+            Assert.IsTrue(response.GetType() != typeof(String), errorString);
+
+            Assert.IsTrue(response.GetType() == typeof(CustomNoteType[]));
+        }
+
+        [TestMethod]
+        public void AddCustomNoteToRouteTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            string errorString;
+
+            NoteParameters noteParameters = new NoteParameters()
+            {
+                RouteId = tdr.SDRT_route.RouteID,
+                AddressId = tdr.SDRT_route.Addresses[1].RouteDestinationId != null ? (int)tdr.SDRT_route.Addresses[1].RouteDestinationId : 0,
+                Format = "json",
+                Latitude = tdr.SDRT_route.Addresses[1].Latitude,
+                Longitude = tdr.SDRT_route.Addresses[1].Longitude
+            };
+
+            Dictionary<string, string> customNotes = new Dictionary<string, string>()
+            {
+                {"custom_note_type[11]", "slippery"},
+                {"custom_note_type[10]", "Backdoor"},
+                {"strUpdateType", "dropoff"},
+                {"strNoteContents", "test1111"}
+            };
+
+            var response = route4Me.addCustomNoteToRoute(noteParameters, customNotes, out errorString);
+
+            Assert.IsTrue(response.GetType() != typeof(String), errorString);
+
+            Assert.IsTrue(response.GetType() == typeof(AddressNote));
         }
 
         [ClassCleanup()]
@@ -4743,7 +4835,7 @@ namespace Route4MeSDKUnitTest
     [TestClass]
     public class OrdersGroup
     {
-        static string c_ApiKey = "11111111111111111111111111111111";
+        static string c_ApiKey = "51d0c0701ce83855c9f62d0440096e7c";
         static TestDataRepository tdr;
         static List<string> lsOptimizationIDs;
         static List<string> lsOrders = new List<string>();
@@ -6282,10 +6374,39 @@ namespace Route4MeSDKUnitTest
     [TestClass]
     public class VehiclesGroup
     {
-        static string c_ApiKey = "11111111111111111111111111111111";
+        static string c_ApiKey = "33333333333333333333333333333333";
+
+        static List<string> lsVehicleIDs;
+
+        [ClassInitialize()]
+        public static void VehiclesGroupInitialize(TestContext context)
+        {
+            lsVehicleIDs = new List<string>();
+
+            VehiclesGroup vehicleGroup = new VehiclesGroup();
+
+            VehicleV4Response[] vehicles = vehicleGroup.getVehilesList();
+
+            if (vehicles.Length < 1)
+            {
+                VehicleV4Response vehicle = vehicleGroup.createVehcile();
+                vehicles[0] = vehicle;
+            }
+
+            foreach (VehicleV4Response veh1 in vehicles)
+            {
+                lsVehicleIDs.Add(veh1.VehicleId);
+            }
+        }
 
         [TestMethod]
-        public void GetVehiclesTest()
+        public void GetVehiclesListTest()
+        {
+            VehicleV4Response[] vehicles = getVehilesList();
+            
+        }
+
+        public VehicleV4Response[] getVehilesList()
         {
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
@@ -6297,10 +6418,110 @@ namespace Route4MeSDKUnitTest
 
             // Run the query
             string errorString = "";
-            VehicleResponse[] vehicles = route4Me.GetVehicles(vehicleParameters, out errorString);
+            VehicleV4Response[] vehicles = route4Me.GetVehicles(vehicleParameters, out errorString);
+            Assert.IsInstanceOfType(vehicles, typeof(VehicleV4Response[]), "getVehilesList failed... " + errorString);
 
-            Assert.IsInstanceOfType(vehicles, typeof(VehicleResponse[]), "VehiclesGroup failed... " + errorString);
+            return vehicles;
         }
+
+        [TestMethod]
+        public void CreatetVehicleTest()
+        {
+            VehicleV4Response result = createVehcile();
+        }
+
+        public VehicleV4Response createVehcile()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            VehicleV4Parameters newVehicle = new VehicleV4Parameters()
+            {
+                VehicleAlias = "Ford Transit Test 6"
+            };
+
+            string errorString = "";
+            VehicleV4Response result = route4Me.CreateVehicle(newVehicle, out errorString);
+
+            Assert.IsNotNull(result, "CreatetVehiclTest failed... " + errorString);
+
+            return result;
+        }
+
+        [TestMethod]
+        public void getVehicleTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            VehicleParameters vehicleParameters = new VehicleParameters
+            {
+                VehicleId = lsVehicleIDs[lsVehicleIDs.Count-1]
+            };
+
+            // Run the query
+            string errorString = "";
+            VehicleV4Response vehicles = route4Me.GetVehicle(vehicleParameters, out errorString);
+            Assert.IsInstanceOfType(vehicles, typeof(VehicleV4Response), "getVehicleTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void updateVehicleTest()
+        {
+            if (lsVehicleIDs.Count < 1)
+            {
+                VehicleV4Response vehicle = createVehcile();
+                lsVehicleIDs.Add(vehicle.VehicleId);
+            }
+
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            // TO DO: on this stage specifying of the parameter vehicle_alias is mandatory. Will be checked later
+            VehicleV4Parameters vehicleParams = new VehicleV4Parameters()
+            {
+                VehicleId = lsVehicleIDs[lsVehicleIDs.Count-1],
+                VehicleAlias = "Ford Transit Test 4",
+                VehicleModelYear = 1995,
+	            VehicleRegCountryId = 223,
+	            VehicleMake = "Ford",
+	            VehicleAxleCount = 2,
+	            MpgCity = 8,
+	            MpgHighway = 14,
+	            FuelType = "unleaded 93",
+	            HeightInches = 72,
+	            WeightLb = 2000
+            };
+
+            // Run the query
+            string errorString = "";
+            VehicleV4Response vehicles = route4Me.updateVehicle(vehicleParams, out errorString);
+
+            Assert.IsInstanceOfType(vehicles, typeof(VehicleV4Response), "updateVehicleTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void deleteVehicleTest()
+        {
+            if (lsVehicleIDs.Count < 1)
+            {
+                VehicleV4Response vehicle = createVehcile();
+                lsVehicleIDs.Add(vehicle.VehicleId);
+            }
+
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            VehicleV4Parameters vehicleParams = new VehicleV4Parameters()
+            {
+                VehicleId = lsVehicleIDs[lsVehicleIDs.Count - 1]
+            };
+
+            // Run the query
+            string errorString = "";
+            VehicleV4Response vehicles = route4Me.deleteVehicle(vehicleParams, out errorString);
+
+            Assert.IsInstanceOfType(vehicles, typeof(VehicleV4Response), "updateVehicleTest failed... " + errorString);
+
+            lsVehicleIDs.RemoveAt(lsVehicleIDs.Count - 1);
+        }
+
     }
 
     [TestClass]
@@ -6882,7 +7103,7 @@ namespace Route4MeSDKUnitTest
         {
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
-            RouteParametersQuery queryParameters = new RouteParametersQuery()
+            OptimizationParameters queryParameters = new OptimizationParameters()
             {
                 Limit = 10,
                 Offset = 5
