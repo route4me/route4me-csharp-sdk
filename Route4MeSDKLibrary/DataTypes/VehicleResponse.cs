@@ -190,5 +190,13 @@ namespace Route4MeSDK.DataTypes
             set { m_WeightLb = value; }
         }
         private System.Nullable<double> m_WeightLb;
+
+        [DataMember(Name = "is_operational")]
+        public System.Nullable<bool> IsOperational
+        {
+            get { return m_IsOperational; }
+            set { m_IsOperational = value; }
+        }
+        private System.Nullable<bool> m_IsOperational;
     }
 }
