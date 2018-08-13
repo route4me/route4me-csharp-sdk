@@ -346,6 +346,16 @@ namespace Route4MeSDKUnitTest
 
             Assert.IsTrue(response.GetType() == typeof(CustomNoteType[]), errorString);
 
+            NotesGroup notesGroup = new NotesGroup();
+
+            if (((CustomNoteType[])response).Length < 2)
+            {
+                notesGroup.addCustomNoteType("Conditions at Site", new string[] { "safe", "mild", "dangerous", "slippery" });
+                notesGroup.addCustomNoteType("To Do", new string[] { "Pass a package", "Pickup package", "Do a service" });
+
+                response = route4Me.getAllCustomNoteTypes(out errorString);
+            }
+
             Assert.IsTrue(((CustomNoteType[])response).Length > 0, "Can not find custom note type in the account");
 
             lastCustomNoteTypeID = ((CustomNoteType[])response)[((CustomNoteType[])response).Length - 1].NoteCustomTypeID;
@@ -458,20 +468,24 @@ namespace Route4MeSDKUnitTest
         [TestMethod]
         public void AddCustomNoteTypeTest()
         {
-            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+            var response = addCustomNoteType("To Do", new string[] { "Pass a package", "Pickup package", "Do a service" });
 
-            string customType = "To Do";
-            string[] values = new string[] { "Pass a package", "Pickup package", "Do a service" };
+            Assert.IsTrue(response.GetType() != typeof(String), response.ToString());
+
+            Assert.IsTrue(Convert.ToInt32(response) >= 0, "Can not create new custom note type");
+
+        }
+
+        public Object addCustomNoteType(string customType, string[] customValues)
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
             // Run the query
             string errorString;
 
-            var response = route4Me.AddCustomNoteType(customType, values, out errorString);
+            var response = route4Me.AddCustomNoteType(customType, customValues, out errorString);
 
-            Assert.IsTrue(response.GetType() != typeof(String), errorString);
-
-            Assert.IsTrue(Convert.ToInt32(response) >= 0, "Can not create new custom note type");
-
+            return response;
         }
 
         [TestMethod]
