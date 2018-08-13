@@ -30,7 +30,7 @@ namespace Route4MeSDKUnitTest
         {
             lsOptimizationIDs = new List<string>();
 
-            tdr = new TestDataRepository();
+            tdr = new TestDataRepository(c_ApiKey);
             bool result = tdr.RunOptimizationSingleDriverRoute10Stops();
 
             Assert.IsTrue(result, "Single Driver 10 Stops generation failed...");
@@ -307,7 +307,7 @@ namespace Route4MeSDKUnitTest
 
             lsOptimizationIDs = new List<string>();
 
-            tdr = new TestDataRepository();
+            tdr = new TestDataRepository(c_ApiKey);
             bool result = tdr.SingleDriverRoundTripTest();
 
             Assert.IsTrue(result, "Single Driver Round Trip generation failed...");
@@ -546,14 +546,24 @@ namespace Route4MeSDKUnitTest
     [TestClass]
     public class RouteTypesGroup
     {
-        static string c_ApiKey = "11111111111111111111111111111111";
-        static TestDataRepository tdr=new TestDataRepository();
+        static string skip;
+        static string c_ApiKey = "11111111111111111111111111111111"; // The optimizations with the multiple depot and multiple drivers allowed only for business and higher account types --- put in the parameter an appropriate API key
+        static string c_ApiKey_1 = "11111111111111111111111111111111";
+
+        static TestDataRepository tdr = new TestDataRepository(c_ApiKey);
 
         static DataObject dataObject, dataObjectMDMD24;
+
+        [ClassInitialize()]
+        public static void RouteTypesGroupInitialize(TestContext context)
+        {
+            if (c_ApiKey == c_ApiKey_1) skip = "yes"; else skip = "no";
+        }
 
         [TestMethod]
         public void MultipleDepotMultipleDriverTest()
         {
+            if (skip == "yes") return;
             // Create the manager with the api key
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
@@ -732,6 +742,7 @@ namespace Route4MeSDKUnitTest
         [TestMethod]
         public void MultipleDepotMultipleDriverTimeWindowTest()
         {
+            if (skip == "yes") return;
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
             // Prepare the addresses
@@ -3210,21 +3221,33 @@ namespace Route4MeSDKUnitTest
                 Parameters = parameters
             };
 
-            // Run the query
-            string errorString;
-            dataObject = route4Me.RunOptimization(optimizationParameters, out errorString);
-
+            
             //Note: The addresses of this test aren't permited for api_key=11111111111111111111111111111111. 
             // If you put in the parameter api_key your valid key, the test will be finished successfuly.
 
-            Assert.IsNull(dataObject, "SingleDepotMultipleDriverNoTimeWindowTest failed... " + errorString);
+            //Assert.IsNull(dataObject, "SingleDepotMultipleDriverNoTimeWindowTest failed... " + errorString);
+            if (skip == "yes")
+            {
+                return;
+            }
+            else
+            {
+                // Run the query
+                string errorString;
+                dataObject = route4Me.RunOptimization(optimizationParameters, out errorString);
 
-            //tdr.RemoveOptimization(new string[] { dataObject.OptimizationProblemId });
+                Assert.IsNotNull(dataObject, "SingleDepotMultipleDriverNoTimeWindowTest failed... " + errorString);
+
+                tdr.RemoveOptimization(new string[] { dataObject.OptimizationProblemId });
+            }
+
+           
         }
 
         [TestMethod]
         public void MultipleDepotMultipleDriverWith24StopsTimeWindowTest()
         {
+            if (skip == "yes") return;
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
             // Prepare the addresses
@@ -4341,7 +4364,7 @@ namespace Route4MeSDKUnitTest
         {
             string ApiKey = "bd48828717021141485a701453273458";
             Route4MeManager route4Me = new Route4MeManager(ApiKey);
-            TestDataRepository tdr = new TestDataRepository();
+            TestDataRepository tdr = new TestDataRepository(c_ApiKey);
 
             bool blContinue = true;
 
@@ -4835,7 +4858,9 @@ namespace Route4MeSDKUnitTest
     [TestClass]
     public class OrdersGroup
     {
-        static string c_ApiKey = "51d0c0701ce83855c9f62d0440096e7c";
+        static string skip;
+        static string c_ApiKey = "11111111111111111111111111111111"; // This group allowed only for business and higher account types --- put in the parameter an appropriate API key
+        static string c_ApiKey_1 = "11111111111111111111111111111111"; //
         static TestDataRepository tdr;
         static List<string> lsOptimizationIDs;
         static List<string> lsOrders = new List<string>();
@@ -4843,11 +4868,16 @@ namespace Route4MeSDKUnitTest
         [ClassInitialize()]
         public static void CreateOrderTest(TestContext context)
         {
+            if (c_ApiKey == c_ApiKey_1) skip = "yes"; else skip = "no";
+
+            if (skip == "yes") return;
+
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
             lsOptimizationIDs = new List<string>();
-
-            tdr = new TestDataRepository();
+            context.Properties.Add("Categ", "Ignorable");
+            tdr = new TestDataRepository(c_ApiKey);
+            
             bool result = tdr.SingleDriverRoundTripTest();
 
             Assert.IsTrue(result, "Single Driver Round Trip generation failed...");
@@ -4866,18 +4896,27 @@ namespace Route4MeSDKUnitTest
                 day_scheduled_for_YYMMDD = dtTomorrow.ToString("yyyy-MM-dd")
             };
 
-            // Run the query
-            string errorString;
-            Order resultOrder = route4Me.AddOrder(order, out errorString);
+            if (c_ApiKey != c_ApiKey_1)
+            {
+                // Run the query
+                string errorString;
+                Order resultOrder = route4Me.AddOrder(order, out errorString);
 
-            Assert.IsNotNull(resultOrder, "CreateOrderTest failed... " + errorString);
+                Assert.IsNotNull(resultOrder, "CreateOrderTest failed... " + errorString);
 
-            lsOrders.Add(resultOrder.order_id.ToString());
+                lsOrders.Add(resultOrder.order_id.ToString());
+            }
+            else
+            {
+                Assert.AreEqual(c_ApiKey_1, c_ApiKey);
+            }
+            
         }
 
         [TestMethod]
         public void GetOrdersTest()
         {
+            if (skip == "yes") return;
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
             OrderParameters orderParameters = new OrderParameters()
@@ -4891,11 +4930,13 @@ namespace Route4MeSDKUnitTest
             Order[] orders = route4Me.GetOrders(orderParameters, out total, out errorString);
 
             Assert.IsInstanceOfType(orders, typeof(Order[]), "GetOrdersTest failed... " + errorString);
+            
         }
 
         [TestMethod]
         public void GetOrderByIDTest()
         {
+            if (skip == "yes") return;
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
             string orderIds = "";
@@ -4916,6 +4957,7 @@ namespace Route4MeSDKUnitTest
         [TestMethod]
         public void GetOrderByInsertedDateTest()
         {
+            if (skip == "yes") return;
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
             string InsertedDate = DateTime.Now.ToString("yyyy-MM-dd");
@@ -4931,6 +4973,7 @@ namespace Route4MeSDKUnitTest
         [TestMethod]
         public void GetOrderByScheduledDateTest()
         {
+            if (skip == "yes") return;
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
             DateTime dtTomorrow = DateTime.Now + (new TimeSpan(1, 0, 0, 0));
@@ -4946,6 +4989,7 @@ namespace Route4MeSDKUnitTest
         [TestMethod]
         public void GetOrdersBySpecifiedTextTest()
         {
+            if (skip == "yes") return;
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
             string query = "Test Address1";
@@ -4966,6 +5010,7 @@ namespace Route4MeSDKUnitTest
         [TestMethod]
         public void GetOrdersByCustomFieldsTest()
         {
+            if (skip == "yes") return;
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
             string CustomFields = "order_id,member_id";
@@ -4986,6 +5031,7 @@ namespace Route4MeSDKUnitTest
         [TestMethod]
         public void UpdateOrderTest()
         {
+            if (skip == "yes") return;
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
             Order order = null;
@@ -5016,6 +5062,7 @@ namespace Route4MeSDKUnitTest
         [TestMethod]
         public void AddScheduledOrderTest()
         {
+            if (skip == "yes") return;
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
             Order orderParams = new Order()
@@ -5050,6 +5097,7 @@ namespace Route4MeSDKUnitTest
         [TestMethod]
         public void AddOrdersToOptimizationTest()
         {
+            if (skip == "yes") return;
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
             OptimizationParameters rQueryParams = new OptimizationParameters()
@@ -5146,7 +5194,6 @@ namespace Route4MeSDKUnitTest
                 AlgorithmType = AlgorithmType.TSP,
                 RT = false,
                 LockLast = false,
-                MemberId = "1",
                 VehicleId = "",
                 DisableOptimization = false
             };
@@ -5161,6 +5208,7 @@ namespace Route4MeSDKUnitTest
         [TestMethod]
         public void AddOrdersToRouteTest()
         {
+            if (skip == "yes") return;
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
             RouteParametersQuery rQueryParams = new RouteParametersQuery()
@@ -5228,7 +5276,6 @@ namespace Route4MeSDKUnitTest
                 AlgorithmType = AlgorithmType.TSP,
                 RT = false,
                 LockLast = false,
-                MemberId = "1",
                 VehicleId = "",
                 DisableOptimization = false
             };
@@ -5242,6 +5289,7 @@ namespace Route4MeSDKUnitTest
         [ClassCleanup]
         public static void RemoveOrdersTest()
         {
+            if (skip == "yes") return;
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
             // Run the query
@@ -5269,7 +5317,7 @@ namespace Route4MeSDKUnitTest
         {
             lsOptimizationIDs = new List<string>();
 
-            tdr = new TestDataRepository();
+            tdr = new TestDataRepository(c_ApiKey);
             bool result = tdr.RunOptimizationSingleDriverRoute10Stops();
 
             Assert.IsTrue(result, "Single Driver 10 Stops generation failed...");
@@ -5735,7 +5783,7 @@ namespace Route4MeSDKUnitTest
         {
             lsOptimizationIDs = new List<string>();
 
-            tdr = new TestDataRepository();
+            tdr = new TestDataRepository(c_ApiKey);
             bool result = tdr.SingleDriverRoundTripTest();
 
             Assert.IsTrue(result, "Single Driver Round Trip generation failed...");
@@ -5984,7 +6032,7 @@ namespace Route4MeSDKUnitTest
         {
             lsOptimizationIDs = new List<string>();
 
-            tdr = new TestDataRepository();
+            tdr = new TestDataRepository(c_ApiKey);
             bool result = tdr.SingleDriverRoundTripTest();
 
             Assert.IsTrue(result, "Single Driver Round Trip generation failed...");
@@ -6092,11 +6140,41 @@ namespace Route4MeSDKUnitTest
     [TestClass]
     public class UsersGroup
     {
-        static string c_ApiKey = "11111111111111111111111111111111";
+        static string skip;
+        static string c_ApiKey = "11111111111111111111111111111111"; // Creating of a user better to do with the business and higher account types --- put in the parameter an appropriate API key
+        static string c_ApiKey_1 = "11111111111111111111111111111111";
+
+        static List<int> lsMembers;
+
+        [ClassInitialize()]
+        public static void UserGroupInitialize(TestContext context)
+        {
+            if (c_ApiKey == c_ApiKey_1) skip = "yes"; else skip = "no";
+            lsMembers = new List<int>();
+
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            GenericParameters parameters = new GenericParameters()
+            {
+            };
+
+            // Run the query
+            string errorString;
+            Route4MeManager.GetUsersResponse dataObjects = route4Me.GetUsers(parameters, out errorString);
+
+            Assert.IsInstanceOfType(dataObjects, typeof(Route4MeManager.GetUsersResponse), errorString);
+
+            foreach (MemberResponseV4 member in dataObjects.results)
+            {
+                lsMembers.Add(Convert.ToInt32(member.member_id));
+            }
+        }
 
         [TestMethod]
         public void CreateUserTest()
         {
+            if (skip == "yes") return;
+
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
             MemberParametersV4 @params = new MemberParametersV4
@@ -6104,7 +6182,7 @@ namespace Route4MeSDKUnitTest
                 HIDE_ROUTED_ADDRESSES = "FALSE",
                 member_phone = "571-259-5939",
                 member_zipcode = "22102",
-                member_email = "aaaaaaaa@gmail.com",
+                member_email = "regression.autotests+" + DateTime.Now.ToString("yyyyMMddHHmmss") + "@gmail.com",
                 HIDE_VISITED_ADDRESSES = "FALSE",
                 READONLY_USER = "FALSE",
                 member_type = "SUB_ACCOUNT_DISPATCHER",
@@ -6125,6 +6203,8 @@ namespace Route4MeSDKUnitTest
             string rightResponse = result != null ? "ok" : ((errorString == "Email is used in system" || errorString == "Registration: The e-mail address is missing or invalid.") ? "ok" : "");
 
             Assert.IsTrue(rightResponse == "ok", "CreateUserTest failed... " + errorString);
+
+            lsMembers.Add(Convert.ToInt32(result.member_id));
         }
 
         [TestMethod]
@@ -6132,7 +6212,8 @@ namespace Route4MeSDKUnitTest
         {
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
-            MemberParametersV4 @params = new MemberParametersV4 { member_id = 1 };
+            int memberID =  lsMembers[0];
+            MemberParametersV4 @params = new MemberParametersV4 { member_id = memberID };
 
             // Run the query
             string errorString = "";
@@ -6164,7 +6245,7 @@ namespace Route4MeSDKUnitTest
 
             MemberParametersV4 @params = new MemberParametersV4
             {
-                member_id = 220461,
+                member_id = lsMembers[lsMembers.Count - 1],
                 member_phone = "571-259-5939"
             };
 
@@ -6245,7 +6326,7 @@ namespace Route4MeSDKUnitTest
         {
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
-            MemberParametersV4 @params = new MemberParametersV4 { member_id = 147824 };
+            MemberParametersV4 @params = new MemberParametersV4 { member_id = lsMembers[lsMembers.Count - 1] };
 
             // Run the query
             string errorString = "";
@@ -6374,7 +6455,7 @@ namespace Route4MeSDKUnitTest
     [TestClass]
     public class VehiclesGroup
     {
-        static string c_ApiKey = "33333333333333333333333333333333";
+        static string c_ApiKey = "11111111111111111111111111111111";
 
         static List<string> lsVehicleIDs;
 
@@ -6721,7 +6802,7 @@ namespace Route4MeSDKUnitTest
 
             db_type = DB_Type.SQLCE; // you can choose other types of the database engine.
 
-            tdr = new TestDataRepository();
+            tdr = new TestDataRepository(c_ApiKey);
             bool result = tdr.GenerateSQLCEDatabaseTest();
 
             Assert.IsTrue(result, "Generation of the SQL tables failed...");
@@ -7088,7 +7169,7 @@ namespace Route4MeSDKUnitTest
             lsAddressbookContacts = new List<string>();
             lsOrders = new List<string>();
 
-            tdr = new TestDataRepository();
+            tdr = new TestDataRepository(c_ApiKey);
             bool result = tdr.RunOptimizationSingleDriverRoute10Stops();
 
             Assert.IsTrue(result, "Single Driver 10 stops generation failed...");
@@ -7684,12 +7765,13 @@ namespace Route4MeSDKUnitTest
     // **** Data repository for the tests ********
     public class TestDataRepository
     {
-        string c_ApiKey = "11111111111111111111111111111111";
+        private string c_ApiKey = "11111111111111111111111111111111";
 
-        public TestDataRepository()
+        public TestDataRepository(String apiKey = "11111111111111111111111111111111")
         {
-
+            c_ApiKey = apiKey;
         }
+
 
         public DataObject dataObjectSD10Stops { get; set; }
         public string SD10Stops_optimization_problem_id { get; set; }
