@@ -5,37 +5,30 @@ namespace Route4MeSDK.QueryTypes
     public sealed class VehicleParameters : GenericParameters
     {
         /// <summary>
-        /// Limit per page, if you use 0 you will get all records
+        /// If true, returned vehicles array will be paginated
         /// </summary>
-        [HttpQueryMemberAttribute(Name = "limit", EmitDefaultValue = false)]
-        public System.Nullable<uint> Limit
-        {
-            get { return m_Limit; }
-            set { m_Limit = value; }
-        }
-        private System.Nullable<uint> m_Limit;
+        [HttpQueryMemberAttribute(Name = "with_pagination", EmitDefaultValue = false)]
+        public bool WithPagination { get; set; }
+
 
         /// <summary>
-        /// Offset
+        /// Current page number in the vehicles collection
         /// </summary>
-        [HttpQueryMemberAttribute(Name = "offset", EmitDefaultValue = false)]
-        public System.Nullable<uint> Offset
-        {
-            get { return m_Offset; }
-            set { m_Offset = value; }
-        }
-        private System.Nullable<uint> m_Offset;
+        [HttpQueryMemberAttribute(Name = "page", EmitDefaultValue = false)]
+        public System.Nullable<uint> Page { get; set; }
+
+
+        /// <summary>
+        /// Returned vehicles number per page
+        /// </summary>
+        [HttpQueryMemberAttribute(Name = "perPage", EmitDefaultValue = false)]
+        public System.Nullable<uint> PerPage { get; set; }
 
         /// <summary>
         /// Vehicle ID
         /// </summary>
         [DataMember(Name = "vehicle_id", EmitDefaultValue = false)]
-        public string VehicleId
-        {
-            get { return m_VehicleId; }
-            set { m_VehicleId = value; }
-        }
-        private string m_VehicleId;
+        public string VehicleId  { get; set; }
     }
 }
 
