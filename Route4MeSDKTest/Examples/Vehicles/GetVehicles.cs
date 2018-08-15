@@ -16,22 +16,23 @@ namespace Route4MeSDK.Examples
 
             VehicleParameters vehicleParameters = new VehicleParameters
             {
-                Limit = 10,
-                Offset = 0
+                WithPagination = true,
+                Page = 1,
+                PerPage = 10
             };
 
             // Run the query
             string errorString = "";
-            VehicleResponse[] vehicles = route4Me.GetVehicles(vehicleParameters, out errorString);
+            VehiclesPaginated vehicles = route4Me.GetVehicles(vehicleParameters, out errorString);
 
             Console.WriteLine("");
 
             if (vehicles != null)
             {
-                Console.WriteLine("GetVehicles executed successfully, {0} vehicles returned", vehicles.Length);
+                Console.WriteLine("GetVehicles executed successfully, {0} vehicles returned", vehicles.Total);
                 Console.WriteLine("");
 
-                foreach (VehicleResponse vehicle in vehicles)
+                foreach (VehicleV4Response vehicle in vehicles.Data)
                 {
                     Console.WriteLine("Vehicle ID: {0}", vehicle.VehicleId);
                 }
