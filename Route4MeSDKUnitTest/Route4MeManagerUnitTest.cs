@@ -6480,41 +6480,45 @@ namespace Route4MeSDKUnitTest
 
             VehiclesGroup vehicleGroup = new VehiclesGroup();
 
-            VehicleV4Response[] vehicles = vehicleGroup.getVehilesList();
+            VehiclesPaginated vehicles = vehicleGroup.getVehilesList();
 
-            if (vehicles.Length < 1)
+            if (vehicles.Total < 1)
             {
                 VehicleV4Response vehicle = vehicleGroup.createVehcile();
-                vehicles[0] = vehicle;
+                lsVehicleIDs.Add(vehicle.VehicleId);
             }
-
-            foreach (VehicleV4Response veh1 in vehicles)
+            else
             {
-                lsVehicleIDs.Add(veh1.VehicleId);
+                foreach (VehicleV4Response veh1 in vehicles.Data)
+                {
+                    lsVehicleIDs.Add(veh1.VehicleId);
+                }
             }
+            
         }
 
         [TestMethod]
         public void GetVehiclesListTest()
         {
-            VehicleV4Response[] vehicles = getVehilesList();
+            VehiclesPaginated vehicles = getVehilesList();
             
         }
 
-        public VehicleV4Response[] getVehilesList()
+        public VehiclesPaginated getVehilesList()
         {
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
             VehicleParameters vehicleParameters = new VehicleParameters
             {
-                Limit = 10,
-                Offset = 0
+                WithPagination = true,
+                Page = 1,
+                PerPage = 10
             };
 
             // Run the query
             string errorString = "";
-            VehicleV4Response[] vehicles = route4Me.GetVehicles(vehicleParameters, out errorString);
-            Assert.IsInstanceOfType(vehicles, typeof(VehicleV4Response[]), "getVehilesList failed... " + errorString);
+            VehiclesPaginated vehicles = route4Me.GetVehicles(vehicleParameters, out errorString);
+            Assert.IsInstanceOfType(vehicles, typeof(VehiclesPaginated), "getVehilesList failed... " + errorString);
 
             return vehicles;
         }

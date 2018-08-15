@@ -2351,10 +2351,10 @@ namespace Route4MeSDK
     /// <param name="total"> out: Total number of Vehicles </param>
     /// <param name="errorString"> out: Error as string </param>
     /// <returns> Vehicle object list </returns>
-    public VehicleV4Response[] GetVehicles(VehicleParameters vehParams, out string errorString)
+    public VehiclesPaginated GetVehicles(VehicleParameters vehParams, out string errorString)
     {
         //VehicleResponse[] response = GetJsonObjectFromAPI<VehicleResponse[]>(vehParams, R4MEInfrastructureSettings.ViewVehicles, HttpMethodType.Get, out errorString);
-        VehicleV4Response[] response = GetJsonObjectFromAPI<VehicleV4Response[]>(vehParams,
+        VehiclesPaginated response = GetJsonObjectFromAPI<VehiclesPaginated>(vehParams,
                                                            R4MEInfrastructureSettings.Vehicle_V4,
                                                            HttpMethodType.Get,
                                                            out errorString);
