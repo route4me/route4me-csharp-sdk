@@ -6484,7 +6484,11 @@ namespace Route4MeSDKUnitTest
 
             if (vehicles.Total < 1)
             {
-                VehicleV4Response vehicle = vehicleGroup.createVehcile();
+                VehicleV4Parameters newVehicle = new VehicleV4Parameters()
+                {
+                    VehicleAlias = "Ford Transit Test 6"
+                };
+                VehicleV4Response vehicle = vehicleGroup.createVehicle(newVehicle);
                 lsVehicleIDs.Add(vehicle.VehicleId);
             }
             else
@@ -6526,20 +6530,130 @@ namespace Route4MeSDKUnitTest
         [TestMethod]
         public void CreatetVehicleTest()
         {
-            VehicleV4Response result = createVehcile();
-        }
-
-        public VehicleV4Response createVehcile()
-        {
-            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
-
-            VehicleV4Parameters newVehicle = new VehicleV4Parameters()
+            // Create common vehicle
+            VehicleV4Parameters commonVehicleParams = new VehicleV4Parameters()
             {
                 VehicleAlias = "Ford Transit Test 6"
             };
 
+            VehicleV4Response commonVehicle = createVehicle(commonVehicleParams);
+
+            // Create a truck belonging to the class 6
+            VehicleV4Parameters class6TruckParams = new VehicleV4Parameters()
+            {
+                VehicleAlias = "GMC TopKick C5500",
+                VehicleVin = "SAJXA01A06FN08012",
+                VehicleLicensePlate = "CVH4561",
+                VehicleModel = "TopKick C5500",
+                VehicleModelYear = 1995,
+                VehicleYearAcquired = 2008,
+                VehicleRegCountryId = 223,
+                VehicleMake = "GMC", 
+                VehicleTypeID = "pickup_truck",
+                VehicleAxleCount = 2,
+                MpgCity = 7,
+                MpgHighway = 14,
+                FuelType = "diesel",
+                HeightInches = 97,
+                HeightMetric = 243,
+                WeightLb = 19000,
+                MaxWeightPerAxleGroupInPounds = 9500,
+                MaxWeightPerAxleGroupMetric = 4300,
+                WidthInInches = 96,
+                WidthMetric = 240,
+                LengthInInches = 244,
+                LengthMetric = 610,
+                Use53FootTrailerRouting = "NO",
+                UseTruckRestrictions = "NO",
+                DividedHighwayAvoidPreference = "NEUTRAL",
+                FreewayAvoidPreference = "NEUTRAL",
+                TruckConfig = "FULLSIZEVAN"
+            };
+
+            VehicleV4Response class6Truck = createVehicle(class6TruckParams);
+
+            // Create a truck belonging to the class 7
+            VehicleV4Parameters class7TruckParams = new VehicleV4Parameters()
+            {
+                VehicleAlias = "FORD F750",
+                VehicleVin = "1NPAX6EX2YD550743",
+                VehicleLicensePlate = "FFV9547",
+                VehicleModel = "F-750",
+                VehicleModelYear = 2010,
+                VehicleYearAcquired = 2018,
+                VehicleRegCountryId = 223,
+                VehicleMake = "Ford",
+                VehicleTypeID = "livestock_carrier",
+                VehicleAxleCount = 2,
+                MpgCity = 8,
+                MpgHighway = 15,
+                FuelType = "diesel",
+                HeightInches = 96,
+                HeightMetric = 244,
+                WeightLb = 26000,
+                MaxWeightPerAxleGroupInPounds = 15000,
+                MaxWeightPerAxleGroupMetric = 6800,
+                WidthInInches = 96,
+                WidthMetric = 240,
+                LengthInInches = 312,
+                LengthMetric = 793,
+                Use53FootTrailerRouting = "NO",
+                UseTruckRestrictions = "YES",
+                DividedHighwayAvoidPreference = "FAVOR",
+                FreewayAvoidPreference = "NEUTRAL",
+                TruckConfig = "26_STRAIGHT_TRUCK",
+                TollRoadUsage = "ALWAYS_AVOID",
+                InternationalBordersOpen = "NO",
+                PurchasedNew = true
+            };
+
+            VehicleV4Response class7Truck = createVehicle(class7TruckParams);
+
+            // Create a truck belonging to the class 8
+            VehicleV4Parameters class8TruckParams = new VehicleV4Parameters()
+            {
+                VehicleAlias = "Peterbilt 579",
+                VehicleVin = "1NP5DB9X93N507873",
+                VehicleLicensePlate = "PPV7516",
+                VehicleModel = "579",
+                VehicleModelYear = 2015,
+                VehicleYearAcquired = 2018,
+                VehicleRegCountryId = 223,
+                VehicleMake = "Peterbilt",
+                VehicleTypeID = "tractor_trailer",
+                VehicleAxleCount = 5,
+                MpgCity = 6,
+                MpgHighway = 12,
+                FuelType = "diesel",
+                HeightInches = 114,
+                HeightMetric = 290,
+                WeightLb = 50350,
+                MaxWeightPerAxleGroupInPounds = 40000,
+                MaxWeightPerAxleGroupMetric = 18000,
+                WidthInInches = 102,
+                WidthMetric = 258,
+                LengthInInches = 640,
+                LengthMetric = 1625,
+                Use53FootTrailerRouting = "YES",
+                UseTruckRestrictions = "YES",
+                DividedHighwayAvoidPreference = "STRONG_FAVOR",
+                FreewayAvoidPreference = "STRONG_AVOID",
+                TruckConfig = "53_SEMI_TRAILER",
+                TollRoadUsage = "ALWAYS_AVOID",
+                InternationalBordersOpen = "YES",
+                PurchasedNew = true
+            };
+
+            VehicleV4Response class8Truck = createVehicle(class8TruckParams);
+
+        }
+
+        public VehicleV4Response createVehicle(VehicleV4Parameters vehicleParams)
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
             string errorString = "";
-            VehicleV4Response result = route4Me.CreateVehicle(newVehicle, out errorString);
+            VehicleV4Response result = route4Me.CreateVehicle(vehicleParams, out errorString);
 
             Assert.IsNotNull(result, "CreatetVehiclTest failed... " + errorString);
 
@@ -6567,7 +6681,12 @@ namespace Route4MeSDKUnitTest
         {
             if (lsVehicleIDs.Count < 1)
             {
-                VehicleV4Response vehicle = createVehcile();
+                VehicleV4Parameters newVehicle = new VehicleV4Parameters()
+                {
+                    VehicleAlias = "Ford Transit Test 6"
+                };
+
+                VehicleV4Response vehicle = createVehicle(newVehicle);
                 lsVehicleIDs.Add(vehicle.VehicleId);
             }
 
@@ -6601,7 +6720,12 @@ namespace Route4MeSDKUnitTest
         {
             if (lsVehicleIDs.Count < 1)
             {
-                VehicleV4Response vehicle = createVehcile();
+                VehicleV4Parameters newVehicle = new VehicleV4Parameters()
+                {
+                    VehicleAlias = "Ford Transit Test 6"
+                };
+
+                VehicleV4Response vehicle = createVehicle(newVehicle);
                 lsVehicleIDs.Add(vehicle.VehicleId);
             }
 
