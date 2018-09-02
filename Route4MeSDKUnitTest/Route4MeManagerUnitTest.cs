@@ -561,7 +561,7 @@ namespace Route4MeSDKUnitTest
     public class RouteTypesGroup
     {
         static string skip;
-        static string c_ApiKey = "11111111111111111111111111111111"; // The optimizations with the multiple depot and multiple drivers allowed only for business and higher account types --- put in the parameter an appropriate API key
+        static string c_ApiKey = "11111111111111111111111111111111"; // The optimizations with the trucking allowed only for business and higher account types --- put in the parameter an appropriate API key
         static string c_ApiKey_1 = "11111111111111111111111111111111";
 
         static TestDataRepository tdr = new TestDataRepository(c_ApiKey);
@@ -3539,6 +3539,180 @@ namespace Route4MeSDKUnitTest
         }
 
         [TestMethod]
+        public void TruckingSingleDriverMultipleTimeWindowsTest()
+        {
+            if (skip == "yes") return;
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            // Prepare the addresses
+            Address[] addresses = new Address[]
+              {
+                #region Addresses
+
+                new Address() { AddressString   = "455 S 4th St, Louisville, KY 40202",
+                                //all possible originating locations are depots, should be marked as true
+                                //stylistically we recommend all depots should be at the top of the destinations list
+                                IsDepot          = true, 
+                                Latitude         = 38.251698,
+                                Longitude        = -85.757308
+                },
+
+                new Address() { AddressString   = "1604 PARKRIDGE PKWY, Louisville, KY, 40214",
+                                Latitude        = 38.141598,
+                                Longitude       = -85.7938461,
+
+                                //together these two specify the time window of a destination
+                                //seconds offset relative to the route start time for the open availability of a destination
+                                TimeWindowStart  = 7 * 3600 + 30 * 60,
+                                //seconds offset relative to the route end time for the open availability of a destination
+                                TimeWindowEnd    = 7 * 3600 + 40 * 60,
+
+                                // Second 'TimeWindowStart'
+                                TimeWindowStart2 = 8 * 3600 + 00 * 60,
+                                // Second 'TimeWindowEnd'
+                                TimeWindowEnd2   = 8 * 3600 + 10 * 60,
+
+                                //the number of seconds at destination
+                                Time             = 300
+                },
+
+                new Address() { AddressString    = "1407 MCCOY, Louisville, KY, 40215",
+                                Latitude         = 38.202496,
+                                Longitude        = -85.786514,
+                                TimeWindowStart  = 8 * 3600 + 30 * 60,
+                                TimeWindowEnd    = 8 * 3600 + 40 * 60,
+                                TimeWindowStart2 = 8 * 3600 + 50 * 60,
+                                TimeWindowEnd2   = 9 * 3600 + 0 * 60,
+                                Time             = 300
+                },
+
+                new Address() { AddressString    = "4805 BELLEVUE AVE, Louisville, KY, 40215",
+                                Latitude         = 38.178844,
+                                Longitude        = -85.774864,
+                                TimeWindowStart  = 9 * 3600 + 0 * 60,
+                                TimeWindowEnd    = 9 * 3600 + 15 * 60,
+                                TimeWindowStart2 = 9 * 3600 + 30 * 60,
+                                TimeWindowEnd2   = 9 * 3600 + 45 * 60,
+                                Time             = 100
+                },
+
+                new Address() { AddressString    = "730 CECIL AVENUE, Louisville, KY, 40211",
+                                Latitude         = 38.248684,
+                                Longitude        = -85.821121,
+                                TimeWindowStart  = 10 * 3600 + 00 * 60,
+                                TimeWindowEnd    = 10 * 3600 + 15 * 60,
+                                TimeWindowStart2 = 10 * 3600 + 30 * 60,
+                                TimeWindowEnd2   = 10 * 3600 + 45 * 60,
+                                Time             = 300
+                },
+
+                new Address() { AddressString    = "650 SOUTH 29TH ST UNIT 315, Louisville, KY, 40211",
+                                Latitude         = 38.251923,
+                                Longitude        = -85.800034,
+                                TimeWindowStart  = 11 * 3600 + 00 * 60,
+                                TimeWindowEnd    = 11 * 3600 + 15 * 60,
+                                TimeWindowStart2 = 11 * 3600 + 30 * 60,
+                                TimeWindowEnd2   = 11 * 3600 + 45 * 60,
+                                Time             = 300
+                },
+
+                new Address() { AddressString    = "4629 HILLSIDE DRIVE, Louisville, KY, 40216",
+                                Latitude         = 38.176067,
+                                Longitude        = -85.824638,
+                                TimeWindowStart  = 12 * 3600 + 00 * 60,
+                                TimeWindowEnd    = 12 * 3600 + 15 * 60,
+                                TimeWindowStart2 = 12 * 3600 + 30 * 60,
+                                TimeWindowEnd2   = 12 * 3600 + 45 * 60,
+                                Time             = 300
+                },
+
+                new Address() { AddressString    = "4738 BELLEVUE AVE, Louisville, KY, 40215",
+                                Latitude         = 38.179806,
+                                Longitude        = -85.775558,
+                                TimeWindowStart  = 13 * 3600 + 00 * 60,
+                                TimeWindowEnd    = 13 * 3600 + 15 * 60,
+                                TimeWindowStart2 = 13 * 3600 + 30 * 60,
+                                TimeWindowEnd2   = 13 * 3600 + 45 * 60,
+                                Time             = 300
+                },
+
+                new Address() { AddressString    = "318 SO. 39TH STREET, Louisville, KY, 40212",
+                                Latitude         = 38.259335,
+                                Longitude        = -85.815094,
+                                TimeWindowStart  = 14 * 3600 + 00 * 60,
+                                TimeWindowEnd    = 14 * 3600 + 15 * 60,
+                                TimeWindowStart2 = 14 * 3600 + 30 * 60,
+                                TimeWindowEnd2   = 14 * 3600 + 45 * 60,
+                                Time             = 300
+                },
+
+                new Address() { AddressString    = "1324 BLUEGRASS AVE, Louisville, KY, 40215",
+                                Latitude         = 38.179253,
+                                Longitude        = -85.785118,
+                                TimeWindowStart  = 15 * 3600 + 00 * 60,
+                                TimeWindowEnd    = 15 * 3600 + 15 * 60,
+                                TimeWindowStart2 = 15 * 3600 + 30 * 60,
+                                TimeWindowEnd2   = 15 * 3600 + 45 * 60,
+                                Time             = 300
+                },
+
+                new Address() { AddressString    = "7305 ROYAL WOODS DR, Louisville, KY, 40214",
+                                Latitude         = 38.162472,
+                                Longitude        = -85.792854,
+                                TimeWindowStart  = 16 * 3600 + 00 * 60,
+                                TimeWindowEnd    = 16 * 3600 + 15 * 60,
+                                TimeWindowStart2 = 16 * 3600 + 30 * 60,
+                                TimeWindowEnd2   = 16 * 3600 + 45 * 60,
+                                Time             = 300
+                }
+
+                #endregion
+              };
+
+            // Set parameters
+            RouteParameters parameters = new RouteParameters()
+            {
+                AlgorithmType = AlgorithmType.CVRP_TW_SD,
+                RouteName = "Trucking SD Multiple TW 09-02-2018 from c# SDK "+DateTime.Now.ToString("yymMddHHmmss"),
+                OptimizationQuality= 3,
+                DeviceType = DeviceType.Web.Description(),
+                DistanceUnit = DistanceUnit.MI.Description(),
+                Dirm =3,
+                DM =6,
+                Optimize = Optimize.TimeWithTraffic.Description(),
+                RouteMaxDuration = 8*3600 +30 * 60,
+                RouteDate = R4MeUtils.ConvertToUnixTimestamp(DateTime.UtcNow.Date.AddDays(1)),
+                RouteTime = 7 * 3600 + 00 * 60,
+                StoreRoute = true,
+                TravelMode = TravelMode.Trucking.Description(),
+                VehicleMaxCargoVolume = 30,
+                VehicleCapacity = 10,
+                VehicleMaxDistanceMI = 10000,
+                TruckHeightMeters= 4,
+                TruckLengthMeters = 12,
+                TruckWidthMeters = 3,
+                TrailerWeightT = 10,
+                WeightPerAxleT = 10,
+                LimitedWeightT = 20,
+                RT = true
+            };
+
+            OptimizationParameters optimizationParameters = new OptimizationParameters()
+            {
+                Addresses = addresses,
+                Parameters = parameters
+            };
+
+            // Run the query
+            string errorString;
+            dataObject = route4Me.RunOptimization(optimizationParameters, out errorString);
+
+            Assert.IsNotNull(dataObject, "SingleDriverMultipleTimeWindowsTest failed... " + errorString);
+
+            tdr.RemoveOptimization(new string[]{dataObject.OptimizationProblemId});
+        }
+
+        [TestMethod]
         public void SingleDriverMultipleTimeWindowsTest()
         {
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
@@ -3710,7 +3884,7 @@ namespace Route4MeSDKUnitTest
 
             Assert.IsNotNull(dataObject, "SingleDriverMultipleTimeWindowsTest failed... " + errorString);
 
-            tdr.RemoveOptimization(new string[]{dataObject.OptimizationProblemId});
+            tdr.RemoveOptimization(new string[] { dataObject.OptimizationProblemId });
         }
 
         [TestMethod]
@@ -6917,7 +7091,6 @@ namespace Route4MeSDKUnitTest
 
             Assert.IsNotNull(result, "ReverseGeocodingTest failed... " + errorString);
         }
-
 
     }
 
