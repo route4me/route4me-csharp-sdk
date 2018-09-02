@@ -561,7 +561,7 @@ namespace Route4MeSDKUnitTest
     public class RouteTypesGroup
     {
         static string skip;
-        static string c_ApiKey = "11111111111111111111111111111111"; // The optimizations with the trucking allowed only for business and higher account types --- put in the parameter an appropriate API key
+        static string c_ApiKey = "11111111111111111111111111111111"; // The optimizations with the Trucking, Multiple Depots, Multiple Drivers allowed only for business and higher account types --- put in the parameter an appropriate API key
         static string c_ApiKey_1 = "11111111111111111111111111111111";
 
         static TestDataRepository tdr = new TestDataRepository(c_ApiKey);
