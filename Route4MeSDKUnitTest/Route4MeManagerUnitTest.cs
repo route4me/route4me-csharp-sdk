@@ -4208,6 +4208,7 @@ namespace Route4MeSDKUnitTest
         [ClassCleanup()]
         public static void RouteTypesGroupCleanup()
         {
+            if (skip == "yes") return;
             bool result = tdr.RemoveOptimization(new string[] { dataObjectMDMD24.OptimizationProblemId });
 
             Assert.IsTrue(result, "Removing of the optimization with 24 stops failed...");
