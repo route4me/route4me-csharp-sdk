@@ -31,6 +31,7 @@ namespace Route4MeSDKUnitTest
             lsOptimizationIDs = new List<string>();
 
             tdr = new TestDataRepository(c_ApiKey);
+
             bool result = tdr.RunOptimizationSingleDriverRoute10Stops();
 
             Assert.IsTrue(result, "Single Driver 10 Stops generation failed...");
@@ -166,9 +167,9 @@ namespace Route4MeSDKUnitTest
             lsAddresses.Add(address1);
             lsAddresses.Add(address2);
 
-            string errorString="";
+            string errorString = "";
             DataObjectRoute route1 = route4Me.ManualyResequenceRoute(rParams, lsAddresses.ToArray(), out errorString);
-            
+
             Assert.IsNotNull(route1, "ResequenceRouteDestinationsTest failed...");
         }
 
@@ -332,7 +333,7 @@ namespace Route4MeSDKUnitTest
                 Longitude = lng,
                 DeviceType = DeviceType.Web.Description(),
                 ActivityType = StatusUpdateType.DropOff.Description(),
-                Format="json"
+                Format = "json"
             };
 
             // Run the query
@@ -420,9 +421,11 @@ namespace Route4MeSDKUnitTest
             };
 
             string tempFilePath = null;
+
             using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Route4MeSDKUnitTest.Resources.test.png"))
             {
                 var tempFiles = new TempFileCollection();
+
                 {
                     tempFilePath = tempFiles.AddExtension("png");
                     System.Console.WriteLine(tempFilePath);
@@ -439,7 +442,6 @@ namespace Route4MeSDKUnitTest
             AddressNote note = route4Me.AddAddressNote(noteParameters, contents, tempFilePath, out errorString);
 
             Assert.IsNotNull(note, "AddAddressNoteWithFileTest failed... " + errorString);
-
         }
 
         [TestMethod]
@@ -473,7 +475,6 @@ namespace Route4MeSDKUnitTest
             Assert.IsTrue(response.GetType() != typeof(String), response.ToString());
 
             Assert.IsTrue(Convert.ToInt32(response) >= 0, "Can not create new custom note type");
-
         }
 
         public Object addCustomNoteType(string customType, string[] customValues)
@@ -501,7 +502,7 @@ namespace Route4MeSDKUnitTest
             Assert.IsTrue(response.GetType() != typeof(String), errorString);
 
             Assert.IsTrue(Convert.ToInt32(response) >= 0, "Can not remove the custom note type");
-        } 
+        }
 
         [TestMethod]
         public void GetAllCustomNoteTypesTest()
@@ -589,7 +590,7 @@ namespace Route4MeSDKUnitTest
                 new Address() { AddressString   = "3634 W Market St, Fairlawn, OH 44333",
                                 //all possible originating locations are depots, should be marked as true
                                 //stylistically we recommend all depots should be at the top of the destinations list
-                                IsDepot         = true, 
+                                IsDepot         = true,
                                 Latitude        = 41.135762259364,
                                 Longitude       = -81.629313826561,
                         
@@ -750,13 +751,14 @@ namespace Route4MeSDKUnitTest
 
             Assert.IsNotNull(dataObject, "MultipleDepotMultipleDriverTest failed... " + errorString);
 
-            tdr.RemoveOptimization(new string[]{dataObject.OptimizationProblemId});
+            tdr.RemoveOptimization(new string[] { dataObject.OptimizationProblemId });
         }
 
         [TestMethod]
         public void MultipleDepotMultipleDriverTimeWindowTest()
         {
             if (skip == "yes") return;
+
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
             // Prepare the addresses
@@ -785,7 +787,7 @@ namespace Route4MeSDKUnitTest
                                 Time            = 300,
                                 TimeWindowStart = 33406,
                                 TimeWindowEnd   = 36228 },
-                new Address() { 
+                new Address() {
                                 AddressString   = "4805 BELLEVUE AVE, Louisville, KY, 40215",
                                 Latitude        = 38.178844,
                                 Longitude       = -85.774864,
@@ -1155,7 +1157,7 @@ namespace Route4MeSDKUnitTest
                                 Longitude       = -85.784187,
                                 Time            = 300,
                                 TimeWindowStart = 124675,
-                                TimeWindowEnd   = 127148 }, 
+                                TimeWindowEnd   = 127148 },
 
                 new Address() { AddressString   = "3524 WHEELER AVE, Louisville, KY, 40215",
                                 Latitude        = 38.195293,
@@ -1290,7 +1292,7 @@ namespace Route4MeSDKUnitTest
                                 TimeWindowStart = 161831,
                                 TimeWindowEnd   = 163705 },
 
-                new Address() { 
+                new Address() {
                                 AddressString   = "1321 OAKWOOD AVE, Louisville, KY, 40215",
                                 Latitude        = 38.17704,
                                 Longitude       = -85.783829,
@@ -1440,7 +1442,7 @@ namespace Route4MeSDKUnitTest
 
             Assert.IsNotNull(dataObject, "MultipleDepotMultipleDriverTimeWindowTest failed... " + errorString);
 
-            tdr.RemoveOptimization(new string[]{dataObject.OptimizationProblemId});
+            tdr.RemoveOptimization(new string[] { dataObject.OptimizationProblemId });
         }
 
         [TestMethod]
@@ -3235,7 +3237,6 @@ namespace Route4MeSDKUnitTest
                 Parameters = parameters
             };
 
-            
             //Note: The addresses of this test aren't permited for api_key=11111111111111111111111111111111. 
             // If you put in the parameter api_key your valid key, the test will be finished successfuly.
 
@@ -3255,13 +3256,13 @@ namespace Route4MeSDKUnitTest
                 tdr.RemoveOptimization(new string[] { dataObject.OptimizationProblemId });
             }
 
-           
         }
 
         [TestMethod]
         public void MultipleDepotMultipleDriverWith24StopsTimeWindowTest()
         {
             if (skip == "yes") return;
+
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
             // Prepare the addresses
@@ -3542,6 +3543,7 @@ namespace Route4MeSDKUnitTest
         public void TruckingSingleDriverMultipleTimeWindowsTest()
         {
             if (skip == "yes") return;
+
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
             // Prepare the addresses
@@ -3552,7 +3554,7 @@ namespace Route4MeSDKUnitTest
                 new Address() { AddressString   = "455 S 4th St, Louisville, KY 40202",
                                 //all possible originating locations are depots, should be marked as true
                                 //stylistically we recommend all depots should be at the top of the destinations list
-                                IsDepot          = true, 
+                                IsDepot          = true,
                                 Latitude         = 38.251698,
                                 Longitude        = -85.757308
                 },
@@ -3673,14 +3675,14 @@ namespace Route4MeSDKUnitTest
             RouteParameters parameters = new RouteParameters()
             {
                 AlgorithmType = AlgorithmType.CVRP_TW_SD,
-                RouteName = "Trucking SD Multiple TW 09-02-2018 from c# SDK "+DateTime.Now.ToString("yymMddHHmmss"),
-                OptimizationQuality= 3,
+                RouteName = "Trucking SD Multiple TW 09-02-2018 from c# SDK " + DateTime.Now.ToString("yymMddHHmmss"),
+                OptimizationQuality = 3,
                 DeviceType = DeviceType.Web.Description(),
                 DistanceUnit = DistanceUnit.MI.Description(),
-                Dirm =3,
-                DM =6,
+                Dirm = 3,
+                DM = 6,
                 Optimize = Optimize.TimeWithTraffic.Description(),
-                RouteMaxDuration = 8*3600 +30 * 60,
+                RouteMaxDuration = 8 * 3600 + 30 * 60,
                 RouteDate = R4MeUtils.ConvertToUnixTimestamp(DateTime.UtcNow.Date.AddDays(1)),
                 RouteTime = 7 * 3600 + 00 * 60,
                 StoreRoute = true,
@@ -3688,7 +3690,7 @@ namespace Route4MeSDKUnitTest
                 VehicleMaxCargoVolume = 30,
                 VehicleCapacity = 10,
                 VehicleMaxDistanceMI = 10000,
-                TruckHeightMeters= 4,
+                TruckHeightMeters = 4,
                 TruckLengthMeters = 12,
                 TruckWidthMeters = 3,
                 TrailerWeightT = 10,
@@ -3709,7 +3711,7 @@ namespace Route4MeSDKUnitTest
 
             Assert.IsNotNull(dataObject, "SingleDriverMultipleTimeWindowsTest failed... " + errorString);
 
-            tdr.RemoveOptimization(new string[]{dataObject.OptimizationProblemId});
+            tdr.RemoveOptimization(new string[] { dataObject.OptimizationProblemId });
         }
 
         [TestMethod]
@@ -3725,10 +3727,10 @@ namespace Route4MeSDKUnitTest
                 new Address() { AddressString   = "3634 W Market St, Fairlawn, OH 44333",
                                 //all possible originating locations are depots, should be marked as true
                                 //stylistically we recommend all depots should be at the top of the destinations list
-                                IsDepot          = true, 
+                                IsDepot          = true,
                                 Latitude         = 41.135762259364,
                                 Longitude        = -81.629313826561,
-                        
+
                                 TimeWindowStart  = null,
                                 TimeWindowEnd    = null,
                                 TimeWindowStart2 = null,
@@ -3943,7 +3945,7 @@ namespace Route4MeSDKUnitTest
                                 Alias         = "Toga Bike Shop",
                                 Latitude      = 40.7753077,
                                 Longitude     = -73.9861529,
-                                Time          = 0 }, 
+                                Time          = 0 },
 
                 new Address() { AddressString = "555 W 57th St New York, NY 10019",
                                 Alias         = "BMW of Manhattan",
@@ -3993,7 +3995,7 @@ namespace Route4MeSDKUnitTest
 
             Assert.IsNotNull(dataObject0, "SingleDriverRoundTripGenericTest failed...");
 
-            tdr.RemoveOptimization(new string[]{dataObject0.OptimizationProblemId});
+            tdr.RemoveOptimization(new string[] { dataObject0.OptimizationProblemId });
         }
 
         [TestMethod]
@@ -4047,7 +4049,7 @@ namespace Route4MeSDKUnitTest
                                 Alias         = "Toga Bike Shop",
                                 Latitude      = 40.7753077,
                                 Longitude     = -73.9861529,
-                                Time          = 0 }, 
+                                Time          = 0 },
 
                 new Address() { AddressString = "555 W 57th St New York, NY 10019",
                                 Alias         = "BMW of Manhattan",
@@ -4201,7 +4203,6 @@ namespace Route4MeSDKUnitTest
             Assert.IsNotNull(dataObject1, "Run optimization test with Single Driver Route 10 Stops failed... " + errorString);
 
             tdr.RemoveOptimization(new string[] { dataObject1.OptimizationProblemId });
-
         }
 
         [ClassCleanup()]
@@ -4227,7 +4228,7 @@ namespace Route4MeSDKUnitTest
         static AddressBookContact scheduledContact5, scheduledContact5Response;
         static AddressBookContact scheduledContact6, scheduledContact6Response;
 
-        static List<int> lsRemoveContacts=new List<int>();
+        static List<int> lsRemoveContacts = new List<int>();
 
         [ClassInitialize()]
         public static void AddAddressBookContactsTest(TestContext context)
@@ -4249,6 +4250,7 @@ namespace Route4MeSDKUnitTest
             Assert.IsNotNull(contact1, "AddAddressBookContactsTest failed... " + errorString);
 
             int location1 = contact1.address_id != null ? Convert.ToInt32(contact1.address_id) : -1;
+
             if (location1 > 0) lsRemoveContacts.Add(location1);
 
             Dictionary<string, string> dCustom = new Dictionary<string, string>()
@@ -4270,6 +4272,7 @@ namespace Route4MeSDKUnitTest
             Assert.IsNotNull(contact2, "AddAddressBookContactsTest failed... " + errorString);
 
             int location2 = contact2.address_id != null ? Convert.ToInt32(contact2.address_id) : -1;
+
             if (location2 > 0) lsRemoveContacts.Add(location2);
         }
 
@@ -4279,13 +4282,12 @@ namespace Route4MeSDKUnitTest
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
             #region // Add a location, scheduled daily.
-            Schedule sched1 = new Schedule("daily", false) 
-            { 
+            Schedule sched1 = new Schedule("daily", false)
+            {
                 enabled = true,
                 mode = "daily",
                 daily = new schedule_daily(1)
             };
-
 
             scheduledContact1 = new AddressBookContact()
             {
@@ -4300,7 +4302,7 @@ namespace Route4MeSDKUnitTest
                 cached_lng = -85.793846,
                 address_city = "Louisville",
                 address_custom_data = new Dictionary<string, string>() { { "scheduled", "yes" }, { "service type", "publishing" } },
-                schedule = new List<Schedule>(){ sched1}
+                schedule = new List<Schedule>() { sched1 }
             };
 
             string errorString;
@@ -4309,6 +4311,7 @@ namespace Route4MeSDKUnitTest
             Assert.IsNotNull(scheduledContact1Response, "AddAddressBookContactsTest failed... " + errorString);
 
             int location1 = scheduledContact1Response.address_id != null ? Convert.ToInt32(scheduledContact1Response.address_id) : -1;
+
             if (location1 > 0) lsRemoveContacts.Add(location1);
             #endregion
 
@@ -4316,7 +4319,7 @@ namespace Route4MeSDKUnitTest
             Schedule sched2 = new Schedule("weekly", false)
             {
                 enabled = true,
-                weekly = new schedule_weekly(1, new int[]{1,2,3,4,5})
+                weekly = new schedule_weekly(1, new int[] { 1, 2, 3, 4, 5 })
             };
 
             scheduledContact2 = new AddressBookContact()
@@ -4340,6 +4343,7 @@ namespace Route4MeSDKUnitTest
             Assert.IsNotNull(scheduledContact2Response, "AddAddressBookContactsTest failed... " + errorString);
 
             int location2 = scheduledContact2Response.address_id != null ? Convert.ToInt32(scheduledContact2Response.address_id) : -1;
+
             if (location2 > 0) lsRemoveContacts.Add(location2);
 
             #endregion
@@ -4377,6 +4381,7 @@ namespace Route4MeSDKUnitTest
             Assert.IsNotNull(scheduledContact3Response, "AddAddressBookContactsTest failed... " + errorString);
 
             int location3 = scheduledContact3Response.address_id != null ? Convert.ToInt32(scheduledContact3Response.address_id) : -1;
+
             if (location3 > 0) lsRemoveContacts.Add(location3);
             #endregion
 
@@ -4384,7 +4389,7 @@ namespace Route4MeSDKUnitTest
             Schedule sched4 = new Schedule("monthly", false)
             {
                 enabled = true,
-                monthly = new schedule_monthly(_every: 1, _mode: "nth", _nth: new Dictionary<int,int>() {{1,4}})
+                monthly = new schedule_monthly(_every: 1, _mode: "nth", _nth: new Dictionary<int, int>() { { 1, 4 } })
             };
 
             scheduledContact4 = new AddressBookContact()
@@ -4410,6 +4415,7 @@ namespace Route4MeSDKUnitTest
             Assert.IsNotNull(scheduledContact4Response, "AddAddressBookContactsTest failed... " + errorString);
 
             int location4 = scheduledContact4Response.address_id != null ? Convert.ToInt32(scheduledContact4Response.address_id) : -1;
+
             if (location4 > 0) lsRemoveContacts.Add(location4);
             #endregion
 
@@ -4420,7 +4426,6 @@ namespace Route4MeSDKUnitTest
                 mode = "daily",
                 daily = new schedule_daily(1)
             };
-
 
             scheduledContact5 = new AddressBookContact()
             {
@@ -4445,6 +4450,7 @@ namespace Route4MeSDKUnitTest
             Assert.IsNotNull(scheduledContact5Response, "AddAddressBookContactsTest failed... " + errorString);
 
             int location5 = scheduledContact5Response.address_id != null ? Convert.ToInt32(scheduledContact5Response.address_id) : -1;
+
             if (location5 > 0) lsRemoveContacts.Add(location5);
             #endregion
         }
@@ -4489,7 +4495,7 @@ namespace Route4MeSDKUnitTest
         {
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
-            Assert.IsNotNull(contact1, "contact1 is null..."); 
+            Assert.IsNotNull(contact1, "contact1 is null...");
             Assert.IsNotNull(contact2, "contact2 is null...");
 
             string addresses = contact1.address_id + "," + contact2.address_id;
@@ -4550,7 +4556,7 @@ namespace Route4MeSDKUnitTest
         [TestMethod]
         public void RemoveAllAddressbookContactsTest()
         {
-            string ApiKey = "bd48828717021141485a701453273458";
+            string ApiKey = "11111111111111111111111111111111";
             Route4MeManager route4Me = new Route4MeManager(ApiKey);
             TestDataRepository tdr = new TestDataRepository(c_ApiKey);
 
@@ -4570,12 +4576,12 @@ namespace Route4MeSDKUnitTest
                 uint total;
                 string errorString;
                 AddressBookContact[] contacts = route4Me.GetAddressBookLocation(addressBookParameters, out total, out errorString);
+
                 if (contacts.Length == 0) blContinue = false;
                 Assert.IsInstanceOfType(contacts, typeof(AddressBookContact[]), "Getting of the contacts failed..." + errorString);
 
                 foreach (AddressBookContact contact in contacts) lsAddresses.Add(contact.address_id.ToString());
 
-                
                 tdr.RemoveAddressBookContacts(lsAddresses, ApiKey);
 
                 iCurOffset += 40;
@@ -4608,6 +4614,7 @@ namespace Route4MeSDKUnitTest
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
             List<string> lsRemLocations = new List<string>();
+
             if (lsRemoveContacts.Count > 0)
             {
                 foreach (int loc1 in lsRemoveContacts) lsRemLocations.Add(loc1.ToString());
@@ -4659,16 +4666,16 @@ namespace Route4MeSDKUnitTest
                 {
                     Type = TerritoryType.Poly.Description(),
                     Data = new string[] {
-			            "37.569752822786455,-77.47833251953125",
-			            "37.75886716305343,-77.68974800109863",
-			            "37.74763966054455,-77.6917221069336",
-			            "37.74655084306813,-77.68863220214844",
-			            "37.7502255383101,-77.68125076293945",
-			            "37.74797991274437,-77.67498512268066",
-			            "37.73327960206065,-77.6411678314209",
-			            "37.74430510679532,-77.63172645568848",
-			            "37.76641925847049,-77.66846199035645"
-		            }
+                        "37.569752822786455,-77.47833251953125",
+                        "37.75886716305343,-77.68974800109863",
+                        "37.74763966054455,-77.6917221069336",
+                        "37.74655084306813,-77.68863220214844",
+                        "37.7502255383101,-77.68125076293945",
+                        "37.74797991274437,-77.67498512268066",
+                        "37.73327960206065,-77.6411678314209",
+                        "37.74430510679532,-77.63172645568848",
+                        "37.76641925847049,-77.66846199035645"
+                    }
                 }
             };
 
@@ -4686,9 +4693,9 @@ namespace Route4MeSDKUnitTest
                 {
                     Type = TerritoryType.Rect.Description(),
                     Data = new string[] {
-			            "43.51668853502909,-109.3798828125",
-			            "46.98025235521883,-101.865234375"
-		            }
+                        "43.51668853502909,-109.3798828125",
+                        "46.98025235521883,-101.865234375"
+                    }
                 }
             };
 
@@ -4719,7 +4726,7 @@ namespace Route4MeSDKUnitTest
             string errorString;
             AvoidanceZone circleAvoidanceZone = route4Me.AddAvoidanceZone(circleAvoidanceZoneParameters, out errorString);
 
-            if (circleAvoidanceZone!=null) lsAvoidanceZones.Add(circleAvoidanceZone.TerritoryId);
+            if (circleAvoidanceZone != null) lsAvoidanceZones.Add(circleAvoidanceZone.TerritoryId);
 
             Assert.IsNotNull(circleAvoidanceZone, "Add Circle Avoidance Zone test failed... " + errorString);
         }
@@ -4731,7 +4738,6 @@ namespace Route4MeSDKUnitTest
 
             AvoidanceZoneQuery avoidanceZoneQuery = new AvoidanceZoneQuery()
             {
-
             };
 
             // Run the query
@@ -4747,7 +4753,9 @@ namespace Route4MeSDKUnitTest
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
             string territoryId = "";
+
             if (lsAvoidanceZones.Count > 1) territoryId = lsAvoidanceZones[1];
+
             AvoidanceZoneQuery avoidanceZoneQuery = new AvoidanceZoneQuery()
             {
                 TerritoryId = territoryId
@@ -4766,6 +4774,7 @@ namespace Route4MeSDKUnitTest
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
             string territoryId = "";
+
             if (lsAvoidanceZones.Count > 1) territoryId = lsAvoidanceZones[1];
 
             AvoidanceZoneParameters avoidanceZoneParameters = new AvoidanceZoneParameters()
@@ -4794,6 +4803,7 @@ namespace Route4MeSDKUnitTest
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
             string territoryId = "";
+
             if (lsAvoidanceZones.Count > 0) territoryId = lsAvoidanceZones[0];
 
             AvoidanceZoneQuery avoidanceZoneQuery = new AvoidanceZoneQuery()
@@ -4808,7 +4818,6 @@ namespace Route4MeSDKUnitTest
             Assert.IsTrue(result, "RemoveAvoidanceZoneTest failed... " + errorString);
 
             if (result) lsAvoidanceZones.RemoveAt(0);
-
         }
 
         [ClassCleanup]
@@ -4871,16 +4880,16 @@ namespace Route4MeSDKUnitTest
                 {
                     Type = TerritoryType.Poly.Description(),
                     Data = new string[] {
-			            "37.569752822786455,-77.47833251953125",
-			            "37.75886716305343,-77.68974800109863",
-			            "37.74763966054455,-77.6917221069336",
-			            "37.74655084306813,-77.68863220214844",
-			            "37.7502255383101,-77.68125076293945",
-			            "37.74797991274437,-77.67498512268066",
-			            "37.73327960206065,-77.6411678314209",
-			            "37.74430510679532,-77.63172645568848",
-			            "37.76641925847049,-77.66846199035645"
-		            }
+                        "37.569752822786455,-77.47833251953125",
+                        "37.75886716305343,-77.68974800109863",
+                        "37.74763966054455,-77.6917221069336",
+                        "37.74655084306813,-77.68863220214844",
+                        "37.7502255383101,-77.68125076293945",
+                        "37.74797991274437,-77.67498512268066",
+                        "37.73327960206065,-77.6411678314209",
+                        "37.74430510679532,-77.63172645568848",
+                        "37.76641925847049,-77.66846199035645"
+                    }
                 }
             };
 
@@ -4898,9 +4907,9 @@ namespace Route4MeSDKUnitTest
                 {
                     Type = TerritoryType.Rect.Description(),
                     Data = new string[] {
-			            "43.51668853502909,-109.3798828125",
-			            "46.98025235521883,-101.865234375"
-		            }
+                        "43.51668853502909,-109.3798828125",
+                        "46.98025235521883,-101.865234375"
+                    }
                 }
             };
 
@@ -4943,7 +4952,6 @@ namespace Route4MeSDKUnitTest
 
             AvoidanceZoneQuery territoryQuery = new AvoidanceZoneQuery()
             {
-
             };
 
             // Run the query
@@ -4959,7 +4967,9 @@ namespace Route4MeSDKUnitTest
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
             string territoryId = "";
+
             if (lsTerritories.Count > 1) territoryId = lsTerritories[1];
+
             TerritoryQuery territoryQuery = new TerritoryQuery()
             {
                 TerritoryId = territoryId
@@ -4978,6 +4988,7 @@ namespace Route4MeSDKUnitTest
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
             string territoryId = "";
+
             if (lsTerritories.Count > 1) territoryId = lsTerritories[1];
 
             AvoidanceZoneParameters territoryParameters = new AvoidanceZoneParameters()
@@ -5006,6 +5017,7 @@ namespace Route4MeSDKUnitTest
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
             string territoryId = "";
+
             if (lsTerritories.Count > 0) territoryId = lsTerritories[0];
 
             AvoidanceZoneQuery territoryQuery = new AvoidanceZoneQuery()
@@ -5065,7 +5077,7 @@ namespace Route4MeSDKUnitTest
             lsOptimizationIDs = new List<string>();
             context.Properties.Add("Categ", "Ignorable");
             tdr = new TestDataRepository(c_ApiKey);
-            
+
             bool result = tdr.SingleDriverRoundTripTest();
 
             Assert.IsTrue(result, "Single Driver Round Trip generation failed...");
@@ -5074,7 +5086,7 @@ namespace Route4MeSDKUnitTest
 
             lsOptimizationIDs.Add(tdr.SDRT_optimization_problem_id);
 
-            DateTime dtTomorrow = DateTime.Now+(new TimeSpan(1,0,0,0));
+            DateTime dtTomorrow = DateTime.Now + (new TimeSpan(1, 0, 0, 0));
             Order order = new Order()
             {
                 address_1 = "Test Address1 " + (new Random()).Next().ToString(),
@@ -5098,13 +5110,13 @@ namespace Route4MeSDKUnitTest
             {
                 Assert.AreEqual(c_ApiKey_1, c_ApiKey);
             }
-            
         }
 
         [TestMethod]
         public void GetOrdersTest()
         {
             if (skip == "yes") return;
+
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
             OrderParameters orderParameters = new OrderParameters()
@@ -5118,16 +5130,17 @@ namespace Route4MeSDKUnitTest
             Order[] orders = route4Me.GetOrders(orderParameters, out total, out errorString);
 
             Assert.IsInstanceOfType(orders, typeof(Order[]), "GetOrdersTest failed... " + errorString);
-            
         }
 
         [TestMethod]
         public void GetOrderByIDTest()
         {
             if (skip == "yes") return;
+
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
             string orderIds = "";
+
             foreach (string ord1 in lsOrders) orderIds += ord1 + ",";
             orderIds = orderIds.TrimEnd(',');
 
@@ -5146,10 +5159,11 @@ namespace Route4MeSDKUnitTest
         public void GetOrderByInsertedDateTest()
         {
             if (skip == "yes") return;
+
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
             string InsertedDate = DateTime.Now.ToString("yyyy-MM-dd");
-            
+
             OrderParameters oParams = new OrderParameters { DayAddedYYMMDD = InsertedDate };
 
             string errorString = "";
@@ -5162,6 +5176,7 @@ namespace Route4MeSDKUnitTest
         public void GetOrderByScheduledDateTest()
         {
             if (skip == "yes") return;
+
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
             DateTime dtTomorrow = DateTime.Now + (new TimeSpan(1, 0, 0, 0));
@@ -5178,6 +5193,7 @@ namespace Route4MeSDKUnitTest
         public void GetOrdersBySpecifiedTextTest()
         {
             if (skip == "yes") return;
+
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
             string query = "Test Address1";
@@ -5199,6 +5215,7 @@ namespace Route4MeSDKUnitTest
         public void GetOrdersByCustomFieldsTest()
         {
             if (skip == "yes") return;
+
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
             string CustomFields = "order_id,member_id";
@@ -5220,6 +5237,7 @@ namespace Route4MeSDKUnitTest
         public void UpdateOrderTest()
         {
             if (skip == "yes") return;
+
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
             Order order = null;
@@ -5251,29 +5269,30 @@ namespace Route4MeSDKUnitTest
         public void AddScheduledOrderTest()
         {
             if (skip == "yes") return;
+
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
             Order orderParams = new Order()
             {
                 address_1 = "318 S 39th St, Louisville, KY 40212, USA",
                 cached_lat = 38.259326,
-	            cached_lng = -85.814979,
-	            curbside_lat = 38.259326,
-	            curbside_lng = -85.814979,
-	            address_alias = "318 S 39th St 40212",
-	            address_city = "Louisville",
-	            EXT_FIELD_first_name = "Lui",
-	            EXT_FIELD_last_name = "Carol",
-	            EXT_FIELD_email = "lcarol654@yahoo.com",
-	            EXT_FIELD_phone = "897946541",
-	            EXT_FIELD_custom_data = new Dictionary<string, string>() {{"order_type","scheduled order"}},
-	            day_scheduled_for_YYMMDD = "2017-12-20",
-	            local_time_window_end = 39000,
-	            local_time_window_end_2 = 46200,
-	            local_time_window_start = 37800,
-	            local_time_window_start_2 = 45000,
-	            local_timezone_string = "America/New_York",
-	            order_icon = "emoji/emoji-bank"
+                cached_lng = -85.814979,
+                curbside_lat = 38.259326,
+                curbside_lng = -85.814979,
+                address_alias = "318 S 39th St 40212",
+                address_city = "Louisville",
+                EXT_FIELD_first_name = "Lui",
+                EXT_FIELD_last_name = "Carol",
+                EXT_FIELD_email = "lcarol654@yahoo.com",
+                EXT_FIELD_phone = "897946541",
+                EXT_FIELD_custom_data = new Dictionary<string, string>() { { "order_type", "scheduled order" } },
+                day_scheduled_for_YYMMDD = "2017-12-20",
+                local_time_window_end = 39000,
+                local_time_window_end_2 = 46200,
+                local_time_window_start = 37800,
+                local_time_window_start_2 = 45000,
+                local_timezone_string = "America/New_York",
+                order_icon = "emoji/emoji-bank"
             };
 
             string errorString = "";
@@ -5286,6 +5305,7 @@ namespace Route4MeSDKUnitTest
         public void AddOrdersToOptimizationTest()
         {
             if (skip == "yes") return;
+
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
             OptimizationParameters rQueryParams = new OptimizationParameters()
@@ -5296,7 +5316,7 @@ namespace Route4MeSDKUnitTest
 
             List<int> lsTimeWindowStart = new List<int>();
 
-            DateTime dtCurDate = DateTime.Now+(new TimeSpan(1,0,0,0));
+            DateTime dtCurDate = DateTime.Now + (new TimeSpan(1, 0, 0, 0));
             dtCurDate = new DateTime(dtCurDate.Year, dtCurDate.Month, dtCurDate.Day, 8, 0, 0);
 
             TimeSpan tsp1000sec = new TimeSpan(0, 0, 1000);
@@ -5309,67 +5329,67 @@ namespace Route4MeSDKUnitTest
 
             #region Addresses
             Address[] addresses = new Address[] {
-		    new Address {
-			    AddressString = "273 Canal St, New York, NY 10013, USA",
-			    Latitude = 40.7191558,
-			    Longitude = -74.0011966,
-			    Alias = "",
-			    CurbsideLatitude = 40.7191558,
-			    CurbsideLongitude = -74.0011966,
-			    IsDepot = true
-		    },
-		    new Address {
-			    AddressString = "106 Liberty St, New York, NY 10006, USA",
-			    Alias = "BK Restaurant #: 2446",
-			    Latitude = 40.709637,
-			    Longitude = -74.011912,
-			    CurbsideLatitude = 40.709637,
-			    CurbsideLongitude = -74.011912,
-			    Email = "",
-			    Phone = "(917) 338-1887",
-			    FirstName = "",
-			    LastName = "",
-			    CustomFields = new Dictionary<string, string> { {"icon", null} },
-			    Time = 0,
-			    TimeWindowStart = lsTimeWindowStart[0],
-			    TimeWindowEnd = lsTimeWindowStart[0]+300,
-			    OrderId = 7205705
-		    },
-		    new Address {
-			    AddressString = "325 Broadway, New York, NY 10007, USA",
-			    Alias = "BK Restaurant #: 20333",
-			    Latitude = 40.71615,
-			    Longitude = -74.00505,
-			    CurbsideLatitude = 40.71615,
-			    CurbsideLongitude = -74.00505,
-			    Email = "",
-			    Phone = "(212) 227-7535",
-			    FirstName = "",
-			    LastName = "",
-			    CustomFields = new Dictionary<string, string> { {"icon", null} },
-			    Time = 0,
-			    TimeWindowStart = lsTimeWindowStart[1],
-			    TimeWindowEnd = lsTimeWindowStart[1]+300,
-			    OrderId = 7205704
-		    },
-		    new Address {
-			    AddressString = "106 Fulton St, Farmingdale, NY 11735, USA",
-			    Alias = "BK Restaurant #: 17871",
-			    Latitude = 40.73073,
-			    Longitude = -73.459283,
-			    CurbsideLatitude = 40.73073,
-			    CurbsideLongitude = -73.459283,
-			    Email = "",
-			    Phone = "(212) 566-5132",
-			    FirstName = "",
-			    LastName = "",
-			    CustomFields = new Dictionary<string, string> { {"icon", null} },
-			    Time = 0,
-			    TimeWindowStart = lsTimeWindowStart[2],
-			    TimeWindowEnd = lsTimeWindowStart[2]+300,
-			    OrderId = 7205703
-		    }
-	    };
+            new Address {
+                AddressString = "273 Canal St, New York, NY 10013, USA",
+                Latitude = 40.7191558,
+                Longitude = -74.0011966,
+                Alias = "",
+                CurbsideLatitude = 40.7191558,
+                CurbsideLongitude = -74.0011966,
+                IsDepot = true
+            },
+            new Address {
+                AddressString = "106 Liberty St, New York, NY 10006, USA",
+                Alias = "BK Restaurant #: 2446",
+                Latitude = 40.709637,
+                Longitude = -74.011912,
+                CurbsideLatitude = 40.709637,
+                CurbsideLongitude = -74.011912,
+                Email = "",
+                Phone = "(917) 338-1887",
+                FirstName = "",
+                LastName = "",
+                CustomFields = new Dictionary<string, string> { {"icon", null} },
+                Time = 0,
+                TimeWindowStart = lsTimeWindowStart[0],
+                TimeWindowEnd = lsTimeWindowStart[0]+300,
+                OrderId = 7205705
+            },
+            new Address {
+                AddressString = "325 Broadway, New York, NY 10007, USA",
+                Alias = "BK Restaurant #: 20333",
+                Latitude = 40.71615,
+                Longitude = -74.00505,
+                CurbsideLatitude = 40.71615,
+                CurbsideLongitude = -74.00505,
+                Email = "",
+                Phone = "(212) 227-7535",
+                FirstName = "",
+                LastName = "",
+                CustomFields = new Dictionary<string, string> { {"icon", null} },
+                Time = 0,
+                TimeWindowStart = lsTimeWindowStart[1],
+                TimeWindowEnd = lsTimeWindowStart[1]+300,
+                OrderId = 7205704
+            },
+            new Address {
+                AddressString = "106 Fulton St, Farmingdale, NY 11735, USA",
+                Alias = "BK Restaurant #: 17871",
+                Latitude = 40.73073,
+                Longitude = -73.459283,
+                CurbsideLatitude = 40.73073,
+                CurbsideLongitude = -73.459283,
+                Email = "",
+                Phone = "(212) 566-5132",
+                FirstName = "",
+                LastName = "",
+                CustomFields = new Dictionary<string, string> { {"icon", null} },
+                Time = 0,
+                TimeWindowStart = lsTimeWindowStart[2],
+                TimeWindowEnd = lsTimeWindowStart[2]+300,
+                OrderId = 7205703
+            }
+        };
             #endregion
 
             RouteParameters rParams = new RouteParameters()
@@ -5390,13 +5410,13 @@ namespace Route4MeSDKUnitTest
             DataObject dataObject = route4Me.AddOrdersToOptimization(rQueryParams, addresses, rParams, out errorString);
 
             Assert.IsNotNull(dataObject, "AddOrdersToOptimizationTest failed... " + errorString);
-
         }
 
         [TestMethod]
         public void AddOrdersToRouteTest()
         {
             if (skip == "yes") return;
+
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
             RouteParametersQuery rQueryParams = new RouteParametersQuery()
@@ -5407,51 +5427,51 @@ namespace Route4MeSDKUnitTest
 
             #region Addresses
             Address[] addresses = new Address[] {
-		        new Address {
-			        AddressString = "273 Canal St, New York, NY 10013, USA",
-			        Latitude = 40.7191558,
-			        Longitude = -74.0011966,
-			        Alias = "",
-			        CurbsideLatitude = 40.7191558,
-			        CurbsideLongitude = -74.0011966
-		        },
-		        new Address {
-			        AddressString = "106 Liberty St, New York, NY 10006, USA",
-			        Alias = "BK Restaurant #: 2446",
-			        Latitude = 40.709637,
-			        Longitude = -74.011912,
-			        CurbsideLatitude = 40.709637,
-			        CurbsideLongitude = -74.011912,
-			        Email = "",
-			        Phone = "(917) 338-1887",
-			        FirstName = "",
-			        LastName = "",
-			        CustomFields = new Dictionary<string, string> { {
-				        "icon",
-				        null
-			        } },
-			        Time = 0,
-			        OrderId = 7205705
-		        },
-		        new Address {
-			        AddressString = "106 Fulton St, Farmingdale, NY 11735, USA",
-			        Alias = "BK Restaurant #: 17871",
-			        Latitude = 40.73073,
-			        Longitude = -73.459283,
-			        CurbsideLatitude = 40.73073,
-			        CurbsideLongitude = -73.459283,
-			        Email = "",
-			        Phone = "(212) 566-5132",
-			        FirstName = "",
-			        LastName = "",
-			        CustomFields = new Dictionary<string, string> { {
-				        "icon",
-				        null
-			        } },
-			        Time = 0,
-			        OrderId = 7205703
-		        }
-	        };
+                new Address {
+                    AddressString = "273 Canal St, New York, NY 10013, USA",
+                    Latitude = 40.7191558,
+                    Longitude = -74.0011966,
+                    Alias = "",
+                    CurbsideLatitude = 40.7191558,
+                    CurbsideLongitude = -74.0011966
+                },
+                new Address {
+                    AddressString = "106 Liberty St, New York, NY 10006, USA",
+                    Alias = "BK Restaurant #: 2446",
+                    Latitude = 40.709637,
+                    Longitude = -74.011912,
+                    CurbsideLatitude = 40.709637,
+                    CurbsideLongitude = -74.011912,
+                    Email = "",
+                    Phone = "(917) 338-1887",
+                    FirstName = "",
+                    LastName = "",
+                    CustomFields = new Dictionary<string, string> { {
+                        "icon",
+                        null
+                    } },
+                    Time = 0,
+                    OrderId = 7205705
+                },
+                new Address {
+                    AddressString = "106 Fulton St, Farmingdale, NY 11735, USA",
+                    Alias = "BK Restaurant #: 17871",
+                    Latitude = 40.73073,
+                    Longitude = -73.459283,
+                    CurbsideLatitude = 40.73073,
+                    CurbsideLongitude = -73.459283,
+                    Email = "",
+                    Phone = "(212) 566-5132",
+                    FirstName = "",
+                    LastName = "",
+                    CustomFields = new Dictionary<string, string> { {
+                        "icon",
+                        null
+                    } },
+                    Time = 0,
+                    OrderId = 7205703
+                }
+            };
             #endregion
 
             RouteParameters rParams = new RouteParameters()
@@ -5478,6 +5498,7 @@ namespace Route4MeSDKUnitTest
         public static void RemoveOrdersTest()
         {
             if (skip == "yes") return;
+
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
             // Run the query
@@ -5506,6 +5527,7 @@ namespace Route4MeSDKUnitTest
             lsOptimizationIDs = new List<string>();
 
             tdr = new TestDataRepository(c_ApiKey);
+
             bool result = tdr.RunOptimizationSingleDriverRoute10Stops();
 
             Assert.IsTrue(result, "Single Driver 10 Stops generation failed...");
@@ -5972,6 +5994,7 @@ namespace Route4MeSDKUnitTest
             lsOptimizationIDs = new List<string>();
 
             tdr = new TestDataRepository(c_ApiKey);
+
             bool result = tdr.SingleDriverRoundTripTest();
 
             Assert.IsTrue(result, "Single Driver Round Trip generation failed...");
@@ -6033,7 +6056,7 @@ namespace Route4MeSDKUnitTest
             string errorString;
             DataObject dataObject = route4Me.UpdateOptimization(optimizationParameters, out errorString);
 
-            tdr.SDRT_route_id = dataObject.Routes.Length>0 ? dataObject.Routes[0].RouteID :  "";
+            tdr.SDRT_route_id = dataObject.Routes.Length > 0 ? dataObject.Routes[0].RouteID : "";
 
             Assert.IsNotNull(tdr.dataObjectSDRT, "AddDestinationToOptimization and reoptimized Test  failed... " + errorString);
 
@@ -6043,7 +6066,6 @@ namespace Route4MeSDKUnitTest
             tdr.SDRT_route_id = dataObject.Routes.Length > 0 ? dataObject.Routes[0].RouteID : "";
 
             Assert.IsNotNull(tdr.dataObjectSDRT, "AddDestinationToOptimization and not reoptimized Test  failed... " + errorString);
-            
         }
 
         [TestMethod]
@@ -6062,7 +6084,7 @@ namespace Route4MeSDKUnitTest
             string errorString;
             bool removed = route4Me.RemoveDestinationFromOptimization(OptimizationProblemId, destinationId, out errorString);
 
-            Assert.IsTrue(removed, "RemoveDestinationFromOptimizationTest failed... "+errorString);
+            Assert.IsTrue(removed, "RemoveDestinationFromOptimizationTest failed... " + errorString);
         }
 
         [TestMethod]
@@ -6079,12 +6101,12 @@ namespace Route4MeSDKUnitTest
             Address[] addresses = new Address[]
             {
                 new Address() { AddressString =  "146 Bill Johnson Rd NE Milledgeville GA 31061",
-                                Latitude = 	33.143526,
+                                Latitude =  33.143526,
                                 Longitude = -83.240354,
                                 Time = 0 },
 
                 new Address() { AddressString =  "222 Blake Cir Milledgeville GA 31061",
-                                Latitude = 	33.177852,
+                                Latitude =  33.177852,
                                 Longitude = -83.263535,
                                 Time = 0 }
             };
@@ -6096,7 +6118,6 @@ namespace Route4MeSDKUnitTest
             int[] destinationIds = route4Me.AddRouteDestinations(route_id, addresses, optimalPosition, out errorString);
 
             Assert.IsInstanceOfType(destinationIds, typeof(System.Int32[]), "AddRouteDestinationsTest failed...");
-
         }
 
         [TestMethod]
@@ -6127,7 +6148,7 @@ namespace Route4MeSDKUnitTest
             AddressParameters aParams = new AddressParameters
             {
                 RouteId = tdr.SDRT_route_id,
-                RouteDestinationId = tdr.SDRT_route.Addresses[0].RouteDestinationId!=null ? Convert.ToInt32(tdr.SDRT_route.Addresses[0].RouteDestinationId) : -1,
+                RouteDestinationId = tdr.SDRT_route.Addresses[0].RouteDestinationId != null ? Convert.ToInt32(tdr.SDRT_route.Addresses[0].RouteDestinationId) : -1,
                 IsDeparted = true
             };
 
@@ -6221,6 +6242,7 @@ namespace Route4MeSDKUnitTest
             lsOptimizationIDs = new List<string>();
 
             tdr = new TestDataRepository(c_ApiKey);
+
             bool result = tdr.SingleDriverRoundTripTest();
 
             Assert.IsTrue(result, "Single Driver Round Trip generation failed...");
@@ -6244,7 +6266,6 @@ namespace Route4MeSDKUnitTest
             FindAssetResponse result = route4Me.FindAsset(tracking, out errorString);
 
             Assert.IsInstanceOfType(result, typeof(FindAssetResponse), "FindAssetTest failed... " + errorString);
-
         }
 
         [TestMethod]
@@ -6278,7 +6299,7 @@ namespace Route4MeSDKUnitTest
         [TestMethod]
         public void GetDeviceHistoryTimeRangeTest()
         {
-            Route4MeManager route4Me = new Route4MeManager("bd48828717021141485a701453273458");
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
             int uStartTime = 0;
             int uEndTime = 0;
@@ -6400,7 +6421,7 @@ namespace Route4MeSDKUnitTest
         {
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
-            int memberID =  lsMembers[0];
+            int memberID = lsMembers[0];
             MemberParametersV4 @params = new MemberParametersV4 { member_id = memberID };
 
             // Run the query
@@ -6423,7 +6444,7 @@ namespace Route4MeSDKUnitTest
             string errorString;
             Route4MeManager.GetUsersResponse dataObjects = route4Me.GetUsers(parameters, out errorString);
 
-            Assert.IsInstanceOfType(dataObjects,typeof(Route4MeManager.GetUsersResponse), "GetUsersTest failed... " + errorString);
+            Assert.IsInstanceOfType(dataObjects, typeof(Route4MeManager.GetUsersResponse), "GetUsersTest failed... " + errorString);
         }
 
         [TestMethod]
@@ -6672,14 +6693,12 @@ namespace Route4MeSDKUnitTest
                     lsVehicleIDs.Add(veh1.VehicleId);
                 }
             }
-            
         }
 
         [TestMethod]
         public void GetVehiclesListTest()
         {
             VehiclesPaginated vehicles = getVehilesList();
-            
         }
 
         public VehiclesPaginated getVehilesList()
@@ -6722,7 +6741,7 @@ namespace Route4MeSDKUnitTest
                 VehicleModelYear = 1995,
                 VehicleYearAcquired = 2008,
                 VehicleRegCountryId = 223,
-                VehicleMake = "GMC", 
+                VehicleMake = "GMC",
                 VehicleTypeID = "pickup_truck",
                 VehicleAxleCount = 2,
                 MpgCity = 7,
@@ -6819,7 +6838,6 @@ namespace Route4MeSDKUnitTest
             };
 
             VehicleV4Response class8Truck = createVehicle(class8TruckParams);
-
         }
 
         public VehicleV4Response createVehicle(VehicleV4Parameters vehicleParams)
@@ -6841,7 +6859,7 @@ namespace Route4MeSDKUnitTest
 
             VehicleParameters vehicleParameters = new VehicleParameters
             {
-                VehicleId = lsVehicleIDs[lsVehicleIDs.Count-1]
+                VehicleId = lsVehicleIDs[lsVehicleIDs.Count - 1]
             };
 
             // Run the query
@@ -6869,17 +6887,17 @@ namespace Route4MeSDKUnitTest
             // TO DO: on this stage specifying of the parameter vehicle_alias is mandatory. Will be checked later
             VehicleV4Parameters vehicleParams = new VehicleV4Parameters()
             {
-                VehicleId = lsVehicleIDs[lsVehicleIDs.Count-1],
+                VehicleId = lsVehicleIDs[lsVehicleIDs.Count - 1],
                 VehicleAlias = "Ford Transit Test 4",
                 VehicleModelYear = 1995,
-	            VehicleRegCountryId = 223,
-	            VehicleMake = "Ford",
-	            VehicleAxleCount = 2,
-	            MpgCity = 8,
-	            MpgHighway = 14,
-	            FuelType = "unleaded 93",
-	            HeightInches = 72,
-	            WeightLb = 2000
+                VehicleRegCountryId = 223,
+                VehicleMake = "Ford",
+                VehicleAxleCount = 2,
+                MpgCity = 8,
+                MpgHighway = 14,
+                FuelType = "unleaded 93",
+                HeightInches = 72,
+                WeightLb = 2000
             };
 
             // Run the query
@@ -6918,7 +6936,6 @@ namespace Route4MeSDKUnitTest
 
             lsVehicleIDs.RemoveAt(lsVehicleIDs.Count - 1);
         }
-
     }
 
     [TestClass]
@@ -6951,7 +6968,7 @@ namespace Route4MeSDKUnitTest
 
             GeocodingParameters geoParams = new GeocodingParameters
             {
-                Addresses ="Los Angeles International Airport, CA\n3495 Purdue St, Cuyahoga Falls, OH 44221",
+                Addresses = "Los Angeles International Airport, CA\n3495 Purdue St, Cuyahoga Falls, OH 44221",
                 Format = "json"
             };
 
@@ -7091,7 +7108,6 @@ namespace Route4MeSDKUnitTest
 
             Assert.IsNotNull(result, "ReverseGeocodingTest failed... " + errorString);
         }
-
     }
 
     [TestClass]
@@ -7106,7 +7122,6 @@ namespace Route4MeSDKUnitTest
         public TestContext TestContext
         {
             get { return _testContext; }
-
             set { _testContext = value; }
         }
 
@@ -7118,6 +7133,7 @@ namespace Route4MeSDKUnitTest
             db_type = DB_Type.SQLCE; // you can choose other types of the database engine.
 
             tdr = new TestDataRepository(c_ApiKey);
+
             bool result = tdr.GenerateSQLCEDatabaseTest();
 
             Assert.IsTrue(result, "Generation of the SQL tables failed...");
@@ -7146,6 +7162,7 @@ namespace Route4MeSDKUnitTest
                 Console.WriteLine("Connection opened");
 
                 int iResult = sqlDB.ExecuteMulticoomandSql(sAddressbookSqlCom);
+
                 if (iResult > 0) Console.WriteLine(":) The SQL table 'addressbook_v4' created successfuly!!!"); else Console.WriteLine(":( Creating of the SQL table 'addressbook_v4' failed...");
 
                 iResult = sqlDB.ExecuteMulticoomandSql(sOrdersSqlCom);
@@ -7163,8 +7180,8 @@ namespace Route4MeSDKUnitTest
 
                 Assert.IsTrue(1 > 0, "");
             }
-            catch (Exception ex) 
-            { 
+            catch (Exception ex)
+            {
                 Console.WriteLine("Generating of the SQL tables failed!.. " + ex.Message);
                 Assert.IsTrue(0 > 1, "GenerateMySQLDatabaseTest failed... " + ex.Message);
             }
@@ -7197,6 +7214,7 @@ namespace Route4MeSDKUnitTest
                 Console.WriteLine("Connection opened");
 
                 int iResult = sqlDB.ExecuteMulticoomandSql(sAddressbookSqlCom);
+
                 if (iResult > 0) Console.WriteLine(":) The SQL table 'addressbook_v4' created successfuly!!!"); else Console.WriteLine(":( Creating of the SQL table 'addressbook_v4' failed...");
 
                 iResult = sqlDB.ExecuteMulticoomandSql(sOrdersSqlCom);
@@ -7214,8 +7232,8 @@ namespace Route4MeSDKUnitTest
 
                 Assert.IsTrue(1 > 0, "");
             }
-            catch (Exception ex) 
-            { 
+            catch (Exception ex)
+            {
                 Console.WriteLine("Generating of the SQL tables failed!.. " + ex.Message);
                 Assert.IsTrue(0 > 1, "GenerateMsSQLDatabaseTest failed... " + ex.Message);
             }
@@ -7267,8 +7285,8 @@ namespace Route4MeSDKUnitTest
                     Assert.IsTrue(iResult > 0, "Inserting of the data in the SQL table 'csv_to_api_dictionary' failed...");
                 }
             }
-            catch (Exception ex) 
-            { 
+            catch (Exception ex)
+            {
                 Console.WriteLine("Generating of the SQL tables failed!.. " + ex.Message);
                 Assert.IsTrue(0 > 1, "GenerateSQLCEDatabaseTest failed... " + ex.Message);
             }
@@ -7301,6 +7319,7 @@ namespace Route4MeSDKUnitTest
                 Console.WriteLine("Connection opened");
 
                 int iResult = sqlDB.ExecuteMulticoomandSql(sAddressbookSqlCom);
+
                 if (iResult > 0) Console.WriteLine(":) The SQL table 'addressbook_v4' created successfuly!!!"); else Console.WriteLine(":( Creating of the SQL table 'addressbook_v4' failed...");
 
                 iResult = sqlDB.ExecuteMulticoomandSql(sOrdersSqlCom);
@@ -7318,8 +7337,8 @@ namespace Route4MeSDKUnitTest
 
                 Assert.IsTrue(1 > 0, "");
             }
-            catch (Exception ex) 
-            { 
+            catch (Exception ex)
+            {
                 Console.WriteLine("Generating of the SQL tables failed!.. " + ex.Message);
                 Assert.IsTrue(0 > 1, "GeneratePostgreSQLDatabaseTest failed... " + ex.Message);
             }
@@ -7342,9 +7361,9 @@ namespace Route4MeSDKUnitTest
 
                 sqlDB.Table2Csv(@"Data/CSV/addressbook v4.csv", "addressbook_v4", true);
                 Console.WriteLine("The file addressbook v4.csv was created.");
-                Assert.IsTrue(1>0,"");
+                Assert.IsTrue(1 > 0, "");
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 Console.WriteLine("Making of a addressbook csv file failed!.. " + ex.Message);
                 Assert.IsTrue(0 > 1, "MakeAddressbookCSVsampleTest failed... " + ex.Message);
@@ -7372,8 +7391,8 @@ namespace Route4MeSDKUnitTest
 
                 Assert.IsTrue(1 > 0, "");
             }
-            catch (Exception ex) 
-            { 
+            catch (Exception ex)
+            {
                 Console.WriteLine("Uploading of the JSON file to the SQL server failed!.. " + ex.Message);
                 Assert.IsTrue(0 > 1, "UploadAddressbookJSONtoSQLTest failed... " + ex.Message);
             }
@@ -7400,8 +7419,8 @@ namespace Route4MeSDKUnitTest
 
                 Assert.IsTrue(1 > 0, "");
             }
-            catch (Exception ex) 
-            { 
+            catch (Exception ex)
+            {
                 Console.WriteLine("Uploading of the CSV file to the SQL server failed!.. " + ex.Message);
                 Assert.IsTrue(0 > 1, "UploadCsvToAddressbookV4Test failed... " + ex.Message);
             }
@@ -7428,8 +7447,8 @@ namespace Route4MeSDKUnitTest
 
                 Assert.IsTrue(1 > 0, "");
             }
-            catch (Exception ex) 
-            { 
+            catch (Exception ex)
+            {
                 Console.WriteLine("Uploading of the CSV file to the SQL server failed!.. " + ex.Message);
                 Assert.IsTrue(0 > 1, "UploadCsvToOrdersTest failed... " + ex.Message);
             }
@@ -7456,8 +7475,8 @@ namespace Route4MeSDKUnitTest
 
                 Assert.IsTrue(1 > 0, "");
             }
-            catch (Exception ex) 
-            { 
+            catch (Exception ex)
+            {
                 Console.WriteLine("Uploading of the JSON file to the SQL server failed!.. " + ex.Message);
                 Assert.IsTrue(0 > 1, "UploadOrdersJSONtoSQLTest failed... " + ex.Message);
             }
@@ -7485,6 +7504,7 @@ namespace Route4MeSDKUnitTest
             lsOrders = new List<string>();
 
             tdr = new TestDataRepository(c_ApiKey);
+
             bool result = tdr.RunOptimizationSingleDriverRoute10Stops();
 
             Assert.IsTrue(result, "Single Driver 10 stops generation failed...");
@@ -7561,8 +7581,8 @@ namespace Route4MeSDKUnitTest
             string opt_id = tdr.SDRT_optimization_problem_id;
             Assert.IsNotNull(opt_id, "optimizationProblemID is null...");
 
-            string[] OptIDs = new string[]{opt_id};
- 
+            string[] OptIDs = new string[] { opt_id };
+
             // Run the query
             string errorString;
             bool removed = route4Me.RemoveOptimization(OptIDs, out errorString);
@@ -7633,6 +7653,7 @@ namespace Route4MeSDKUnitTest
                     if (!sched0.ValidateScheduleMode(sched_mode)) continue;
 
                     bool blNth = false;
+
                     if (sched0.ValidateScheduleMonthlyMode(sched_monthly_mode))
                     {
                         if (sched_monthly_mode == "nth") blNth = true;
@@ -7654,6 +7675,7 @@ namespace Route4MeSDKUnitTest
                         if (schedule.ValidateScheduleEvery(sched_every))
                         {
                             int iEvery = Convert.ToInt32(sched_every);
+
                             switch (schedule.mode)
                             {
                                 case "daily":
@@ -7663,8 +7685,10 @@ namespace Route4MeSDKUnitTest
                                     if (schedule.ValidateScheduleWeekdays(sched_weekdays))
                                     {
                                         schedule.weekly.every = iEvery;
+
                                         string[] arWeekdays = sched_weekdays.Split(',');
                                         List<int> lsWeekdays = new List<int>();
+
                                         for (int i = 0; i < arWeekdays.Length; i++)
                                         {
                                             lsWeekdays.Add(Convert.ToInt32(arWeekdays[i]));
@@ -7684,6 +7708,7 @@ namespace Route4MeSDKUnitTest
                                                 {
                                                     string[] arMonthdays = sched_monthly_dates.Split(',');
                                                     List<int> lsMonthdays = new List<int>();
+
                                                     for (int i = 0; i < arMonthdays.Length; i++)
                                                     {
                                                         lsMonthdays.Add(Convert.ToInt32(arMonthdays[i]));
@@ -7714,6 +7739,7 @@ namespace Route4MeSDKUnitTest
                                             {
                                                 string[] arYearmonths = sched_annually_months.Split(',');
                                                 List<int> lsMonths = new List<int>();
+
                                                 for (int i = 0; i < arYearmonths.Length; i++)
                                                 {
                                                     lsMonths.Add(Convert.ToInt32(arYearmonths[i]));
@@ -7725,7 +7751,6 @@ namespace Route4MeSDKUnitTest
                                     break;
                             }
                         }
-
                     }
                     newLocation.schedule = (new List<Schedule>() { schedule }).ToArray();
                     //}
@@ -7738,11 +7763,11 @@ namespace Route4MeSDKUnitTest
                     if (resultContact != null)
                     {
                         string AddressId = resultContact.address_id != null ? resultContact.address_id.ToString() : "";
+
                         if (AddressId != "") lsAddressbookContacts.Add(AddressId);
                     }
 
                     Thread.Sleep(1000);
-
                 }
             };
 
@@ -7754,6 +7779,7 @@ namespace Route4MeSDKUnitTest
             TimeSpan tsp1day = new TimeSpan(1, 0, 0, 0);
             List<string> lsScheduledDays = new List<string>();
             DateTime curDate = DateTime.Now;
+
             for (int i = 0; i < 5; i++)
             {
                 curDate += tsp1day;
@@ -7763,45 +7789,45 @@ namespace Route4MeSDKUnitTest
             #region Addresses
             Address[] Depots = new Address[] {
                 new Address {
-			            AddressString = "2017 Ambler Ave, Abilene, TX, 79603-2239",
-			            IsDepot = true,
+                        AddressString = "2017 Ambler Ave, Abilene, TX, 79603-2239",
+                        IsDepot = true,
                         Latitude = 32.474395,
                         Longitude = -99.7447021,
                         CurbsideLatitude = 32.474395,
                         CurbsideLongitude = -99.7447021
-		            },
+                    },
                 new Address {
-			            AddressString = "807 Ridge Rd, Alamo, TX, 78516-9596",
-			            IsDepot = true,
+                        AddressString = "807 Ridge Rd, Alamo, TX, 78516-9596",
+                        IsDepot = true,
                         Latitude = 26.170834,
                         Longitude = -98.116201,
                         CurbsideLatitude = 26.170834,
                         CurbsideLongitude = -98.116201
-		            },
+                    },
                 new Address {
-			            AddressString = "1430 W Amarillo Blvd, Amarillo, TX, 79107-5505",
-			            IsDepot = true,
+                        AddressString = "1430 W Amarillo Blvd, Amarillo, TX, 79107-5505",
+                        IsDepot = true,
                         Latitude = 35.221969,
                         Longitude = -101.835288,
                         CurbsideLatitude = 35.221969,
                         CurbsideLongitude = -101.835288
-		            },
+                    },
                 new Address {
-			            AddressString = "3611 Ne 24Th Ave, Amarillo, TX, 79107-7242",
-			            IsDepot = true,
+                        AddressString = "3611 Ne 24Th Ave, Amarillo, TX, 79107-7242",
+                        IsDepot = true,
                         Latitude = 35.236626,
                         Longitude = -101.795117,
                         CurbsideLatitude = 35.236626,
                         CurbsideLongitude = -101.795117
-		            },
+                    },
                 new Address {
-			            AddressString = "1525 New York Ave, Arlington, TX, 76010-4723",
-			            IsDepot = true,
+                        AddressString = "1525 New York Ave, Arlington, TX, 76010-4723",
+                        IsDepot = true,
                         Latitude = 32.720524,
                         Longitude = -97.080195,
                         CurbsideLatitude = 32.720524,
                         CurbsideLongitude = -97.080195
-		            }
+                    }
             };
             #endregion
 
@@ -7842,7 +7868,7 @@ namespace Route4MeSDKUnitTest
 
                 var addDepotResult = route4Me.AddDepotsToHybridOptimization(hDepotParams, out errorString3);
 
-                Assert.IsTrue(addDepotResult, "Adding a depot to the Hybrid Optimization failed... "+errorString3);
+                Assert.IsTrue(addDepotResult, "Adding a depot to the Hybrid Optimization failed... " + errorString3);
 
                 Thread.Sleep(5000);
 
@@ -7868,7 +7894,6 @@ namespace Route4MeSDKUnitTest
             bool removeLocations = tdr.RemoveAddressBookContacts(lsAddressbookContacts, ApiKey);
 
             Assert.IsTrue(removeLocations, "Removing of the addressbook contacts failed...");
-
         }
 
         [TestMethod]
@@ -7937,6 +7962,7 @@ namespace Route4MeSDKUnitTest
                     if (resultOrder != null)
                     {
                         string OrderId = resultOrder.order_id != null ? resultOrder.order_id.ToString() : "";
+
                         if (OrderId != "") lsOrders.Add(OrderId);
                     }
 
@@ -7954,6 +7980,7 @@ namespace Route4MeSDKUnitTest
             TimeSpan tsp1day = new TimeSpan(1, 0, 0, 0);
             List<string> lsScheduledDays = new List<string>();
             DateTime curDate = DateTime.Now;
+
             for (int i = 0; i < 5; i++)
             {
                 curDate += tsp1day;
@@ -7962,45 +7989,45 @@ namespace Route4MeSDKUnitTest
 
             Address[] Depots = new Address[] {
                 new Address {
-			            AddressString = "2017 Ambler Ave, Abilene, TX, 79603-2239",
-			            IsDepot = true,
+                        AddressString = "2017 Ambler Ave, Abilene, TX, 79603-2239",
+                        IsDepot = true,
                         Latitude = 32.474395,
                         Longitude = -99.7447021,
                         CurbsideLatitude = 32.474395,
                         CurbsideLongitude = -99.7447021
-		            },
+                    },
                 new Address {
-			            AddressString = "807 Ridge Rd, Alamo, TX, 78516-9596",
-			            IsDepot = true,
+                        AddressString = "807 Ridge Rd, Alamo, TX, 78516-9596",
+                        IsDepot = true,
                         Latitude = 26.170834,
                         Longitude = -98.116201,
                         CurbsideLatitude = 26.170834,
                         CurbsideLongitude = -98.116201
-		            },
+                    },
                 new Address {
-			            AddressString = "1430 W Amarillo Blvd, Amarillo, TX, 79107-5505",
-			            IsDepot = true,
+                        AddressString = "1430 W Amarillo Blvd, Amarillo, TX, 79107-5505",
+                        IsDepot = true,
                         Latitude = 35.221969,
                         Longitude = -101.835288,
                         CurbsideLatitude = 35.221969,
                         CurbsideLongitude = -101.835288
-		            },
+                    },
                 new Address {
-			            AddressString = "3611 Ne 24Th Ave, Amarillo, TX, 79107-7242",
-			            IsDepot = true,
+                        AddressString = "3611 Ne 24Th Ave, Amarillo, TX, 79107-7242",
+                        IsDepot = true,
                         Latitude = 35.236626,
                         Longitude = -101.795117,
                         CurbsideLatitude = 35.236626,
                         CurbsideLongitude = -101.795117
-		            },
+                    },
                 new Address {
-			            AddressString = "1525 New York Ave, Arlington, TX, 76010-4723",
-			            IsDepot = true,
+                        AddressString = "1525 New York Ave, Arlington, TX, 76010-4723",
+                        IsDepot = true,
                         Latitude = 32.720524,
                         Longitude = -97.080195,
                         CurbsideLatitude = 32.720524,
                         CurbsideLongitude = -97.080195
-		            }
+                    }
             };
 
             string errorString1;
@@ -8057,7 +8084,6 @@ namespace Route4MeSDKUnitTest
 
                 if (finalOptimization != null) lsOptimizationIDs.Add(finalOptimization.OptimizationProblemId);
 
-
                 Thread.Sleep(5000);
                 //=================================================================
             }
@@ -8087,17 +8113,14 @@ namespace Route4MeSDKUnitTest
             c_ApiKey = apiKey;
         }
 
-
         public DataObject dataObjectSD10Stops { get; set; }
         public string SD10Stops_optimization_problem_id { get; set; }
-        public DataObjectRoute SD10Stops_route {get; set;}
+        public DataObjectRoute SD10Stops_route { get; set; }
         public string SD10Stops_route_id { get; set; }
-
         public DataObject dataObjectSDRT { get; set; }
         public string SDRT_optimization_problem_id { get; set; }
         public DataObjectRoute SDRT_route { get; set; }
         public string SDRT_route_id { get; set; }
-
         public DataObject dataObjectMDMD24 { get; set; }
         public string MDMD24_optimization_problem_id { get; set; }
         public DataObjectRoute MDMD24_route { get; set; }
@@ -8200,6 +8223,7 @@ namespace Route4MeSDKUnitTest
 
             // Run the query
             string errorString;
+
             try
             {
                 dataObjectSD10Stops = r4mm.RunOptimization(optimizationParameters, out errorString);
@@ -8215,7 +8239,6 @@ namespace Route4MeSDKUnitTest
                 Console.WriteLine("Single Driver Route 10 Stops generation failed... " + ex.Message);
                 return false;
             }
-
         }
 
         public bool SingleDriverRoundTripTest()
@@ -8268,7 +8291,7 @@ namespace Route4MeSDKUnitTest
                                 Alias         = "Toga Bike Shop",
                                 Latitude      = 40.7753077,
                                 Longitude     = -73.9861529,
-                                Time          = 0 }, 
+                                Time          = 0 },
 
                 new Address() { AddressString = "555 W 57th St New York, NY 10019",
                                 Alias         = "BMW of Manhattan",
@@ -8312,6 +8335,7 @@ namespace Route4MeSDKUnitTest
 
             // Run the query
             string errorString;
+
             try
             {
                 dataObjectSDRT = route4Me.RunOptimization(optimizationParameters, out errorString);
@@ -8325,7 +8349,6 @@ namespace Route4MeSDKUnitTest
                 Console.WriteLine("Single Driver Round Trip generation failed... " + ex.Message);
                 return false;
             }
-
         }
 
         public bool RemoveOptimization(string[] optimizationProblemIDs)
@@ -8345,7 +8368,6 @@ namespace Route4MeSDKUnitTest
                 Console.WriteLine("Removing of an optimization failed..." + ex.Message); return false;
                 throw;
             }
-           
         }
 
         public bool MultipleDepotMultipleDriverWith24StopsTimeWindowTest()
@@ -8571,9 +8593,8 @@ namespace Route4MeSDKUnitTest
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Generation of the Multiple Depot, Multiple Driver with 24 Stops optimization problem failed... "+ex.Message); return false;
+                Console.WriteLine("Generation of the Multiple Depot, Multiple Driver with 24 Stops optimization problem failed... " + ex.Message); return false;
             }
-
         }
 
         public bool GenerateSQLCEDatabaseTest()
@@ -8599,6 +8620,7 @@ namespace Route4MeSDKUnitTest
                 dropSQLCEtable("addressbook_v4", sqlDB);
 
                 int iResult = sqlDB.ExecuteMulticoomandSql(sAddressbookSqlCom);
+
                 if (iResult < 1) return false;
 
                 dropSQLCEtable("orders", sqlDB);
@@ -8664,9 +8686,7 @@ namespace Route4MeSDKUnitTest
             bool removed = route4Me.RemoveOrders(lsOrders.ToArray(), out errorString);
 
             return removed;
-
         }
-
     }
 
     #region Types
@@ -8698,10 +8718,10 @@ namespace Route4MeSDKUnitTest
     class MyAddressAndParametersHolder : GenericParameters
     {
         [DataMember]
-        public Address[] addresses { get; set; } 
+        public Address[] addresses { get; set; }
 
         [DataMember]
-        public RouteParameters parameters { get; set; } 
+        public RouteParameters parameters { get; set; }
     }
 
     [DataContract]
@@ -8714,10 +8734,10 @@ namespace Route4MeSDKUnitTest
         public int MyState { get; set; }
 
         [DataMember(Name = "addresses")]
-        public Address[] Addresses { get; set; } 
+        public Address[] Addresses { get; set; }
 
         [DataMember(Name = "parameters")]
-        public RouteParameters Parameters { get; set; } 
+        public RouteParameters Parameters { get; set; }
     }
     #endregion
 }
