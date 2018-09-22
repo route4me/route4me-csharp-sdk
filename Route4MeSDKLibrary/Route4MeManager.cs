@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Runtime.Serialization;
@@ -2855,13 +2856,15 @@ namespace Route4MeSDK
 
     private HttpClient CreateHttpClient(string url)
     {
-      HttpClient result = new HttpClient() { BaseAddress = new Uri(url) };
+          ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
 
-      result.Timeout = m_DefaultTimeOut;
-      result.DefaultRequestHeaders.Accept.Clear();
-      result.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+          HttpClient result = new HttpClient() { BaseAddress = new Uri(url) };
 
-      return result;
+          result.Timeout = m_DefaultTimeOut;
+          result.DefaultRequestHeaders.Accept.Clear();
+          result.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+          return result;
     }
 
     #endregion
