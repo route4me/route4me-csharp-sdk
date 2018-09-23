@@ -2205,19 +2205,19 @@ namespace Route4MeSDK
 
     public string BatchGeocoding(GeocodingParameters geoParams, out string errorString)
     {
-            GeocodingRequest request = new GeocodingRequest { };
+        GeocodingRequest request = new GeocodingRequest { };
 
-            var keyValues = new List<KeyValuePair<string, string>>();
+        var keyValues = new List<KeyValuePair<string, string>>();
 
-            keyValues.Add(new KeyValuePair<string, string>("strExportFormat", geoParams.Format));
-            keyValues.Add(new KeyValuePair<string, string>("addresses", geoParams.Addresses));
+        keyValues.Add(new KeyValuePair<string, string>("strExportFormat", geoParams.Format));
+        keyValues.Add(new KeyValuePair<string, string>("addresses", geoParams.Addresses));
 
-            HttpContent httpContent = new FormUrlEncodedContent(keyValues);
+        HttpContent httpContent = new FormUrlEncodedContent(keyValues);
 
-            string response = GetJsonObjectFromAPI<string>(request, R4MEInfrastructureSettings.Geocoder, HttpMethodType.Post, httpContent, true, out errorString);
+        string response = GetJsonObjectFromAPI<string>(request, R4MEInfrastructureSettings.Geocoder, HttpMethodType.Post, httpContent, true, out errorString);
 
-            return response.ToString();
-        }
+        return response.ToString();
+    }
 
     public ArrayList RapidStreetData(GeocodingParameters geoParams, out string errorString)
     {
@@ -2856,15 +2856,29 @@ namespace Route4MeSDK
 
     private HttpClient CreateHttpClient(string url)
     {
-          ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+     //   ServicePointManager.SecurityProtocol |= (SecurityProtocolType)3072;
+     //   ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+        if (!isTlsEnum()) ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | (SecurityProtocolType)768 | (SecurityProtocolType)3072;
+      HttpClient result = new HttpClient() { BaseAddress = new Uri(url) };
 
-          HttpClient result = new HttpClient() { BaseAddress = new Uri(url) };
+      result.Timeout = m_DefaultTimeOut;
+      result.DefaultRequestHeaders.Accept.Clear();
+      result.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-          result.Timeout = m_DefaultTimeOut;
-          result.DefaultRequestHeaders.Accept.Clear();
-          result.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+      return result;
+    }
 
-          return result;
+    private bool isTlsEnum()
+    {
+        try
+        {
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+            return true;
+        }
+        catch (Exception)
+        {
+            return false;
+        }
     }
 
     #endregion
