@@ -4553,8 +4553,8 @@ namespace Route4MeSDKUnitTest
 
             Assert.IsInstanceOfType(contacts, typeof(AddressBookContact[]), "GetAddressBookContactsTest failed... " + errorString);
         }
-
-        [TestMethod]
+         
+        //[TestMethod]
         public void RemoveAllAddressbookContactsTest()
         {
             string ApiKey = "11111111111111111111111111111111";
