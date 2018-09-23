@@ -2868,19 +2868,6 @@ namespace Route4MeSDK
       return result;
     }
 
-    private bool isTlsEnum()
-    {
-        try
-        {
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
-            return true;
-        }
-        catch (Exception)
-        {
-            return false;
-        }
-    }
-
     #endregion
 
     #endregion
