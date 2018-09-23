@@ -2858,7 +2858,7 @@ namespace Route4MeSDK
     {
      //   ServicePointManager.SecurityProtocol |= (SecurityProtocolType)3072;
      //   ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
-        if (!isTlsEnum()) ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | (SecurityProtocolType)768 | (SecurityProtocolType)3072;
+      ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | (SecurityProtocolType)768 | (SecurityProtocolType)3072;
       HttpClient result = new HttpClient() { BaseAddress = new Uri(url) };
 
       result.Timeout = m_DefaultTimeOut;
