@@ -4208,7 +4208,6 @@ namespace Route4MeSDKUnitTest
         [ClassCleanup()]
         public static void RouteTypesGroupCleanup()
         {
-            if (skip == "yes") return;
             bool result = tdr.RemoveOptimization(new string[] { dataObjectMDMD24.OptimizationProblemId });
 
             Assert.IsTrue(result, "Removing of the optimization with 24 stops failed...");
@@ -4553,7 +4552,7 @@ namespace Route4MeSDKUnitTest
 
             Assert.IsInstanceOfType(contacts, typeof(AddressBookContact[]), "GetAddressBookContactsTest failed... " + errorString);
         }
-         
+
         //[TestMethod]
         public void RemoveAllAddressbookContactsTest()
         {
@@ -4577,8 +4576,12 @@ namespace Route4MeSDKUnitTest
                 uint total;
                 string errorString;
                 AddressBookContact[] contacts = route4Me.GetAddressBookLocation(addressBookParameters, out total, out errorString);
+                if (contacts == null) blContinue = false;
+                else
+                {
+                    if (contacts.Length == 0) blContinue = false;
+                }
 
-                if (contacts.Length == 0) blContinue = false;
                 Assert.IsInstanceOfType(contacts, typeof(AddressBookContact[]), "Getting of the contacts failed..." + errorString);
 
                 foreach (AddressBookContact contact in contacts) lsAddresses.Add(contact.address_id.ToString());
@@ -7652,6 +7655,8 @@ namespace Route4MeSDKUnitTest
 
                     //newLocation.schedule = new Schedule[]{};
                     if (!sched0.ValidateScheduleMode(sched_mode)) continue;
+
+                    sched0.from = DateTime.Now.ToString("yyyy-MM-dd");
 
                     bool blNth = false;
 
