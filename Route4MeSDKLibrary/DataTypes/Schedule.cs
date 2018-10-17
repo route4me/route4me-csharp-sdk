@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.ComponentModel.DataAnnotations;
@@ -47,6 +48,9 @@ namespace Route4MeSDK.DataTypes
         [DataMember(Name = "enabled")]
         public bool enabled { get; set; }
 
+        [DataMember(Name = "from"), CustomValidation(typeof(PropertyValidation), "ValidateScheduleFrom")]
+        public string from { get; set; }
+
         [DataMember(Name = "mode"), CustomValidation(typeof(PropertyValidation), "ValidateScheduleMode")]
         public string mode { get; set; }
 
@@ -73,6 +77,13 @@ namespace Route4MeSDK.DataTypes
         {
             bool blValid = false;
             if (bool.TryParse(ScheduleEnabled.ToString(), out blValid)) return true; else return false;
+        }
+
+        public bool ValidateScheduleFrom(object ScheduleFrom)
+        {
+            bool blValid = false;
+            DateTime dtOut = DateTime.MinValue;
+            if (DateTime.TryParseExact(ScheduleFrom.ToString(), "yyyy-MM-dd", new CultureInfo("fr-FR"), DateTimeStyles.None, out dtOut)) return true; else return false;
         }
 
         public bool ValidateScheduleUseNth(object ScheduleUseNth)

@@ -195,17 +195,17 @@ namespace Route4MeSDK.DataTypes
         //for routes that have trucking directions enabled, directions generated
         //will ensure compliance of this maximum height of truck when generating road network driving directions
         [DataMember(Name = "truck_height", EmitDefaultValue = false)]
-        public int? TruckHeightMeters { get; set; }
+        public double? TruckHeightMeters { get; set; }
 
         //for routes that have trucking directions enabled, directions generated
         //will ensure compliance of this width of the truck when generating road network driving directions
         [DataMember(Name = "truck_width", EmitDefaultValue = false)]
-        public int? TruckWidthMeters { get; set; }
+        public double? TruckWidthMeters { get; set; }
 
         //for routes that have trucking directions enabled, directions generated
         //will ensure compliance of this length of the truck when generating road network driving directions
         [DataMember(Name = "truck_length", EmitDefaultValue = false)]
-        public int? TruckLengthMeters { get; set; }
+        public double? TruckLengthMeters { get; set; }
 
 
         //the minimum number of stops permitted per created subroute
