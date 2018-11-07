@@ -10,6 +10,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Runtime.Serialization;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Web.Http;
@@ -61,7 +62,20 @@ namespace Route4MeSDK
       return result;
     }
 
-    public DataObject GetOptimization(OptimizationParameters optimizationParameters, out string errorString)
+    public DataObject RunAsyncOptimization(OptimizationParameters optimizationParameters, out string errorString)
+    {
+     Task<Tuple<DataObject, string>> result = GetJsonObjectFromAPIAsync<DataObject>(optimizationParameters,
+                                                        R4MEInfrastructureSettings.ApiHost,
+                                                        HttpMethodType.Post,
+                                                        false);
+
+            result.Wait();
+        errorString = "";
+        if (result.IsFaulted || result.IsCanceled) errorString = result.Result.Item2;
+        return result.Result.Item1;
+    }
+
+        public DataObject GetOptimization(OptimizationParameters optimizationParameters, out string errorString)
     {
       var result = GetJsonObjectFromAPI<DataObject>(optimizationParameters,
                                                     R4MEInfrastructureSettings.ApiHost,
@@ -2555,7 +2569,157 @@ namespace Route4MeSDK
       return result;
     }
 
-    private T GetJsonObjectFromAPI<T>(GenericParameters optimizationParameters,
+      private async Task<Tuple<T, string>> GetJsonObjectFromAPIAsync<T>(GenericParameters optimizationParameters,
+                                      string url,
+                                      HttpMethodType httpMethod,
+                                      bool isString)
+      where T : class
+        {
+            return await Task.Run(() =>
+            {
+                Task<Tuple<T, string>> result = GetJsonObjectFromAPIAsync<T>(optimizationParameters,
+                                               url,
+                                               httpMethod,
+                                               (HttpContent)null,
+                                               isString);
+
+                return result;
+            });
+
+            
+        }
+
+       private async Task<Tuple<T, string>> GetJsonObjectFromAPIAsync<T>(GenericParameters optimizationParameters,
+                                      string url,
+                                      HttpMethodType httpMethod,
+                                      HttpContent httpContent,
+                                      bool isString)
+      where T : class
+        {
+            //out string errorMessage return this parameter in the tuple
+
+            T result = default(T);
+            string errorMessage = string.Empty;
+
+            try
+            {
+                using (HttpClient httpClient = CreateAsyncHttpClient(url))
+                {
+                    // Get the parameters
+                    string parametersURI = optimizationParameters.Serialize(m_ApiKey);
+
+                    switch (httpMethod)
+                    {
+                        case HttpMethodType.Get:
+                            {
+                                var response =await httpClient.GetStreamAsync(parametersURI);
+
+                                result = isString ? response.ReadString() as T :
+                                                        response.ReadObject<T>();
+
+                                break;
+                            }
+                        case HttpMethodType.Post:
+                        case HttpMethodType.Put:
+                        case HttpMethodType.Delete:
+                            {
+                                bool isPut = httpMethod == HttpMethodType.Put;
+                                bool isDelete = httpMethod == HttpMethodType.Delete;
+                                HttpContent content = null;
+                                if (httpContent != null)
+                                {
+                                    content = httpContent;
+                                }
+                                else
+                                {
+                                    string jsonString = R4MeUtils.SerializeObjectToJson(optimizationParameters);
+                                    content = new StringContent(jsonString);
+                                    content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                                }
+
+                                HttpResponseMessage response = null;
+                                if (isPut)
+                                {
+                                    response = await httpClient.PutAsync(parametersURI, content);
+                                }
+                                else if (isDelete)
+                                {
+                                    HttpRequestMessage request = new HttpRequestMessage
+                                    {
+                                        Content = content,
+                                        Method = HttpMethod.Delete,
+                                        RequestUri = new Uri(parametersURI, UriKind.Relative)
+                                    };
+                                    response = await httpClient.SendAsync(request);
+                                }
+                                else
+                                {
+                                    var request = new HttpRequestMessage();
+                                    response = await httpClient.PostAsync(parametersURI, content).ConfigureAwait(true);
+                                }
+
+                                // Check if successful
+                                if (response.Content is StreamContent)
+                                {
+                                    var streamTask = await ((StreamContent)response.Content).ReadAsStreamAsync();
+
+                                    result = isString ? streamTask.ReadString() as T :
+                                                            streamTask.ReadObject<T>();
+                                }
+                                else
+                                {
+                                    var streamTask = await ((StreamContent)response.Content).ReadAsStreamAsync();
+                                    ErrorResponse errorResponse = null;
+                                    try
+                                    {
+                                        errorResponse = streamTask.ReadObject<ErrorResponse>();
+                                    }
+                                    catch// (Exception e)
+                                    {
+                                        errorResponse = default(ErrorResponse);
+                                    }
+                                    if (errorResponse != null && errorResponse.Errors != null && errorResponse.Errors.Count > 0)
+                                    {
+                                        foreach (String error in errorResponse.Errors)
+                                        {
+                                            if (errorMessage.Length > 0)
+                                                errorMessage += "; ";
+                                            errorMessage += error;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        var responseStream = await response.Content.ReadAsStringAsync();
+                                        String responseString = responseStream;
+                                        if (responseString != null)
+                                            errorMessage = "Response: " + responseString;
+                                    }
+                                }
+
+                                break;
+                            }
+                    }
+                }
+            }
+            catch (HttpResponseException e)
+            {
+                errorMessage = e is AggregateException ? e.InnerException.Message : e.Message;
+
+                errorMessage = e.Response.ToString() + " --- " + errorMessage;
+                result = null;
+            }
+            catch (Exception e)
+             {
+                errorMessage = e is AggregateException ? e.InnerException.Message : e.Message;
+                result = default(T);
+            }
+
+            return new Tuple<T, string>(result, errorMessage);
+        }
+
+
+        
+private T GetJsonObjectFromAPI<T>(GenericParameters optimizationParameters,
                                       string            url,
                                       HttpMethodType    httpMethod,
                                       HttpContent       httpContent,
@@ -2572,7 +2736,7 @@ namespace Route4MeSDK
         {
           // Get the parameters
           string parametersURI = optimizationParameters.Serialize(m_ApiKey);
-          
+
           switch (httpMethod)
           {
             case HttpMethodType.Get:
@@ -2625,7 +2789,11 @@ namespace Route4MeSDK
               }
               else
               {
-                response = httpClient.PostAsync(parametersURI, content);
+                    var cts = new CancellationTokenSource();
+                    cts.CancelAfter(1000*60*5); // 3seconds
+
+                    var request = new HttpRequestMessage();
+                    response = httpClient.PostAsync(parametersURI, content, cts.Token);
               }
 
               // Wait for response
@@ -2856,8 +3024,9 @@ namespace Route4MeSDK
 
     private HttpClient CreateHttpClient(string url)
     {
-     //   ServicePointManager.SecurityProtocol |= (SecurityProtocolType)3072;
-     //   ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+            //   ServicePointManager.SecurityProtocol |= (SecurityProtocolType)3072;
+            //   ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+
       ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | (SecurityProtocolType)768 | (SecurityProtocolType)3072;
       HttpClient result = new HttpClient() { BaseAddress = new Uri(url) };
 
@@ -2868,8 +3037,29 @@ namespace Route4MeSDK
       return result;
     }
 
-    #endregion
+        private HttpClient CreateAsyncHttpClient(string url)
+        {
+            //   ServicePointManager.SecurityProtocol |= (SecurityProtocolType)3072;
+            //   ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+            var handler = new HttpClientHandler()
+            {
+                AllowAutoRedirect = false
+            };
 
-    #endregion
-  }
+            var supprotsAutoRdirect = handler.SupportsAutomaticDecompression;
+
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | (SecurityProtocolType)768 | (SecurityProtocolType)3072;
+            HttpClient result = new HttpClient(handler) { BaseAddress = new Uri(url) };
+
+            result.Timeout = m_DefaultTimeOut;
+            result.DefaultRequestHeaders.Accept.Clear();
+            result.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            return result;
+        }
+
+        #endregion
+
+        #endregion
+    }
 }
