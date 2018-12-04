@@ -1,4 +1,6 @@
 ﻿using System.Runtime.Serialization;
+using System.Globalization;
+using System.ComponentModel.DataAnnotations;
 
 namespace Route4MeSDK.DataTypes
 {
@@ -233,5 +235,19 @@ namespace Route4MeSDK.DataTypes
         [DataMember(Name = "rightturn", EmitDefaultValue = false)]
         public int? RightTurn { get; set; }
 
+        [DataMember(Name = "override_addresses", EmitDefaultValue = false)]
+        public OverrideAddresses overrideAddresses { get; set; }
+
     }
+
+    public class OverrideAddresses
+    {
+        [DataMember(Name = "time", EmitDefaultValue = false), CustomValidation(typeof(PropertyValidation), nameof(PropertyValidation.ValidateEpochTime))]
+        public int? Time
+        {
+            get; set;
+        }
+    }
+
+    
 }
