@@ -59,5 +59,34 @@ namespace Route4MeSDK
                     "The selected option is not available for this type of the schedule.");
             }
         }
+
+        public static ValidationResult ValidateEpochTime(object value)
+        {
+            int iTime = 0;
+            
+            if (int.TryParse(value.ToString(), out iTime) && value.GetType().ToString()!="System.String")
+                return ValidationResult.Success;
+            else
+            {
+                return new ValidationResult(
+                    "The property time can not have the value "+value.ToString());
+            }
+        }
+
+        public static ValidationResult ValidateOverrideAddresses(object value)
+        {
+            try
+            {
+                Route4MeSDK.DataTypes.OverrideAddresses oaddr = (Route4MeSDK.DataTypes.OverrideAddresses)value;
+                return ValidationResult.Success;
+            }
+            catch (Exception ex)
+            {
+                return new ValidationResult(
+                    "The property override_addresses can not have the value " + value.ToString());
+            }
+        }
+
+
     }
 }
