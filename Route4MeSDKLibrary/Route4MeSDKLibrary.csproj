@@ -34,8 +34,7 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>
-    </AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>Route4MeExcelAddIn_1_TemporaryKey.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -88,6 +87,7 @@
     <Compile Include="DataTypes\RouteParameters.cs" />
     <Compile Include="DataTypes\RouteResponse.cs" />
     <Compile Include="DataTypes\Schedule.cs" />
+    <Compile Include="DataTypes\SetGpsResponse.cs" />
     <Compile Include="DataTypes\Territory.cs" />
     <Compile Include="DataTypes\TerritoryZone.cs" />
     <Compile Include="DataTypes\TrackingHistory.cs" />
@@ -125,6 +125,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Route4MeExcelAddIn_1_TemporaryKey.pfx" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

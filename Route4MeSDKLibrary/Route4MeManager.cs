@@ -791,12 +791,13 @@ namespace Route4MeSDK
             return result;
         }
 
-    public string SetGPS(GPSParameters gpsParameters, out string errorString)
+
+        public SetGpsResponse SetGPS(GPSParameters gpsParameters, out string errorString)
     {
-      var result = GetJsonObjectFromAPI<string>(gpsParameters,
+        SetGpsResponse result = GetJsonObjectFromAPI<SetGpsResponse>(gpsParameters,
                                                 R4MEInfrastructureSettings.SetGpsHost,
                                                 HttpMethodType.Get,
-                                                true,
+                                                false,
                                                 out errorString);
 
       return result;
@@ -2231,6 +2232,28 @@ namespace Route4MeSDK
         string response = GetJsonObjectFromAPI<string>(request, R4MEInfrastructureSettings.Geocoder, HttpMethodType.Post, httpContent, true, out errorString);
 
         return response.ToString();
+    }
+
+    public string BatchGeocodingAsync(GeocodingParameters geoParams, out string errorString)
+    {
+        GeocodingRequest request = new GeocodingRequest { };
+
+        var keyValues = new List<KeyValuePair<string, string>>();
+
+        keyValues.Add(new KeyValuePair<string, string>("strExportFormat", geoParams.ExportFormat));
+        keyValues.Add(new KeyValuePair<string, string>("addresses", geoParams.Addresses));
+
+        HttpContent httpContent = new FormUrlEncodedContent(keyValues);
+
+        Task<Tuple<string, string>> result = GetJsonObjectFromAPIAsync<string>(request,
+                                                           R4MEInfrastructureSettings.Geocoder,
+                                                           HttpMethodType.Post,
+                                                           httpContent, true);
+
+        result.Wait();
+        errorString = "";
+        if (result.IsFaulted || result.IsCanceled) errorString = result.Result.Item2;
+        return result.Result.Item1;
     }
 
     public ArrayList RapidStreetData(GeocodingParameters geoParams, out string errorString)
