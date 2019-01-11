@@ -242,7 +242,7 @@ namespace Route4MeSDK.DataTypes
 
     public class OverrideAddresses
     {
-        [DataMember(Name = "time", EmitDefaultValue = false), CustomValidation(typeof(PropertyValidation), nameof(PropertyValidation.ValidateEpochTime))]
+        [DataMember(Name = "time", EmitDefaultValue = false),  CustomValidation(typeof(PropertyValidation), "ValidateEpochTime")]
         public int? Time
         {
             get; set;
