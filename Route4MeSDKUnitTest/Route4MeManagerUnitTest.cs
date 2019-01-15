@@ -9441,7 +9441,7 @@ namespace Route4MeSDKUnitTest
 
             VehiclesGroup vehicleGroup = new VehiclesGroup();
 
-            VehiclesPaginated vehicles = vehicleGroup.getVehilesList();
+            VehiclesPaginated vehicles = vehicleGroup.getVehiclesList();
 
             if (vehicles.Total < 1)
             {
@@ -9464,10 +9464,10 @@ namespace Route4MeSDKUnitTest
         [TestMethod]
         public void GetVehiclesListTest()
         {
-            VehiclesPaginated vehicles = getVehilesList();
+            VehiclesPaginated vehicles = getVehiclesList();
         }
 
-        public VehiclesPaginated getVehilesList()
+        public VehiclesPaginated getVehiclesList()
         {
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
@@ -9481,7 +9481,7 @@ namespace Route4MeSDKUnitTest
             // Run the query
             string errorString = "";
             VehiclesPaginated vehicles = route4Me.GetVehicles(vehicleParameters, out errorString);
-            Assert.IsInstanceOfType(vehicles, typeof(VehiclesPaginated), "getVehilesList failed... " + errorString);
+            Assert.IsInstanceOfType(vehicles, typeof(VehiclesPaginated), "getVehiclesList failed... " + errorString);
 
             return vehicles;
         }
@@ -9760,7 +9760,7 @@ namespace Route4MeSDKUnitTest
             string errorString = "";
             string result = route4Me.BatchGeocodingAsync(geoParams, out errorString);
 
-            Assert.IsNotNull(result, "GeocodingForwardTestAsync failed... " + errorString);
+            Assert.IsNotNull(result, "GeocodingForwardTest failed... " + errorString);
         }
 
         [TestMethod]
