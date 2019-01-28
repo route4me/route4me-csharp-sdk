@@ -200,7 +200,7 @@ namespace Route4MeSDK
     #endregion
 
     #region Hybrid Optimization
-    public DataObject GetOHybridptimization(HybridOptimizationParameters hybridOptimizationParameters, out string errorString)
+    public DataObject GetHybridptimization(HybridOptimizationParameters hybridOptimizationParameters, out string errorString)
     {
         var result = GetJsonObjectFromAPI<DataObject>(hybridOptimizationParameters,
                                                         R4MEInfrastructureSettings.HybridOptimization,
