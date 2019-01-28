@@ -562,7 +562,7 @@ namespace Route4MeSDKUnitTest
     public class RouteTypesGroup
     {
         static string skip;
-        static string c_ApiKey = "51d0c0701ce83855c9f62d0440096e7c"; // The optimizations with the Trucking, Multiple Depots, Multiple Drivers allowed only for business and higher account types --- put in the parameter an appropriate API key
+        static string c_ApiKey = "11111111111111111111111111111111"; // The optimizations with the Trucking, Multiple Depots, Multiple Drivers allowed only for business and higher account types --- put in the parameter an appropriate API key
         static string c_ApiKey_1 = "11111111111111111111111111111111";
 
         static TestDataRepository tdr = new TestDataRepository(c_ApiKey);
@@ -7824,7 +7824,7 @@ namespace Route4MeSDKUnitTest
     public class OrdersGroup
     {
         static string skip;
-        static string c_ApiKey = "51d0c0701ce83855c9f62d0440096e7c"; // This group allowed only for business and higher account types --- put in the parameter an appropriate API key
+        static string c_ApiKey = "11111111111111111111111111111111"; // This group allowed only for business and higher account types --- put in the parameter an appropriate API key
         static string c_ApiKey_1 = "11111111111111111111111111111111"; //
         static TestDataRepository tdr;
         static List<string> lsOptimizationIDs;
@@ -10629,7 +10629,7 @@ namespace Route4MeSDKUnitTest
                     timezone_offset_minutes = -240
                 };
 
-                DataObject resultOptimization = route4Me.GetOHybridptimization(hparams, out errorString1);
+                DataObject resultOptimization = route4Me.GetHybridptimization(hparams, out errorString1);
 
                 Assert.IsNotNull(resultOptimization, "Get Hybrid Optimization failed... " + errorString1);
 
@@ -10828,7 +10828,7 @@ namespace Route4MeSDKUnitTest
                     timezone_offset_minutes = 480
                 };
 
-                DataObject resultOptimization = route4Me.GetOHybridptimization(hparams, out errorString1);
+                DataObject resultOptimization = route4Me.GetHybridptimization(hparams, out errorString1);
 
                 string HybridOptimizationId = "";
 
