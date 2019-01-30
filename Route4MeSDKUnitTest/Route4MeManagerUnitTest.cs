@@ -10629,7 +10629,7 @@ namespace Route4MeSDKUnitTest
                     timezone_offset_minutes = -240
                 };
 
-                DataObject resultOptimization = route4Me.GetHybridptimization(hparams, out errorString1);
+                DataObject resultOptimization = route4Me.GetHybridOptimization(hparams, out errorString1);
 
                 Assert.IsNotNull(resultOptimization, "Get Hybrid Optimization failed... " + errorString1);
 
@@ -10828,7 +10828,7 @@ namespace Route4MeSDKUnitTest
                     timezone_offset_minutes = 480
                 };
 
-                DataObject resultOptimization = route4Me.GetHybridptimization(hparams, out errorString1);
+                DataObject resultOptimization = route4Me.GetHybridOptimization(hparams, out errorString1);
 
                 string HybridOptimizationId = "";
 
