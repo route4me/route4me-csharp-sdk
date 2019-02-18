@@ -2234,7 +2234,43 @@ namespace Route4MeSDK
         return response.ToString();
     }
 
-    public string BatchGeocodingAsync(GeocodingParameters geoParams, out string errorString)
+        [DataContract]
+        public sealed class uploadAddressesToTemporarryStorageResponse : GenericParameters
+        {
+            [DataMember(Name = "optimization_problem_id", IsRequired = false)]
+            public string optimization_problem_id { get; set; }
+
+            [DataMember(Name = "temporary_addresses_storage_id", IsRequired = false)]
+            public string temporary_addresses_storage_id { get; set; }
+
+            [DataMember(Name = "address_count", IsRequired = false)]
+            public uint address_count { get; set; }
+
+            [DataMember(Name = "status", IsRequired = false)]
+            public bool status { get; set; }
+        }
+
+        public uploadAddressesToTemporarryStorageResponse uploadAddressesToTemporarryStorage(string jsonAddresses, out string errorString)
+        {
+            GeocodingRequest request = new GeocodingRequest { };
+
+            HttpContent content = new StringContent(jsonAddresses);
+            content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            //content.Headers.Add("Accept", "application/json");
+
+            Tuple<uploadAddressesToTemporarryStorageResponse, string> result = GetJsonObjectFromAPIAsync<uploadAddressesToTemporarryStorageResponse>(request,
+                                                               R4MEInfrastructureSettings.FastGeocoder,
+                                                               HttpMethodType.Post,
+                                                               content, false).GetAwaiter().GetResult();
+
+            Thread.SpinWait(5000);
+            //Thread.Sleep(15000);
+
+            errorString = result.Item2;
+            return result.Item1;
+        }
+
+        public string BatchGeocodingAsync(GeocodingParameters geoParams, out string errorString)
     {
         GeocodingRequest request = new GeocodingRequest { };
 
