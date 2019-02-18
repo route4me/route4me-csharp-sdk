@@ -38,6 +38,8 @@ namespace Route4MeSDK
     public const string MarkAddressVisited = MainHost + "/actions/address/update_address_visited.php";
 
     public const string Geocoder = MainHost + "/api/geocoder.php";
+    public const string FastGeocoder = MainHost + "/actions/upload/json-geocode.php";
+    public const string r4meValidator = "https://validator.route4me.com:443/";
     public const string RapidStreetData = "https://rapid.route4me.com/street_data";
     public const string RapidStreetZipcode = "https://rapid.route4me.com/street_data/zipcode";
     public const string RapidStreetService = "https://rapid.route4me.com/street_data/service";
