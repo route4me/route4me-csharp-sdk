@@ -9,6 +9,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Route4MeSDK;
 using Route4MeSDK.DataTypes;
 using Route4MeSDK.QueryTypes;
+using Route4MeSDK.FastProcessing;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
@@ -9761,6 +9762,30 @@ namespace Route4MeSDKUnitTest
             string result = route4Me.BatchGeocodingAsync(geoParams, out errorString);
 
             Assert.IsNotNull(result, "GeocodingForwardTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void FastBulkGeocodingTest()
+        {
+            FastBulkGeocoding fastProcessing = new FastBulkGeocoding(c_ApiKey);
+
+            var uploadAddressesResponse = 
+                fastProcessing.uploadAddressesToTemporarryStorage(@"Data\JSON\batch_socket_upload_addresses_data.json");
+
+            Assert.IsNotNull(uploadAddressesResponse, "Fast uploading of the addresss failed");
+
+            //string tempAddressesStorageID = "8982165DBD3271CA838383B9B1472E5F";
+            string tempAddressesStorageID = uploadAddressesResponse.optimization_problem_id;
+            int addressesInFile = (int)uploadAddressesResponse.address_count;
+
+            var response = fastProcessing.downloadGeocodedAddresses(tempAddressesStorageID, addressesInFile);
+
+            if (response==null) Console.WriteLine("Addresses downloading failed");
+
+            Assert.AreEqual(addressesInFile, response.Count, "Not all the uploaded adddresses downloaded");
+
+            Console.WriteLine("Was geocoded " + response.Count + " addresses");
+
         }
 
         [TestMethod]
