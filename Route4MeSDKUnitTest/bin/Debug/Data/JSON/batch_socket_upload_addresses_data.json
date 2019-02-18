@@ -1,0 +1,58 @@
+{
+"rows":[
+	{
+	  "ADDRESS": "3307 WEDGEWOOD PLAZA DR",
+	  "CITY": "RIVIERA BEACH",
+	  "STATE": "FL",
+	  "ZIP": 33404
+	},
+	{
+	  "ADDRESS": "1591 LANE AVE S APT 15W",
+	  "CITY": "JACKSONVILLE",
+	  "STATE": "FL",
+	  "ZIP": 32210
+	},
+	{
+	  "ADDRESS": "10501 BLAKEWOOD DR APT 1",
+	  "CITY": "KNOXVILLE",
+	  "STATE": "TN",
+	  "ZIP": 37922
+	},
+	{
+	  "ADDRESS": "5116 UNIVERSITY BLVD",
+	  "CITY": "EIGHT MILE",
+	  "STATE": "AL",
+	  "ZIP": 36613
+	},
+	{
+	  "ADDRESS": "2004 GAULT AVE S",
+	  "CITY": "FORT PAYNE",
+	  "STATE": "AL",
+	  "ZIP": 35967
+	},
+	{
+	  "ADDRESS": "841 CORVINA DR",
+	  "CITY": "DAVENPORT",
+	  "STATE": "FL",
+	  "ZIP": 33897
+	},
+	{
+	  "ADDRESS": "6105 HAMMER RD",
+	  "CITY": "KNOXVILLE",
+	  "STATE": "TN",
+	  "ZIP": 37914
+	},
+	{
+	  "ADDRESS": "PO BOX 92",
+	  "CITY": "GREENSBORO",
+	  "STATE": "GA",
+	  "ZIP": 30642
+	},
+	{
+	  "ADDRESS": "8300 N MIAMI AVE APT 110",
+	  "CITY": "MIAMI",
+	  "STATE": "FL",
+	  "ZIP": 33150
+	}
+]
+}
