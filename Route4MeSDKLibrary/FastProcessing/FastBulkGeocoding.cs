@@ -6,7 +6,6 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-//using Quobject.Collections.Immutable;
 using System.Collections.Immutable;
 using Quobject.SocketIoClientDotNet.EngineIoClientDotNet;
 using Quobject.SocketIoClientDotNet.EngineIoClientDotNet.Client.Transports;

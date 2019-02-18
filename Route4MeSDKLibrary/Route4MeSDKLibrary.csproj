@@ -37,6 +37,9 @@
     <AssemblyOriginatorKeyFile>Route4MeExcelAddIn_1_TemporaryKey.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="fastJSON">
+      <HintPath>..\packages\fastJSON.2.2.0.1\lib\net40\fastJSON.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>lib\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -71,6 +74,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataTypes\AddressGeocoded.cs" />
     <Compile Include="FastProcessing\Connection.cs" />
     <Compile Include="FastProcessing\ConnectionConstants.cs" />
     <Compile Include="Consts.cs" />
@@ -145,6 +149,7 @@
     <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
     <None Include="Route4MeExcelAddIn_1_TemporaryKey.pfx" />
   </ItemGroup>
