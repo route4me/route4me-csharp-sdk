@@ -43,8 +43,9 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>lib\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="SocketIoClientDotNet">
-      <HintPath>lib\SocketIoClientDotNet.dll</HintPath>
+    <Reference Include="SocketIoClientDotNet, Version=1.0.2.0, Culture=neutral, PublicKeyToken=cafd2980d433ff43, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\Oleg_Route4Me\route4me-csharp-sdk\Route4MeSDKLibrary\lib\SocketIoClientDotNet.dll</HintPath>
     </Reference>
     <Reference Include="SuperSocket.ClientEngine">
       <HintPath>lib\SuperSocket.ClientEngine.dll</HintPath>
@@ -74,6 +75,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataTypes\AddressForGeocoding.cs" />
     <Compile Include="DataTypes\AddressGeocoded.cs" />
     <Compile Include="FastProcessing\Connection.cs" />
     <Compile Include="FastProcessing\ConnectionConstants.cs" />
