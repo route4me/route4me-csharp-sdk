@@ -9765,8 +9765,40 @@ namespace Route4MeSDKUnitTest
         }
 
         [TestMethod]
+        public void uploadAndGeocodeLargeJsonFile()
+        {
+            //ManualResetEvent manualResetEvent = new ManualResetEvent(false);
+            FastBulkGeocoding fastProcessing = new FastBulkGeocoding(c_ApiKey);
+            List<AddressGeocoded> lsGeocodedAddressTotal = new List<AddressGeocoded>();
+
+            int addressesInFile = 433;
+
+            fastProcessing.AddressesChunkGeocoded += (object sender, FastBulkGeocoding.AddressesChunkGeocodedArgs e) =>
+            {
+                if (e.lsAddressesChunkGeocoded != null) lsGeocodedAddressTotal.AddRange(e.lsAddressesChunkGeocoded);
+                Console.WriteLine("Total Geocoded Addresses -> " + lsGeocodedAddressTotal.Count);
+            };
+
+            fastProcessing.uploadAndGeocodeLargeJsonFile(@"Data\JSON\batch_socket_upload_addresses_data.json");
+
+            fastProcessing.GeocodingIsFinished += (object sender, FastBulkGeocoding.GeocodingIsFinishedArgs e) =>
+            {
+                Assert.IsNotNull(lsGeocodedAddressTotal, "Geocoding process failed");
+                Assert.AreEqual(addressesInFile, lsGeocodedAddressTotal.Count, "Not all the addresses were geocoded");
+                Console.WriteLine("Large addresses file geocoding is finished");
+            };
+        }
+
+        private void FastProcessing_AddressesChunkGeocoded(object sender, FastBulkGeocoding.AddressesChunkGeocodedArgs e)
+        {
+            if (e.lsAddressesChunkGeocoded != null) Console.WriteLine("Geocoded addresses " + e.lsAddressesChunkGeocoded.Count);
+
+        }
+
+        [TestMethod]
         public void FastBulkGeocodingTest()
         {
+            /*
             FastBulkGeocoding fastProcessing = new FastBulkGeocoding(c_ApiKey);
 
             var uploadAddressesResponse = 
@@ -9785,7 +9817,7 @@ namespace Route4MeSDKUnitTest
             Assert.AreEqual(addressesInFile, response.Count, "Not all the uploaded adddresses downloaded");
 
             Console.WriteLine("Was geocoded " + response.Count + " addresses");
-
+            */
         }
 
         [TestMethod]
