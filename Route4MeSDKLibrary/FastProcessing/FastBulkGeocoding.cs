@@ -22,6 +22,7 @@ namespace Route4MeSDK.FastProcessing
     public class FastBulkGeocoding : Connection
     {
         private ManualResetEvent manualResetEvent = null;
+        private ManualResetEvent mainResetEvent = null;
         private Socket socket;
         public string Message;
         private int Number;
@@ -32,6 +33,11 @@ namespace Route4MeSDK.FastProcessing
         private int loadedAddressesCount;
         string TEMPORARY_ADDRESSES_STORAGE_ID;
 
+        FastFileReading fileReading;
+
+        bool largeJsonFileProcessingIsDone;
+        bool geocodedAddressesDownloadingIsDone;
+
         List<AddressGeocoded> savedAddresses;
 
         JsonSerializer jsSer = new JsonSerializer();
@@ -40,16 +46,118 @@ namespace Route4MeSDK.FastProcessing
 
         public FastBulkGeocoding(string ApiKey)
         {
-            apiKey = ApiKey;
+            if (ApiKey!="") apiKey = ApiKey;
         }
 
-        public Route4MeManager.uploadAddressesToTemporarryStorageResponse uploadAddressesToTemporarryStorage(string fileName)
+        public event EventHandler<AddressesChunkGeocodedArgs> AddressesChunkGeocoded;
+
+        protected virtual void OnAddressesChunkGeocoded(AddressesChunkGeocodedArgs e)
+        {
+            EventHandler< AddressesChunkGeocodedArgs> handler = AddressesChunkGeocoded;
+
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
+        public class AddressesChunkGeocodedArgs : EventArgs
+        {
+            public List<AddressGeocoded> lsAddressesChunkGeocoded { get; set; }
+        }
+
+        public delegate void AddressesChunkGeocodedEventHandler(object sender, AddressesChunkGeocodedArgs e);
+
+        #region // geocoding is finished event handler
+        public event EventHandler<GeocodingIsFinishedArgs> GeocodingIsFinished;
+
+        protected virtual void OnGeocodingIsFinished(GeocodingIsFinishedArgs e)
+        {
+            EventHandler<GeocodingIsFinishedArgs> handler = GeocodingIsFinished;
+
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
+        public class GeocodingIsFinishedArgs : EventArgs
+        {
+            public bool isFinished { get; set; }
+        }
+
+        public delegate void GeocodingIsFinishedEventHandler(object sender, AddressesChunkGeocodedArgs e);
+        #endregion
+
+
+        public void uploadAndGeocodeLargeJsonFile(string fileName)
+        {
+            Route4MeManager route4Me = new Route4MeManager(apiKey);
+
+            largeJsonFileProcessingIsDone = false;
+
+            fileReading = new FastFileReading();
+
+            fileReading.jsonObjectsChunkSize = 100;
+
+            savedAddresses = new List<AddressGeocoded>();
+
+            fileReading.JsonFileChunkIsReady += FileReading_JsonFileChunkIsReady;
+
+            fileReading.JsonFileReadingIsDone += FileReading_JsonFileReadingIsDone;
+
+            mainResetEvent = new ManualResetEvent(false);
+
+            fileReading.readingChunksFromLargeJsonFile(fileName);
+
+        }
+
+        private void FileReading_JsonFileReadingIsDone(object sender, FastFileReading.JsonFileReadingIsDoneArgs e)
+        {
+            bool isDone = e.IsDone;
+            if (isDone)
+            {
+                largeJsonFileProcessingIsDone = true;
+                mainResetEvent.Set();
+                if (geocodedAddressesDownloadingIsDone)
+                {
+                    OnGeocodingIsFinished(new GeocodingIsFinishedArgs() { isFinished = true });
+                }
+                // fire here event for external (test) code
+            }
+
+        }
+
+        private void FileReading_JsonFileChunkIsReady(object sender, FastFileReading.JsonFileChunkIsReadyArgs e)
+        {
+            string jsonAddressesChunk = e.AddressesChunk;
+
+            var uploadAddressesResponse = uploadAddressesToTemporarryStorage(jsonAddressesChunk);
+
+            if (uploadAddressesResponse!=null)
+            {
+                string tempAddressesStorageID = uploadAddressesResponse.optimization_problem_id;
+                int addressesInChunk = (int)uploadAddressesResponse.address_count;
+
+                if (addressesInChunk < fileReading.jsonObjectsChunkSize) requestedAddresses = addressesInChunk; // last chunk
+
+                downloadGeocodedAddresses(tempAddressesStorageID, addressesInChunk);
+            }
+            
+        }
+
+        public Route4MeManager.uploadAddressesToTemporarryStorageResponse uploadAddressesToTemporarryStorage(string streamSource)
         {
             Route4MeManager route4Me = new Route4MeManager(apiKey);
 
             //List<AddressField> lsAddresses = readLargeJsonFileOfAddresse(sFileName);
 
-            string jsonText = readJsonTextFromLargeJsonFileOfAddresses(fileName);
+            string jsonText = "";
+
+            if (streamSource.Contains("{") && streamSource.Contains("}")) 
+                jsonText = streamSource;
+            else
+                jsonText = readJsonTextFromLargeJsonFileOfAddresses(streamSource);
 
             string errorString = "";
 
@@ -62,13 +170,15 @@ namespace Route4MeSDK.FastProcessing
             return uploadResponse;
         }
 
-        public List<AddressGeocoded> downloadGeocodedAddresses(string temporarryAddressesStorageID, int addressesInFile)
+        public async void downloadGeocodedAddresses(string temporarryAddressesStorageID, int addressesInFile)
         {
-            bool done = false;
+            //bool done = false;
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls
             | SecurityProtocolType.Tls11
             | SecurityProtocolType.Tls12
             | SecurityProtocolType.Ssl3;
+
+            geocodedAddressesDownloadingIsDone = false;
 
             savedAddresses = new List<AddressGeocoded>();
 
@@ -87,51 +197,70 @@ namespace Route4MeSDK.FastProcessing
             options.Upgrade = true;
             options.ForceJsonp = true;
             options.Transports = ImmutableList.Create<string>(new string[] { Polling.NAME, WebSocket.NAME });
-            options.ExtraHeaders.Add("uri", "https://api.route4me.com/actions/upload/json-geocode.php?api_key=11111111111111111111111111111111");
 
             var uri = CreateUri();
             socket = IO.Socket(uri, options);
 
-            manualResetEvent.Set();
-
-            socket.On("error", async (message) =>
+            socket.On("error", (message) =>
             {
-                Console.WriteLine("Error -> " + message);
-                await Task.Delay(1000);
-                Thread.Sleep(2 * 1000);
+                Debug.Print("Error -> " + message);
+                //await Task.Delay(500);
+                Thread.Sleep(500);
                 socket.Disconnect();
-                manualResetEvent.Set();
+                //manualResetEvent.Set();
             });
 
-            socket.On(Socket.EVENT_MESSAGE, async (message) =>
+            socket.On(Socket.EVENT_MESSAGE, (message) =>
             {
-                Console.WriteLine("Error -> " + message);
-                await Task.Delay(1000);
+                Debug.Print("Error -> " + message);
+                //await Task.Delay(500);
+                Thread.Sleep(500);
+                //manualResetEvent.Set();
+            });
+
+            socket.On("data", (d) =>
+            {
+                Debug.Print("data -> " + d.ToString());
+                //await Task.Delay(1000);
                 Thread.Sleep(2 * 1000);
-                manualResetEvent.Set();
+                //manualResetEvent.Set();
             });
 
-            socket.On("data", async (d) =>
+            socket.On(Socket.EVENT_CONNECT, () =>
             {
-                Console.WriteLine("data -> " + d.ToString());
-                await Task.Delay(1000);
-                Thread.Sleep(2 * 1000);
-                manualResetEvent.Set();
-            });
-
-            socket.On(Socket.EVENT_CONNECT, async () =>
-            {
-                Console.WriteLine("Socket opened");
+                Debug.Print("Socket opened");
                 //socket.Close();
-                await Task.Delay(1000);
-                Thread.Sleep(2 * 1000);
+                //await Task.Delay(500);
+                Thread.Sleep(500);
 
-                manualResetEvent.Set();
+                //manualResetEvent.Set();
+            });
+
+            socket.On(Socket.EVENT_DISCONNECT, () =>
+            {
+                Debug.Print("Socket disconnected");
+                //socket.Close();
+                //await Task.Delay(500);
+                Thread.Sleep(500);
+
+                //manualResetEvent.Set();
+            });
+
+            socket.On(Socket.EVENT_RECONNECT_ATTEMPT, () =>
+            {
+                Debug.Print("Socket reconnectattempt");
+                //socket.Close();
+                //await Task.Delay(1000);
+                Thread.Sleep(1000);
+
+                //manualResetEvent.Set();
             });
 
             socket.On("addresses_bulk", (addresses_chunk) =>
             {
-                Console.WriteLine("addresses_chunk received");
+                Debug.Print("addresses_chunk received");
+
+                //await Task.Delay(500);
 
                 string jsonChunkText = addresses_chunk.ToString();
 
@@ -149,7 +278,7 @@ namespace Route4MeSDK.FastProcessing
 
                 var addressesChunk = JsonConvert.DeserializeObject<AddressGeocoded[]>(jsonChunkText, jsonSettings);
 
-                Debug.Print("Json derializer errors:");
+                Debug.Print("Json serializer errors:");
                 foreach (string errMessage in errors) Debug.Print(errMessage);
                 savedAddresses = savedAddresses.Concat(addressesChunk).ToList();
 
@@ -170,16 +299,29 @@ namespace Route4MeSDK.FastProcessing
                     Debug.Print("Done, saved addresses %s", savedAddresses.Count);
 
                     socket.Emit("disconnect", TEMPORARY_ADDRESSES_STORAGE_ID);
-                    done = true;
-                }
-            });
+                    loadedAddressesCount = 0;
+                    AddressesChunkGeocodedArgs args = new AddressesChunkGeocodedArgs() { lsAddressesChunkGeocoded = savedAddresses };
+                    OnAddressesChunkGeocoded(args);
 
+                    manualResetEvent.Set();
+
+                    geocodedAddressesDownloadingIsDone = true;
+
+                    if (largeJsonFileProcessingIsDone)
+                    {
+                        OnGeocodingIsFinished(new GeocodingIsFinishedArgs() { isFinished = true });
+                    }
+
+                    socket.Close();
+                }
+
+                
+            });
 
             socket.On("geocode_progress", (message) =>
             {
-
                 Debug.Print("Progress from websocket:", message.ToString());
-                //JsonSerializer jsSer = new JsonSerializer();
+
                 var progressMessage = JsonConvert.DeserializeObject<clsProgress>(message.ToString());
 
                 if (progressMessage.total == progressMessage.done)
@@ -197,32 +339,17 @@ namespace Route4MeSDK.FastProcessing
             var _args = new List<object> { };
             _args.Add(jobj);
 
-            socket.Emit("geocode", _args);
-            manualResetEvent.Set();
-
-            while (!done)
+            try
             {
-                Thread.Sleep(500);
+                socket.Emit("geocode", _args);
             }
-            //string yn = Console.ReadLine();
-
-            
-            return savedAddresses;
-            /*
-            string command = "";
-            while (command != "q")
+            catch (Exception ex)
             {
-                command = Console.ReadLine();
-                if (command == "g")
-                {
-                    socket.Emit("geocode", _args);
-                    manualResetEvent.Set();
-                }
-                //socket.Emit(command);
+                Debug.Print("Socket connection failed. " + ex.Message);
             }
-            */
 
-            //socket.Disconnect();
+            manualResetEvent.WaitOne();
+
         }
 
         public void download(int start)
