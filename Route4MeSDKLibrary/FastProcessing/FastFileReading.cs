@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.Runtime.Serialization.Formatters.Binary;
+using Newtonsoft.Json;
+using Route4MeSDK.DataTypes;
+using System.Threading;
 
 namespace Route4MeSDK.FastProcessing
 {
@@ -13,6 +16,50 @@ namespace Route4MeSDK.FastProcessing
     {
         const long offset = 0x10000000; // 256 megabytes
         const long length = 0x20000000; // 512 megabytes
+
+        string jsonFileName;
+
+        public int jsonObjectsChunkSize { get; set; }
+
+        private ManualResetEvent manualResetEvent = null;
+
+        public event EventHandler<JsonFileChunkIsReadyArgs> JsonFileChunkIsReady;
+
+        public event EventHandler<JsonFileReadingIsDoneArgs> JsonFileReadingIsDone;
+
+        protected virtual void OnJsonFileChunkIsReady(JsonFileChunkIsReadyArgs e)
+        {
+            EventHandler<JsonFileChunkIsReadyArgs> handler = JsonFileChunkIsReady;
+
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
+        protected virtual void OnJsonFileReadingIsDone(JsonFileReadingIsDoneArgs e)
+        {
+            EventHandler< JsonFileReadingIsDoneArgs> handler = JsonFileReadingIsDone;
+
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
+        public delegate void JsonFileChunkIsReadyEventHandler(object sender, JsonFileChunkIsReadyArgs e);
+
+        public delegate void JsonFileReadingIsDoneEventHandler(object sender, JsonFileReadingIsDoneArgs e);
+
+        public class JsonFileChunkIsReadyArgs : EventArgs
+        {
+            public string AddressesChunk  { get; set; }
+        }
+
+        public class JsonFileReadingIsDoneArgs : EventArgs
+        {
+            public bool IsDone { get; set; }
+        }
 
         public void fastReadFromFile(String sFileName)
         {
@@ -23,20 +70,91 @@ namespace Route4MeSDK.FastProcessing
 
             }
 
-            using (MemoryMappedFile memoryMappedFile = MemoryMappedFile.CreateFromFile(sFileName))
+            try
             {
-
-                using (MemoryMappedViewStream memoryMappedViewStream = memoryMappedFile.CreateViewStream(0, 1204, MemoryMappedFileAccess.Read))
+                using (MemoryMappedFile memoryMappedFile = MemoryMappedFile.CreateFromFile(sFileName))
                 {
+                    using (MemoryMappedViewStream memoryMappedViewStream = memoryMappedFile.CreateViewStream(0, 1204, MemoryMappedFileAccess.Read))
+                    {
+                        var contentArray = new byte[1024];
 
-                    var contentArray = new byte[1024];
+                        memoryMappedViewStream.Read(contentArray, 0, contentArray.Length);
 
-                    memoryMappedViewStream.Read(contentArray, 0, contentArray.Length);
+                        string content = Encoding.UTF8.GetString(contentArray);
 
-                    string content = Encoding.UTF8.GetString(contentArray);
+                    }
 
                 }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error during JSON file readinf. " + ex.Message);
+            }
 
+            
+        }
+
+        //static AutoResetEvent autoEvent = new AutoResetEvent(false);
+
+        public void readingChunksFromLargeJsonFile(string fileName)
+        {
+            ///manualResetEvent = new ManualResetEvent(false);
+            FastBulkGeocoding fbGeocoding = new FastBulkGeocoding("");
+            
+            JsonSerializer serializer = new JsonSerializer();
+
+            AddressField o = null;
+
+            string sJsonAddressesChunk = "";
+            int curJsonObjects = 0;
+            using (FileStream s = File.Open(fileName, FileMode.Open))
+            using (StreamReader sr = new StreamReader(s))
+            using (JsonReader reader = new JsonTextReader(sr))
+            {
+                //reader.SupportMultipleContent = true;
+                bool blStartAdresses = false;
+                while (reader.Read())
+                {
+                    if (reader.TokenType == JsonToken.StartArray) blStartAdresses = true;
+
+                    if (reader.TokenType == JsonToken.StartObject && blStartAdresses)
+                    {
+                        o = serializer.Deserialize<AddressField>(reader);
+
+                        if (o.Address == null) continue;
+
+                        sJsonAddressesChunk += JsonConvert.SerializeObject(o, Formatting.None) + ",";
+                        curJsonObjects++;
+
+                        if (curJsonObjects >= jsonObjectsChunkSize)
+                        {
+                            sJsonAddressesChunk = "{\"rows\":[" + sJsonAddressesChunk.TrimEnd(',') + "]}";
+                            JsonFileChunkIsReadyArgs chunkIsReady = new JsonFileChunkIsReadyArgs();
+                            chunkIsReady.AddressesChunk = sJsonAddressesChunk;
+                            sJsonAddressesChunk = "";
+                            curJsonObjects = 0;
+
+                            //manualResetEvent.Set();
+                            OnJsonFileChunkIsReady(chunkIsReady);
+                            System.Threading.Thread.Sleep(5000);
+                            //manualResetEvent.WaitOne();
+                        }
+                    }
+                }
+
+                if (sJsonAddressesChunk != "")
+                {
+                    sJsonAddressesChunk = "{\"rows\":[" + sJsonAddressesChunk.TrimEnd(',') + "]}";
+                    JsonFileChunkIsReadyArgs chunkIsReady = new JsonFileChunkIsReadyArgs();
+                    chunkIsReady.AddressesChunk = sJsonAddressesChunk;
+                    sJsonAddressesChunk = "";
+                    OnJsonFileChunkIsReady(chunkIsReady);
+
+                    System.Threading.Thread.Sleep(5000);
+                }
+
+                JsonFileReadingIsDoneArgs args = new JsonFileReadingIsDoneArgs() { IsDone = true };
+                OnJsonFileReadingIsDone(args);
             }
         }
 
