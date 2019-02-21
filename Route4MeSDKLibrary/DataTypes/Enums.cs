@@ -17,7 +17,7 @@ namespace Route4MeSDK.DataTypes
   }
 
 
-    public enum TravelMode : uint
+  public enum TravelMode : uint
     {
         [Description("Driving")]
         Driving,
@@ -44,6 +44,7 @@ namespace Route4MeSDK.DataTypes
     [Description("km")]
     KM
   }
+  
   public enum Avoid
   {
     [Description("Highways")]
@@ -62,7 +63,7 @@ namespace Route4MeSDK.DataTypes
     None
   }
 
-  
+ 
   public enum Optimize : uint
   {
     [Description("Distance")]
@@ -113,7 +114,10 @@ namespace Route4MeSDK.DataTypes
     Serialized,
 
     [Description("xml")]
-    Xml
+    Xml,
+
+    [Description("json")]
+    Json
   }
 
 
