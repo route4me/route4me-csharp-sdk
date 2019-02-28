@@ -43,7 +43,16 @@ namespace Route4MeSDK.DataTypes
     //a route may have multiple depots/points of origin
     [DataMember(Name = "is_depot", EmitDefaultValue = false)]
     public bool? IsDepot { get; set; }
-  
+
+    [DataMember(Name = "timeframe_violation_state", EmitDefaultValue = false)]
+    public int? TimeframeViolationState { get; set; }
+
+    [DataMember(Name = "timeframe_violation_time", EmitDefaultValue = false)]
+    public int? TimeframeViolationTime { get; set; }
+
+    [DataMember(Name = "timeframe_violation_rate", EmitDefaultValue = false)]
+    public double? TimeframeViolationRate { get; set; }
+
     //the latitude of this address
     [DataMember(Name = "lat")]
     public double Latitude { get; set; }
@@ -76,6 +85,9 @@ namespace Route4MeSDK.DataTypes
     [DataMember(Name = "failed_geocoding", EmitDefaultValue = false)]
     public bool? FailedGeocoding { get; set; }
 
+    [DataMember(Name = "geocodings", EmitDefaultValue = false)]
+    public Geocoding[] Geocodings { get; set; }
+
     //when planning a route from the address book or using existing address book ids
     //pass the address book id (contact_id) for an address so that route4me can run
     //analytics on the address book addresses that were used to plan routes, and to find previous visits to 
@@ -98,6 +110,18 @@ namespace Route4MeSDK.DataTypes
     //the last known departed timestamp of this address
     [DataMember(Name = "timestamp_last_departed", EmitDefaultValue = false)]
     public uint? TimestampLastDeparted { get; set; }
+
+        [DataMember(Name = "visited_lat")]
+        public double? VisitedLatitude { get; set; }
+
+        [DataMember(Name = "visited_lng")]
+        public double? VisitedLongitude { get; set; }
+
+        [DataMember(Name = "departed_lat")]
+        public double? DepartedLatitude { get; set; }
+
+        [DataMember(Name = "departed_lng")]
+        public double? DepartedLongitude { get; set; }
 
     [DataMember(Name = "group", EmitDefaultValue = false)]
     public string Group { get; set; }
@@ -168,6 +192,16 @@ namespace Route4MeSDK.DataTypes
     [DataMember(Name = "drive_time_to_next_destination", EmitDefaultValue = false)]
     public int? DriveTimeToNextDestination { get; set; }
 
+    [DataMember(Name = "abnormal_traffic_time_to_next_destination", EmitDefaultValue = false)]
+    public int? AbnormalTrafficTimeToNextDestination { get; set; }
+
+    [DataMember(Name = "uncongested_time_to_next_destination", EmitDefaultValue = false)]
+    public int? UncongestedTimeToNextDestination { get; set; }
+
+    [DataMember(Name = "traffic_time_to_next_destination", EmitDefaultValue = false)]
+    public int? TrafficTimeToNextDestination { get; set; }
+
+
     //server-side generated amount of seconds that it will take to get to the next location
     [DataMember(Name = "distance_to_next_destination", EmitDefaultValue = false)]
     public double? DistanceToNextDestination { get; set; }
@@ -191,8 +225,35 @@ namespace Route4MeSDK.DataTypes
     [DataMember(Name = "time_window_end", EmitDefaultValue = false)]
     public int? TimeWindowEnd { get; set; }
 
-    //the expected amount of time that will be spent at this address by the driver/user
-    [DataMember(Name = "time", EmitDefaultValue = false)]
+    [DataMember(Name = "time_window_start_2", EmitDefaultValue = false)]
+    public int? TimeWindowStart2 { get; set; }
+
+    [DataMember(Name = "time_window_end_2", EmitDefaultValue = false)]
+    public int? TimeWindowEnd2 { get; set; }
+
+        [DataMember(Name = "geofence_detected_visited_timestamp", EmitDefaultValue = false)]
+        public int? geofence_detected_visited_timestamp { get; set; }
+
+        [DataMember(Name = "geofence_detected_departed_timestamp", EmitDefaultValue = false)]
+        public int? geofence_detected_departed_timestamp { get; set; }
+
+        [DataMember(Name = "geofence_detected_service_time", EmitDefaultValue = false)]
+        public int? geofence_detected_service_time { get; set; }
+
+        [DataMember(Name = "geofence_detected_visited_lat", EmitDefaultValue = false)]
+        public double? geofence_detected_visited_lat { get; set; }
+
+        [DataMember(Name = "geofence_detected_visited_lng", EmitDefaultValue = false)]
+        public double? geofence_detected_visited_lng { get; set; }
+
+        [DataMember(Name = "geofence_detected_departed_lat", EmitDefaultValue = false)]
+        public double? geofence_detected_departed_lat { get; set; }
+
+        [DataMember(Name = "geofence_detected_departed_lng", EmitDefaultValue = false)]
+        public double? geofence_detected_departed_lng { get; set; }
+
+        //the expected amount of time that will be spent at this address by the driver/user
+        [DataMember(Name = "time", EmitDefaultValue = false)]
     public int? Time { get; set; }
 
     [DataMember(Name = "notes", EmitDefaultValue = false)]
@@ -212,17 +273,20 @@ namespace Route4MeSDK.DataTypes
     [DataMember(Name = "curbside_lng")]
     public double? CurbsideLongitude { get; set; }
 
-    [DataMember(Name = "time_window_start_2", EmitDefaultValue = false)]
-    public int? TimeWindowStart2 { get; set; }
-
-    [DataMember(Name = "time_window_end_2", EmitDefaultValue = false)]
-    public int? TimeWindowEnd2 { get; set; }
-
     [DataMember(Name = "custom_fields", EmitDefaultValue = false)]
     public Dictionary<string, string> CustomFields { get; set; }
 
-    //Systemwide unique code, which permits end-users (recipients) to track the status of their order
-    [DataMember(Name = "tracking_number", EmitDefaultValue = false)]
+    [DataMember(Name = "custom_fields_str_json", EmitDefaultValue = false)]
+    public string CustomFieldsStrJson { get; set; }
+
+    [DataMember(Name = "custom_fields_config", EmitDefaultValue = false)]
+    public string[] CustomFieldsConfig { get; set; }
+
+    [DataMember(Name = "custom_fields_config_str_json", EmitDefaultValue = false)]
+    public string CustomFieldsConfigStrJson { get; set; }
+
+        //Systemwide unique code, which permits end-users (recipients) to track the status of their order
+        [DataMember(Name = "tracking_number", EmitDefaultValue = false)]
     public string tracking_number { get; set; }
   }
 }
