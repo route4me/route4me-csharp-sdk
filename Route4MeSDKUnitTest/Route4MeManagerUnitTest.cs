@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.CodeDom.Compiler;
 using CsvHelper;
+using System.Linq;
 
 namespace Route4MeSDKUnitTest
 {
@@ -8282,7 +8283,7 @@ namespace Route4MeSDKUnitTest
     [TestClass]
     public class ActivitiesGroup
     {
-        static string c_ApiKey = "11111111111111111111111111111111";
+        static string c_ApiKey = "51d0c0701ce83855c9f62d0440096e7c";
 
         static TestDataRepository tdr;
         static List<string> lsOptimizationIDs;
@@ -9710,6 +9711,12 @@ namespace Route4MeSDKUnitTest
     {
         static string c_ApiKey = "11111111111111111111111111111111";
 
+        [TestInitialize]
+        public void GeocodingGroupInitialize()
+        {
+            //Console.SetOut(new StreamWriter(new FileStream("Console_Output.txt", FileMode.Append)) { AutoFlush = true });
+        }
+
         [TestMethod]
         public void GeocodingForwardTest()
         {
@@ -9767,26 +9774,40 @@ namespace Route4MeSDKUnitTest
         [TestMethod]
         public void uploadAndGeocodeLargeJsonFile()
         {
+            //Console.SetOut(new StreamWriter(new FileStream("Console_Output.txt", FileMode.Append)) { AutoFlush = true });
             //ManualResetEvent manualResetEvent = new ManualResetEvent(false);
             FastBulkGeocoding fastProcessing = new FastBulkGeocoding(c_ApiKey);
             List<AddressGeocoded> lsGeocodedAddressTotal = new List<AddressGeocoded>();
+            List<string> lsAddresses = new List<string>();
 
-            int addressesInFile = 433;
-
-            fastProcessing.AddressesChunkGeocoded += (object sender, FastBulkGeocoding.AddressesChunkGeocodedArgs e) =>
-            {
-                if (e.lsAddressesChunkGeocoded != null) lsGeocodedAddressTotal.AddRange(e.lsAddressesChunkGeocoded);
-                Console.WriteLine("Total Geocoded Addresses -> " + lsGeocodedAddressTotal.Count);
-            };
-
-            fastProcessing.uploadAndGeocodeLargeJsonFile(@"Data\JSON\batch_socket_upload_addresses_data.json");
+            int addressesInFile = 13;
 
             fastProcessing.GeocodingIsFinished += (object sender, FastBulkGeocoding.GeocodingIsFinishedArgs e) =>
             {
                 Assert.IsNotNull(lsGeocodedAddressTotal, "Geocoding process failed");
+                /*
+                foreach (var geocededAddress in lsGeocodedAddressTotal)
+                {
+                    lsAddresses.Add(geocededAddress.geocodedAddress.AddressString+" | "+ geocededAddress.geocodedAddress.Longitude+", "+ geocededAddress.geocodedAddress.Latitude);
+                }
+                */
+                //string sAddresses = lsAddresses.ToString();
+                //var sAddresses = lsAddresses.Aggregate((a, b) => a + System.Environment.NewLine + b);
+                //Console.WriteLine(sAddresses);
                 Assert.AreEqual(addressesInFile, lsGeocodedAddressTotal.Count, "Not all the addresses were geocoded");
                 Console.WriteLine("Large addresses file geocoding is finished");
             };
+
+            fastProcessing.AddressesChunkGeocoded += (object sender, FastBulkGeocoding.AddressesChunkGeocodedArgs e) =>
+            {
+                if (e.lsAddressesChunkGeocoded != null) lsGeocodedAddressTotal.AddRange(e.lsAddressesChunkGeocoded);
+
+                Console.WriteLine("Total Geocoded Addresses -> " + lsGeocodedAddressTotal.Count);
+                System.Diagnostics.Debug.Print("Total Geocoded Addresses -> " + lsGeocodedAddressTotal.Count);
+            };
+
+            fastProcessing.uploadAndGeocodeLargeJsonFile(@"Data\JSON\batch_socket_upload_error_addresses_data_5.json");
+
         }
 
         private void FastProcessing_AddressesChunkGeocoded(object sender, FastBulkGeocoding.AddressesChunkGeocodedArgs e)
