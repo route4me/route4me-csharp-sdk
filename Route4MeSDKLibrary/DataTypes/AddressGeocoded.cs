@@ -16,10 +16,10 @@ namespace Route4MeSDK.DataTypes
         public int memberTypeID { get; set; }
 
         [DataMember(Name = "userLat")]
-        public double userLatitude { get; set; }
+        public double? userLatitude { get; set; }
 
         [DataMember(Name = "userLng")]
-        public double userLongitude { get; set; }
+        public double? userLongitude { get; set; }
 
         [DataMember(Name = "intUserIP", EmitDefaultValue = false)]
         public uint intUserIP { get; set; }
