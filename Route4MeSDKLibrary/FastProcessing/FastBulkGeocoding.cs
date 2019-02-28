@@ -19,6 +19,9 @@ using System.Diagnostics;
 
 namespace Route4MeSDK.FastProcessing
 {
+    /// <summary>
+    /// The class for the geocoding of bulk addresses
+    /// </summary>
     public class FastBulkGeocoding : Connection
     {
         private ManualResetEvent manualResetEvent = null;
@@ -49,6 +52,7 @@ namespace Route4MeSDK.FastProcessing
             if (ApiKey!="") apiKey = ApiKey;
         }
 
+        #region // Addresses chunk's geocoding is finished event handler
         public event EventHandler<AddressesChunkGeocodedArgs> AddressesChunkGeocoded;
 
         protected virtual void OnAddressesChunkGeocoded(AddressesChunkGeocodedArgs e)
@@ -67,6 +71,7 @@ namespace Route4MeSDK.FastProcessing
         }
 
         public delegate void AddressesChunkGeocodedEventHandler(object sender, AddressesChunkGeocodedArgs e);
+        #endregion
 
         #region // geocoding is finished event handler
         public event EventHandler<GeocodingIsFinishedArgs> GeocodingIsFinished;
@@ -90,6 +95,10 @@ namespace Route4MeSDK.FastProcessing
         #endregion
 
 
+        /// <summary>
+        /// Upload and geocode large JSON file
+        /// </summary>
+        /// <param name="fileName">JSON file name</param>
         public void uploadAndGeocodeLargeJsonFile(string fileName)
         {
             Route4MeManager route4Me = new Route4MeManager(apiKey);
@@ -98,7 +107,7 @@ namespace Route4MeSDK.FastProcessing
 
             fileReading = new FastFileReading();
 
-            fileReading.jsonObjectsChunkSize = 100;
+            fileReading.jsonObjectsChunkSize = 200;
 
             savedAddresses = new List<AddressGeocoded>();
 
@@ -112,6 +121,11 @@ namespace Route4MeSDK.FastProcessing
 
         }
 
+        /// <summary>
+        /// Event handler for the JsonFileReadingIsDone event
+        /// </summary>
+        /// <param name="sender">Event raiser object</param>
+        /// <param name="e">Event arguments of the type JsonFileReadingIsDoneArgs</param>
         private void FileReading_JsonFileReadingIsDone(object sender, FastFileReading.JsonFileReadingIsDoneArgs e)
         {
             bool isDone = e.IsDone;
@@ -128,6 +142,12 @@ namespace Route4MeSDK.FastProcessing
 
         }
 
+
+        /// <summary>
+        /// Event handler for the JsonFileChunkIsReady event
+        /// </summary>
+        /// <param name="sender">Event raiser object</param>
+        /// <param name="e">Event arguments of the type JsonFileChunkIsReadyArgs</param>
         private void FileReading_JsonFileChunkIsReady(object sender, FastFileReading.JsonFileChunkIsReadyArgs e)
         {
             string jsonAddressesChunk = e.AddressesChunk;
@@ -146,6 +166,11 @@ namespace Route4MeSDK.FastProcessing
             
         }
 
+        /// <summary>
+        /// Upload JSON addresses to a temporary storage
+        /// </summary>
+        /// <param name="streamSource">Input stream source - file name or JSON text</param>
+        /// <returns>Response object of the type uploadAddressesToTemporarryStorageResponse</returns>
         public Route4MeManager.uploadAddressesToTemporarryStorageResponse uploadAddressesToTemporarryStorage(string streamSource)
         {
             Route4MeManager route4Me = new Route4MeManager(apiKey);
@@ -170,6 +195,11 @@ namespace Route4MeSDK.FastProcessing
             return uploadResponse;
         }
 
+        /// <summary>
+        /// Geocode and download the addresses from the temporary storage.
+        /// </summary>
+        /// <param name="temporarryAddressesStorageID">ID of the temporary storage</param>
+        /// <param name="addressesInFile">Chunk size of the addresses to be geocoded</param>
         public async void downloadGeocodedAddresses(string temporarryAddressesStorageID, int addressesInFile)
         {
             //bool done = false;
@@ -197,17 +227,32 @@ namespace Route4MeSDK.FastProcessing
             options.Upgrade = true;
             options.ForceJsonp = true;
             options.Transports = ImmutableList.Create<string>(new string[] { Polling.NAME, WebSocket.NAME });
+            
 
             var uri = CreateUri();
             socket = IO.Socket(uri, options);
+            
 
             socket.On("error", (message) =>
             {
                 Debug.Print("Error -> " + message);
                 //await Task.Delay(500);
                 Thread.Sleep(500);
+                manualResetEvent.Set();
                 socket.Disconnect();
                 //manualResetEvent.Set();
+            });
+
+            socket.On(Socket.EVENT_ERROR, (e) =>
+            {
+                var exception = (Quobject.SocketIoClientDotNet.EngineIoClientDotNet.Client.EngineIOException)e;
+                Console.WriteLine("EVENT_ERROR. "+exception.Message);
+                Console.WriteLine("BASE EXCEPTION. " + exception.GetBaseException());
+                Console.WriteLine("DATA COUNT. " + exception.Data.Count);
+                //events.Enqueue(exception.code);
+                socket.Disconnect();
+                //manager.Close();
+                 manualResetEvent.Set(); ;
             });
 
             socket.On(Socket.EVENT_MESSAGE, (message) =>
@@ -222,7 +267,7 @@ namespace Route4MeSDK.FastProcessing
             {
                 Debug.Print("data -> " + d.ToString());
                 //await Task.Delay(1000);
-                Thread.Sleep(2 * 1000);
+                Thread.Sleep(1000);
                 //manualResetEvent.Set();
             });
 
@@ -241,17 +286,17 @@ namespace Route4MeSDK.FastProcessing
                 Debug.Print("Socket disconnected");
                 //socket.Close();
                 //await Task.Delay(500);
-                Thread.Sleep(500);
+                Thread.Sleep(700);
 
                 //manualResetEvent.Set();
             });
 
             socket.On(Socket.EVENT_RECONNECT_ATTEMPT, () =>
             {
-                Debug.Print("Socket reconnectattempt");
+                Debug.Print("Socket reconnect attempt");
                 //socket.Close();
                 //await Task.Delay(1000);
-                Thread.Sleep(1000);
+                Thread.Sleep(1500);
 
                 //manualResetEvent.Set();
             });
@@ -314,7 +359,6 @@ namespace Route4MeSDK.FastProcessing
 
                     socket.Close();
                 }
-
                 
             });
 
@@ -352,6 +396,10 @@ namespace Route4MeSDK.FastProcessing
 
         }
 
+        /// <summary>
+        /// Download chunk of the geocoded addresses
+        /// </summary>
+        /// <param name="start">Download addresses starting from</param>
         public void download(int start)
         {
             int bufferFailSafeMaxAddresses = 100;
@@ -384,6 +432,9 @@ namespace Route4MeSDK.FastProcessing
         }
     }
 
+    /// <summary>
+    /// Response class of the received event about geocoding progress
+    /// </summary>
     class clsProgress
     {
         public int total { get; set; }

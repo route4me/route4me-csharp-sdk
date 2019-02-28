@@ -12,6 +12,9 @@ using System.Threading;
 
 namespace Route4MeSDK.FastProcessing
 {
+    /// <summary>
+    /// THe class for asynchronous reading large JSON file by chunks (default chunk size = 100 addresses)
+    /// </summary>
     public class FastFileReading
     {
         const long offset = 0x10000000; // 256 megabytes
@@ -23,9 +26,17 @@ namespace Route4MeSDK.FastProcessing
 
         private ManualResetEvent manualResetEvent = null;
 
+        #region // Event handler for the JsonFileChunkIsReady event
         public event EventHandler<JsonFileChunkIsReadyArgs> JsonFileChunkIsReady;
 
         public event EventHandler<JsonFileReadingIsDoneArgs> JsonFileReadingIsDone;
+
+        public delegate void JsonFileChunkIsReadyEventHandler(object sender, JsonFileChunkIsReadyArgs e);
+
+        public class JsonFileChunkIsReadyArgs : EventArgs
+        {
+            public string AddressesChunk { get; set; }
+        }
 
         protected virtual void OnJsonFileChunkIsReady(JsonFileChunkIsReadyArgs e)
         {
@@ -36,7 +47,9 @@ namespace Route4MeSDK.FastProcessing
                 handler(this, e);
             }
         }
+        #endregion
 
+        #region // Event handler for the JsonFileReadingIsDone event
         protected virtual void OnJsonFileReadingIsDone(JsonFileReadingIsDoneArgs e)
         {
             EventHandler< JsonFileReadingIsDoneArgs> handler = JsonFileReadingIsDone;
@@ -47,19 +60,14 @@ namespace Route4MeSDK.FastProcessing
             }
         }
 
-        public delegate void JsonFileChunkIsReadyEventHandler(object sender, JsonFileChunkIsReadyArgs e);
-
         public delegate void JsonFileReadingIsDoneEventHandler(object sender, JsonFileReadingIsDoneArgs e);
-
-        public class JsonFileChunkIsReadyArgs : EventArgs
-        {
-            public string AddressesChunk  { get; set; }
-        }
 
         public class JsonFileReadingIsDoneArgs : EventArgs
         {
             public bool IsDone { get; set; }
         }
+
+        #endregion
 
         public void fastReadFromFile(String sFileName)
         {
@@ -96,11 +104,19 @@ namespace Route4MeSDK.FastProcessing
 
         //static AutoResetEvent autoEvent = new AutoResetEvent(false);
 
+        /// <summary>
+        /// Read content from A large JSON file by chunks
+        /// </summary>
+        /// <param name="fileName">JSON file name</param>
         public void readingChunksFromLargeJsonFile(string fileName)
         {
-            ///manualResetEvent = new ManualResetEvent(false);
+            //manualResetEvent = new ManualResetEvent(false);
             FastBulkGeocoding fbGeocoding = new FastBulkGeocoding("");
-            
+
+            //fbGeocoding.GeocodingIsFinished += FbGeocoding_GeocodingIsFinished;
+
+            //manualResetEvent.WaitOne();
+
             JsonSerializer serializer = new JsonSerializer();
 
             AddressField o = null;
@@ -155,7 +171,13 @@ namespace Route4MeSDK.FastProcessing
 
                 JsonFileReadingIsDoneArgs args = new JsonFileReadingIsDoneArgs() { IsDone = true };
                 OnJsonFileReadingIsDone(args);
+
             }
+        }
+
+        private void FbGeocoding_GeocodingIsFinished(object sender, FastBulkGeocoding.GeocodingIsFinishedArgs e)
+        {
+            //manualResetEvent.Set();
         }
 
         public string readJsonTextFromFile(String sFileName)
