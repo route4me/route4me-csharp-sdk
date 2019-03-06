@@ -47,9 +47,10 @@ namespace Route4MeSDK.FastProcessing
 
         public string apiKey { get; set; }
 
-        public FastBulkGeocoding(string ApiKey)
+        public FastBulkGeocoding(string ApiKey, bool EnableTraceSource = false)
         {
             if (ApiKey!="") apiKey = ApiKey;
+            Quobject.SocketIoClientDotNet.TraceSourceTools.LogTraceSource.TraceSourceLogging(EnableTraceSource);
         }
 
         #region // Addresses chunk's geocoding is finished event handler
@@ -257,7 +258,7 @@ namespace Route4MeSDK.FastProcessing
 
             socket.On(Socket.EVENT_MESSAGE, (message) =>
             {
-                Debug.Print("Error -> " + message);
+                //Debug.Print("Error -> " + message);
                 //await Task.Delay(500);
                 Thread.Sleep(500);
                 //manualResetEvent.Set();
@@ -265,7 +266,7 @@ namespace Route4MeSDK.FastProcessing
 
             socket.On("data", (d) =>
             {
-                Debug.Print("data -> " + d.ToString());
+                //Debug.Print("data -> " + d.ToString());
                 //await Task.Delay(1000);
                 Thread.Sleep(1000);
                 //manualResetEvent.Set();
@@ -273,7 +274,7 @@ namespace Route4MeSDK.FastProcessing
 
             socket.On(Socket.EVENT_CONNECT, () =>
             {
-                Debug.Print("Socket opened");
+                //Debug.Print("Socket opened");
                 //socket.Close();
                 //await Task.Delay(500);
                 Thread.Sleep(500);
@@ -283,7 +284,7 @@ namespace Route4MeSDK.FastProcessing
 
             socket.On(Socket.EVENT_DISCONNECT, () =>
             {
-                Debug.Print("Socket disconnected");
+                //Debug.Print("Socket disconnected");
                 //socket.Close();
                 //await Task.Delay(500);
                 Thread.Sleep(700);
@@ -293,7 +294,7 @@ namespace Route4MeSDK.FastProcessing
 
             socket.On(Socket.EVENT_RECONNECT_ATTEMPT, () =>
             {
-                Debug.Print("Socket reconnect attempt");
+                //Debug.Print("Socket reconnect attempt");
                 //socket.Close();
                 //await Task.Delay(1000);
                 Thread.Sleep(1500);
@@ -303,7 +304,7 @@ namespace Route4MeSDK.FastProcessing
 
             socket.On("addresses_bulk", (addresses_chunk) =>
             {
-                Debug.Print("addresses_chunk received");
+                //Debug.Print("addresses_chunk received");
 
                 //await Task.Delay(500);
 
@@ -323,25 +324,29 @@ namespace Route4MeSDK.FastProcessing
 
                 var addressesChunk = JsonConvert.DeserializeObject<AddressGeocoded[]>(jsonChunkText, jsonSettings);
 
-                Debug.Print("Json serializer errors:");
-                foreach (string errMessage in errors) Debug.Print(errMessage);
+                if (errors.Count>0)
+                {
+                    Debug.Print("Json serializer errors:");
+                    foreach (string errMessage in errors) Debug.Print(errMessage);
+                }
+                
                 savedAddresses = savedAddresses.Concat(addressesChunk).ToList();
 
                 loadedAddressesCount += addressesChunk.Length;
 
-                Debug.Print(addressesChunk.Length.ToString());
+                //Debug.Print(addressesChunk.Length.ToString());
 
-                Debug.Print("Got chunks from websocket %s / %s", loadedAddressesCount, requestedAddresses);
+                //Debug.Print("Got chunks from websocket %s / %s", loadedAddressesCount, requestedAddresses);
                 if (loadedAddressesCount == nextDownloadStage)
                 {
-                    Debug.Print("Downloading");
+                    //Debug.Print("Downloading");
                     download(loadedAddressesCount);
                 }
 
                 if (loadedAddressesCount == requestedAddresses)
                 {
-                    Debug.Print("First address:", savedAddresses[0].geocodedAddress);
-                    Debug.Print("Done, saved addresses %s", savedAddresses.Count);
+                    //Debug.Print("First address:", savedAddresses[0].geocodedAddress);
+                    //Debug.Print("Done, saved addresses %s", savedAddresses.Count);
 
                     socket.Emit("disconnect", TEMPORARY_ADDRESSES_STORAGE_ID);
                     loadedAddressesCount = 0;
@@ -364,13 +369,13 @@ namespace Route4MeSDK.FastProcessing
 
             socket.On("geocode_progress", (message) =>
             {
-                Debug.Print("Progress from websocket:", message.ToString());
+                //Debug.Print("Progress from websocket:", message.ToString());
 
                 var progressMessage = JsonConvert.DeserializeObject<clsProgress>(message.ToString());
 
                 if (progressMessage.total == progressMessage.done)
                 {
-                    Debug.Print("Geocoding Done, Downloading...");
+                    //Debug.Print("Geocoding Done, Downloading...");
                     if (requestedAddresses == null) requestedAddresses = progressMessage.total;
                     download(0);
                 }
