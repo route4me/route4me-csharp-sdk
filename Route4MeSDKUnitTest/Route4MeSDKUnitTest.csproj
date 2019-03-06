@@ -41,7 +41,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="CsvHelper">
-      <HintPath>..\Route4MeSDKTest\bin\Debug\CsvHelper.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\Oleg_Route4Me\route4me-csharp-sdk\packages\CsvHelper.2.16.3.0\lib\net45\CsvHelper.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Moq, Version=4.7.8.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
