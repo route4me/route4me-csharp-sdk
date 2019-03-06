@@ -111,7 +111,7 @@ namespace Route4MeSDK.FastProcessing
         public void readingChunksFromLargeJsonFile(string fileName)
         {
             //manualResetEvent = new ManualResetEvent(false);
-            FastBulkGeocoding fbGeocoding = new FastBulkGeocoding("");
+            //FastBulkGeocoding fbGeocoding = new FastBulkGeocoding("");
 
             //fbGeocoding.GeocodingIsFinished += FbGeocoding_GeocodingIsFinished;
 
@@ -152,7 +152,7 @@ namespace Route4MeSDK.FastProcessing
 
                             //manualResetEvent.Set();
                             OnJsonFileChunkIsReady(chunkIsReady);
-                            System.Threading.Thread.Sleep(5000);
+                            Thread.Sleep(5000);
                             //manualResetEvent.WaitOne();
                         }
                     }
