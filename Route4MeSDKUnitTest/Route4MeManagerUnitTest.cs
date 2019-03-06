@@ -4210,7 +4210,9 @@ namespace Route4MeSDKUnitTest
         [TestMethod]
         public void Route300StopsTest()
         {
-            Route4MeManager route4Me = new Route4MeManager("bd48828717021141485a701453273458");
+            if (skip == "yes") return;
+
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
             Address[] addresses = new Address[]
                 {
@@ -9776,7 +9778,7 @@ namespace Route4MeSDKUnitTest
         {
             //Console.SetOut(new StreamWriter(new FileStream("Console_Output.txt", FileMode.Append)) { AutoFlush = true });
             //ManualResetEvent manualResetEvent = new ManualResetEvent(false);
-            FastBulkGeocoding fastProcessing = new FastBulkGeocoding(c_ApiKey);
+            FastBulkGeocoding fastProcessing = new FastBulkGeocoding(c_ApiKey, false);
             List<AddressGeocoded> lsGeocodedAddressTotal = new List<AddressGeocoded>();
             List<string> lsAddresses = new List<string>();
 
@@ -9784,26 +9786,24 @@ namespace Route4MeSDKUnitTest
 
             fastProcessing.GeocodingIsFinished += (object sender, FastBulkGeocoding.GeocodingIsFinishedArgs e) =>
             {
-                Assert.IsNotNull(lsGeocodedAddressTotal, "Geocoding process failed");
-                /*
-                foreach (var geocededAddress in lsGeocodedAddressTotal)
-                {
-                    lsAddresses.Add(geocededAddress.geocodedAddress.AddressString+" | "+ geocededAddress.geocodedAddress.Longitude+", "+ geocededAddress.geocodedAddress.Latitude);
-                }
-                */
-                //string sAddresses = lsAddresses.ToString();
-                //var sAddresses = lsAddresses.Aggregate((a, b) => a + System.Environment.NewLine + b);
-                //Console.WriteLine(sAddresses);
-                Assert.AreEqual(addressesInFile, lsGeocodedAddressTotal.Count, "Not all the addresses were geocoded");
+                //Assert.IsNotNull(lsGeocodedAddressTotal, "Geocoding process failed");
+                Assert.IsNotNull(lsAddresses, "Geocoding process failed");
+
+                //Assert.AreEqual(addressesInFile, lsGeocodedAddressTotal.Count, "Not all the addresses were geocoded");
+                Assert.AreEqual(addressesInFile, lsAddresses.Count, "Not all the addresses were geocoded");
                 Console.WriteLine("Large addresses file geocoding is finished");
             };
 
             fastProcessing.AddressesChunkGeocoded += (object sender, FastBulkGeocoding.AddressesChunkGeocodedArgs e) =>
             {
-                if (e.lsAddressesChunkGeocoded != null) lsGeocodedAddressTotal.AddRange(e.lsAddressesChunkGeocoded);
-
-                Console.WriteLine("Total Geocoded Addresses -> " + lsGeocodedAddressTotal.Count);
-                System.Diagnostics.Debug.Print("Total Geocoded Addresses -> " + lsGeocodedAddressTotal.Count);
+                //if (e.lsAddressesChunkGeocoded != null) lsGeocodedAddressTotal.AddRange(e.lsAddressesChunkGeocoded);
+                if (e.lsAddressesChunkGeocoded != null)
+                {
+                    foreach (var addr1 in e.lsAddressesChunkGeocoded)
+                        lsAddresses.Add(addr1.geocodedAddress.AddressString);
+                }
+                    
+                Console.WriteLine("Total Geocoded Addresses -> " + lsAddresses.Count);
             };
 
             fastProcessing.uploadAndGeocodeLargeJsonFile(@"Data\JSON\batch_socket_upload_error_addresses_data_5.json");
@@ -9816,30 +9816,6 @@ namespace Route4MeSDKUnitTest
 
         }
 
-        [TestMethod]
-        public void FastBulkGeocodingTest()
-        {
-            /*
-            FastBulkGeocoding fastProcessing = new FastBulkGeocoding(c_ApiKey);
-
-            var uploadAddressesResponse = 
-                fastProcessing.uploadAddressesToTemporarryStorage(@"Data\JSON\batch_socket_upload_addresses_data.json");
-
-            Assert.IsNotNull(uploadAddressesResponse, "Fast uploading of the addresss failed");
-
-            //string tempAddressesStorageID = "8982165DBD3271CA838383B9B1472E5F";
-            string tempAddressesStorageID = uploadAddressesResponse.optimization_problem_id;
-            int addressesInFile = (int)uploadAddressesResponse.address_count;
-
-            var response = fastProcessing.downloadGeocodedAddresses(tempAddressesStorageID, addressesInFile);
-
-            if (response==null) Console.WriteLine("Addresses downloading failed");
-
-            Assert.AreEqual(addressesInFile, response.Count, "Not all the uploaded adddresses downloaded");
-
-            Console.WriteLine("Was geocoded " + response.Count + " addresses");
-            */
-        }
 
         [TestMethod]
         public void RapidStreetDataAllTest()
