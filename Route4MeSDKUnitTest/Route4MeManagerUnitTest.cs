@@ -8292,7 +8292,7 @@ namespace Route4MeSDKUnitTest
     [TestClass]
     public class ActivitiesGroup
     {
-        static string c_ApiKey = "51d0c0701ce83855c9f62d0440096e7c";
+        static string c_ApiKey = ApiKeys.actualApiKey;
 
         static TestDataRepository tdr;
         static List<string> lsOptimizationIDs;
@@ -9047,7 +9047,7 @@ namespace Route4MeSDKUnitTest
         [TestMethod]
         public void SetGPSPositionTest()
         {
-            Route4MeManager route4Me = new Route4MeManager("51d0c0701ce83855c9f62d0440096e7c");
+            Route4MeManager route4Me = new Route4MeManager(ApiKeys.actualApiKey);
 
             double lat = tdr.SDRT_route.Addresses.Length > 1 ? tdr.SDRT_route.Addresses[1].Latitude : 33.14384;
             double lng = tdr.SDRT_route.Addresses.Length > 1 ? tdr.SDRT_route.Addresses[1].Longitude : -83.22466;
