@@ -3086,7 +3086,27 @@ private T GetJsonObjectFromAPI<T>(GenericParameters optimizationParameters,
             //   ServicePointManager.SecurityProtocol |= (SecurityProtocolType)3072;
             //   ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
 
+        // Uncomment code lines below when is tested broono (no signed cert)
+        /*
+        ServicePointManager.ServerCertificateValidationCallback +=
+    (sender, cert, chain, sslPolicyErrors) => true;
+
+        
+        var handler = new HttpClientHandler()
+        {
+            AllowAutoRedirect = true,
+            MaxAutomaticRedirections = 4
+        };
+        
+        var supportsAutoRdirect = handler.SupportsAutomaticDecompression;
+
+        Console.WriteLine("Supports redirection -> " + supportsAutoRdirect);
+        */
+        //ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
+        //ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | SecurityProtocolType.Ssl3 | (SecurityProtocolType)768 | (SecurityProtocolType)3072;
       ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | (SecurityProtocolType)768 | (SecurityProtocolType)3072;
+
+      // HttpClient result = new HttpClient(handler) { BaseAddress = new Uri(url) }; // use this in case of specified handler.
       HttpClient result = new HttpClient() { BaseAddress = new Uri(url) };
 
       result.Timeout = m_DefaultTimeOut;
