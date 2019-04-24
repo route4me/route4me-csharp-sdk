@@ -19,10 +19,17 @@ using System.Linq;
 
 namespace Route4MeSDKUnitTest
 {
+    public class ApiKeys
+    {
+        public const string actualApiKey = "11111111111111111111111111111111";
+        public const string demoApiKey = "11111111111111111111111111111111";
+    }
+    
+
     [TestClass]
     public class RoutesGroup
     {
-        static string c_ApiKey = "11111111111111111111111111111111";
+        static string c_ApiKey = ApiKeys.actualApiKey;
 
         static TestDataRepository tdr;
         static List<string> lsOptimizationIDs;
@@ -297,7 +304,7 @@ namespace Route4MeSDKUnitTest
     [TestClass]
     public class NotesGroup
     {
-        static string c_ApiKey = "11111111111111111111111111111111";
+        static string c_ApiKey = ApiKeys.actualApiKey;
         static TestDataRepository tdr;
         static List<string> lsOptimizationIDs;
         static int lastCustomNoteTypeID;
@@ -564,8 +571,8 @@ namespace Route4MeSDKUnitTest
     public class RouteTypesGroup
     {
         static string skip;
-        static string c_ApiKey = "11111111111111111111111111111111"; // The optimizations with the Trucking, Multiple Depots, Multiple Drivers allowed only for business and higher account types --- put in the parameter an appropriate API key
-        static string c_ApiKey_1 = "11111111111111111111111111111111";
+        static string c_ApiKey = ApiKeys.actualApiKey; // The optimizations with the Trucking, Multiple Depots, Multiple Drivers allowed only for business and higher account types --- put in the parameter an appropriate API key
+        static string c_ApiKey_1 = ApiKeys.demoApiKey;
 
         static TestDataRepository tdr = new TestDataRepository(c_ApiKey);
 
@@ -3895,7 +3902,7 @@ namespace Route4MeSDKUnitTest
         public void SingleDriverRoundTripGenericTest()
         {
             const string uri = R4MEInfrastructureSettings.MainHost + "/api.v4/optimization_problem.php";
-            const string myApiKey = "11111111111111111111111111111111";
+            const string myApiKey = ApiKeys.actualApiKey;
 
             // Create the manager with the api key
             Route4MeManager route4Me = new Route4MeManager(myApiKey);
@@ -6982,7 +6989,7 @@ namespace Route4MeSDKUnitTest
     [TestClass]
     public class AddressbookContactsGroup
     {
-        static string c_ApiKey = "11111111111111111111111111111111";
+        static string c_ApiKey = ApiKeys.actualApiKey;
 
         static AddressBookContact contact1, contact2;
 
@@ -7321,7 +7328,7 @@ namespace Route4MeSDKUnitTest
         //[TestMethod]
         public void RemoveAllAddressbookContactsTest()
         {
-            string ApiKey = "11111111111111111111111111111111";
+            string ApiKey = ApiKeys.actualApiKey;
             Route4MeManager route4Me = new Route4MeManager(ApiKey);
             TestDataRepository tdr = new TestDataRepository(c_ApiKey);
 
@@ -7399,7 +7406,7 @@ namespace Route4MeSDKUnitTest
     [TestClass]
     public class AvoidanseZonesGroup
     {
-        static string c_ApiKey = "11111111111111111111111111111111";
+        static string c_ApiKey = ApiKeys.actualApiKey;
 
         static List<string> lsAvoidanceZones = new List<string>();
 
@@ -7613,7 +7620,7 @@ namespace Route4MeSDKUnitTest
     [TestClass]
     public class TerritoriesGroup
     {
-        static string c_ApiKey = "11111111111111111111111111111111";
+        static string c_ApiKey = ApiKeys.actualApiKey;
 
         static List<string> lsTerritories = new List<string>();
 
@@ -7828,8 +7835,8 @@ namespace Route4MeSDKUnitTest
     public class OrdersGroup
     {
         static string skip;
-        static string c_ApiKey = "11111111111111111111111111111111"; // This group allowed only for business and higher account types --- put in the parameter an appropriate API key
-        static string c_ApiKey_1 = "11111111111111111111111111111111"; //
+        static string c_ApiKey = ApiKeys.actualApiKey; // This group allowed only for business and higher account types --- put in the parameter an appropriate API key
+        static string c_ApiKey_1 = ApiKeys.demoApiKey; //
         static TestDataRepository tdr;
         static List<string> lsOptimizationIDs;
         static List<string> lsOrders = new List<string>();
@@ -8285,7 +8292,7 @@ namespace Route4MeSDKUnitTest
     [TestClass]
     public class ActivitiesGroup
     {
-        static string c_ApiKey = "51d0c0701ce83855c9f62d0440096e7c";
+        static string c_ApiKey = ApiKeys.actualApiKey;
 
         static TestDataRepository tdr;
         static List<string> lsOptimizationIDs;
@@ -8753,7 +8760,7 @@ namespace Route4MeSDKUnitTest
     [TestClass]
     public class AddressesGroup
     {
-        static string c_ApiKey = "11111111111111111111111111111111";
+        static string c_ApiKey = ApiKeys.actualApiKey;
         static TestDataRepository tdr;
         static List<string> lsOptimizationIDs;
 
@@ -9000,7 +9007,7 @@ namespace Route4MeSDKUnitTest
     [TestClass]
     public class TrackingGroup
     {
-        static string c_ApiKey = "11111111111111111111111111111111";
+        static string c_ApiKey = ApiKeys.actualApiKey;
 
         static TestDataRepository tdr;
         static List<string> lsOptimizationIDs;
@@ -9040,7 +9047,7 @@ namespace Route4MeSDKUnitTest
         [TestMethod]
         public void SetGPSPositionTest()
         {
-            Route4MeManager route4Me = new Route4MeManager("51d0c0701ce83855c9f62d0440096e7c");
+            Route4MeManager route4Me = new Route4MeManager(ApiKeys.actualApiKey);
 
             double lat = tdr.SDRT_route.Addresses.Length > 1 ? tdr.SDRT_route.Addresses[1].Latitude : 33.14384;
             double lng = tdr.SDRT_route.Addresses.Length > 1 ? tdr.SDRT_route.Addresses[1].Longitude : -83.22466;
@@ -9120,8 +9127,8 @@ namespace Route4MeSDKUnitTest
     public class UsersGroup
     {
         static string skip;
-        static string c_ApiKey = "11111111111111111111111111111111"; // Creating of a user better to do with the business and higher account types --- put in the parameter an appropriate API key
-        static string c_ApiKey_1 = "11111111111111111111111111111111";
+        static string c_ApiKey = ApiKeys.actualApiKey; // Creating of a user better to do with the business and higher account types --- put in the parameter an appropriate API key
+        static string c_ApiKey_1 = ApiKeys.demoApiKey;
 
         static List<int> lsMembers;
 
@@ -9318,7 +9325,7 @@ namespace Route4MeSDKUnitTest
     [TestClass]
     public class MemberConfigurationGroup
     {
-        static string c_ApiKey = "11111111111111111111111111111111";
+        static string c_ApiKey = ApiKeys.actualApiKey;
 
         [ClassInitialize()]
         public static void MemberConfigurationGroupInitialize(TestContext context)
@@ -9434,7 +9441,7 @@ namespace Route4MeSDKUnitTest
     [TestClass]
     public class VehiclesGroup
     {
-        static string c_ApiKey = "11111111111111111111111111111111";
+        static string c_ApiKey = ApiKeys.actualApiKey;
 
         static List<string> lsVehicleIDs;
 
@@ -9711,7 +9718,7 @@ namespace Route4MeSDKUnitTest
     [TestClass]
     public class GeocodingGroup
     {
-        static string c_ApiKey = "11111111111111111111111111111111";
+        static string c_ApiKey = ApiKeys.actualApiKey;
 
         [TestInitialize]
         public void GeocodingGroupInitialize()
@@ -9951,7 +9958,7 @@ namespace Route4MeSDKUnitTest
     [TestClass]
     public class DatabasesGroup
     {
-        static string c_ApiKey = "11111111111111111111111111111111";
+        static string c_ApiKey = ApiKeys.actualApiKey;
         static DB_Type db_type;
 
         static TestDataRepository tdr;
@@ -10328,7 +10335,7 @@ namespace Route4MeSDKUnitTest
     [TestClass]
     public class OptimizationsGroup
     {
-        static string c_ApiKey = "11111111111111111111111111111111";
+        static string c_ApiKey = ApiKeys.actualApiKey;
         static TestDataRepository tdr;
         static List<string> lsOptimizationIDs;
         static List<string> lsAddressbookContacts;
@@ -10431,7 +10438,7 @@ namespace Route4MeSDKUnitTest
         [TestMethod]
         public void HybridOptimizationFrom1000AddressesTest()
         {
-            string ApiKey = "11111111111111111111111111111111"; // The addresses in this test not allowed for this API key, you shuld put your valid API key.
+            string ApiKey = ApiKeys.actualApiKey; // The addresses in this test not allowed for this API key, you shuld put your valid API key.
 
             // Comment 2 lines bellow if you have put in the above line your valid key.
             Assert.IsTrue(1 > 0, "");
@@ -10739,7 +10746,7 @@ namespace Route4MeSDKUnitTest
         [TestMethod]
         public void HybridOptimizationFrom1000OrdersTest()
         {
-            string ApiKey = "11111111111111111111111111111111"; // The addresses in this test not allowed for this API key, you shuld put your valid API key.
+            string ApiKey = ApiKeys.actualApiKey; // The addresses in this test not allowed for this API key, you shuld put your valid API key.
 
             // Comment 2 lines bellow if you have put in the above line your valid key.
             Assert.IsTrue(1 > 0, "");
@@ -10946,9 +10953,9 @@ namespace Route4MeSDKUnitTest
     // **** Data repository for the tests ********
     public class TestDataRepository
     {
-        private string c_ApiKey = "11111111111111111111111111111111";
+        private string c_ApiKey = ApiKeys.actualApiKey;
 
-        public TestDataRepository(String apiKey = "11111111111111111111111111111111")
+        public TestDataRepository(String apiKey = ApiKeys.actualApiKey)
         {
             c_ApiKey = apiKey;
         }
