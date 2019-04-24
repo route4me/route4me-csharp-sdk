@@ -3696,7 +3696,7 @@ namespace Route4MeSDKUnitTest
                 RouteTime = 7 * 3600 + 00 * 60,
                 StoreRoute = true,
                 TravelMode = TravelMode.Trucking.Description(),
-                VehicleMaxCargoVolume = 30,
+                VehicleMaxCargoWeight = 30,
                 VehicleCapacity = 10,
                 VehicleMaxDistanceMI = 10000,
                 TruckHeightMeters = 4,
@@ -3716,7 +3716,7 @@ namespace Route4MeSDKUnitTest
 
             // Run the query
             string errorString;
-            dataObject = route4Me.RunOptimization(optimizationParameters, out errorString);
+            dataObject = route4Me.RunAsyncOptimization(optimizationParameters, out errorString);
 
             Assert.IsNotNull(dataObject, "SingleDriverMultipleTimeWindowsTest failed... " + errorString);
 
@@ -6962,7 +6962,7 @@ namespace Route4MeSDKUnitTest
 
             // Run the query
             string errorString;
-            DataObject dataObject = route4Me.RunOptimization(optimizationParameters, out errorString);
+            DataObject dataObject = route4Me.RunAsyncOptimization(optimizationParameters, out errorString);
 
             if (dataObject!=null)
             {
