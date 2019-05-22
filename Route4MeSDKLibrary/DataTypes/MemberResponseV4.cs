@@ -176,7 +176,54 @@ namespace Route4MeSDK.DataTypes
         [DataMember(Name = "level")]
         public int? level { get; set; }
 
-        [DataMember(Name = "custom_data")]
-        public Dictionary<string,string> custom_data { get; set; }
+        [DataMember(Name = "custom_data", EmitDefaultValue = false)]
+        public Dictionary<string, string> custom_data
+        {
+            get
+            {
+                if (_custom_data == null)
+                {
+                    return null;
+                }
+                else
+                {
+                    var v1 = (Dictionary<string, string>)_custom_data;
+
+                    Dictionary<string, string> v2 = new Dictionary<string, string>();
+                    foreach (KeyValuePair<string, string> kv1 in v1)
+                    {
+                        if (kv1.Key != null)
+                        {
+                            if (kv1.Value != null) v2.Add(kv1.Key, kv1.Value.ToString()); else v2.Add(kv1.Key, "");
+                        }
+                        else continue;
+                    }
+
+                    return v2;
+                }
+            }
+            set
+            {
+                if (value == null)
+                {
+                    _custom_data = null;
+                }
+                else
+                {
+                    var v1 = (Dictionary<string, string>)value;
+                    Dictionary<string, string> v2 = new Dictionary<string, string>();
+                    foreach (KeyValuePair<string, string> kv1 in v1)
+                    {
+                        if (kv1.Key != null)
+                        {
+                            if (kv1.Value != null) v2.Add(kv1.Key, kv1.Value.ToString()); else v2.Add(kv1.Key, "");
+                        }
+                        else continue;
+                    }
+                    _custom_data = v2;
+                }
+            }
+        }
+        private Dictionary<string, string> _custom_data;
     }
 }

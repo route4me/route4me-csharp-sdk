@@ -21,7 +21,7 @@ namespace Route4MeSDKUnitTest
 {
     public class ApiKeys
     {
-        public const string actualApiKey = "11111111111111111111111111111111";
+        public const string actualApiKey = "51d0c0701ce83855c9f62d0440096e7c";
         public const string demoApiKey = "11111111111111111111111111111111";
     }
     
@@ -404,7 +404,7 @@ namespace Route4MeSDKUnitTest
             Assert.IsNotNull(note, "AddAddressNoteTest failed... " + errorString);
         }
 
-        //[TestMethod] -- this test excluded because website refuses sending of the file
+        [TestMethod] // this test excluded because website refuses sending of the file
         public void AddAddressNoteWithFileTest()
         {
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
@@ -8338,7 +8338,7 @@ namespace Route4MeSDKUnitTest
         }
 
         [TestMethod]
-        public void GetRouteTimeActivitiesTest()
+        public void GetRouteTeamActivitiesTest()
         {
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
@@ -8376,6 +8376,36 @@ namespace Route4MeSDKUnitTest
             Activity[] activities = route4Me.GetActivityFeed(activityParameters, out errorString);
 
             Assert.IsInstanceOfType(activities, typeof(Activity[]), "GetActivitiesTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void GetLastActivities()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            DateTime activitiesAfterTime = DateTime.Now - (new TimeSpan(7, 0, 0, 0));
+
+            activitiesAfterTime = new DateTime(activitiesAfterTime.Year, activitiesAfterTime.Month, activitiesAfterTime.Day, 0, 0, 0);
+
+            uint uiActivitiesAfterTime = (uint)Route4MeSDK.R4MeUtils.ConvertToUnixTimestamp(activitiesAfterTime);
+
+            ActivityParameters activityParameters = new ActivityParameters()
+            {
+                Limit = 10,
+                Offset = 0,
+                Start = uiActivitiesAfterTime
+            };
+
+            // Run the query
+            string errorString;
+            Activity[] activities = route4Me.GetActivityFeed(activityParameters, out errorString);
+
+            foreach (Activity activity in activities)
+            {
+                uint activityTime = activity.ActivityTimestamp!=null ? (uint)activity.ActivityTimestamp : 0;
+                Assert.IsTrue(activityTime >= uiActivitiesAfterTime, "GetLastActivities failed. "+ errorString);
+            }
+
         }
 
         [TestMethod]
@@ -8897,6 +8927,35 @@ namespace Route4MeSDKUnitTest
         }
 
         [TestMethod]
+        public void AddRouteDestinationInSpecificPositionTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            string route_id = tdr.SDRT_route_id;
+
+            Assert.IsNotNull(route_id, "rote_id is null...");
+
+            // Prepare the addresses
+            #region Addresses
+            Address[] addresses = new Address[]
+            {
+                new Address() { AddressString =  "146 Bill Johnson Rd NE Milledgeville GA 31061",
+                                Latitude =  33.143526,
+                                Longitude = -83.240354,
+                                SequenceNo = 3,
+                                Time = 0 }
+            };
+            #endregion
+
+            // Run the query
+            bool optimalPosition = false;
+            string errorString;
+            int[] destinationIds = route4Me.AddRouteDestinations(route_id, addresses, optimalPosition, out errorString);
+
+            Assert.IsInstanceOfType(destinationIds, typeof(System.Int32[]), "AddRouteDestinationsTest failed...");
+        }
+
+        [TestMethod]
         public void RemoveRouteDestinationTest()
         {
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
@@ -9191,6 +9250,60 @@ namespace Route4MeSDKUnitTest
             Assert.IsTrue(rightResponse == "ok", "CreateUserTest failed... " + errorString);
 
             lsMembers.Add(Convert.ToInt32(result.member_id));
+        }
+
+        [TestMethod]
+        public void AddEditCustomDataToUserTest()
+        {
+            if (skip == "yes") return;
+
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            MemberParametersV4 @params = new MemberParametersV4
+            {
+                HIDE_ROUTED_ADDRESSES = "FALSE",
+                member_phone = "571-259-5939",
+                member_zipcode = "22102",
+                member_email = "regression.autotests+" + DateTime.Now.ToString("yyyyMMddHHmmss") + "@gmail.com",
+                HIDE_VISITED_ADDRESSES = "FALSE",
+                READONLY_USER = "FALSE",
+                member_type = "SUB_ACCOUNT_DISPATCHER",
+                date_of_birth = "2010",
+                member_first_name = "Clay",
+                member_password = "123456",
+                HIDE_NONFUTURE_ROUTES = "FALSE",
+                member_last_name = "Abraham",
+                SHOW_ALL_VEHICLES = "FALSE",
+                SHOW_ALL_DRIVERS = "FALSE"
+            };
+
+            // Run the query
+            string errorString = "";
+            var result = route4Me.CreateUser(@params, out errorString);
+
+            //For successful testing of an user creating, you shuld provide valid email address, otherwise you'll get error "Email is used in system"
+            string rightResponse = result != null ? "ok" : ((errorString == "Email is used in system" || errorString == "Registration: The e-mail address is missing or invalid.") ? "ok" : "");
+
+            Assert.IsTrue(rightResponse == "ok", "CreateUserTest failed... " + errorString);
+
+            lsMembers.Add(Convert.ToInt32(result.member_id));
+
+            MemberParametersV4 @customParams = new MemberParametersV4
+            {
+                member_id = result.member_id != null ? Convert.ToInt32(result.member_id) : -1,
+                custom_data = new Dictionary<string,string>() {{"Custom Key 2", "Custom Value 2"}}
+            };
+
+            errorString = "";
+            MemberResponseV4 result2 = route4Me.UserUpdate(@customParams, out errorString);
+
+            Assert.IsTrue(result2!=null, "UpdateUserTest failed... " + errorString);
+
+            Dictionary<string, string> customData = result2.custom_data;
+
+            Assert.IsTrue(customData.Keys.ElementAt(0) == "Custom Key 2", "Custom Key is not 'Custom Key 2'");
+
+            Assert.IsTrue(customData["Custom Key 2"] == "Custom Value 2", "Custom Value is not 'Custom Value 2'");
         }
 
         [TestMethod]

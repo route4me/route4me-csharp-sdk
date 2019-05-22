@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace Route4MeSDK.DataTypes
 {
@@ -212,5 +213,6 @@ namespace Route4MeSDK.DataTypes
             set { m_AutoLogoutTs = value; }
         }
         private System.Nullable<int> m_AutoLogoutTs;
+
     }
 }
