@@ -2271,26 +2271,26 @@ namespace Route4MeSDK
         }
 
         public string BatchGeocodingAsync(GeocodingParameters geoParams, out string errorString)
-    {
-        GeocodingRequest request = new GeocodingRequest { };
+        {
+            GeocodingRequest request = new GeocodingRequest { };
 
-        var keyValues = new List<KeyValuePair<string, string>>();
+            var keyValues = new List<KeyValuePair<string, string>>();
 
-        keyValues.Add(new KeyValuePair<string, string>("strExportFormat", geoParams.ExportFormat));
-        keyValues.Add(new KeyValuePair<string, string>("addresses", geoParams.Addresses));
+            keyValues.Add(new KeyValuePair<string, string>("strExportFormat", geoParams.ExportFormat));
+            keyValues.Add(new KeyValuePair<string, string>("addresses", geoParams.Addresses));
 
-        HttpContent httpContent = new FormUrlEncodedContent(keyValues);
+            HttpContent httpContent = new FormUrlEncodedContent(keyValues);
 
-        Task<Tuple<string, string>> result = GetJsonObjectFromAPIAsync<string>(request,
-                                                           R4MEInfrastructureSettings.Geocoder,
-                                                           HttpMethodType.Post,
-                                                           httpContent, true);
+            Task<Tuple<string, string>> result = GetJsonObjectFromAPIAsync<string>(request,
+                                                                R4MEInfrastructureSettings.Geocoder,
+                                                                HttpMethodType.Post,
+                                                                httpContent, true);
 
-        result.Wait();
-        errorString = "";
-        if (result.IsFaulted || result.IsCanceled) errorString = result.Result.Item2;
-        return result.Result.Item1;
-    }
+            result.Wait();
+            errorString = "";
+            if (result.IsFaulted || result.IsCanceled) errorString = result.Result.Item2;
+            return result.Result.Item1;
+        }
 
     public ArrayList RapidStreetData(GeocodingParameters geoParams, out string errorString)
     {
