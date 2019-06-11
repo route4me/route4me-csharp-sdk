@@ -22,7 +22,7 @@ namespace Route4MeSDKUnitTest
 {
     public class ApiKeys
     {
-        public const string actualApiKey = "51d0c0701ce83855c9f62d0440096e7c";
+        public const string actualApiKey = "11111111111111111111111111111111";
         public const string demoApiKey = "11111111111111111111111111111111";
     }
     
