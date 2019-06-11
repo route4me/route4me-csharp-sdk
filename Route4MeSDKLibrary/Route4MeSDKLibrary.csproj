@@ -37,15 +37,17 @@
     <AssemblyOriginatorKeyFile>Route4MeExcelAddIn_1_TemporaryKey.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="fastJSON">
+    <Reference Include="fastJSON, Version=2.2.0.0, Culture=neutral, PublicKeyToken=6b75a806b86095cd, processorArchitecture=MSIL">
       <HintPath>..\packages\fastJSON.2.2.0.1\lib\net40\fastJSON.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>lib\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="SocketIoClientDotNet, Version=1.0.2.0, Culture=neutral, PublicKeyToken=cafd2980d433ff43, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\Oleg_Route4Me\route4me-csharp-sdk\Route4MeSDKLibrary\lib\SocketIoClientDotNet.dll</HintPath>
+      <HintPath>lib\SocketIoClientDotNet.dll</HintPath>
     </Reference>
     <Reference Include="SuperSocket.ClientEngine">
       <HintPath>lib\SuperSocket.ClientEngine.dll</HintPath>
@@ -70,25 +72,24 @@
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
-    <Reference Include="WebSocket4Net">
-      <HintPath>lib\WebSocket4Net.dll</HintPath>
+    <Reference Include="WebSocket4Net, Version=0.15.2.11, Culture=neutral, PublicKeyToken=eb4e154b696bf72a, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebSocket4Net.0.15.2\lib\net45\WebSocket4Net.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataTypes\AddressForGeocoding.cs" />
-    <Compile Include="DataTypes\AddressGeocoded.cs" />
-    <Compile Include="DataTypes\Geocoding.cs" />
-    <Compile Include="FastProcessing\Connection.cs" />
-    <Compile Include="FastProcessing\ConnectionConstants.cs" />
     <Compile Include="Consts.cs" />
     <Compile Include="DataTypes\Activity.cs" />
     <Compile Include="DataTypes\Address.cs" />
     <Compile Include="DataTypes\AddressBookContact.cs" />
     <Compile Include="DataTypes\AddressBookContactsResponse.cs" />
     <Compile Include="DataTypes\AddressCustomNote.cs" />
+    <Compile Include="DataTypes\AddressGeocoded.cs" />
     <Compile Include="DataTypes\AddressNote.cs" />
+    <Compile Include="DataTypes\AddressForGeocoding.cs" />
     <Compile Include="DataTypes\AvoidanceZone.cs" />
     <Compile Include="DataTypes\cDatabase.cs" />
+    <Compile Include="DataTypes\Country.cs" />
     <Compile Include="DataTypes\CustomNoteType.cs" />
     <Compile Include="DataTypes\DataObject.cs" />
     <Compile Include="DataTypes\Direction.cs" />
@@ -98,6 +99,7 @@
     <Compile Include="DataTypes\Enums.cs" />
     <Compile Include="DataTypes\ErrorResponse.cs" />
     <Compile Include="DataTypes\FindAssetResponse.cs" />
+    <Compile Include="DataTypes\Geocoding.cs" />
     <Compile Include="DataTypes\GeocodingResponse.cs" />
     <Compile Include="DataTypes\GeoPoint.cs" />
     <Compile Include="DataTypes\Links.cs" />
@@ -113,6 +115,12 @@
     <Compile Include="DataTypes\RouteResponse.cs" />
     <Compile Include="DataTypes\Schedule.cs" />
     <Compile Include="DataTypes\SetGpsResponse.cs" />
+    <Compile Include="DataTypes\TelematicsVendorFeature.cs" />
+    <Compile Include="DataTypes\TelematicsVendorResponse.cs" />
+    <Compile Include="DataTypes\TelematicsVendors.cs" />
+    <Compile Include="DataTypes\TelematicsVendorsResponse.cs" />
+    <Compile Include="DataTypes\TelematicsVendorsSearchResponse.cs" />
+    <Compile Include="DataTypes\TelematicsVendor.cs" />
     <Compile Include="DataTypes\Territory.cs" />
     <Compile Include="DataTypes\TerritoryZone.cs" />
     <Compile Include="DataTypes\TrackingHistory.cs" />
@@ -120,6 +128,8 @@
     <Compile Include="DataTypes\VehicleResponse.cs" />
     <Compile Include="DataTypes\VehiclesPaginated.cs" />
     <Compile Include="DataTypes\VehicleV4Response.cs" />
+    <Compile Include="FastProcessing\Connection.cs" />
+    <Compile Include="FastProcessing\ConnectionConstants.cs" />
     <Compile Include="FastProcessing\FastBulkGeocoding.cs" />
     <Compile Include="FastProcessing\FastFileReading.cs" />
     <Compile Include="FastProcessing\Options.cs" />
@@ -144,6 +154,7 @@
     <Compile Include="QueryTypes\OptimizationParameters.cs" />
     <Compile Include="QueryTypes\OrderParameters.cs" />
     <Compile Include="QueryTypes\RouteParametersQuery.cs" />
+    <Compile Include="QueryTypes\TelematicsVendorParameters.cs" />
     <Compile Include="QueryTypes\TerritoryQuery.cs" />
     <Compile Include="QueryTypes\VehicleParameters.cs" />
     <Compile Include="QueryTypes\VehicleV4Parameters.cs" />
@@ -152,7 +163,9 @@
     <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
     <None Include="Route4MeExcelAddIn_1_TemporaryKey.pfx" />
   </ItemGroup>

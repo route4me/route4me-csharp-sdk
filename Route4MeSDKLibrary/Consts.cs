@@ -58,6 +58,8 @@ namespace Route4MeSDK
 
     public const string CustomNoteType = MainHost + "/api.v4/note_custom_types.php";
 
+    public const string TeleamticsVendorsHost = "https://telematics.route4me.com/api/vendors.php";
+
     #endregion
   }
 }

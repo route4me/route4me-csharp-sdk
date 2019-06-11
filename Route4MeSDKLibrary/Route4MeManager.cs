@@ -2561,6 +2561,40 @@ namespace Route4MeSDK
 
     #endregion
 
+    #region Telematics Vendors
+
+    public TelematicsVendorsResponse GetAllTelematicsVendors(TelematicsVendorParameters vendorParams, out string errorString)
+    {
+        TelematicsVendorsResponse response = GetJsonObjectFromAPI<TelematicsVendorsResponse>(vendorParams,
+                                                           R4MEInfrastructureSettings.TeleamticsVendorsHost,
+                                                           HttpMethodType.Get,
+                                                           out errorString);
+
+        return response;
+    }
+
+    public TelematicsVendorResponse GetTelematicsVendor(TelematicsVendorParameters vendorParams, out string errorString)
+    {
+        TelematicsVendorResponse response = GetJsonObjectFromAPI<TelematicsVendorResponse>(vendorParams,
+                                                           R4MEInfrastructureSettings.TeleamticsVendorsHost,
+                                                           HttpMethodType.Get,
+                                                           out errorString);
+
+        return response;
+    }
+
+    public TelematicsVendorsSearchResponse SearchTelematicsVendors(TelematicsVendorParameters vendorParams, out string errorString)
+    {
+        TelematicsVendorsSearchResponse response = GetJsonObjectFromAPI<TelematicsVendorsSearchResponse>(vendorParams,
+                                                           R4MEInfrastructureSettings.TeleamticsVendorsHost,
+                                                           HttpMethodType.Get,
+                                                           out errorString);
+
+        return response;
+    }
+
+    #endregion
+
     #endregion
 
     #region Generic Methods
