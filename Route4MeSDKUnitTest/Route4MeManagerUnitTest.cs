@@ -16,6 +16,7 @@ using System.Reflection;
 using System.CodeDom.Compiler;
 using CsvHelper;
 using System.Linq;
+using Route4MeSDKLibrary.DataTypes;
 
 namespace Route4MeSDKUnitTest
 {
@@ -11061,6 +11062,100 @@ namespace Route4MeSDKUnitTest
 
             Assert.IsTrue(result, "Removing of the testing optimization problem failed...");
         }
+    }
+
+    [TestClass]
+    public class TelematicsGateWayAPI
+    {
+        static string c_ApiKey = ApiKeys.actualApiKey;
+
+        [TestInitialize]
+        public void TelematicsGateWayAPIInitialize()
+        {
+            //Console.SetOut(new StreamWriter(new FileStream("Console_Output.txt", FileMode.Append)) { AutoFlush = true });
+        }
+
+        [TestMethod]
+        public void getAllVendorsTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            TelematicsVendorParameters vendorParameters = new TelematicsVendorParameters();
+
+            string errorString = "";
+            TelematicsVendorsResponse vendors = route4Me.GetAllTelematicsVendors(vendorParameters, out errorString);
+
+            Assert.IsNotNull(vendors, "The test getAllVendorsTest failed. " + errorString);
+
+            Assert.IsInstanceOfType(vendors, typeof(TelematicsVendorsResponse), "The test getAllVendorsTest failed. " + errorString);
+        }
+
+        [TestMethod]
+        public void getVendorTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            string errorString = "";
+            TelematicsVendorsResponse vendors = route4Me.GetAllTelematicsVendors(new TelematicsVendorParameters(), out errorString);
+
+            int randomNumber = (new Random()).Next(0, vendors.Vendors.Count() - 1);
+            string randomVendorID =  vendors.Vendors[randomNumber].ID;
+
+            TelematicsVendorParameters vendorParameters = new TelematicsVendorParameters()
+                {
+                    vendorID = Convert.ToUInt32(randomVendorID)
+                };
+
+            errorString = "";
+            TelematicsVendorResponse vendor = route4Me.GetTelematicsVendor(vendorParameters, out errorString);
+
+            Assert.IsNotNull(vendors, "The test getVendorTest failed. " + errorString);
+
+            Assert.IsInstanceOfType(vendors, typeof(TelematicsVendorsResponse), "The test getVendorTest failed. " + errorString);
+        }
+
+        [TestMethod]
+        public void searchVendorsTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            TelematicsVendorParameters vendorParameters = new TelematicsVendorParameters()
+            {
+                //Country = "GB",  // uncomment this line for searching by Country
+                isIntegrated = 1,
+                //Feature = "Satelite",  // uncomment this line for searching by Feature
+                Search = "Fleet",
+                Page = 1,
+                perPage = 15
+            };
+
+            string errorString = "";
+            TelematicsVendorsSearchResponse vendors = route4Me.SearchTelematicsVendors(vendorParameters, out errorString);
+
+            Assert.IsNotNull(vendors, "The test searchVendorsTest failed. " + errorString);
+
+            Assert.IsInstanceOfType(vendors, typeof(TelematicsVendorsSearchResponse), "The test searchVendorsTest failed. " + errorString);
+
+        }
+
+        [TestMethod]
+        public void vendorsComparisonTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(ApiKeys.demoApiKey);
+
+            TelematicsVendorParameters vendorParameters = new TelematicsVendorParameters()
+            {
+                Vendors = "55,56,57"
+            };
+
+            string errorString = "";
+            TelematicsVendorsSearchResponse vendors = route4Me.SearchTelematicsVendors(vendorParameters, out errorString);
+
+            Assert.IsNotNull(vendors, "The test vendorsComparisonTest failed. " + errorString);
+
+            Assert.IsInstanceOfType(vendors, typeof(TelematicsVendorsSearchResponse), "The test vendorsComparisonTest failed. " + errorString);
+        }
+
     }
 
     // **** Data repository for the tests ********
