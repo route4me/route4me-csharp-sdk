@@ -12,5 +12,11 @@ namespace Route4MeSDK.DataTypes
 
         [DataMember(Name = "total", EmitDefaultValue = false)]
         public int? total { get; set; }
+
+        [DataMember(Name = "index_query", EmitDefaultValue = false)]
+        public string index_query { get; set; }
+
+        [DataMember(Name = "fields", EmitDefaultValue = false)]
+        public string[] fields { get; set; }
     }
 }

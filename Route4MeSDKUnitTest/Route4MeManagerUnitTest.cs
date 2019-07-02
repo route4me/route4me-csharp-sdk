@@ -3457,12 +3457,12 @@ namespace Route4MeSDKUnitTest
             {
                 AlgorithmType = AlgorithmType.CVRP_TW_MD,
                 RouteName = "Multiple Depot, Multiple Driver with 24 Stops, Time Window",
-                StoreRoute = false,
+                StoreRoute = true,
 
                 RouteDate = R4MeUtils.ConvertToUnixTimestamp(DateTime.UtcNow.Date.AddDays(1)),
                 RouteTime = 60 * 60 * 7,
                 RouteMaxDuration = 86400,
-                VehicleCapacity = 1,
+                VehicleCapacity = 5,
                 VehicleMaxDistanceMI = 10000,
 
                 Optimize = Optimize.Distance.Description(),
@@ -7405,6 +7405,222 @@ namespace Route4MeSDKUnitTest
     }
 
     [TestClass]
+    public class AddressbookGroupsGroup
+    {
+        static string c_ApiKey = ApiKeys.actualApiKey;
+
+        static AddressBookGroup group1, group2;
+
+        static List<string> lsGroups = new List<string>();
+
+        [ClassInitialize()]
+        public static void AddressBookGroupsInitialize(TestContext context)
+        {
+            string errorString;
+            group1 = CreateAddreessBookGroup(out errorString);
+
+            Assert.IsNotNull(group1, "AddressBookGroupsInitialize failed... " + errorString);
+
+            group2 = CreateAddreessBookGroup(out errorString);
+
+            Assert.IsNotNull(group2, "AddressBookGroupsInitialize failed... " + errorString);
+
+            lsGroups.Add(group2.groupID);
+        }
+
+        [TestMethod]
+        public void GetAddressBookGroupsTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            AddressBookGroupParameters addressBookGroupParameters = new AddressBookGroupParameters()
+            {
+                Limit = 10,
+                Offset = 0
+            };
+
+            // Run the query
+            string errorString;
+            AddressBookGroup[] groups = route4Me.GetAddressBookGroups(addressBookGroupParameters, out errorString);
+
+            Assert.IsInstanceOfType(groups, typeof(AddressBookGroup[]), "GetAddressBookGroupsTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void GetAddressBookGroupTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            AddressBookGroupParameters addressBookGroupParameters = new AddressBookGroupParameters()
+            {
+                GroupId = group2.groupID
+            };
+
+            // Run the query
+            string errorString;
+            AddressBookGroup addressBookGroup = route4Me.GetAddressBookGroup(addressBookGroupParameters, out errorString);
+
+            Assert.IsInstanceOfType(addressBookGroup, typeof(AddressBookGroup), "GetAddressBookGroupTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void GetAddressBookContactsByGroupTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            AddressBookGroupParameters addressBookGroupParameters = new AddressBookGroupParameters()
+            {
+                groupID = group2.groupID
+            };
+
+            // Run the query
+            string errorString;
+            AddressBookContactsResponse addressBookGroup = route4Me.GetAddressBookContactsByGroup(addressBookGroupParameters, out errorString);
+
+            Assert.IsInstanceOfType(addressBookGroup, typeof(AddressBookContactsResponse), "GetAddressBookContactsByGroupTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void SearchAddressBookContactsByFilterTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            AddressBookGroupFilterParameter filterParam = new AddressBookGroupFilterParameter()
+            {
+                query = "Louisville",
+                display = "all"
+            };
+
+            AddressBookGroupParameters addressBookGroupParameters = new AddressBookGroupParameters()
+            {
+                Fields = new string[] { "address_id", "address_1", "address_group" },
+                offset = 0,
+                limit = 10,
+                filter= filterParam
+            };
+
+            // Run the query
+            string errorString;
+            AddressBookContactsResponse results = route4Me.SearchAddressBookContactsByFilter(addressBookGroupParameters, out errorString);
+
+            Assert.IsInstanceOfType(results, typeof(AddressBookContactsResponse), "GetAddressBookContactsByGroupTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void UpdateAddressBookGroupTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            AddressBookGroupRule addressBookGroupRule = new AddressBookGroupRule()
+            {
+                ID = "address_1",
+                Field = "address_1",
+                Operator = "not_equal",
+                Value = "qwerty1234567"
+            };
+
+            AddressBookGroupFilter addressBookGroupFilter = new AddressBookGroupFilter()
+            {
+                Condition = "AND",
+                Rules = new AddressBookGroupRule[] { addressBookGroupRule }
+            };
+
+            AddressBookGroup addressBookGroupParameters = new AddressBookGroup()
+            {
+                groupID = group2.groupID,
+                groupColor = "cd74e6",
+                Filter = addressBookGroupFilter
+            };
+
+            // Run the query
+            string errorString;
+            AddressBookGroup addressBookGroup = route4Me.UpdateAddressBookGroup(addressBookGroupParameters, out errorString);
+
+            Assert.IsNotNull(addressBookGroup, "UpdateAddressBookGroupTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void AddAddressBookGroupTest()
+        {
+            string errorString;
+            AddressBookGroup addressBookGroup = CreateAddreessBookGroup(out errorString);
+
+            Assert.IsNotNull(addressBookGroup, "AddAddreessBookGroupTest failed... " + errorString);
+
+            lsGroups.Add(addressBookGroup.groupID);
+        }
+
+        private static AddressBookGroup CreateAddreessBookGroup(out string errorString)
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            AddressBookGroupRule addressBookGroupRule = new AddressBookGroupRule()
+            {
+                ID = "address_1",
+                Field = "address_1",
+                Operator = "not_equal",
+                Value = "qwerty123456"
+            };
+
+            AddressBookGroupFilter addressBookGroupFilter = new AddressBookGroupFilter()
+            {
+                Condition = "AND",
+                Rules = new AddressBookGroupRule[] { addressBookGroupRule }
+            };
+
+            AddressBookGroup addressBookGroupParameters = new AddressBookGroup()
+            {
+                groupName = "All Group",
+                groupColor = "92e1c0",
+                Filter = addressBookGroupFilter
+            };
+
+            // Run the query
+            //string errorString;
+            AddressBookGroup addressBookGroup = route4Me.AddAddressBookGroup(addressBookGroupParameters, out errorString);
+
+
+            return addressBookGroup;
+        }
+
+        private static StatusResponse DeleteAddreessBookGroup(string remeoveGroupID, out string errorString)
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            AddressBookGroupParameters addressGroupParams = new AddressBookGroupParameters()
+            {
+                groupID = remeoveGroupID
+            };
+
+            errorString = "";
+            StatusResponse status = route4Me.RemoveAddressBookGroup(addressGroupParams, out errorString);
+            return status;
+        }
+
+        [TestMethod]
+        public void RemoveAddressBookGroupTest()
+        {
+            string errorString = "";
+            StatusResponse response = DeleteAddreessBookGroup(group1.groupID, out errorString);
+
+            Assert.IsTrue(response.status, "RemoveAddressBookGroupTest failed... " + errorString);
+        }
+
+        [ClassCleanup()]
+        public static void AddressBookGroupsGroupCleanup()
+        {
+            string errorString = "";
+            foreach (string curGroupID in lsGroups)
+            {
+                StatusResponse resposne = DeleteAddreessBookGroup(curGroupID, out errorString);
+
+                Assert.IsTrue(resposne.status, "Removing of the address book group with group ID = "+curGroupID +" failed.");
+            }
+        }
+    }
+
+
+        [TestClass]
     public class AvoidanseZonesGroup
     {
         static string c_ApiKey = ApiKeys.actualApiKey;
