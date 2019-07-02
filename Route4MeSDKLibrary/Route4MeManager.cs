@@ -210,25 +210,19 @@ namespace Route4MeSDK
         return result;
     }
 
-    [DataContract()]
-    private sealed class AddDepotsToHybridOptimizationResponse
-    {
-        [DataMember(Name = "status")]
-        public Boolean Status { get; set; }
-    }
 
     public bool AddDepotsToHybridOptimization(HybridDepotParameters hybridDepotParameters, out string errorString)
     {
-        var result = GetJsonObjectFromAPI<AddDepotsToHybridOptimizationResponse>(hybridDepotParameters,
+        var result = GetJsonObjectFromAPI<StatusResponse>(hybridDepotParameters,
                                                         R4MEInfrastructureSettings.HybridDepots,
                                                         HttpMethodType.Post,
                                                         out errorString);
 
         if (result != null)
         {
-            if (result.GetType()==typeof(AddDepotsToHybridOptimizationResponse))
+            if (result.GetType()==typeof(StatusResponse))
             {
-                return ((AddDepotsToHybridOptimizationResponse)result).Status;
+                return ((StatusResponse)result).status;
             }
             else return false;
         }
@@ -372,31 +366,13 @@ namespace Route4MeSDK
 
         HttpContent httpContent = new FormUrlEncodedContent(keyValues);
 
-        ResequenceReoptimizeRouteResponse response = GetJsonObjectFromAPI<ResequenceReoptimizeRouteResponse>
+        StatusResponse response = GetJsonObjectFromAPI<StatusResponse>
             (roParames, R4MEInfrastructureSettings.MergeRoutes, 
             HttpMethodType.Post, httpContent, out errorString);
 
-        if (response != null && response.Status)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return (response != null && response.status) ? true : false;
     }
 
-    [DataContract()]
-    private sealed class ResequenceReoptimizeRouteResponse
-    {
-        [DataMember(Name = "status")]
-        public Boolean Status
-        {
-            get { return m_Status; }
-            set { m_Status = value; }
-        }
-        private Boolean m_Status;
-    }
 
     public bool ResequenceReoptimizeRoute(Dictionary<string, string> roParames, out string errorString)
     {
@@ -407,16 +383,9 @@ namespace Route4MeSDK
             Optimize = roParames["optimize"]
         };
 
-        ResequenceReoptimizeRouteResponse response = GetJsonObjectFromAPI<ResequenceReoptimizeRouteResponse>(request, R4MEInfrastructureSettings.RouteReoptimize, HttpMethodType.Get, out errorString);
+        StatusResponse response = GetJsonObjectFromAPI<StatusResponse>(request, R4MEInfrastructureSettings.RouteReoptimize, HttpMethodType.Get, out errorString);
 
-        if (response != null && response.Status)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return (response != null && response.status) ? true : false;
     }
 
         [DataContract()]
@@ -484,16 +453,9 @@ namespace Route4MeSDK
         keyValues.Add(new KeyValuePair<string, string>("recipient_email", Email));
         HttpContent httpContent = new FormUrlEncodedContent(keyValues);
 
-        ResequenceReoptimizeRouteResponse response = GetJsonObjectFromAPI<ResequenceReoptimizeRouteResponse>(roParames, R4MEInfrastructureSettings.RouteSharing, HttpMethodType.Post, httpContent, out errorString);
+        StatusResponse response = GetJsonObjectFromAPI<StatusResponse>(roParames, R4MEInfrastructureSettings.RouteSharing, HttpMethodType.Post, httpContent, out errorString);
 
-        if (response != null && response.Status)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return (response != null && response.status) ? true : false;
     }
 
     [DataContract()]
@@ -852,25 +814,13 @@ namespace Route4MeSDK
         return response;
     }
 
-    [DataContract()]
-    public sealed class UserDeleteResponse
-    {
-        [DataMember(Name = "status")]
-        public bool Status
-        {
-            get { return m_Status; }
-            set { m_Status = value; }
-        }
-        private bool m_Status;
-    }
-
     public bool UserDelete(MemberParametersV4 memParams, out string errorString)
     {
-        UserDeleteResponse response = GetJsonObjectFromAPI<UserDeleteResponse>(memParams, R4MEInfrastructureSettings.GetUsersHost, HttpMethodType.Delete, out errorString);
+        StatusResponse response = GetJsonObjectFromAPI<StatusResponse>(memParams, R4MEInfrastructureSettings.GetUsersHost, HttpMethodType.Delete, out errorString);
 
         if (response == null) return false;
 
-        if (response.Status) return true; else return false;
+        if (response.status) return true; else return false;
     }
 
     public MemberResponseV4 GetUserById(MemberParametersV4 memParams, out string errorString)
@@ -1287,13 +1237,6 @@ namespace Route4MeSDK
       return result;
     }
 
-    [DataContract]
-    private sealed class LogCustomActivityResponse
-    {
-      [DataMember(Name = "status")]
-      public bool Status { get; set; }
-    }
-
     /// <summary>
     /// Create User Activity. Send custom message to Activity Stream.
     /// </summary>
@@ -1303,18 +1246,11 @@ namespace Route4MeSDK
     public bool LogCustomActivity(Activity activity, out string errorString)
     {
       activity.PrepareForSerialization();
-      LogCustomActivityResponse response = GetJsonObjectFromAPI<LogCustomActivityResponse>(activity,
+      StatusResponse response = GetJsonObjectFromAPI<StatusResponse>(activity,
                                                              R4MEInfrastructureSettings.ActivityFeedHost,
                                                              HttpMethodType.Post,
                                                              out errorString);
-      if (response != null && response.Status)
-      {
-        return true;
-      }
-      else
-      {
-        return false;
-      }
+      return (response != null && response.status) ? true : false;
     }
 
         public Activity[] GetAnalytics(ActivityParameters activityParameters, out string errorString)
@@ -1811,44 +1747,103 @@ namespace Route4MeSDK
       public string[] AddressIds { get; set; }
     }
 
-    [DataContract]
-    private sealed class RemoveAddressBookContactsResponse
-    {
-      [DataMember(Name = "status")]
-      public bool Status { get; set; }
-    }
-
     public bool RemoveAddressBookContacts(string[] addressIds, out string errorString)
     {
       RemoveAddressBookContactsRequest request = new RemoveAddressBookContactsRequest()
       {
         AddressIds = addressIds
       };
-      RemoveAddressBookContactsResponse response = GetJsonObjectFromAPI<RemoveAddressBookContactsResponse>(request,
+      StatusResponse response = GetJsonObjectFromAPI<StatusResponse>(request,
                                                              R4MEInfrastructureSettings.AddressBook,
                                                              HttpMethodType.Delete,
                                                              out errorString);
-      if (response != null && response.Status)
-      {
-        return true;
-      }
-      else
-      {
-        return false;
-      }
+
+      return (response != null && response.status) ? true : false;
     }
 
     #endregion
 
-    #region Avoidance Zones
+        #region Address Book Group
+        public AddressBookGroup[] GetAddressBookGroups(AddressBookGroupParameters addressBookGroupParameters, out string errorString)
+        {
+            var response = GetJsonObjectFromAPI<AddressBookGroup[]>(addressBookGroupParameters,
+                                                                 R4MEInfrastructureSettings.AddressBookGroup,
+                                                                 HttpMethodType.Get,
+                                                                 out errorString);
+            return response;
+        }
 
-    /// <summary>
-    /// Create avoidance zone
-    /// </summary>
-    /// <param name="avoidanceZoneParameters"> Parameters for request </param>
-    /// <param name="errorString"> out: Error as string </param>
-    /// <returns> Avoidance zone Object </returns>
-    public AvoidanceZone AddAvoidanceZone(AvoidanceZoneParameters avoidanceZoneParameters, out string errorString)
+        public AddressBookGroup GetAddressBookGroup(AddressBookGroupParameters addressBookGroupParameters, out string errorString)
+        {
+            addressBookGroupParameters.PrepareForSerialization();
+            var response = GetJsonObjectFromAPI<AddressBookGroup>(addressBookGroupParameters,
+                                                                 R4MEInfrastructureSettings.AddressBookGroup,
+                                                                 HttpMethodType.Get,
+                                                                 out errorString);
+            return response;
+        }
+
+        public AddressBookContactsResponse GetAddressBookContactsByGroup(AddressBookGroupParameters addressBookGroupParameters, out string errorString)
+        {
+            addressBookGroupParameters.PrepareForSerialization();
+            var response = GetJsonObjectFromAPI<AddressBookContactsResponse>(addressBookGroupParameters,
+                                                                 R4MEInfrastructureSettings.AddressBookGroupSearch,
+                                                                 HttpMethodType.Post,
+                                                                 out errorString);
+            return response;
+        }
+
+        public AddressBookContactsResponse SearchAddressBookContactsByFilter(AddressBookGroupParameters addressBookGroupParameters, out string errorString)
+        {
+            addressBookGroupParameters.PrepareForSerialization();
+            var response = GetJsonObjectFromAPI<AddressBookContactsResponse>(addressBookGroupParameters,
+                                                                 R4MEInfrastructureSettings.AddressBook,
+                                                                 HttpMethodType.Post,
+                                                                 out errorString);
+            return response;
+        }
+
+        public AddressBookGroup AddAddressBookGroup(AddressBookGroup group, out string errorString)
+        {
+            group.PrepareForSerialization();
+            AddressBookGroup result = GetJsonObjectFromAPI<AddressBookGroup>(group,
+                                                                 R4MEInfrastructureSettings.AddressBookGroup,
+                                                                 HttpMethodType.Post,
+                                                                 out errorString);
+            return result;
+        }
+
+        public AddressBookGroup UpdateAddressBookGroup(AddressBookGroup group, out string errorString)
+        {
+            group.PrepareForSerialization();
+            AddressBookGroup result = GetJsonObjectFromAPI<AddressBookGroup>(group,
+                                                                 R4MEInfrastructureSettings.AddressBookGroup,
+                                                                 HttpMethodType.Put,
+                                                                 out errorString);
+            return result;
+        }
+
+        public StatusResponse RemoveAddressBookGroup(AddressBookGroupParameters groupID, out string errorString)
+        {
+            groupID.PrepareForSerialization();
+            StatusResponse result = GetJsonObjectFromAPI<StatusResponse>(groupID,
+                                                                 R4MEInfrastructureSettings.AddressBookGroup,
+                                                                 HttpMethodType.Delete,
+                                                                 out errorString);
+            return result;
+        }
+
+        #endregion
+
+        #region Avoidance Zones
+
+        /// <summary>
+        /// Create avoidance zone
+        /// </summary>
+        /// <param name="avoidanceZoneParameters"> Parameters for request </param>
+        /// <param name="errorString"> out: Error as string </param>
+        /// <returns> Avoidance zone Object </returns>
+        public AvoidanceZone AddAvoidanceZone(AvoidanceZoneParameters avoidanceZoneParameters, out string errorString)
     {
       AvoidanceZone avoidanceZone = GetJsonObjectFromAPI<AvoidanceZone>(avoidanceZoneParameters,
                                                              R4MEInfrastructureSettings.Avoidance,
@@ -1902,13 +1897,6 @@ namespace Route4MeSDK
       return avoidanceZone;
     }
 
-    [DataContract]
-    private sealed class DeleteAvoidanceZoneResponse
-    {
-        [DataMember(Name = "status")]
-        public Boolean status { get; set; }
-
-    }
     /// <summary>
     /// Delete avoidance zone (by territory id, device id)
     /// </summary>
@@ -1917,7 +1905,7 @@ namespace Route4MeSDK
     /// <returns> Result status true/false </returns>
     public bool DeleteAvoidanceZone(AvoidanceZoneQuery avoidanceZoneQuery, out string errorString)
     {
-        var result = GetJsonObjectFromAPI<DeleteAvoidanceZoneResponse>(avoidanceZoneQuery,
+        var result = GetJsonObjectFromAPI<StatusResponse>(avoidanceZoneQuery,
                                                              R4MEInfrastructureSettings.Avoidance,
                                                              HttpMethodType.Delete,
                                                              out errorString);
@@ -2022,12 +2010,6 @@ namespace Route4MeSDK
       public string[] OrderIds { get; set; }
     }
 
-    [DataContract]
-    private sealed class RemoveOrdersResponse
-    {
-      [DataMember(Name = "status")]
-      public bool Status { get; set; }
-    }
 
     /// <summary>
     /// Remove Orders
@@ -2041,18 +2023,12 @@ namespace Route4MeSDK
       {
         OrderIds = orderIds
       };
-      RemoveOrdersResponse response = GetJsonObjectFromAPI<RemoveOrdersResponse>(request,
+      StatusResponse response = GetJsonObjectFromAPI<StatusResponse>(request,
                                                              R4MEInfrastructureSettings.Order,
                                                              HttpMethodType.Delete,
                                                              out errorString);
-      if (response != null && response.Status)
-      {
-        return true;
-      }
-      else
-      {
-        return false;
-      }
+
+      return (response != null && response.status) ? true : false;
     }
 
     [DataContract()]
@@ -2527,13 +2503,6 @@ namespace Route4MeSDK
         return territory;
     }
 
-    [DataContract]
-    private sealed class RemoveTerritoryResponse
-    {
-        [DataMember(Name = "status")]
-        public Boolean status { get; set; }
-
-    }
     /// <summary>
     /// Remove Territory (by territory id, device id)
     /// </summary>
@@ -2542,7 +2511,7 @@ namespace Route4MeSDK
     /// <returns> Result status true/false </returns>
     public bool RemoveTerritory(AvoidanceZoneQuery territoryQuery, out string errorString)
     {
-        var result = GetJsonObjectFromAPI<RemoveTerritoryResponse>(territoryQuery, R4MEInfrastructureSettings.Territory, HttpMethodType.Delete, out errorString);
+        var result = GetJsonObjectFromAPI<StatusResponse>(territoryQuery, R4MEInfrastructureSettings.Territory, HttpMethodType.Delete, out errorString);
 
         return result.status;
     }
