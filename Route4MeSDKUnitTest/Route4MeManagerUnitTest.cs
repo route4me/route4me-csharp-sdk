@@ -22,7 +22,7 @@ namespace Route4MeSDKUnitTest
 {
     public class ApiKeys
     {
-        public const string actualApiKey = "11111111111111111111111111111111";
+        public const string actualApiKey = "51d0c0701ce83855c9f62d0440096e7c";
         public const string demoApiKey = "11111111111111111111111111111111";
     }
     
@@ -138,30 +138,6 @@ namespace Route4MeSDKUnitTest
 
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
-            //AddressesOrderInfo addressesOrderInfo = new AddressesOrderInfo();
-            //addressesOrderInfo.RouteId = route.RouteID;
-            //addressesOrderInfo.Addresses = new AddressInfo[0];
-            //for (int i = 0; i < route.Addresses.Length; i++)
-            //{
-            //    Address address = route.Addresses[i];
-            //    AddressInfo addressInfo = new AddressInfo();
-            //    addressInfo.DestinationId = address.RouteDestinationId.Value;
-            //    addressInfo.SequenceNo = i;
-            //    if (i == 1)
-            //        addressInfo.SequenceNo = 2;
-            //    else if (i == 2)
-            //        addressInfo.SequenceNo = 1;
-            //    addressInfo.IsDepot = (addressInfo.SequenceNo == 0);
-            //    List<AddressInfo> addressesList = new List<AddressInfo>(addressesOrderInfo.Addresses);
-            //    addressesList.Add(addressInfo);
-            //    addressesOrderInfo.Addresses = addressesList.ToArray();
-            //}
-
-            //string errorString1 = "";
-            //DataObjectRoute route1 = route4Me.GetJsonObjectFromAPI<DataObjectRoute>(addressesOrderInfo,
-            //                                                                                    R4MEInfrastructureSettings.RouteHost,
-            //                                                                                    HttpMethodType.Put,
-            //                                                                                    out errorString1);
             RouteParametersQuery rParams = new RouteParametersQuery()
             {
                 RouteId = route.RouteID
@@ -3461,11 +3437,11 @@ namespace Route4MeSDKUnitTest
 
                 RouteDate = R4MeUtils.ConvertToUnixTimestamp(DateTime.UtcNow.Date.AddDays(1)),
                 RouteTime = 60 * 60 * 7,
-                RouteMaxDuration = 86400,
-                VehicleCapacity = 1,
+                RouteMaxDuration = 86400 * 3,
+                VehicleCapacity = 5,
                 VehicleMaxDistanceMI = 10000,
 
-                Optimize = Optimize.Distance.Description(),
+                Optimize = Optimize.TimeWithTraffic.Description(),
                 DistanceUnit = DistanceUnit.MI.Description(),
                 DeviceType = DeviceType.Web.Description(),
                 TravelMode = TravelMode.Driving.Description(),
@@ -3495,17 +3471,25 @@ namespace Route4MeSDKUnitTest
 
             Assert.IsNotNull(dataObjectMDMD24, "dataObjectMDMD24 is null...");
 
-            Assert.IsTrue(dataObjectMDMD24.Routes.Length >= 2, "There is no 2 routes for moving a destination to other route...");
+            OptimizationParameters optimizationParameters = new OptimizationParameters()
+            {
+                OptimizationProblemID = dataObjectMDMD24.OptimizationProblemId
+            };
 
-            DataObjectRoute route1 = dataObjectMDMD24.Routes[0];
+            string errorString;
+            DataObject dataObjectDetails = route4Me.GetOptimization(optimizationParameters, out errorString);
+
+            Assert.IsTrue(dataObjectDetails.Routes.Length >= 2, "There is no 2 routes for moving a destination to other route...");
+
+            DataObjectRoute route1 = dataObjectDetails.Routes[0];
 
             Assert.IsTrue(route1.Addresses.Length >= 2, "There is less than 2 addresses in the generated route...");
 
-            int routeDestinationIdToMove = route1.Addresses[1].RouteDestinationId != null ? Convert.ToInt32(route1.Addresses[1].RouteDestinationId) : -1;
+            int routeDestinationIdToMove = route1.Addresses[2].RouteDestinationId != null ? Convert.ToInt32(route1.Addresses[1].RouteDestinationId) : -1;
 
             Assert.IsTrue(routeDestinationIdToMove > 0, "Wrong destination_id to move: " + routeDestinationIdToMove);
 
-            DataObjectRoute route2 = dataObjectMDMD24.Routes[1];
+            DataObjectRoute route2 = dataObjectDetails.Routes[1];
 
             Assert.IsTrue(route1.Addresses.Length >= 2, "There is less than 2 addresses in the generated route...");
 
@@ -3513,7 +3497,7 @@ namespace Route4MeSDKUnitTest
 
             Assert.IsTrue(afterDestinationIdToMoveAfter > 0, "Wrong destination_id to move after: " + afterDestinationIdToMoveAfter);
 
-            string errorString;
+            errorString = "";
 
             bool result = route4Me.MoveDestinationToRoute(route2.RouteID, routeDestinationIdToMove, afterDestinationIdToMoveAfter, out errorString);
 
@@ -7405,6 +7389,222 @@ namespace Route4MeSDKUnitTest
     }
 
     [TestClass]
+    public class AddressbookGroupsGroup
+    {
+        static string c_ApiKey = ApiKeys.actualApiKey;
+
+        static AddressBookGroup group1, group2;
+
+        static List<string> lsGroups = new List<string>();
+
+        [ClassInitialize()]
+        public static void AddressBookGroupsInitialize(TestContext context)
+        {
+            string errorString;
+            group1 = CreateAddreessBookGroup(out errorString);
+
+            Assert.IsNotNull(group1, "AddressBookGroupsInitialize failed... " + errorString);
+
+            group2 = CreateAddreessBookGroup(out errorString);
+
+            Assert.IsNotNull(group2, "AddressBookGroupsInitialize failed... " + errorString);
+
+            lsGroups.Add(group2.groupID);
+        }
+
+        [TestMethod]
+        public void GetAddressBookGroupsTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            AddressBookGroupParameters addressBookGroupParameters = new AddressBookGroupParameters()
+            {
+                Limit = 10,
+                Offset = 0
+            };
+
+            // Run the query
+            string errorString;
+            AddressBookGroup[] groups = route4Me.GetAddressBookGroups(addressBookGroupParameters, out errorString);
+
+            Assert.IsInstanceOfType(groups, typeof(AddressBookGroup[]), "GetAddressBookGroupsTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void GetAddressBookGroupTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            AddressBookGroupParameters addressBookGroupParameters = new AddressBookGroupParameters()
+            {
+                GroupId = group2.groupID
+            };
+
+            // Run the query
+            string errorString;
+            AddressBookGroup addressBookGroup = route4Me.GetAddressBookGroup(addressBookGroupParameters, out errorString);
+
+            Assert.IsInstanceOfType(addressBookGroup, typeof(AddressBookGroup), "GetAddressBookGroupTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void GetAddressBookContactsByGroupTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            AddressBookGroupParameters addressBookGroupParameters = new AddressBookGroupParameters()
+            {
+                groupID = group2.groupID
+            };
+
+            // Run the query
+            string errorString;
+            AddressBookContactsResponse addressBookGroup = route4Me.GetAddressBookContactsByGroup(addressBookGroupParameters, out errorString);
+
+            Assert.IsInstanceOfType(addressBookGroup, typeof(AddressBookContactsResponse), "GetAddressBookContactsByGroupTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void SearchAddressBookContactsByFilterTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            AddressBookGroupFilterParameter filterParam = new AddressBookGroupFilterParameter()
+            {
+                query = "Louisville",
+                display = "all"
+            };
+
+            AddressBookGroupParameters addressBookGroupParameters = new AddressBookGroupParameters()
+            {
+                Fields = new string[] { "address_id", "address_1", "address_group" },
+                offset = 0,
+                limit = 10,
+                filter= filterParam
+            };
+
+            // Run the query
+            string errorString;
+            AddressBookContactsResponse results = route4Me.SearchAddressBookContactsByFilter(addressBookGroupParameters, out errorString);
+
+            Assert.IsInstanceOfType(results, typeof(AddressBookContactsResponse), "GetAddressBookContactsByGroupTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void UpdateAddressBookGroupTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            AddressBookGroupRule addressBookGroupRule = new AddressBookGroupRule()
+            {
+                ID = "address_1",
+                Field = "address_1",
+                Operator = "not_equal",
+                Value = "qwerty1234567"
+            };
+
+            AddressBookGroupFilter addressBookGroupFilter = new AddressBookGroupFilter()
+            {
+                Condition = "AND",
+                Rules = new AddressBookGroupRule[] { addressBookGroupRule }
+            };
+
+            AddressBookGroup addressBookGroupParameters = new AddressBookGroup()
+            {
+                groupID = group2.groupID,
+                groupColor = "cd74e6",
+                Filter = addressBookGroupFilter
+            };
+
+            // Run the query
+            string errorString;
+            AddressBookGroup addressBookGroup = route4Me.UpdateAddressBookGroup(addressBookGroupParameters, out errorString);
+
+            Assert.IsNotNull(addressBookGroup, "UpdateAddressBookGroupTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void AddAddressBookGroupTest()
+        {
+            string errorString;
+            AddressBookGroup addressBookGroup = CreateAddreessBookGroup(out errorString);
+
+            Assert.IsNotNull(addressBookGroup, "AddAddreessBookGroupTest failed... " + errorString);
+
+            lsGroups.Add(addressBookGroup.groupID);
+        }
+
+        private static AddressBookGroup CreateAddreessBookGroup(out string errorString)
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            AddressBookGroupRule addressBookGroupRule = new AddressBookGroupRule()
+            {
+                ID = "address_1",
+                Field = "address_1",
+                Operator = "not_equal",
+                Value = "qwerty123456"
+            };
+
+            AddressBookGroupFilter addressBookGroupFilter = new AddressBookGroupFilter()
+            {
+                Condition = "AND",
+                Rules = new AddressBookGroupRule[] { addressBookGroupRule }
+            };
+
+            AddressBookGroup addressBookGroupParameters = new AddressBookGroup()
+            {
+                groupName = "All Group",
+                groupColor = "92e1c0",
+                Filter = addressBookGroupFilter
+            };
+
+            // Run the query
+            //string errorString;
+            AddressBookGroup addressBookGroup = route4Me.AddAddressBookGroup(addressBookGroupParameters, out errorString);
+
+
+            return addressBookGroup;
+        }
+
+        private static StatusResponse DeleteAddreessBookGroup(string remeoveGroupID, out string errorString)
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            AddressBookGroupParameters addressGroupParams = new AddressBookGroupParameters()
+            {
+                groupID = remeoveGroupID
+            };
+
+            errorString = "";
+            StatusResponse status = route4Me.RemoveAddressBookGroup(addressGroupParams, out errorString);
+            return status;
+        }
+
+        [TestMethod]
+        public void RemoveAddressBookGroupTest()
+        {
+            string errorString = "";
+            StatusResponse response = DeleteAddreessBookGroup(group1.groupID, out errorString);
+
+            Assert.IsTrue(response.status, "RemoveAddressBookGroupTest failed... " + errorString);
+        }
+
+        [ClassCleanup()]
+        public static void AddressBookGroupsGroupCleanup()
+        {
+            string errorString = "";
+            foreach (string curGroupID in lsGroups)
+            {
+                StatusResponse resposne = DeleteAddreessBookGroup(curGroupID, out errorString);
+
+                Assert.IsTrue(resposne.status, "Removing of the address book group with group ID = "+curGroupID +" failed.");
+            }
+        }
+    }
+
+
+        [TestClass]
     public class AvoidanseZonesGroup
     {
         static string c_ApiKey = ApiKeys.actualApiKey;
@@ -9192,6 +9392,8 @@ namespace Route4MeSDKUnitTest
 
         static List<int> lsMembers;
 
+        int? createdMemberID;
+
         [ClassInitialize()]
         public static void UserGroupInitialize(TestContext context)
         {
@@ -9244,6 +9446,8 @@ namespace Route4MeSDKUnitTest
             // Run the query
             string errorString = "";
             var result = route4Me.CreateUser(@params, out errorString);
+
+            createdMemberID = Convert.ToInt32(result.member_id);
 
             //For successful testing of an user creating, you shuld provide valid email address, otherwise you'll get error "Email is used in system"
             string rightResponse = result != null ? "ok" : ((errorString == "Email is used in system" || errorString == "Registration: The e-mail address is missing or invalid.") ? "ok" : "");
@@ -9343,9 +9547,11 @@ namespace Route4MeSDKUnitTest
         {
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
+            Console.WriteLine("createdMemberID -> " + createdMemberID);
+
             MemberParametersV4 @params = new MemberParametersV4
             {
-                member_id = lsMembers[lsMembers.Count - 1],
+                member_id = createdMemberID!=null ? createdMemberID : lsMembers[lsMembers.Count - 1],
                 member_phone = "571-259-5939"
             };
 
@@ -9433,6 +9639,8 @@ namespace Route4MeSDKUnitTest
             bool result = route4Me.UserDelete(@params, out errorString);
 
             Assert.IsNotNull(result, "DeleteUserTest failed... " + errorString);
+
+            lsMembers.RemoveAt(lsMembers.Count - 1);
         }
     }
 

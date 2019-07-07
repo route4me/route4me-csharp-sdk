@@ -18,7 +18,7 @@ namespace Route4MeSDK.Examples
             AddressBookParameters addressBookParameters = new AddressBookParameters
             {
                 Query = "david",
-                Fields = "first_name,address_email",
+                Fields = "address_id,first_name,address_email,address_group,first_name,cached_lat,schedule",
                 Offset = 0,
                 Limit = 20
             };
@@ -26,7 +26,7 @@ namespace Route4MeSDK.Examples
             // Run the query
             uint total = 0;
             string errorString = "";
-            List<string[]> contacts = route4Me.SearchAddressBookLocation(addressBookParameters, out total, out errorString);
+            List<object[]> contacts = route4Me.SearchAddressBookLocation(addressBookParameters, out total, out errorString);
 
             Console.WriteLine("");
 
