@@ -3433,11 +3433,15 @@ namespace Route4MeSDKUnitTest
             {
                 AlgorithmType = AlgorithmType.CVRP_TW_MD,
                 RouteName = "Multiple Depot, Multiple Driver with 24 Stops, Time Window",
-                StoreRoute = false,
+                StoreRoute = true,
 
                 RouteDate = R4MeUtils.ConvertToUnixTimestamp(DateTime.UtcNow.Date.AddDays(1)),
                 RouteTime = 60 * 60 * 7,
+<<<<<<< HEAD
                 RouteMaxDuration = 86400 * 3,
+=======
+                RouteMaxDuration = 86400,
+>>>>>>> bcd8fc70775194ea6774330f575ea3f8fe1ebe3a
                 VehicleCapacity = 5,
                 VehicleMaxDistanceMI = 10000,
 

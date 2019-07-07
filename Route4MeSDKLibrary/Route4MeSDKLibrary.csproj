@@ -78,11 +78,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataTypes\AddressBookGroupFilter.cs" />
     <Compile Include="Consts.cs" />
     <Compile Include="DataTypes\Activity.cs" />
     <Compile Include="DataTypes\Address.cs" />
     <Compile Include="DataTypes\AddressBookContact.cs" />
     <Compile Include="DataTypes\AddressBookContactsResponse.cs" />
+    <Compile Include="DataTypes\AddressBookGroup.cs" />
+    <Compile Include="DataTypes\AddressBookGroupRule.cs" />
     <Compile Include="DataTypes\AddressCustomNote.cs" />
     <Compile Include="DataTypes\AddressGeocoded.cs" />
     <Compile Include="DataTypes\AddressNote.cs" />
@@ -136,6 +139,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropertyValidation.cs" />
     <Compile Include="QueryTypes\ActivityParameters.cs" />
+    <Compile Include="QueryTypes\AddressBookGroupParameters.cs" />
     <Compile Include="QueryTypes\AddressBookParameters.cs" />
     <Compile Include="QueryTypes\AddressParameters.cs" />
     <Compile Include="QueryTypes\AvoidanceZoneParameters.cs" />
@@ -159,6 +163,7 @@
     <Compile Include="QueryTypes\VehicleParameters.cs" />
     <Compile Include="QueryTypes\VehicleV4Parameters.cs" />
     <Compile Include="Route4MeManager.cs" />
+    <Compile Include="DataTypes\StatusResponse.cs" />
     <Compile Include="Types.cs" />
     <Compile Include="Utils.cs" />
   </ItemGroup>
