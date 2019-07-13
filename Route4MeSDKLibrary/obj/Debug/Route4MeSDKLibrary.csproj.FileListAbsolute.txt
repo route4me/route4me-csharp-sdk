@@ -37,3 +37,7 @@ C:\Users\User\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKLibrary\bin\Debug\
 C:\Users\User\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKLibrary\bin\Debug\System.Data.SqlServerCe.dll
 C:\Users\User\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKLibrary\bin\Debug\SocketIoClientDotNet.pdb
 C:\Users\User\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKLibrary\bin\Debug\System.Collections.Immutable.xml
+C:\Users\Odin62\Documents\GitHub\Route4Me\route4me-csharp-sdk\Route4MeSDKLibrary\bin\Debug\System.Web.Http.dll
+C:\Users\Odin62\Documents\GitHub\Route4Me\route4me-csharp-sdk\Route4MeSDKLibrary\bin\Debug\System.Net.Http.Formatting.dll
+C:\Users\Odin62\Documents\GitHub\Route4Me\route4me-csharp-sdk\Route4MeSDKLibrary\bin\Debug\System.Web.Http.xml
+C:\Users\Odin62\Documents\GitHub\Route4Me\route4me-csharp-sdk\Route4MeSDKLibrary\bin\Debug\System.Net.Http.Formatting.xml
