@@ -27,13 +27,13 @@ namespace Route4MeSDK.Examples
       };
 
       string errorString;
-      string response = route4Me.SetGPS(gpsParameters, out errorString);
+      var response = route4Me.SetGPS(gpsParameters, out errorString);
 
       Console.WriteLine("");
 
       if (string.IsNullOrEmpty(errorString))
       {
-        Console.WriteLine("SetGps response: {0}", response);
+        Console.WriteLine("SetGps response: {0}", response.ToString());
       }
       else
       {
