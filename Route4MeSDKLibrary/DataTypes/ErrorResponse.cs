@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Route4MeSDKLibrary.DataTypes
 {
@@ -13,6 +10,9 @@ namespace Route4MeSDKLibrary.DataTypes
     [DataContract]
     public class ErrorResponse
     {
+        /// <summary>
+        /// List of the error strings
+        /// </summary>
         [DataMember(Name = "errors")]
         public List<String> Errors { get; set; }
     }

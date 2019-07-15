@@ -1,218 +1,171 @@
-﻿using System.Collections.Generic;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 
 namespace Route4MeSDK.DataTypes
 {
+    /// <summary>
+    /// Response for the user's authentication, registration, session validation process
+    /// </summary>
     [DataContract]
     public sealed class MemberResponse
     {
+        /// <summary>
+        /// Process status
+        /// </summary>
         [DataMember(Name = "status")]
-        public System.Nullable<bool> Status
-        {
-            get { return m_Status; }
-            set { m_Status = value; }
-        }
-        private System.Nullable<bool> m_Status;
+        public System.Nullable<bool> Status { get; set; }
 
+        /// <summary>
+        /// Geocoding service
+        /// </summary>
         [DataMember(Name = "geocoding_service")]
-        public string GeocodingService
-        {
-            get { return m_GeocodingService; }
-            set { m_GeocodingService = value; }
-        }
-        private string m_GeocodingService;
+        public string GeocodingService { get; set; }
 
+        /// <summary>
+        /// Session ID
+        /// </summary>
         [DataMember(Name = "session_id")]
-        public System.Nullable<int> SessionId
-        {
-            get { return m_SessionId; }
-            set { m_SessionId = value; }
-        }
-        private System.Nullable<int> m_SessionId;
+        public System.Nullable<int> SessionId { get; set; }
 
+        /// <summary>
+        /// Session GUID
+        /// </summary>
         [DataMember(Name = "session_guid")]
-        public string SessionGuid
-        {
-            get { return m_SessionGuid; }
-            set { m_SessionGuid = value; }
-        }
-        private string m_SessionGuid;
+        public string SessionGuid { get; set; }
 
+        /// <summary>
+        /// Member ID
+        /// </summary>
         [DataMember(Name = "member_id")]
-        public System.Nullable<int> MemberId
-        {
-            get { return m_MemberId; }
-            set { m_MemberId = value; }
-        }
-        private System.Nullable<int> m_MemberId;
+        public System.Nullable<int> MemberId { get; set; }
 
+        /// <summary>
+        /// User's API key
+        /// </summary>
         [DataMember(Name = "api_key")]
-        public string ApiKey
-        {
-            get { return m_ApiKey; }
-            set { m_ApiKey = value; }
-        }
-        private string m_ApiKey;
+        public string ApiKey { get; set; }
 
+        /// <summary>
+        /// Tracking TTL
+        /// </summary>
         [DataMember(Name = "tracking_ttl")]
-        public System.Nullable<int> TrackingTtl
-        {
-            get { return m_TrackingTtl; }
-            set { m_TrackingTtl = value; }
-        }
-        private System.Nullable<int> m_TrackingTtl;
+        public System.Nullable<int> TrackingTtl { get; set; }
 
+        /// <summary>
+        /// Geofence polygon shape. Available values: circle, poly, rect.
+        /// </summary>
         [DataMember(Name = "geofence_polygon_shape")]
-        public string GeofencePolygonShape
-        {
-            get { return m_GeofencePolygonShape; }
-            set { m_GeofencePolygonShape = value; }
-        }
-        private string m_GeofencePolygonShape;
+        public string GeofencePolygonShape { get; set; }
 
+        /// <summary>
+        /// Geofence polygon size
+        /// </summary>
         [DataMember(Name = "geofence_polygon_size")]
-        public System.Nullable<int> GeofencePolygonSize
-        {
-            get { return m_GeofencePolygonSize; }
-            set { m_GeofencePolygonSize = value; }
-        }
-        private System.Nullable<int> m_GeofencePolygonSize;
+        public System.Nullable<int> GeofencePolygonSize { get; set; }
 
+        /// <summary>
+        /// Geofence onsite trigger time (seconds)
+        /// </summary>
         [DataMember(Name = "geofence_time_onsite_trigger_secs")]
-        public System.Nullable<int> GeofenceTimeOnsiteTriggerSecs
-        {
-            get { return m_GeofenceTimeOnsiteTriggerSecs; }
-            set { m_GeofenceTimeOnsiteTriggerSecs = value; }
-        }
-        private System.Nullable<int> m_GeofenceTimeOnsiteTriggerSecs;
+        public System.Nullable<int> GeofenceTimeOnsiteTriggerSecs { get; set; }
 
+        /// <summary>
+        /// Geofence's minimum trigger speed
+        /// </summary>
         [DataMember(Name = "geofence_minimum_trigger_speed")]
-        public System.Nullable<int> GeofenceMinimumTriggerSpeed
-        {
-            get { return m_GeofenceMinimumTriggerSpeed; }
-            set { m_GeofenceMinimumTriggerSpeed = value; }
-        }
-        private System.Nullable<int> m_GeofenceMinimumTriggerSpeed;
+        public System.Nullable<int> GeofenceMinimumTriggerSpeed { get; set; }
 
+        /// <summary>
+        /// True if the subscription is past due
+        /// </summary>
         [DataMember(Name = "is_subscription_past_due")]
-        public System.Nullable<bool> IsSubscriptionPastDue
-        {
-            get { return m_IsSubscriptionPastDue; }
-            set { m_IsSubscriptionPastDue = value; }
-        }
-        private System.Nullable<bool> m_IsSubscriptionPastDue;
+        public System.Nullable<bool> IsSubscriptionPastDue { get; set; }
 
+        /// <summary>
+        /// If true, triggering of the visited and departed activities is enabled.
+        /// </summary>
         [DataMember(Name = "visited_departed_enabled")]
-        public string VisitedDepartedEnabled
-        {
-            get { return m_VisitedDepartedEnabled; }
-            set { m_VisitedDepartedEnabled = value; }
-        }
-        private string m_VisitedDepartedEnabled;
+        public string VisitedDepartedEnabled { get; set; }
 
+        /// <summary>
+        /// If true, long press is enabled
+        /// </summary>
         [DataMember(Name = "long_press_enabled")]
-        public string LongPressEnabled
-        {
-            get { return m_LongPressEnabled; }
-            set { m_LongPressEnabled = value; }
-        }
-        private string m_LongPressEnabled;
+        public string LongPressEnabled { get; set; }
 
+        /// <summary>
+        /// The account type ID
+        /// </summary>
         [DataMember(Name = "account_type_id")]
-        public System.Nullable<int> AccountTypeId
-        {
-            get { return m_AccountTypeId; }
-            set { m_AccountTypeId = value; }
-        }
-        private System.Nullable<int> m_AccountTypeId;
+        public System.Nullable<int> AccountTypeId { get; set; }
 
+        /// <summary>
+        /// Account type alias
+        /// </summary>
         [DataMember(Name = "account_type_alias")]
-        public string AccountTypeAlias
-        {
-            get { return m_AccountTypeAlias; }
-            set { m_AccountTypeAlias = value; }
-        }
-        private string m_AccountTypeAlias;
+        public string AccountTypeAlias { get; set; }
 
+        /// <summary>
+        /// Member type. Available values:
+        /// <para>PRIMARY_ACCOUNT, SUB_ACCOUNT_ADMIN, SUB_ACCOUNT_REGIONAL_MANAGER,</para>
+        /// <para>SUB_ACCOUNT_DISPATCHER, SUB_ACCOUNT_PLANNER, SUB_ACCOUNT_DRIVER,</para>
+        /// <para>SUB_ACCOUNT_ANALYSTSUB_ACCOUNT_VENDORSUB_ACCOUNT_CUSTOMER_SERVICE</para>
+        /// </summary>
         [DataMember(Name = "member_type")]
-        public string MemberType
-        {
-            get { return m_MemberType; }
-            set { m_MemberType = value; }
-        }
-        private string m_MemberType;
+        public string MemberType { get; set; }
 
+        /// <summary>
+        /// Maximum allowed number of the stops per route.
+        /// </summary>
         [DataMember(Name = "max_stops_per_route")]
-        public System.Nullable<int> MaxStopsPerRoute
-        {
-            get { return m_MaxStopsPerRoute; }
-            set { m_MaxStopsPerRoute = value; }
-        }
-        private System.Nullable<int> m_MaxStopsPerRoute;
+        public System.Nullable<int> MaxStopsPerRoute { get; set; }
 
+        /// <summary>
+        /// Maximum allowed number of the generated routes
+        /// </summary>
         [DataMember(Name = "max_routes")]
-        public System.Nullable<int> MaxRoutes
-        {
-            get { return m_MaxRoutes; }
-            set { m_MaxRoutes = value; }
-        }
-        private System.Nullable<int> m_MaxRoutes;
+        public System.Nullable<int> MaxRoutes { get; set; }
 
+        /// <summary>
+        /// Number of the planned routes by the user
+        /// </summary>
         [DataMember(Name = "routes_planned")]
-        public System.Nullable<int> RoutesPlanned
-        {
-            get { return m_RoutesPlanned; }
-            set { m_RoutesPlanned = value; }
-        }
-        private System.Nullable<int> m_RoutesPlanned;
+        public System.Nullable<int> RoutesPlanned { get; set; }
 
+        /// <summary>
+        /// Preferred units (mi, km)
+        /// </summary>
         [DataMember(Name = "preferred_units")]
-        public string PreferredUnits
-        {
-            get { return m_PreferredUnits; }
-            set { m_PreferredUnits = value; }
-        }
-        private string m_PreferredUnits;
+        public string PreferredUnits { get; set; }
 
+        /// <summary>
+        /// Preferred language (en, fr)
+        /// </summary>
         [DataMember(Name = "preferred_language")]
-        public string PreferredLanguage
-        {
-            get { return m_PreferredLanguage; }
-            set { m_PreferredLanguage = value; }
-        }
-        private string m_PreferredLanguage;
+        public string PreferredLanguage { get; set; }
 
+        /// <summary>
+        /// If true, routed addresses will be hidden.
+        /// </summary>
         [DataMember(Name = "HIDE_ROUTED_ADDRESSES")]
-        public string HideRoutedAddresses
-        {
-            get { return m_HideRoutedAddresses; }
-            set { m_HideRoutedAddresses = value; }
-        }
-        private string m_HideRoutedAddresses;
+        public string HideRoutedAddresses { get; set; }
 
+        /// <summary>
+        /// If true, visited addresses will be hidden.
+        /// </summary>
         [DataMember(Name = "HIDE_VISITED_ADDRESSES")]
-        public string HideVisitedAddresses
-        {
-            get { return m_HideVisitedAddresses; }
-            set { m_HideVisitedAddresses = value; }
-        }
-        private string m_HideVisitedAddresses;
+        public string HideVisitedAddresses { get; set; }
 
+        /// <summary>
+        /// If true, nonfuture routes will be hidden.
+        /// </summary>
         [DataMember(Name = "HIDE_NONFUTURE_ROUTES")]
-        public string HideNonfutureAddresses
-        {
-            get { return m_HideNonfutureAddresses; }
-            set { m_HideNonfutureAddresses = value; }
-        }
-        private string m_HideNonfutureAddresses;
+        public string HideNonfutureAddresses { get; set; }
 
+        /// <summary>
+        /// Time in seconds. A user will be logged out after been inactive during specified by this parameter seconds.
+        /// </summary>
         [DataMember(Name = "auto_logout_ts")]
-        public System.Nullable<int> AutoLogoutTs
-        {
-            get { return m_AutoLogoutTs; }
-            set { m_AutoLogoutTs = value; }
-        }
-        private System.Nullable<int> m_AutoLogoutTs;
+        public System.Nullable<int> AutoLogoutTs { get; set; }
 
     }
 }
