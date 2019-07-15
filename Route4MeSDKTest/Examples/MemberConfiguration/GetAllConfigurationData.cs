@@ -18,7 +18,7 @@ namespace Route4MeSDK.Examples
 
             // Run the query
             string errorString = "";
-            MemberConfigurationDataRersponse result = route4Me.GetConfigurationData(@params, out errorString);
+            MemberConfigurationDataResponse result = route4Me.GetConfigurationData(@params, out errorString);
 
             Console.WriteLine("");
 
