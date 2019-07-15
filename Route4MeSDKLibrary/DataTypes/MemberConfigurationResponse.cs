@@ -2,24 +2,23 @@
 
 namespace Route4MeSDK.DataTypes
 {
+    /// <summary>
+    /// Response from the member configuration request
+    /// </summary>
     [DataContract]
     public sealed class MemberConfigurationResponse
     {
+        /// <summary>
+        /// Configuration result
+        /// </summary>
         [DataMember(Name = "result")]
-        public string result
-        {
-            get { return m_result; }
-            set { m_result = value; }
-        }
-        private string m_result;
+        public string result { get; set; }
 
+        /// <summary>
+        /// How many configuration key -> data pairs affected
+        /// </summary>
         [DataMember(Name = "affected")]
-        public int affected
-        {
-            get { return m_affected; }
-            set { m_affected = value; }
-        }
-        private int m_affected;
+        public int affected { get; set; }
 
     }
 }

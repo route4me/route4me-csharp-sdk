@@ -12,6 +12,9 @@ using System.Web.Script;
 
 namespace Route4MeSDK.DataTypes
 {
+    /// <summary>
+    /// Route4Me data types
+    /// </summary>
     public enum R4M_DataType
     {
         Activity,
@@ -27,6 +30,9 @@ namespace Route4MeSDK.DataTypes
         Vehicle
     }
 
+    /// <summary>
+    /// Database types
+    /// </summary>
     public enum DB_Type
     {
         MSSQL,
@@ -37,6 +43,9 @@ namespace Route4MeSDK.DataTypes
         MS_Access
     }
 
+    /// <summary>
+    /// The databases wrapper class
+    /// </summary>
     public class cDatabase : IDisposable 
     {
         private IDbConnection _con;
@@ -52,7 +61,10 @@ namespace Route4MeSDK.DataTypes
 
         private string sStartupFolder;
 
-
+        /// <summary>
+        /// The class constructor.
+        /// </summary>
+        /// <param name="db_type">See <see cref="DB_Type"/></param>
         public cDatabase(DB_Type db_type)
         {
             switch (db_type)
@@ -90,6 +102,9 @@ namespace Route4MeSDK.DataTypes
             sStartupFolder = AppDomain.CurrentDomain.BaseDirectory;
         }
 
+        /// <summary>
+        /// True if a cDatabase type object is disposed.
+        /// </summary>
         public bool IsDisposed
         {
             get
@@ -101,6 +116,9 @@ namespace Route4MeSDK.DataTypes
             }
         }
 
+        /// <summary>
+        /// Disposes a cDatabase type object.
+        /// </summary>
         public void Dispose()
         {
             if (!IsDisposed)
@@ -114,6 +132,9 @@ namespace Route4MeSDK.DataTypes
             }
         }
 
+        /// <summary>
+        /// Cleans up the cDatabase object variables.
+        /// </summary>
         protected virtual void CleanUp()
         {
             if (_con != null)
@@ -134,6 +155,9 @@ namespace Route4MeSDK.DataTypes
             }
         } 
 
+        /// <summary>
+        /// Opens a database connection.
+        /// </summary>
         public void OpenConnection()
         {
             try
@@ -143,16 +167,22 @@ namespace Route4MeSDK.DataTypes
             catch (Exception ex) { Console.WriteLine("Connection not established!.. "+ex.Message); }
         }
 
+        /// <summary>
+        /// Closes a database connection.
+        /// </summary>
         public void CloseConnection()
         {
             if (_con.State != ConnectionState.Closed) _con.Close();
         }
 
-        /* Parsing of the multi-command SQL texts, ommiting commentaries and extracting of the puare SQL commands;
-         * Note: 
-         * - after semicolon ';' shouldn't be written anything (blank spaces allowed).
-         * - befor '/*' shouldn't be written anything (blank spaces allowed).
-         * */
+        /// <summary>
+        /// Parsing of the multi-command SQL texts, omiting commentaries and extracting of pure SQL commands.
+        /// <para>Note:</para>
+        /// <para>- after semicolon ';' shouldn't be written anything (blank spaces allowed)</para>
+        /// <para>- befor '/*' shouldn't be written anything (blank spaces allowed)</para>
+        /// </summary>
+        /// <param name="sQuery">The database request SQL string.</param>
+        /// <returns></returns>
         public int ExecuteMulticoomandSql(string sQuery)
         {
             int iRet = 0;
@@ -203,15 +233,26 @@ namespace Route4MeSDK.DataTypes
 
                     }
                 }
+
                 _transaction.Commit();
+
                 iRet = 1;
+
                 return iRet;
             }
-            catch (Exception ex) { Console.WriteLine(":( Transaction failed... " + ex.Message); _transaction.Rollback(); iRet = 0; return iRet; }
+            catch (Exception ex)
+            {
+                Console.WriteLine(":( Transaction failed... " + ex.Message); _transaction.Rollback();
+                iRet = 0; return iRet;
+            }
             
         }
 
-        // Table for correspondance between Route4Me CSV exported file fields and Route4Me API fields
+        /// <summary>
+        /// Table for correspondance between Route4Me CSV exported file fields and Route4Me API fields.
+        /// </summary>
+        /// <param name="sTableName">The dictionary table name.</param>
+        /// <returns>The dictionary datatable.</returns>
         public DataTable GetCsv2ApiDictionary(string sTableName)
         {
             DataTable tblDictionary = new DataTable();
@@ -226,23 +267,28 @@ namespace Route4MeSDK.DataTypes
             return tblDictionary;
         }
 
-        /* Method for importing an addressbook CSV file (with structure equal to exported by Route4Me web UI CSV file) to an addressbook table on the SQL type server.
-         * sFileName --- CSV file name.
-         * sTableName --- Server addressbook table name.
-         * sIdName --- The name of id column of the server addressbook table (it's differs from address_id, you need it for editing prior updloading to the Route4Me server)
-         * isFirstRowHeader --- If true, first column of the CSV file is header.
-         * */
+        /// <summary>
+        /// Method for importing an addressbook CSV file 
+        /// (with structure equal to exported by Route4Me web UI CSV file)
+        /// to an addressbook table on the SQL type server.
+        /// </summary>
+        /// <param name="sFileName">CSV file name</param>
+        /// <param name="sTableName">Server addressbook table name</param>
+        /// <param name="sIdName">The name of the ID column of the server addressbook table (it differs from address_id and you need it for editing prior uploading to the Route4Me server).</param>
+        /// <param name="iFieldsNumber">The fields number of the CSV file.</param>
+        /// <param name="isFirstRowHeader">If true, the first row of the CSV file is a header.</param>
         public void Csv2Table(string sFileName, string sTableName, string sIdName, int iFieldsNumber, bool isFirstRowHeader)
         {
             if (!File.Exists(sFileName))
             {
-                Console.WriteLine("The file " + sFileName + " doesn't exist..."); return;
+                Console.WriteLine("The file " + sFileName + " doesn't exist...");
+                return;
             }
 
             string header = isFirstRowHeader ? "Yes" : "No";
 
-            string pathOnly = System.IO.Path.GetDirectoryName(sFileName);
-            string fileName = System.IO.Path.GetFileName(sFileName);
+            string pathOnly = Path.GetDirectoryName(sFileName);
+            string fileName = Path.GetFileName(sFileName);
 
             string csvCom = @"SELECT * FROM [" + fileName + "]";
 
@@ -297,11 +343,9 @@ namespace Route4MeSDK.DataTypes
                                 {
                                     
                                     var oSchedule = ExceptFields2QueryValue(sFieldApiName, row[iCol]);
-                                    if (oSchedule == null)
-                                    {
-                                        sList += sFieldApiName + "=null,";
-                                    }
-                                    else sList += sFieldApiName + "='" + oSchedule + "',";
+
+                                    sList += (oSchedule == null) ? sFieldApiName + "=null," 
+                                        : sFieldApiName + "='" + oSchedule + "',";
                                 }
                                 else
                                 {
@@ -343,6 +387,7 @@ namespace Route4MeSDK.DataTypes
                             else continue;
                         }
                     }
+
                     sList = sList.TrimEnd(',');
 
                     if (tblTempTable.Columns.Count > 33)
@@ -366,6 +411,7 @@ namespace Route4MeSDK.DataTypes
                                     }
                                 }
                             }
+
                             string sCustom = sbCustom.ToString();
                             sCustom = sCustom.TrimEnd(',');
                             sCustom += "}";
@@ -405,16 +451,13 @@ namespace Route4MeSDK.DataTypes
                                 string sApiFieldType = arRows[0]["api_field_type"].ToString();
                                 string sCsvFieldType = arRows[0]["csv_field_type"].ToString();
 
-                                //sFields += prop.Name + ",";
                                 if (sFieldApiName == "day_scheduled_for_YYMMDD")
                                 {
                                     sList += sFieldApiName + ",";
+
                                     var oSchedule = ExceptFields2QueryValue(sFieldApiName, row[iCol]);
-                                    if (oSchedule == null)
-                                    {
-                                        sValues += "null";
-                                    }
-                                    else sValues += "'" + oSchedule + "',";
+
+                                    sValues += (oSchedule == null) ? "null" : "'" + oSchedule + "',";
                                 }
                                 else
                                 {
@@ -445,11 +488,9 @@ namespace Route4MeSDK.DataTypes
                                                 }
                                                 else
                                                 {
-                                                    if (_conStngInstitute.ProviderName == "System.Data.OleDb")
-                                                    {
-                                                        sValues += "#" + dt1900.ToString("yyyy-MM-dd HH:mm:ss") + "#,";
-                                                    }
-                                                    else sValues += "'" + dt1900.ToString("yyyy-MM-dd HH:mm:ss") + "',";
+                                                    sValues += (_conStngInstitute.ProviderName == "System.Data.OleDb") 
+                                                        ? "#" + dt1900.ToString("yyyy-MM-dd HH:mm:ss") + "#," 
+                                                        : "'" + dt1900.ToString("yyyy-MM-dd HH:mm:ss") + "',";
                                                 }
                                             }
                                             break;
@@ -502,17 +543,20 @@ namespace Route4MeSDK.DataTypes
                     }
                     else
                     {
-                        Console.WriteLine(":( Can not created new row in the table "+sTableName);
+                        Console.WriteLine(":( Can not create new row in the table "+sTableName);
                     }
                 }
             }
         }
 
-        /* Method for exporting addressbook data from SQL type server to the CSV file (with structure equal to the exported by Route4Me web UI CSV file)
-         * sFileName --- CSV file name.
-         * sTableName --- Server addressbook table name.
-         * WithId --- If true, CSV file will have first ID of SQL addressbook table (you need it for editing in CSV file and updating server table using Csv2Table method.
-         * */
+        /// <summary>
+        /// Method for exporting addressbook data from SQL type server to the CSV file
+        /// (with structure equal to the CSV file exported by Route4Me web UI).
+        /// </summary>
+        /// <param name="sFileName">CSV file name</param>
+        /// <param name="sTableName">Server addressbook table name</param>
+        /// <param name="WithId">If true, CSV file will have first ID of SQL addressbook table 
+        /// (you need it for editing in CSV file and updating server table using Csv2Table method).</param>
         public void Table2Csv(string sFileName, string sTableName, bool WithId)
         {
             if (!CheckDataFolder(sFileName, true)) return;
@@ -531,7 +575,7 @@ namespace Route4MeSDK.DataTypes
                 sFileHeader += "\"" + dictRow["r4m_csv_field_name"].ToString() + "\",";
             }
 
-            #region Convert JSON string of the custom data to the csv fields (as they are represented in the exported from Route4Me csv file
+            #region Convert JSON string of the custom data to the CSV fields (as they are represented in the exported CSV file from Route4Me).
             foreach (DataRow row in tblTemp.Rows)
             {
                 if (IsValidValue(tblTemp.Columns["address_custom_Data"], row["address_custom_Data"]))
@@ -580,8 +624,6 @@ namespace Route4MeSDK.DataTypes
 
                 foreach (DataRow dictRow in tblDictionary.Rows)
                 {
-                    //string sCsvFieldName = dictRow["r4m_csv_field_name"].ToString();
-
                     string sApiFieldName = dictRow["api_field_name"].ToString();
 
                     if (sApiFieldName.IndexOf("_cf__") == 0)
@@ -623,7 +665,7 @@ namespace Route4MeSDK.DataTypes
                                     sVal = sVal.Replace("\"", "\"\"");
                                     sRow += "\"" + sVal + "\",";
                                     break;
-                                case "System.DdateTime":
+                                case "System.DateTime":
                                     sRow += "\"" + Convert.ToDateTime(row[apiCol.ColumnName]).ToString("yyyy-MM-dd HH:mm:ss") + "\",";
                                     break;
                                 default:
@@ -643,11 +685,15 @@ namespace Route4MeSDK.DataTypes
             
             File.WriteAllLines(sFileName, lsCsvContent.ToArray());
 
-            Console.WriteLine("The file "+sFileName+" was created. You can fill it with data for upoloading on the server.");
+            Console.WriteLine("The file "+sFileName+" was created. You can fill it with data for uploading to the server.");
         }
 
-        /* Create data folder if it doesn't exist.
-         * */
+        /// <summary>
+        /// Creates the data folder if it does not exist.
+        /// </summary>
+        /// <param name="file_name">A file name the folder contains.</param>
+        /// <param name="blCreateIfNotExists">If true and the folder does not exist, it will be created.</param>
+        /// <returns>True if the folder exists (or created successfully).</returns>
         private bool CheckDataFolder(string file_name, bool blCreateIfNotExists)
         {
             try
@@ -656,14 +702,12 @@ namespace Route4MeSDK.DataTypes
                 if (File.Exists(iDir.FullName))
                 {
                     return true;
-                    
                 }
                 else
                 {
                     if (blCreateIfNotExists) Directory.CreateDirectory(iDir.FullName);
                     return true;
                 }
-                
             }
             catch (Exception ex) 
             {
@@ -672,8 +716,12 @@ namespace Route4MeSDK.DataTypes
             }
         }
 
-        /* Method FieldValue2QueryValue converts value of the type ttype to value for sqlquery operations (update, insert)
-         **/
+        /// <summary>
+        /// Converts the value of the type ttype to a value for SQL query operations (update, insert).
+        /// </summary>
+        /// <param name="ttype">The value type.</param>
+        /// <param name="oValue">The field value.</param>
+        /// <returns></returns>
         private string FieldValue2QueryValue(Type ttype, object oValue)
         {
             string sQueryValue = "";
@@ -694,11 +742,9 @@ namespace Route4MeSDK.DataTypes
                     if (DateTime.TryParse(oValue.ToString(), out dt1900))
                     {
                         dt1900 = Convert.ToDateTime(oValue);
-                        if (_conStngInstitute.ProviderName == "System.Data.OleDb")
-                        {
-                            sQueryValue = "#" + dt1900.ToString("yyyy-MM-dd HH:mm:ss") + "#";
-                        }
-                        else sQueryValue = "'" + dt1900.ToString("yyyy-MM-dd HH:mm:ss") + "'";
+                        sQueryValue = (_conStngInstitute.ProviderName == "System.Data.OleDb") 
+                            ? "#" + dt1900.ToString("yyyy-MM-dd HH:mm:ss") + "#" 
+                            : "'" + dt1900.ToString("yyyy-MM-dd HH:mm:ss") + "'";
                     }
                     break;
             }
@@ -706,6 +752,12 @@ namespace Route4MeSDK.DataTypes
             return sQueryValue;
         }
 
+        /// <summary>
+        /// Converts complex fields to the SQL query value.
+        /// </summary>
+        /// <param name="PropertyName">The object property name.</param>
+        /// <param name="oValue">The object value.</param>
+        /// <returns>The SQL query value.</returns>
         private string ExceptFields2QueryValue(string PropertyName, object oValue)
         {
             string sQueryValue = "";
@@ -774,28 +826,30 @@ namespace Route4MeSDK.DataTypes
             return sQueryValue;
         }
 
-        /* Upload JSON response file, generated by the process of getting addressbook contacts by Route4Me API, to the SQL type server.
+        /* Upload the JSON response file generated by the process of getting address book contacts through Route4Me API to the SQL type server.
          * */
+        /// <summary>
+        /// Converts JSON file to the database table according to the Route4Me object type.
+        /// </summary>
+        /// <param name="sFileName">The JSON filename.</param>
+        /// <param name="sTableName">The database table name.</param>
+        /// <param name="sIdName">The name of the ID column.</param>
+        /// <param name="r4m_dtype">A Route4Me object type.</param>
         public void Json2Table(string sFileName, string sTableName, string sIdName, R4M_DataType r4m_dtype)
         {
             if (!File.Exists(sFileName))
             {
-                Console.WriteLine("The file " + sFileName + " doesn't exist..."); return;
+                Console.WriteLine("The file " + sFileName + " doesn't exist...");
+                return;
             }
-
-            //string pathOnly = System.IO.Path.GetDirectoryName(sFileName);
-            //string fileName = System.IO.Path.GetFileName(sFileName);
 
             string jsonContent = File.ReadAllText(sFileName);
 
-            //DataTable tblTempTable = new DataTable();
-            
             var jsSerializer = new System.Web.Script.Serialization.JavaScriptSerializer();
 
             switch (r4m_dtype)
             {
                 case R4M_DataType.Addressbook:
-                    //var jsSerializer = new System.Runtime.Serialization.Json.DataContractJsonSerializer(typeof(AddressBookContactsResponse));
                     AddressBookContactsResponse Data = jsSerializer.Deserialize<AddressBookContactsResponse>(jsonContent);
                     if (Data.total == 0) break;
 
@@ -812,21 +866,17 @@ namespace Route4MeSDK.DataTypes
                                 if (prop.Name=="address_id") continue;
                                 if (prop.Name == "ConvertBooleansToInteger") continue;
                                 if (prop.MemberType != System.Reflection.MemberTypes.Property) continue;
+
                                 var vValue = contact.GetType().GetProperty(prop.Name).GetValue(contact, null);
                                 if (vValue == null) continue;
 
-                                Console.WriteLine("Properyt type=" + prop.PropertyType.Name);
+                                Console.WriteLine("Property type=" + prop.PropertyType.Name);
 
                                 sFields += prop.Name + ",";
-                                if (prop.Name == "address_custom_data" || prop.Name == "schedule" || prop.Name == "schedule_blacklist")
-                                {
-                                    sValues += "'" + ExceptFields2QueryValue(prop.Name, vValue) + "',";
-                                }
-                                else
-                                {
-                                    sValues += FieldValue2QueryValue(vValue.GetType(), vValue) + ",";
-                                }
 
+                                sValues += (prop.Name == "address_custom_data" || prop.Name == "schedule" || prop.Name == "schedule_blacklist") 
+                                    ? "'" + ExceptFields2QueryValue(prop.Name, vValue) + "'," 
+                                    : FieldValue2QueryValue(vValue.GetType(), vValue) + ",";
                             }
                             sFields = sFields.TrimEnd(','); 
                             sValues=sValues.TrimEnd(',');
@@ -846,16 +896,17 @@ namespace Route4MeSDK.DataTypes
                                 if (prop.Name == "address_id") continue;
                                 if (prop.Name == "ConvertBooleansToInteger") continue;
                                 if (prop.MemberType != System.Reflection.MemberTypes.Property) continue;
+
                                 var vValue = contact.GetType().GetProperty(prop.Name).GetValue(contact,null);
                                 if (vValue == null) continue;
                                 
-                                Console.WriteLine("Properyt type=" + prop.PropertyType.Name);
-                                if (prop.Name == "address_custom_data" || prop.Name == "schedule" || prop.Name == "schedule_blacklist")
-                                {
-                                    sSet += prop.Name + "='" + ExceptFields2QueryValue(prop.Name, vValue) + "',";
-                                }
-                                else sSet += prop.Name + "=" + FieldValue2QueryValue(vValue.GetType(), vValue) + ",";
+                                Console.WriteLine("Property type=" + prop.PropertyType.Name);
+
+                                sSet += (prop.Name == "address_custom_data" || prop.Name == "schedule" || prop.Name == "schedule_blacklist") 
+                                    ? prop.Name + "='" + ExceptFields2QueryValue(prop.Name, vValue) + "',"
+                                    : prop.Name + "=" + FieldValue2QueryValue(vValue.GetType(), vValue) + ",";
                             }
+
                             sSet = sSet.TrimEnd(',');
                             sQuery += sSet + " WHERE address_id=" + address_id;
                         }
@@ -878,25 +929,21 @@ namespace Route4MeSDK.DataTypes
 
                             foreach (System.Reflection.PropertyInfo prop in typeof(Order).GetProperties())
                             {
-                                //if (prop.Name == "order_id") continue;
                                 if (prop.Name == "ConvertBooleansToInteger") continue;
                                 if (prop.MemberType != System.Reflection.MemberTypes.Property) continue;
+
                                 var vValue = order.GetType().GetProperty(prop.Name).GetValue(order, null);
                                 if (vValue == null) continue;
 
-                                Console.WriteLine("Properyt type=" + prop.PropertyType.Name);
+                                Console.WriteLine("Property type=" + prop.PropertyType.Name);
 
                                 sFields += prop.Name + ",";
-                                if (prop.Name == "EXT_FIELD_custom_data")
-                                {
-                                    sValues += "'" + ExceptFields2QueryValue(prop.Name, vValue) + "',";
-                                }
-                                else
-                                {
-                                    sValues += FieldValue2QueryValue(vValue.GetType(), vValue) + ",";
-                                }
 
+                                sValues += (prop.Name == "EXT_FIELD_custom_data") 
+                                    ? "'" + ExceptFields2QueryValue(prop.Name, vValue) + "'," 
+                                    : FieldValue2QueryValue(vValue.GetType(), vValue) + ",";
                             }
+
                             sFields = sFields.TrimEnd(',');
                             sValues = sValues.TrimEnd(',');
 
@@ -917,19 +964,21 @@ namespace Route4MeSDK.DataTypes
                                 if (prop.Name == "order_id") continue;
                                 if (prop.Name == "ConvertBooleansToInteger") continue;
                                 if (prop.MemberType != System.Reflection.MemberTypes.Property) continue;
+
                                 var vValue = order.GetType().GetProperty(prop.Name).GetValue(order, null);
                                 if (vValue == null) continue;
 
-                                Console.WriteLine("Properyt type=" + prop.PropertyType.Name);
-                                if (prop.Name == "EXT_FIELD_custom_data")
-                                {
-                                    sSet += prop.Name + "='" + ExceptFields2QueryValue(prop.Name, vValue) + "',";
-                                }
-                                else sSet += prop.Name + "=" + FieldValue2QueryValue(vValue.GetType(), vValue) + ",";
+                                Console.WriteLine("Property type=" + prop.PropertyType.Name);
+
+                                sSet += (prop.Name == "EXT_FIELD_custom_data") 
+                                    ? prop.Name + "='" + ExceptFields2QueryValue(prop.Name, vValue) + "'," 
+                                    : prop.Name + "=" + FieldValue2QueryValue(vValue.GetType(), vValue) + ",";
                             }
+
                             sSet = sSet.TrimEnd(',');
                             sQuery += sSet + " WHERE order_id=" + order_id;
                         }
+
                         ExecuteNon(sQuery);
                     }
                     
@@ -940,59 +989,91 @@ namespace Route4MeSDK.DataTypes
             }
         }
 
+        /// <summary>
+        /// Checks if the address is new in the datatable.
+        /// </summary>
+        /// <param name="sTableName">The table name.</param>
+        /// <param name="sIdName">The ID column name.</param>
+        /// <param name="AddressId">The address ID.</param>
+        /// <returns>True if the address is new.</returns>
         public bool IsNewAddress(string sTableName, string sIdName, int AddressId)
         {
-            bool blNew = true;
             string sCom = @"SELECT COUNT(*) as rba FROM "+sTableName+ " WHERE "+sIdName+"="+AddressId;
+
             object result = ExecuteScalar(sCom);
+
             int iRows = -1;
             if (int.TryParse(result.ToString(), out iRows)) iRows = Convert.ToInt32(result);
-            if (iRows > 0) blNew = false;
-            return blNew;
+
+            return (iRows > 0) ? false : true;
         }
 
+        /// <summary>
+        /// Checks if the address ID is new in the datatable.
+        /// </summary>
+        /// <param name="sTableName">The table name.</param>
+        /// <param name="oAddressId">The address ID.</param>
+        /// <returns>True if the address is new.</returns>
         public bool IsNewAddressID(string sTableName, object oAddressId)
         {
-            bool blNew = true;
             int AddressId = -1;
             if (int.TryParse(oAddressId.ToString(), out AddressId)) AddressId = Convert.ToInt32(oAddressId); else return true;
 
             string sCom = @"SELECT COUNT(*) as rba FROM " + sTableName + " WHERE address_id=" + AddressId;
+
             object result = ExecuteScalar(sCom);
+
             int iRows = -1;
             if (int.TryParse(result.ToString(), out iRows)) iRows = Convert.ToInt32(result);
-            if (iRows > 0) blNew = false;
-            return blNew;
+
+            return (iRows > 0) ? false : true;
         }
 
+        /// <summary>
+        /// Checks if the order ID is new in the datatable.
+        /// </summary>
+        /// <param name="sTableName">The table name.</param>
+        /// <param name="oOrderId">The order ID.</param>
+        /// <returns>True if the order is new.</returns>
         public bool IsNewOrderID(string sTableName, object oOrderId)
         {
-            bool blNew = true;
             int OrderId = -1;
             if (int.TryParse(oOrderId.ToString(), out OrderId)) OrderId = Convert.ToInt32(oOrderId); else return true;
 
             string sCom = @"SELECT COUNT(*) as rba FROM " + sTableName + " WHERE order_id=" + OrderId;
+
             object result = ExecuteScalar(sCom);
+
             int iRows = -1;
             if (int.TryParse(result.ToString(), out iRows)) iRows = Convert.ToInt32(result);
-            if (iRows > 0) blNew = false;
-            return blNew;
+
+            return (iRows > 0) ? false : true;
         }
 
+        /// <summary>
+        /// Executes scalar SQL request.
+        /// </summary>
+        /// <param name="sQuery">SQL query text.</param>
+        /// <returns>Scalar object</returns>
         public object ExecuteScalar(string sQuery)
         {
             object result = null;
+
             try
             {
-                int iResult = -1;
                 OpenConnection();
                 _cmd.CommandText = sQuery;
                 result = _cmd.ExecuteScalar();
 
+                int iResult = -1;
                 if (int.TryParse(result.ToString(), out iResult)) iResult = Convert.ToInt32(result);
+
                 return iResult;
             }
-            catch (Exception ex) { Console.WriteLine(ex.Message); return 0; }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message); return 0;
+            }
             finally
             {
                 CloseConnection();
@@ -1000,6 +1081,11 @@ namespace Route4MeSDK.DataTypes
 
         }
 
+        /// <summary>
+        /// Executes a non-query request.
+        /// </summary>
+        /// <param name="sQuery">SQL request text.</param>
+        /// <returns>The number of affected rows.</returns>
         public int ExecuteNon(string sQuery)
         {
             try
@@ -1019,6 +1105,12 @@ namespace Route4MeSDK.DataTypes
             
         }
 
+        /// <summary>
+        /// Checks if the object is a valid type value.
+        /// </summary>
+        /// <param name="col">Datacolumn</param>
+        /// <param name="value">An object value.</param>
+        /// <returns>True if the value is a valid type.</returns>
         public bool IsValidValue(DataColumn col, object value)
         {
             bool isValid = false;
@@ -1047,6 +1139,11 @@ namespace Route4MeSDK.DataTypes
             return isValid;
         }
 
+        /// <summary>
+        /// Creates and fills a datatable by SQL query.
+        /// </summary>
+        /// <param name="sSQLSelect">SQL query text.</param>
+        /// <returns>The datatable.</returns>
         public DataTable fillTable(string sSQLSelect)
         {
             DataTable dtbElements = new DataTable();
