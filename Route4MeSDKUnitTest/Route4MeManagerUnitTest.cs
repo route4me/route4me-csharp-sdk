@@ -154,7 +154,7 @@ namespace Route4MeSDKUnitTest
             lsAddresses.Add(address2);
 
             string errorString = "";
-            DataObjectRoute route1 = route4Me.ManualyResequenceRoute(rParams, lsAddresses.ToArray(), out errorString);
+            DataObjectRoute route1 = route4Me.ManuallyResequenceRoute(rParams, lsAddresses.ToArray(), out errorString);
 
             Assert.IsNotNull(route1, "ResequenceRouteDestinationsTest failed...");
         }
@@ -9694,7 +9694,7 @@ namespace Route4MeSDKUnitTest
 
             // Run the query
             string errorString = "";
-            MemberConfigurationDataRersponse result = route4Me.GetConfigurationData(@params, out errorString);
+            MemberConfigurationDataResponse result = route4Me.GetConfigurationData(@params, out errorString);
 
             Assert.IsNotNull(result, "GetAllConfigurationDataTest failed... " + errorString);
         }
@@ -9708,7 +9708,7 @@ namespace Route4MeSDKUnitTest
 
             // Run the query
             string errorString = "";
-            MemberConfigurationDataRersponse result = route4Me.GetConfigurationData(@params, out errorString);
+            MemberConfigurationDataResponse result = route4Me.GetConfigurationData(@params, out errorString);
 
             Assert.IsNotNull(result, "GetSpecificConfigurationKeyDataTest failed... " + errorString);
         }
