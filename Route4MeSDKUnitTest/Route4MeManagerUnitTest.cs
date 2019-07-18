@@ -154,7 +154,7 @@ namespace Route4MeSDKUnitTest
             lsAddresses.Add(address2);
 
             string errorString = "";
-            DataObjectRoute route1 = route4Me.ManualyResequenceRoute(rParams, lsAddresses.ToArray(), out errorString);
+            DataObjectRoute route1 = route4Me.ManuallyResequenceRoute(rParams, lsAddresses.ToArray(), out errorString);
 
             Assert.IsNotNull(route1, "ResequenceRouteDestinationsTest failed...");
         }
@@ -7041,9 +7041,9 @@ namespace Route4MeSDKUnitTest
             #region // Add a location, scheduled daily.
             Schedule sched1 = new Schedule("daily", false)
             {
-                enabled = true,
-                mode = "daily",
-                daily = new schedule_daily(1)
+                Enabled = true,
+                Mode = "daily",
+                Daily = new ScheduleDaily(1)
             };
 
             scheduledContact1 = new AddressBookContact()
@@ -7075,8 +7075,8 @@ namespace Route4MeSDKUnitTest
             #region // Add a location, scheduled weekly.
             Schedule sched2 = new Schedule("weekly", false)
             {
-                enabled = true,
-                weekly = new schedule_weekly(1, new int[] { 1, 2, 3, 4, 5 })
+                Enabled = true,
+                Weekly = new ScheduleWeekly(1, new int[] { 1, 2, 3, 4, 5 })
             };
 
             scheduledContact2 = new AddressBookContact()
@@ -7108,8 +7108,8 @@ namespace Route4MeSDKUnitTest
             #region // Add a location, scheduled monthly (dates mode).
             Schedule sched3 = new Schedule("monthly", false)
             {
-                enabled = true,
-                monthly = new schedule_monthly(_every: 1, _mode: "dates", _dates: new int[] { 20, 22, 23, 24, 25 })
+                Enabled = true,
+                Monthly = new ScheduleMonthly(_every: 1, _mode: "dates", _dates: new int[] { 20, 22, 23, 24, 25 })
             };
 
             scheduledContact3 = new AddressBookContact()
@@ -7145,8 +7145,8 @@ namespace Route4MeSDKUnitTest
             #region // Add a location, scheduled monthly (nth mode).
             Schedule sched4 = new Schedule("monthly", false)
             {
-                enabled = true,
-                monthly = new schedule_monthly(_every: 1, _mode: "nth", _nth: new Dictionary<int, int>() { { 1, 4 } })
+                Enabled = true,
+                Monthly = new ScheduleMonthly(_every: 1, _mode: "nth", _nth: new Dictionary<int, int>() { { 1, 4 } })
             };
 
             scheduledContact4 = new AddressBookContact()
@@ -7179,9 +7179,9 @@ namespace Route4MeSDKUnitTest
             #region // Add a location with the daily scheduling and blacklist.
             Schedule sched5 = new Schedule("daily", false)
             {
-                enabled = true,
-                mode = "daily",
-                daily = new schedule_daily(1)
+                Enabled = true,
+                Mode = "daily",
+                Daily = new ScheduleDaily(1)
             };
 
             scheduledContact5 = new AddressBookContact()
@@ -9694,7 +9694,7 @@ namespace Route4MeSDKUnitTest
 
             // Run the query
             string errorString = "";
-            MemberConfigurationDataRersponse result = route4Me.GetConfigurationData(@params, out errorString);
+            MemberConfigurationDataResponse result = route4Me.GetConfigurationData(@params, out errorString);
 
             Assert.IsNotNull(result, "GetAllConfigurationDataTest failed... " + errorString);
         }
@@ -9708,7 +9708,7 @@ namespace Route4MeSDKUnitTest
 
             // Run the query
             string errorString = "";
-            MemberConfigurationDataRersponse result = route4Me.GetConfigurationData(@params, out errorString);
+            MemberConfigurationDataResponse result = route4Me.GetConfigurationData(@params, out errorString);
 
             Assert.IsNotNull(result, "GetSpecificConfigurationKeyDataTest failed... " + errorString);
         }
@@ -10819,7 +10819,7 @@ namespace Route4MeSDKUnitTest
                     //newLocation.schedule = new Schedule[]{};
                     if (!sched0.ValidateScheduleMode(sched_mode)) continue;
 
-                    sched0.from = DateTime.Now.ToString("yyyy-MM-dd");
+                    sched0.From = DateTime.Now.ToString("yyyy-MM-dd");
 
                     bool blNth = false;
 
@@ -10837,23 +10837,23 @@ namespace Route4MeSDKUnitTest
                     DateTime dt = DateTime.Now;
                     //if (schedule.ValidateScheduleMode(sched_mode))
                     //{
-                    schedule.mode = sched_mode.ToString();
+                    schedule.Mode = sched_mode.ToString();
                     if (schedule.ValidateScheduleEnabled(sched_enabled))
                     {
-                        schedule.enabled = Convert.ToBoolean(sched_enabled);
+                        schedule.Enabled = Convert.ToBoolean(sched_enabled);
                         if (schedule.ValidateScheduleEvery(sched_every))
                         {
                             int iEvery = Convert.ToInt32(sched_every);
 
-                            switch (schedule.mode)
+                            switch (schedule.Mode)
                             {
                                 case "daily":
-                                    schedule.daily.every = iEvery;
+                                    schedule.Daily.Every = iEvery;
                                     break;
                                 case "weekly":
                                     if (schedule.ValidateScheduleWeekdays(sched_weekdays))
                                     {
-                                        schedule.weekly.every = iEvery;
+                                        schedule.Weekly.Every = iEvery;
 
                                         string[] arWeekdays = sched_weekdays.Split(',');
                                         List<int> lsWeekdays = new List<int>();
@@ -10862,15 +10862,15 @@ namespace Route4MeSDKUnitTest
                                         {
                                             lsWeekdays.Add(Convert.ToInt32(arWeekdays[i]));
                                         }
-                                        schedule.weekly.weekdays = lsWeekdays.ToArray();
+                                        schedule.Weekly.Weekdays = lsWeekdays.ToArray();
                                     }
                                     break;
                                 case "monthly":
                                     if (schedule.ValidateScheduleMonthlyMode(sched_monthly_mode))
                                     {
-                                        schedule.monthly.every = iEvery;
-                                        schedule.monthly.mode = sched_monthly_mode.ToString();
-                                        switch (schedule.monthly.mode)
+                                        schedule.Monthly.Every = iEvery;
+                                        schedule.Monthly.Mode = sched_monthly_mode.ToString();
+                                        switch (schedule.Monthly.Mode)
                                         {
                                             case "dates":
                                                 if (schedule.ValidateScheduleMonthDays(sched_monthly_dates))
@@ -10882,12 +10882,12 @@ namespace Route4MeSDKUnitTest
                                                     {
                                                         lsMonthdays.Add(Convert.ToInt32(arMonthdays[i]));
                                                     }
-                                                    schedule.monthly.dates = lsMonthdays.ToArray();
+                                                    schedule.Monthly.Dates = lsMonthdays.ToArray();
                                                 }
                                                 break;
                                             case "nth":
-                                                if (schedule.ValidateScheduleNthN(sched_nth_n)) schedule.monthly.nth.n = Convert.ToInt32(sched_nth_n);
-                                                if (schedule.ValidateScheduleNthWhat(sched_nth_what)) schedule.monthly.nth.what = Convert.ToInt32(sched_nth_what);
+                                                if (schedule.ValidateScheduleNthN(sched_nth_n)) schedule.Monthly.Nth.N = Convert.ToInt32(sched_nth_n);
+                                                if (schedule.ValidateScheduleNthWhat(sched_nth_what)) schedule.Monthly.Nth.What = Convert.ToInt32(sched_nth_what);
                                                 break;
                                         }
                                     }
@@ -10895,12 +10895,12 @@ namespace Route4MeSDKUnitTest
                                 case "annually":
                                     if (schedule.ValidateScheduleUseNth(sched_annually_usenth))
                                     {
-                                        schedule.annually.every = iEvery;
-                                        schedule.annually.use_nth = Convert.ToBoolean(sched_annually_usenth);
-                                        if (schedule.annually.use_nth)
+                                        schedule.Annually.Every = iEvery;
+                                        schedule.Annually.UseNth = Convert.ToBoolean(sched_annually_usenth);
+                                        if (schedule.Annually.UseNth)
                                         {
-                                            if (schedule.ValidateScheduleNthN(sched_nth_n)) schedule.annually.nth.n = Convert.ToInt32(sched_nth_n);
-                                            if (schedule.ValidateScheduleNthWhat(sched_nth_what)) schedule.annually.nth.what = Convert.ToInt32(sched_nth_what);
+                                            if (schedule.ValidateScheduleNthN(sched_nth_n)) schedule.Annually.Nth.N = Convert.ToInt32(sched_nth_n);
+                                            if (schedule.ValidateScheduleNthWhat(sched_nth_what)) schedule.Annually.Nth.What = Convert.ToInt32(sched_nth_what);
                                         }
                                         else
                                         {
@@ -10913,7 +10913,7 @@ namespace Route4MeSDKUnitTest
                                                 {
                                                     lsMonths.Add(Convert.ToInt32(arYearmonths[i]));
                                                 }
-                                                schedule.annually.months = lsMonths.ToArray();
+                                                schedule.Annually.Months = lsMonths.ToArray();
                                             }
                                         }
                                     }

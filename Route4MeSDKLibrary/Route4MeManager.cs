@@ -453,9 +453,9 @@ namespace Route4MeSDK
         /// <param name="mergeRoutesParameters">The parameters containing:
         /// <para>RouteIds: IDs of the routes to be merged</para>
         /// <para>DepotAddress: a depot address of the merged route</para>
-        /// <para>RemoveOrigin: if true, the origin routes hould be routed</para>
-        /// <para>DepotLat: the dpot's latitude</para>
-        /// <para>DepotLng: the dpot's longitude</para>
+        /// <para>RemoveOrigin: if true, the origin routes will be removed</para>
+        /// <para>DepotLat: the depot's latitude</para>
+        /// <para>DepotLng: the depot's longitude</para>
         /// </param>
         /// <param name="errorString">Returned error string in case of the processs failing</param>
         /// <returns>True if the routes were merged successfuly</returns>
@@ -505,7 +505,7 @@ namespace Route4MeSDK
         /// The request parameters for manually resequencing of a route
         /// </summary>
 		[DataContract()]
-		private sealed class ManualyResequenceRouteRequest : GenericParameters
+		private sealed class ManuallyResequenceRouteRequest : GenericParameters
 		{
             /// <value>The route ID to be resequenced</value>
 			[HttpQueryMemberAttribute(Name = "route_id", EmitDefaultValue = false)]
@@ -542,9 +542,9 @@ namespace Route4MeSDK
         /// <param name="addresses">The route addresses</param>
         /// <param name="errorString">Returned error string in case of the processs failing</param>
         /// <returns>A re-sequenced route</returns>
-        public DataObjectRoute ManualyResequenceRoute(RouteParametersQuery rParams, Address[] addresses, out string errorString)
+        public DataObjectRoute ManuallyResequenceRoute(RouteParametersQuery rParams, Address[] addresses, out string errorString)
 		{
-			ManualyResequenceRouteRequest request = new ManualyResequenceRouteRequest()
+			ManuallyResequenceRouteRequest request = new ManuallyResequenceRouteRequest()
 			{
 				RouteId = rParams.RouteId,
 
@@ -1176,14 +1176,14 @@ namespace Route4MeSDK
         /// <param name="confParams">An object of the type MemberConfigurationParameters (empty or containing the parameter config_key)</param>
         /// <param name="errorString">Error message text</param>
         /// <returns>An object of the type MemberConfigurationResponse</returns>
-		public MemberConfigurationDataRersponse GetConfigurationData(MemberConfigurationParameters confParams, out string errorString)
+		public MemberConfigurationDataResponse GetConfigurationData(MemberConfigurationParameters confParams, out string errorString)
 		{
 			GetConfigurationDataRequest mParams = default(GetConfigurationDataRequest);
 
 			mParams = new GetConfigurationDataRequest();
 			if ((confParams != null)) mParams.config_key = confParams.config_key;
 
-            return GetJsonObjectFromAPI<MemberConfigurationDataRersponse>(mParams, 
+            return GetJsonObjectFromAPI<MemberConfigurationDataResponse>(mParams, 
                 R4MEInfrastructureSettings.UserConfiguration, HttpMethodType.Get, out errorString);
 		}
 
@@ -2518,7 +2518,7 @@ namespace Route4MeSDK
         /// The response from the addresses uploading process to temporary storage.
         /// </summary>
 		[DataContract]
-		public sealed class uploadAddressesToTemporarryStorageResponse : GenericParameters
+		public sealed class uploadAddressesToTemporaryStorageResponse : GenericParameters
 		{
             /// <value>The optimization problem ID</value>
             [DataMember(Name = "optimization_problem_id", IsRequired = false)]
@@ -2542,15 +2542,15 @@ namespace Route4MeSDK
         /// </summary>
         /// <param name="jsonAddresses">The addresses, JSON formatted</param>
         /// <param name="errorString">out: Error as string</param>
-        /// <returns>The uploadAddressesToTemporarryStorageResponse type object</returns>
-		public uploadAddressesToTemporarryStorageResponse uploadAddressesToTemporarryStorage(string jsonAddresses, out string errorString)
+        /// <returns>The uploadAddressesToTemporaryStorageResponse type object</returns>
+		public uploadAddressesToTemporaryStorageResponse uploadAddressesToTemporaryStorage(string jsonAddresses, out string errorString)
 		{
 			GeocodingRequest request = new GeocodingRequest { };
 
 			HttpContent content = new StringContent(jsonAddresses);
 			content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-			Tuple<uploadAddressesToTemporarryStorageResponse, string> result = GetJsonObjectFromAPIAsync<uploadAddressesToTemporarryStorageResponse>(request,
+			Tuple<uploadAddressesToTemporaryStorageResponse, string> result = GetJsonObjectFromAPIAsync<uploadAddressesToTemporaryStorageResponse>(request,
 															   R4MEInfrastructureSettings.FastGeocoder,
 															   HttpMethodType.Post,
 															   content, false).GetAwaiter().GetResult();
