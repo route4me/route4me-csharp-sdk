@@ -143,7 +143,7 @@ namespace Route4MeSDK.Examples
                     timezone_offset_minutes = 480
                 };
 
-                DataObject resultOptimization = route4Me.GetOHybridptimization(hparams, out errorString1);
+                DataObject resultOptimization = route4Me.GetHybridOptimization(hparams, out errorString1);
 
                 string HybridOptimizationId = "";
 

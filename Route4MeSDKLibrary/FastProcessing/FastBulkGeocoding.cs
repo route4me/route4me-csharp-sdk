@@ -153,7 +153,7 @@ namespace Route4MeSDK.FastProcessing
         {
             string jsonAddressesChunk = e.AddressesChunk;
 
-            var uploadAddressesResponse = uploadAddressesToTemporarryStorage(jsonAddressesChunk);
+            var uploadAddressesResponse = uploadAddressesToTemporaryStorage(jsonAddressesChunk);
 
             if (uploadAddressesResponse!=null)
             {
@@ -171,8 +171,8 @@ namespace Route4MeSDK.FastProcessing
         /// Upload JSON addresses to a temporary storage
         /// </summary>
         /// <param name="streamSource">Input stream source - file name or JSON text</param>
-        /// <returns>Response object of the type uploadAddressesToTemporarryStorageResponse</returns>
-        public Route4MeManager.uploadAddressesToTemporarryStorageResponse uploadAddressesToTemporarryStorage(string streamSource)
+        /// <returns>Response object of the type uploadAddressesToTemporaryStorageResponse</returns>
+        public Route4MeManager.uploadAddressesToTemporaryStorageResponse uploadAddressesToTemporaryStorage(string streamSource)
         {
             Route4MeManager route4Me = new Route4MeManager(apiKey);
 
@@ -187,8 +187,8 @@ namespace Route4MeSDK.FastProcessing
 
             string errorString = "";
 
-            Route4MeManager.uploadAddressesToTemporarryStorageResponse uploadResponse =
-                route4Me.uploadAddressesToTemporarryStorage(jsonText, out errorString);
+            Route4MeManager.uploadAddressesToTemporaryStorageResponse uploadResponse =
+                route4Me.uploadAddressesToTemporaryStorage(jsonText, out errorString);
 
 
             if (uploadResponse == null || !uploadResponse.status) return null;
@@ -199,9 +199,9 @@ namespace Route4MeSDK.FastProcessing
         /// <summary>
         /// Geocode and download the addresses from the temporary storage.
         /// </summary>
-        /// <param name="temporarryAddressesStorageID">ID of the temporary storage</param>
+        /// <param name="temporaryAddressesStorageID">ID of the temporary storage</param>
         /// <param name="addressesInFile">Chunk size of the addresses to be geocoded</param>
-        public async void downloadGeocodedAddresses(string temporarryAddressesStorageID, int addressesInFile)
+        public async void downloadGeocodedAddresses(string temporaryAddressesStorageID, int addressesInFile)
         {
             //bool done = false;
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls
@@ -213,7 +213,7 @@ namespace Route4MeSDK.FastProcessing
 
             savedAddresses = new List<AddressGeocoded>();
 
-            TEMPORARY_ADDRESSES_STORAGE_ID = temporarryAddressesStorageID;
+            TEMPORARY_ADDRESSES_STORAGE_ID = temporaryAddressesStorageID;
             if (addressesInFile != null) requestedAddresses = addressesInFile;
 
             manualResetEvent = new ManualResetEvent(false);

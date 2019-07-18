@@ -17,9 +17,9 @@ namespace Route4MeSDK.Examples
             #region // Add a location, scheduled daily.
             Schedule sched1 = new Schedule("daily", false)
             {
-                enabled = true,
-                mode = "daily",
-                daily = new schedule_daily(1)
+                Enabled = true,
+                Mode = "daily",
+                Daily = new ScheduleDaily(1)
             };
 
             AddressBookContact scheduledContact1 = new AddressBookContact()
@@ -53,8 +53,8 @@ namespace Route4MeSDK.Examples
             #region // Add a location, scheduled weekly.
             Schedule sched2 = new Schedule("weekly", false)
             {
-                enabled = true,
-                weekly = new schedule_weekly(1, new int[] { 1, 2, 3, 4, 5 })
+                Enabled = true,
+                Weekly = new ScheduleWeekly(1, new int[] { 1, 2, 3, 4, 5 })
             };
 
             AddressBookContact scheduledContact2 = new AddressBookContact()
@@ -89,8 +89,8 @@ namespace Route4MeSDK.Examples
             #region // Add a location, scheduled monthly (dates mode).
             Schedule sched3 = new Schedule("monthly", false)
             {
-                enabled = true,
-                monthly = new schedule_monthly(_every: 1, _mode: "dates", _dates: new int[] { 20, 22, 23, 24, 25 })
+                Enabled = true,
+                Monthly = new ScheduleMonthly(_every: 1, _mode: "dates", _dates: new int[] { 20, 22, 23, 24, 25 })
             };
 
             AddressBookContact scheduledContact3 = new AddressBookContact()
@@ -129,8 +129,8 @@ namespace Route4MeSDK.Examples
             #region // Add a location, scheduled monthly (nth mode).
             Schedule sched4 = new Schedule("monthly", false)
             {
-                enabled = true,
-                monthly = new schedule_monthly(_every: 1, _mode: "nth", _nth: new Dictionary<int, int>() { { 1, 4 } })
+                Enabled = true,
+                Monthly = new ScheduleMonthly(_every: 1, _mode: "nth", _nth: new Dictionary<int, int>() { { 1, 4 } })
             };
 
             AddressBookContact scheduledContact4 = new AddressBookContact()
@@ -166,9 +166,9 @@ namespace Route4MeSDK.Examples
             #region // Add a location with the daily scheduling and blacklist.
             Schedule sched5 = new Schedule("daily", false)
             {
-                enabled = true,
-                mode = "daily",
-                daily = new schedule_daily(1)
+                Enabled = true,
+                Mode = "daily",
+                Daily = new ScheduleDaily(1)
             };
 
             AddressBookContact scheduledContact5 = new AddressBookContact()

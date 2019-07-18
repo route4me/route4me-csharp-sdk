@@ -27,7 +27,7 @@ namespace Route4MeSDK.Examples
       };
 
       string errorString;
-      string response = route4Me.SetGPS(gpsParameters, out errorString);
+      var response = route4Me.SetGPS(gpsParameters, out errorString);
 
       if (!string.IsNullOrEmpty(errorString))
       {
@@ -35,7 +35,7 @@ namespace Route4MeSDK.Examples
         return;
       }
 
-      Console.WriteLine("SetGps response: {0}", response);
+      Console.WriteLine("SetGps response: {0}", response.ToString());
 
       GenericParameters genericParameters = new GenericParameters();
       genericParameters.ParametersCollection.Add("route_id", routeId);

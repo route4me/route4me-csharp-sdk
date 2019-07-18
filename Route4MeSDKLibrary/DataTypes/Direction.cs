@@ -1,25 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Runtime.Serialization;
 
 namespace Route4MeSDK.DataTypes
 {
-  [DataContract]
-  public sealed class Direction
-  {
-    ///<summary>
-    /// Location
-    ///</summary>
-    [DataMember(Name = "location")]
-    public DirectionLocation Location { get; set; }
-
     /// <summary>
-    /// Steps
+    /// The structure for the movement direction
     /// </summary>
-    [DataMember(Name = "steps")]
-    public DirectionStep[] Steps { get; set; }
-  }
+    [DataContract]
+    public sealed class Direction
+    {
+        ///<summary>
+        /// Starting location of a direction. See <see cref="DirectionLocation"/>
+        ///</summary>
+        [DataMember(Name = "location")]
+        public DirectionLocation Location { get; set; }
+
+        /// <summary>
+        /// The diection steps. See <see cref="DirectionStep"/>
+        /// </summary>
+        [DataMember(Name = "steps")]
+        public DirectionStep[] Steps { get; set; }
+    }
 }
