@@ -14,7 +14,7 @@ namespace Route4MeSDK.Examples
             // Create the manager with the api key
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
-            MemberConfigurationParameters @params = new MemberConfigurationParameters { config_key = "My height" };
+            MemberConfigurationParameters @params = new MemberConfigurationParameters { ConfigKey = "My height" };
 
             // Run the query
             string errorString = "";

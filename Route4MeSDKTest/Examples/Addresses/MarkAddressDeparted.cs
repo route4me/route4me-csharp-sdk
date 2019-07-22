@@ -19,7 +19,7 @@ namespace Route4MeSDK.Examples
             // Run the query
 
             string errorString = "";
-            int result = route4Me.MarkAddressVisited(aParams, out errorString);
+            int? result = route4Me.MarkAddressVisited(aParams, out errorString);
 
             Console.WriteLine("");
 
