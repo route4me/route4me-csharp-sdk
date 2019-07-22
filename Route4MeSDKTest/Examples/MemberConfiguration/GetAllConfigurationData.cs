@@ -25,12 +25,12 @@ namespace Route4MeSDK.Examples
             if (result != null)
             {
                 Console.WriteLine("GetAllConfigurationData executed successfully");
-                Console.WriteLine("Result: " + result.result);
+                Console.WriteLine("Result: " + result.Result);
                 foreach (MemberConfigurationData mc_data in result.data)
                 {
-                    Console.WriteLine("member_id= " + mc_data.member_id);
-                    Console.WriteLine("config_key= " + mc_data.config_key);
-                    Console.WriteLine("config_value= " + mc_data.config_value);
+                    Console.WriteLine("MemberId= " + mc_data.MemberId);
+                    Console.WriteLine("ConfigKey= " + mc_data.ConfigKey);
+                    Console.WriteLine("ConfigValue= " + mc_data.ConfigValue);
                     Console.WriteLine("---------------------------");
                 }
             }

@@ -19,7 +19,7 @@ namespace Route4MeSDK.Examples
             TerritoryQuery territoryQuery1 = new TerritoryQuery
             {
                 TerritoryId = territoryId,
-                addresses = 1
+                Addresses = 1
             };
 
             // Run the query
