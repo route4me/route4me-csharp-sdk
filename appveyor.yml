@@ -1,0 +1,16 @@
+image: Visual Studio 2015
+before_build:
+  - nuget restore
+  - choco install opencover.portable
+configuration: Debug
+platform: Any CPU
+build:
+  project: Route4MeSDK.sln 
+  verbosity: minimal
+assembly_info:
+  patch: true
+after_test: 
+    - OpenCover.Console.exe -register:user -target:"C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\MSTest.exe" -targetargs:"/testcontainer:"".\Route4MeSDKUnitTest\bin\Debug\Route4MeSDKUnitTest.dll" 
+    -output:".\Route4MeSDKUnitTest_coverage.xml"
+
+    
