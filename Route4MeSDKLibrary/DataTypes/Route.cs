@@ -104,11 +104,14 @@ namespace Route4MeSDK.DataTypes
         [DataMember(Name = "trip_distance", EmitDefaultValue = false)]
         public double? TripDistance { get; set; }
 
+        /// <summary>
+        /// Gas price
+        /// </summary>
         [DataMember(Name = "gas_price", EmitDefaultValue = false)]
         public double? GasPrice { get; set; }
 
         /// <summary>
-        /// Total route's duration (seconds)
+        /// Total route duration (seconds)
         /// </summary>
         [DataMember(Name = "route_duration_sec", EmitDefaultValue = false)]
         public int? RouteDurationSec { get; set; }
