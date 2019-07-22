@@ -1,202 +1,168 @@
 ﻿using Route4MeSDK.QueryTypes;
-using System.Collections.Generic;
+using System;
 using System.Runtime.Serialization;
 
 namespace Route4MeSDK.DataTypes
 {
+    /// <summary>
+    /// Response from the vehicle request.
+    /// </summary>
+    /// <seealso cref="VehicleV4Response" />
+    [Obsolete("New endpoint uses the classes: 'VehicleV4Response' and 'VehiclesPaginated' instead")]
     [DataContract]
     public sealed class VehicleResponse : GenericParameters
     {
+        /// <summary>
+        /// The vehicle ID.
+        /// </summary>
         [DataMember(Name = "vehicle_id")]
-        public string VehicleId
-        {
-            get { return m_VehicleId; }
-            set { m_VehicleId = value; }
-        }
-        private string m_VehicleId;
+        public string VehicleId { get; set; }
 
+        /// <summary>
+        /// When the vehicle was created.
+        /// </summary>
         [DataMember(Name = "created_time")]
-        public string CreatedTime
-        {
-            get { return m_CreatedTime; }
-            set { m_CreatedTime = value; }
-        }
-        private string m_CreatedTime;
+        public string CreatedTime { get; set; }
 
+        /// <summary>
+        /// Member ID assigned to the vehicle.
+        /// </summary>
         [DataMember(Name = "member_id")]
-        public string MemberId
-        {
-            get { return m_MemberId; }
-            set { m_MemberId = value; }
-        }
-        private string m_MemberId;
+        public string MemberId { get; set; }
 
+        /// <summary>
+        /// Vehicle alias.
+        /// </summary>
         [DataMember(Name = "vehicle_alias")]
-        public string VehicleAlias
-        {
-            get { return m_VehicleAlias; }
-            set { m_VehicleAlias = value; }
-        }
-        private string m_VehicleAlias;
+        public string VehicleAlias { get; set; }
 
+        /// <summary>
+        /// Vehicle VIN.
+        /// </summary>
         [DataMember(Name = "vehicle_vin")]
-        public string VehicleVin
-        {
-            get { return m_VehicleVin; }
-            set { m_VehicleVin = value; }
-        }
-        private string m_VehicleVin;
+        public string VehicleVin { get; set; }
 
+        /// <summary>
+        /// Vehicle registration state.
+        /// </summary>
         [DataMember(Name = "vehicle_reg_state")]
-        public string VehicleRegState
-        {
-            get { return m_VehicleRegState; }
-            set { m_VehicleRegState = value; }
-        }
-        private string m_VehicleRegState;
+        public string VehicleRegState { get; set; }
 
+        /// <summary>
+        /// Vehicle registration state ID.
+        /// </summary>
         [DataMember(Name = "vehicle_reg_state_id")]
-        public System.Nullable<int> VehicleRegStateId
-        {
-            get { return m_VehicleRegStateId; }
-            set { m_VehicleRegStateId = value; }
-        }
-        private System.Nullable<int> m_VehicleRegStateId;
+        public Nullable<int> VehicleRegStateId { get; set; }
 
+        /// <summary>
+        /// Vehicle registration country.
+        /// </summary>
         [DataMember(Name = "vehicle_reg_country")]
-        public string VehicleRegCountry
-        {
-            get { return m_VehicleRegCountry; }
-            set { m_VehicleRegCountry = value; }
-        }
-        private string m_VehicleRegCountry;
+        public string VehicleRegCountry { get; set; }
 
+        /// <summary>
+        /// Vehicle registration country ID.
+        /// </summary>
         [DataMember(Name = "vehicle_reg_country_id")]
-        public System.Nullable<int> VehicleRegCountryId
-        {
-            get { return m_VehicleRegCountryId; }
-            set { m_VehicleRegCountryId = value; }
-        }
-        private System.Nullable<int> m_VehicleRegCountryId;
+        public Nullable<int> VehicleRegCountryId { get; set; }
 
+        /// <summary>
+        /// A license plate of the vehicle.
+        /// </summary>
         [DataMember(Name = "vehicle_license_plate")]
-        public string VehicleLicensePlate
-        {
-            get { return m_VehicleLicensePlate; }
-            set { m_VehicleLicensePlate = value; }
-        }
-        private string m_VehicleLicensePlate;
+        public string VehicleLicensePlate { get; set; }
 
+        /// <summary>
+        /// Vehicle maker brend. 
+        /// <para>Available values:</para>
+        /// <value>
+        /// "american coleman", "bmw", "chevrolet", "ford", "freightliner", "gmc", 
+        /// <para>"hino", "honda", "isuzu", "kenworth", "mack", "mercedes-benz", "mitsubishi", </para>
+        /// "navistar", "nissan", "peterbilt", "renault", "scania", "sterling", "toyota", 
+        /// <para>"volvo", "western star" </para>
+        /// </value>"
+        /// </summary>
         [DataMember(Name = "vehicle_make")]
-        public string VehicleMake
-        {
-            get { return m_VehicleMake; }
-            set { m_VehicleMake = value; }
-        }
-        private string m_VehicleMake;
+        public string VehicleMake { get; set; }
 
+        /// <summary>
+        /// Vehicle model year.
+        /// </summary>
         [DataMember(Name = "vehicle_model_year")]
-        public System.Nullable<int> VehicleModelYear
-        {
-            get { return m_VehicleModelYear; }
-            set { m_VehicleModelYear = value; }
-        }
-        private System.Nullable<int> m_VehicleModelYear;
+        public Nullable<int> VehicleModelYear { get; set; }
 
+        /// <summary>
+        /// Vehicle model.
+        /// </summary>
         [DataMember(Name = "vehicle_model")]
-        public string VehicleModel
-        {
-            get { return m_VehicleModel; }
-            set { m_VehicleModel = value; }
-        }
-        private string m_VehicleModel;
+        public string VehicleModel { get; set; }
 
+        /// <summary>
+        /// The year, vehicle was acquired.
+        /// </summary>
         [DataMember(Name = "vehicle_year_acquired")]
-        public System.Nullable<int> VehicleYearAcquired
-        {
-            get { return m_VehicleYearAcquired; }
-            set { m_VehicleYearAcquired = value; }
-        }
-        private System.Nullable<int> m_VehicleYearAcquired;
+        public Nullable<int> VehicleYearAcquired { get; set; }
 
+        /// <summary>
+        /// A cost of the new vehicle.
+        /// </summary>
         [DataMember(Name = "vehicle_cost_new")]
-        public System.Nullable<double> VehicleCostNew
-        {
-            get { return m_VehicleCostNew; }
-            set { m_VehicleCostNew = value; }
-        }
-        private System.Nullable<double> m_VehicleCostNew;
+        public Nullable<double> VehicleCostNew { get; set; }
 
+        /// <summary>
+        /// Start date of the license.
+        /// </summary>
         [DataMember(Name = "license_start_date")]
-        public string LicenseStartDate
-        {
-            get { return m_LicenseStartDate; }
-            set { m_LicenseStartDate = value; }
-        }
-        private string m_LicenseStartDate;
+        public string LicenseStartDate { get; set; }
 
+        /// <summary>
+        /// End date of the license.
+        /// </summary>
         [DataMember(Name = "license_end_date")]
-        public string LicenseEndDate
-        {
-            get { return m_LicenseEndDate; }
-            set { m_LicenseEndDate = value; }
-        }
-        private string m_LicenseEndDate;
+        public string LicenseEndDate { get; set; }
 
+        /// <summary>
+        /// A number of the vecile's axles.
+        /// </summary>
         [DataMember(Name = "vehicle_axle_count")]
-        public System.Nullable<int> VehicleAxleCount
-        {
-            get { return m_VehicleAxleCount; }
-            set { m_VehicleAxleCount = value; }
-        }
-        private System.Nullable<int> m_VehicleAxleCount;
+        public Nullable<int> VehicleAxleCount { get; set; }
 
+        /// <summary>
+        /// Miles per gallon in the city area.
+        /// </summary>
         [DataMember(Name = "mpg_city")]
-        public System.Nullable<double> MpgCity
-        {
-            get { return m_MpgCity; }
-            set { m_MpgCity = value; }
-        }
-        private System.Nullable<double> m_MpgCity;
+        public Nullable<double> MpgCity { get; set; }
 
+        /// <summary>
+        /// Miles per gallon in the highway area.
+        /// </summary>
         [DataMember(Name = "mpg_highway")]
-        public System.Nullable<double> MpgHighway
-        {
-            get { return m_MpgHighway; }
-            set { m_MpgHighway = value; }
-        }
-        private System.Nullable<double> m_MpgHighway;
+        public Nullable<double> MpgHighway { get; set; }
 
+        /// <summary>
+        /// A type of the fuel.
+        /// <para>Available values:</para>
+        /// <value>unleaded 87, unleaded 89, unleaded 91, unleaded 93, diesel, electric, hybrid</value>
+        /// </summary>
         [DataMember(Name = "fuel_type")]
-        public string FuelType
-        {
-            get { return m_FuelType; }
-            set { m_FuelType = value; }
-        }
-        private string m_FuelType;
+        public string FuelType { get; set; }
 
+        /// <summary>
+        /// Height of the vehicle in the inches.
+        /// </summary>
         [DataMember(Name = "height_inches")]
-        public System.Nullable<double> HeightInches
-        {
-            get { return m_HeightInches; }
-            set { m_HeightInches = value; }
-        }
-        private System.Nullable<double> m_HeightInches;
+        public Nullable<double> HeightInches { get; set; }
 
+        /// <summary>
+        /// Weight of the vehicle in the pounds.
+        /// </summary>
         [DataMember(Name = "weight_lb")]
-        public System.Nullable<double> WeightLb
-        {
-            get { return m_WeightLb; }
-            set { m_WeightLb = value; }
-        }
-        private System.Nullable<double> m_WeightLb;
+        public Nullable<double> WeightLb { get; set; }
 
+        /// <summary>
+        /// If true, the vehicle is operational.
+        /// </summary>
         [DataMember(Name = "is_operational")]
-        public System.Nullable<bool> IsOperational
-        {
-            get { return m_IsOperational; }
-            set { m_IsOperational = value; }
-        }
-        private System.Nullable<bool> m_IsOperational;
+        public Nullable<bool> IsOperational { get; set; }
     }
 }

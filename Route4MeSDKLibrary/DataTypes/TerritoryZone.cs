@@ -3,75 +3,45 @@
 namespace Route4MeSDK.DataTypes
 {
     /// <summary>
-    /// Territory Zone
+    /// Territory zone data structure.
     /// </summary>
     [DataContract]
     public sealed class TerritoryZone
     {
         ///<summary>
-        /// Avoidance zone id
+        /// Territory ID.
         ///</summary>
         [DataMember(Name = "territory_id")]
-        public string TerritoryId
-        {
-            get { return m_TerritoryId; }
-            set { m_TerritoryId = value; }
-        }
-        private string m_TerritoryId;
+        public string TerritoryId { get; set; }
 
         ///<summary>
-        /// Territory name
+        /// Territory name.
         ///</summary>
         [DataMember(Name = "territory_name")]
-        public string TerritoryName
-        {
-            get { return m_TerritoryName; }
-            set { m_TerritoryName = value; }
-        }
-        private string m_TerritoryName;
+        public string TerritoryName { get; set; }
 
         ///<summary>
-        /// Territory color 
+        /// Territory color.
         ///</summary>
         [DataMember(Name = "territory_color")]
-        public string TerritoryColor
-        {
-            get { return m_TerritoryColor; }
-            set { m_TerritoryColor = value; }
-        }
-        private string m_TerritoryColor;
+        public string TerritoryColor { get; set; }
 
         ///<summary>
-        /// Territory addresses 
+        /// The locations comprised in the territory.
         ///</summary>
         [DataMember(Name = "addresses")]
-        public int[] addresses
-        {
-            get { return m_addresses; }
-            set { m_addresses = value; }
-        }
-        private int[] m_addresses;
+        public int[] addresses { get; set; }
 
         ///<summary>
-        /// Member Id
+        /// Member Id.
         ///</summary>
         [DataMember(Name = "member_id")]
-        public string MemberId
-        {
-            get { return m_MemberId; }
-            set { m_MemberId = value; }
-        }
-        private string m_MemberId;
+        public string MemberId { get; set; }
 
         ///<summary>
-        /// Territory parameters
+        /// Territory parameters. See <see cref="DataTypes.Territory"/>.
         ///</summary>
         [DataMember(Name = "territory")]
-        public Territory Territory
-        {
-            get { return m_Territory; }
-            set { m_Territory = value; }
-        }
-        private Territory m_Territory;
+        public Territory Territory { get; set; }
     }
 }

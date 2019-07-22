@@ -3,47 +3,53 @@ using System.Runtime.Serialization;
 
 namespace Route4MeSDK.QueryTypes
 {
-  /// <summary>
-  /// Avoidance zone parameters
-  /// </summary>
-  [DataContract]
-  public sealed class AvoidanceZoneParameters : GenericParameters
-  {
     /// <summary>
-    /// Device Id
+    /// Parameters for the Avoidance zone(s) requst.
     /// </summary>
-    [IgnoreDataMember] // Don't serialize as JSON
-    [HttpQueryMemberAttribute(Name = "device_id", EmitDefaultValue = false)]
-    public string DeviceID { get; set; }
+    [DataContract]
+    public sealed class AvoidanceZoneParameters : GenericParameters
+    {
+        /// <summary>
+        /// Unique ID of a device.
+        /// <remarks><para>Query parameter.</para></remarks>
+        /// </summary>
+        [IgnoreDataMember] // Don't serialize as JSON
+        [HttpQueryMemberAttribute(Name = "device_id", EmitDefaultValue = false)]
+        public string DeviceID { get; set; }
 
-    /// <summary>
-    /// Territory Id
-    /// </summary>
-    [HttpQueryMemberAttribute(Name = "territory_id", EmitDefaultValue = false)]
-    public string TerritoryId { get; set; }
+        /// <summary>
+        /// Unique ID of the territory.
+        /// <remarks><para>Query parameter.</para></remarks>
+        /// </summary>
+        [HttpQueryMemberAttribute(Name = "territory_id", EmitDefaultValue = false)]
+        public string TerritoryId { get; set; }
 
-    /// <summary>
-    /// Territory name
-    /// </summary>
-    [DataMember(Name = "territory_name")]
-    public string TerritoryName { get; set; }
+        /// <summary>
+        /// Territory name.
+        /// <remarks><para>Data member parameter.</para></remarks>
+        /// </summary>
+        [DataMember(Name = "territory_name")]
+        public string TerritoryName { get; set; }
 
-    /// <summary>
-    /// Territory color
-    /// </summary>
-    [DataMember(Name = "territory_color")]
-    public string TerritoryColor { get; set; }
+        /// <summary>
+        /// Territory color.
+        /// <remarks><para>Data member parameter.</para></remarks>
+        /// </summary>
+        [DataMember(Name = "territory_color")]
+        public string TerritoryColor { get; set; }
 
-    /// <summary>
-    /// Member Id
-    /// </summary>
-    [DataMember(Name = "member_id")]
-    public string MemberId { get; set; }
+        /// <summary>
+        /// Member Id.
+        /// <remarks><para>Data member parameter.</para></remarks>
+        /// </summary>
+        [DataMember(Name = "member_id")]
+        public string MemberId { get; set; }
 
-    /// <summary>
-    /// Territory parameters
-    /// </summary>
-    [DataMember(Name = "territory")]
-    public Territory Territory { get; set; }
-  }
+        /// <summary>
+        /// Territory parameters. See <see cref="DataTypes.Territory"/>.
+        /// <remarks><para>Data member parameter.</para></remarks>
+        /// </summary>
+        [DataMember(Name = "territory")]
+        public Territory Territory { get; set; }
+    }
 }

@@ -82,6 +82,7 @@ namespace Route4MeSDK
             }
             catch (Exception ex)
             {
+                Console.WriteLine("Validation of the override_addresses's value failed. " + ex.Message);
                 return new ValidationResult(
                     "The property override_addresses can not have the value " + value.ToString());
             }

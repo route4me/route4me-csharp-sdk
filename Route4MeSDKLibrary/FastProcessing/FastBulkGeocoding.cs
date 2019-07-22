@@ -28,10 +28,10 @@ namespace Route4MeSDK.FastProcessing
         private ManualResetEvent mainResetEvent = null;
         private Socket socket;
         public string Message;
-        private int Number;
-        private bool Flag;
+        //private int Number;
+        //private bool Flag;
         public static Connection con = new Connection();
-        private int requestedAddresses;
+        private int? requestedAddresses;
         private int nextDownloadStage;
         private int loadedAddressesCount;
         string TEMPORARY_ADDRESSES_STORAGE_ID;
@@ -201,7 +201,7 @@ namespace Route4MeSDK.FastProcessing
         /// </summary>
         /// <param name="temporaryAddressesStorageID">ID of the temporary storage</param>
         /// <param name="addressesInFile">Chunk size of the addresses to be geocoded</param>
-        public async void downloadGeocodedAddresses(string temporaryAddressesStorageID, int addressesInFile)
+        public async void downloadGeocodedAddresses(string temporaryAddressesStorageID, int? addressesInFile)
         {
             //bool done = false;
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls
@@ -214,10 +214,11 @@ namespace Route4MeSDK.FastProcessing
             savedAddresses = new List<AddressGeocoded>();
 
             TEMPORARY_ADDRESSES_STORAGE_ID = temporaryAddressesStorageID;
-            if (addressesInFile != null) requestedAddresses = addressesInFile;
+
+            if (addressesInFile != null) requestedAddresses = (int)addressesInFile;
 
             manualResetEvent = new ManualResetEvent(false);
-            Flag = false;
+            //Flag = false;
 
             var options = CreateOptions();
             options.Path = "/socket.io";
@@ -408,7 +409,7 @@ namespace Route4MeSDK.FastProcessing
         public void download(int start)
         {
             int bufferFailSafeMaxAddresses = 100;
-            int chunkSize = (int)Math.Round((decimal)(Math.Min(200, Math.Max(10, requestedAddresses / 100))));
+            int chunkSize = (int)Math.Round((decimal)(Math.Min(200, Math.Max(10, (requestedAddresses!=null ? (int)requestedAddresses : 0) / 100))));
             int chunksLimit = (int)Math.Ceiling(((decimal)(bufferFailSafeMaxAddresses / chunkSize)));
 
             int maxAddressesToBeDownloaded = chunkSize * chunksLimit;

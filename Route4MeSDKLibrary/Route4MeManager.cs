@@ -611,7 +611,7 @@ namespace Route4MeSDK
 
             /// <value>A route destination ID to be updated</value>
 			[HttpQueryMemberAttribute(Name = "route_destination_id", EmitDefaultValue = false)]
-			public System.Nullable<int> RouteDestinationId { get; set; }
+			public Nullable<int> RouteDestinationId { get; set; }
 
             /// <value>The changed/new custom fields of a route destination</value>
 			[DataMember(Name = "custom_fields", EmitDefaultValue = false)]
@@ -1145,6 +1145,7 @@ namespace Route4MeSDK
         /// <returns>An object of the type MemberConfigurationResponse</returns>
 		public MemberConfigurationResponse CreateNewConfigurationKey(MemberConfigurationParameters confParams, out string errorString)
 		{
+            confParams.PrepareForSerialization();
             return GetJsonObjectFromAPI<MemberConfigurationResponse>(confParams, R4MEInfrastructureSettings.UserConfiguration, HttpMethodType.Post, out errorString);
 		}
 
@@ -1181,7 +1182,7 @@ namespace Route4MeSDK
 			GetConfigurationDataRequest mParams = default(GetConfigurationDataRequest);
 
 			mParams = new GetConfigurationDataRequest();
-			if ((confParams != null)) mParams.config_key = confParams.config_key;
+			if ((confParams != null)) mParams.config_key = confParams.ConfigKey;
 
             return GetJsonObjectFromAPI<MemberConfigurationDataResponse>(mParams, 
                 R4MEInfrastructureSettings.UserConfiguration, HttpMethodType.Get, out errorString);
@@ -2484,7 +2485,7 @@ namespace Route4MeSDK
 			GeocodingRequest request = new GeocodingRequest
 			{
 				Addresses = geoParams.Addresses,
-				Format = geoParams.Format
+				Format = geoParams.ExportFormat
 			};
 
 			var response = GetXmlObjectFromAPI<string>(request, R4MEInfrastructureSettings.Geocoder, 
@@ -2505,7 +2506,7 @@ namespace Route4MeSDK
 
 			var keyValues = new List<KeyValuePair<string, string>>()
             {
-                new KeyValuePair<string, string>("strExportFormat", geoParams.Format),
+                new KeyValuePair<string, string>("strExportFormat", geoParams.ExportFormat),
                 new KeyValuePair<string, string>("addresses", geoParams.Addresses)
             };
 
@@ -2603,8 +2604,8 @@ namespace Route4MeSDK
 			GeocodingRequest request = new GeocodingRequest
 			{
 				Addresses = geoParams.Addresses,
-				Format = geoParams.Format
-			};
+				Format = geoParams.ExportFormat
+            };
 
 			string url = R4MEInfrastructureSettings.RapidStreetData;
 
@@ -2659,8 +2660,8 @@ namespace Route4MeSDK
 			GeocodingRequest request = new GeocodingRequest
 			{
 				Addresses = geoParams.Addresses,
-				Format = geoParams.Format
-			};
+				Format = geoParams.ExportFormat
+            };
 
 			string url = R4MEInfrastructureSettings.RapidStreetZipcode;
 
@@ -2709,8 +2710,8 @@ namespace Route4MeSDK
 			GeocodingRequest request = new GeocodingRequest
 			{
 				Addresses = geoParams.Addresses,
-				Format = geoParams.Format
-			};
+				Format = geoParams.ExportFormat
+            };
 
 			string url = R4MEInfrastructureSettings.RapidStreetService;
 
@@ -3155,7 +3156,7 @@ namespace Route4MeSDK
 			}
 			catch (HttpListenerException e)
 			{
-				errorMessage = e is AggregateException ? e.InnerException.Message : e.Message;
+				//errorMessage = e is AggregateException ? e.InnerException.Message : e.Message;
 
 				errorMessage = e.Message + " --- " + errorMessage;
 				result = null;
@@ -3301,7 +3302,7 @@ namespace Route4MeSDK
 			}
 			catch (HttpListenerException e)
 			{
-				errorMessage = e is AggregateException ? e.InnerException.Message : e.Message;
+				//errorMessage = e is AggregateException ? e.InnerException.Message : e.Message;
 
 				errorMessage = e.Message + " --- " + errorMessage;
 				result = null;
@@ -3448,7 +3449,7 @@ namespace Route4MeSDK
 			}
 			catch (HttpListenerException e)
 			{
-				errorMessage = e is AggregateException ? e.InnerException.Message : e.Message;
+				//errorMessage = e is AggregateException ? e.InnerException.Message : e.Message;
 
 				errorMessage = e.Message + " --- " + errorMessage;
 				result = null;

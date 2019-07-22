@@ -53,7 +53,7 @@ namespace Route4MeSDK.DataTypes
 
         private IDbTransaction _transaction;
         private DbDataAdapter _adapter;
-        private IDataReader _dr;
+        //private IDataReader _dr;
         private DbProviderFactory _factory;
         private ConnectionStringSettings _conStngInstitute;
 
@@ -148,11 +148,13 @@ namespace Route4MeSDK.DataTypes
                 _cmd.Dispose();
             }
 
+            /*
             if (_dr != null)
             {
                 _dr.Close();
                 _dr.Dispose();
             }
+            */
         } 
 
         /// <summary>

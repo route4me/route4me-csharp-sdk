@@ -1400,7 +1400,6 @@ namespace Route4MeSDKUnitTest
             {
                 AlgorithmType = AlgorithmType.CVRP_TW_MD,
                 RouteName = "Multiple Depot, Multiple Driver, Time Window",
-                StoreRoute = false,
 
                 RouteDate = R4MeUtils.ConvertToUnixTimestamp(DateTime.UtcNow.Date.AddDays(1)),
                 RouteTime = 60 * 60 * 7,
@@ -3200,7 +3199,6 @@ namespace Route4MeSDKUnitTest
             {
                 AlgorithmType = AlgorithmType.CVRP_TW_MD,
                 RouteName = "Single Depot, Multiple Driver, No Time Window",
-                StoreRoute = false,
 
                 RouteDate = R4MeUtils.ConvertToUnixTimestamp(DateTime.UtcNow.Date.AddDays(1)),
                 RouteTime = 60 * 60 * 7,
@@ -3433,7 +3431,6 @@ namespace Route4MeSDKUnitTest
             {
                 AlgorithmType = AlgorithmType.CVRP_TW_MD,
                 RouteName = "Multiple Depot, Multiple Driver with 24 Stops, Time Window",
-                StoreRoute = false,
 
                 RouteDate = R4MeUtils.ConvertToUnixTimestamp(DateTime.UtcNow.Date.AddDays(1)),
                 RouteTime = 60 * 60 * 7,
@@ -3679,7 +3676,6 @@ namespace Route4MeSDKUnitTest
                 RouteMaxDuration = 8 * 3600 + 30 * 60,
                 RouteDate = R4MeUtils.ConvertToUnixTimestamp(DateTime.UtcNow.Date.AddDays(1)),
                 RouteTime = 7 * 3600 + 00 * 60,
-                StoreRoute = true,
                 TravelMode = TravelMode.Trucking.Description(),
                 VehicleMaxCargoWeight = 30,
                 VehicleCapacity = 10,
@@ -3858,7 +3854,6 @@ namespace Route4MeSDKUnitTest
             RouteParameters parameters = new RouteParameters()
             {
                 AlgorithmType = AlgorithmType.TSP,
-                StoreRoute = false,
                 RouteName = "Single Driver Multiple TimeWindows 12 Stops",
 
                 RouteDate = R4MeUtils.ConvertToUnixTimestamp(DateTime.UtcNow.Date.AddDays(1)),
@@ -3961,7 +3956,6 @@ namespace Route4MeSDKUnitTest
             RouteParameters parameters = new RouteParameters()
             {
                 AlgorithmType = AlgorithmType.TSP,
-                StoreRoute = false,
                 RouteName = "Single Driver Round Trip",
 
                 RouteDate = R4MeUtils.ConvertToUnixTimestamp(DateTime.UtcNow.Date.AddDays(1)),
@@ -4064,7 +4058,6 @@ namespace Route4MeSDKUnitTest
             RouteParameters parameters = new RouteParameters()
             {
                 AlgorithmType = AlgorithmType.TSP,
-                StoreRoute = false,
                 RouteName = "Single Driver Round Trip",
 
                 RouteDate = R4MeUtils.ConvertToUnixTimestamp(DateTime.UtcNow.Date.AddDays(1)),
@@ -4174,7 +4167,6 @@ namespace Route4MeSDKUnitTest
             RouteParameters parameters = new RouteParameters()
             {
                 AlgorithmType = AlgorithmType.TSP,
-                StoreRoute = false,
                 RouteName = "Single Driver Route 10 Stops Test",
 
                 RouteDate = R4MeUtils.ConvertToUnixTimestamp(DateTime.UtcNow.Date.AddDays(1)),
@@ -6983,7 +6975,7 @@ namespace Route4MeSDKUnitTest
         static AddressBookContact scheduledContact3, scheduledContact3Response;
         static AddressBookContact scheduledContact4, scheduledContact4Response;
         static AddressBookContact scheduledContact5, scheduledContact5Response;
-        static AddressBookContact scheduledContact6, scheduledContact6Response;
+        //static AddressBookContact scheduledContact6, scheduledContact6Response;
 
         static List<int> lsRemoveContacts = new List<int>();
 
@@ -7041,9 +7033,9 @@ namespace Route4MeSDKUnitTest
             #region // Add a location, scheduled daily.
             Schedule sched1 = new Schedule("daily", false)
             {
-                enabled = true,
-                mode = "daily",
-                daily = new schedule_daily(1)
+                Enabled = true,
+                Mode = "daily",
+                Daily = new ScheduleDaily(1)
             };
 
             scheduledContact1 = new AddressBookContact()
@@ -7075,8 +7067,8 @@ namespace Route4MeSDKUnitTest
             #region // Add a location, scheduled weekly.
             Schedule sched2 = new Schedule("weekly", false)
             {
-                enabled = true,
-                weekly = new schedule_weekly(1, new int[] { 1, 2, 3, 4, 5 })
+                Enabled = true,
+                Weekly = new ScheduleWeekly(1, new int[] { 1, 2, 3, 4, 5 })
             };
 
             scheduledContact2 = new AddressBookContact()
@@ -7108,8 +7100,8 @@ namespace Route4MeSDKUnitTest
             #region // Add a location, scheduled monthly (dates mode).
             Schedule sched3 = new Schedule("monthly", false)
             {
-                enabled = true,
-                monthly = new schedule_monthly(_every: 1, _mode: "dates", _dates: new int[] { 20, 22, 23, 24, 25 })
+                Enabled = true,
+                Monthly = new ScheduleMonthly(_every: 1, _mode: "dates", _dates: new int[] { 20, 22, 23, 24, 25 })
             };
 
             scheduledContact3 = new AddressBookContact()
@@ -7145,8 +7137,8 @@ namespace Route4MeSDKUnitTest
             #region // Add a location, scheduled monthly (nth mode).
             Schedule sched4 = new Schedule("monthly", false)
             {
-                enabled = true,
-                monthly = new schedule_monthly(_every: 1, _mode: "nth", _nth: new Dictionary<int, int>() { { 1, 4 } })
+                Enabled = true,
+                Monthly = new ScheduleMonthly(_every: 1, _mode: "nth", _nth: new Dictionary<int, int>() { { 1, 4 } })
             };
 
             scheduledContact4 = new AddressBookContact()
@@ -7179,9 +7171,9 @@ namespace Route4MeSDKUnitTest
             #region // Add a location with the daily scheduling and blacklist.
             Schedule sched5 = new Schedule("daily", false)
             {
-                enabled = true,
-                mode = "daily",
-                daily = new schedule_daily(1)
+                Enabled = true,
+                Mode = "daily",
+                Daily = new ScheduleDaily(1)
             };
 
             scheduledContact5 = new AddressBookContact()
@@ -7471,8 +7463,8 @@ namespace Route4MeSDKUnitTest
 
             AddressBookGroupFilterParameter filterParam = new AddressBookGroupFilterParameter()
             {
-                query = "Louisville",
-                display = "all"
+                Query = "Louisville",
+                Display = "all"
             };
 
             AddressBookGroupParameters addressBookGroupParameters = new AddressBookGroupParameters()
@@ -9348,9 +9340,9 @@ namespace Route4MeSDKUnitTest
             {
                 Format = "json",
                 RouteId = "8D1A03A79E24D57C9EBEB1A03C12CA6B",
-                time_period = "custom",
-                start_date = uStartTime,
-                end_date = uEndTime
+                TimePeriod = "custom",
+                StartDate = uStartTime,
+                EndDate = uEndTime
             };
 
             string errorString = "";
@@ -9654,15 +9646,15 @@ namespace Route4MeSDKUnitTest
         {
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
-            MemberConfigurationParameters @params = new MemberConfigurationParameters
+            MemberConfigurationParameters memberConfigParameters = new MemberConfigurationParameters
             {
-                config_key = "My height",
-                config_value = "value"
+                ConfigKey = "My height",
+                ConfigValue = "value"
             };
 
             // Run the query
             string errorString = "";
-            MemberConfigurationResponse result = route4Me.CreateNewConfigurationKey(@params, out errorString);
+            MemberConfigurationResponse result = route4Me.CreateNewConfigurationKey(memberConfigParameters, out errorString);
 
             Assert.IsNotNull(result, "AddNewConfigurationKeyTest failed... " + errorString);
         }
@@ -9674,8 +9666,8 @@ namespace Route4MeSDKUnitTest
 
             MemberConfigurationParameters @params = new MemberConfigurationParameters
             {
-                config_key = "destination_icon_uri",
-                config_value = "value"
+                ConfigKey = "destination_icon_uri",
+                ConfigValue = "value"
             };
 
             // Run the query
@@ -9704,7 +9696,7 @@ namespace Route4MeSDKUnitTest
         {
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
-            MemberConfigurationParameters @params = new MemberConfigurationParameters { config_key = "destination_icon_uri" };
+            MemberConfigurationParameters @params = new MemberConfigurationParameters { ConfigKey = "destination_icon_uri" };
 
             // Run the query
             string errorString = "";
@@ -9720,8 +9712,8 @@ namespace Route4MeSDKUnitTest
 
             MemberConfigurationParameters @params = new MemberConfigurationParameters
             {
-                config_key = "destination_icon_uri",
-                config_value = "444"
+                ConfigKey = "destination_icon_uri",
+                ConfigValue = "444"
             };
 
             // Run the query
@@ -9736,7 +9728,7 @@ namespace Route4MeSDKUnitTest
         {
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
-            MemberConfigurationParameters @params = new MemberConfigurationParameters { config_key = "My height" };
+            MemberConfigurationParameters @params = new MemberConfigurationParameters { ConfigKey = "My height" };
 
             // Run the query
             string errorString = "";
@@ -9750,7 +9742,7 @@ namespace Route4MeSDKUnitTest
         {
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
-            MemberConfigurationParameters @params = new MemberConfigurationParameters { config_key = "destination_icon_uri" };
+            MemberConfigurationParameters @params = new MemberConfigurationParameters { ConfigKey = "destination_icon_uri" };
 
             // Run the query
             string errorString = "";
@@ -10056,7 +10048,7 @@ namespace Route4MeSDKUnitTest
             GeocodingParameters geoParams = new GeocodingParameters
             {
                 Addresses = "Los Angeles International Airport, CA||3495 Purdue St, Cuyahoga Falls, OH 44221",
-                Format = "json"
+                ExportFormat = "json"
             };
 
             //Run the query
@@ -10074,7 +10066,7 @@ namespace Route4MeSDKUnitTest
             GeocodingParameters geoParams = new GeocodingParameters
             {
                 Addresses = "Los Angeles International Airport, CA\n3495 Purdue St, Cuyahoga Falls, OH 44221",
-                Format = "json"
+                ExportFormat = "json"
             };
 
             //Run the query
@@ -10268,7 +10260,7 @@ namespace Route4MeSDKUnitTest
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
             GeocodingParameters geoParams = new GeocodingParameters { Addresses = "41.00367151,-81.59846105" };
-            geoParams.Format = "xml";
+            geoParams.ExportFormat = "xml";
             // Run the query
             string errorString = "";
             string result = route4Me.Geocoding(geoParams, out errorString);
@@ -10764,7 +10756,7 @@ namespace Route4MeSDKUnitTest
 
             // Comment 2 lines bellow if you have put in the above line your valid key.
             Assert.IsTrue(1 > 0, "");
-            return;
+            if (ApiKey.Length>10) return;
 
             Route4MeManager route4Me = new Route4MeManager(ApiKey);
 
@@ -10819,7 +10811,7 @@ namespace Route4MeSDKUnitTest
                     //newLocation.schedule = new Schedule[]{};
                     if (!sched0.ValidateScheduleMode(sched_mode)) continue;
 
-                    sched0.from = DateTime.Now.ToString("yyyy-MM-dd");
+                    sched0.From = DateTime.Now.ToString("yyyy-MM-dd");
 
                     bool blNth = false;
 
@@ -10837,23 +10829,23 @@ namespace Route4MeSDKUnitTest
                     DateTime dt = DateTime.Now;
                     //if (schedule.ValidateScheduleMode(sched_mode))
                     //{
-                    schedule.mode = sched_mode.ToString();
+                    schedule.Mode = sched_mode.ToString();
                     if (schedule.ValidateScheduleEnabled(sched_enabled))
                     {
-                        schedule.enabled = Convert.ToBoolean(sched_enabled);
+                        schedule.Enabled = Convert.ToBoolean(sched_enabled);
                         if (schedule.ValidateScheduleEvery(sched_every))
                         {
                             int iEvery = Convert.ToInt32(sched_every);
 
-                            switch (schedule.mode)
+                            switch (schedule.Mode)
                             {
                                 case "daily":
-                                    schedule.daily.every = iEvery;
+                                    schedule.Daily.Every = iEvery;
                                     break;
                                 case "weekly":
                                     if (schedule.ValidateScheduleWeekdays(sched_weekdays))
                                     {
-                                        schedule.weekly.every = iEvery;
+                                        schedule.Weekly.Every = iEvery;
 
                                         string[] arWeekdays = sched_weekdays.Split(',');
                                         List<int> lsWeekdays = new List<int>();
@@ -10862,15 +10854,15 @@ namespace Route4MeSDKUnitTest
                                         {
                                             lsWeekdays.Add(Convert.ToInt32(arWeekdays[i]));
                                         }
-                                        schedule.weekly.weekdays = lsWeekdays.ToArray();
+                                        schedule.Weekly.Weekdays = lsWeekdays.ToArray();
                                     }
                                     break;
                                 case "monthly":
                                     if (schedule.ValidateScheduleMonthlyMode(sched_monthly_mode))
                                     {
-                                        schedule.monthly.every = iEvery;
-                                        schedule.monthly.mode = sched_monthly_mode.ToString();
-                                        switch (schedule.monthly.mode)
+                                        schedule.Monthly.Every = iEvery;
+                                        schedule.Monthly.Mode = sched_monthly_mode.ToString();
+                                        switch (schedule.Monthly.Mode)
                                         {
                                             case "dates":
                                                 if (schedule.ValidateScheduleMonthDays(sched_monthly_dates))
@@ -10882,12 +10874,12 @@ namespace Route4MeSDKUnitTest
                                                     {
                                                         lsMonthdays.Add(Convert.ToInt32(arMonthdays[i]));
                                                     }
-                                                    schedule.monthly.dates = lsMonthdays.ToArray();
+                                                    schedule.Monthly.Dates = lsMonthdays.ToArray();
                                                 }
                                                 break;
                                             case "nth":
-                                                if (schedule.ValidateScheduleNthN(sched_nth_n)) schedule.monthly.nth.n = Convert.ToInt32(sched_nth_n);
-                                                if (schedule.ValidateScheduleNthWhat(sched_nth_what)) schedule.monthly.nth.what = Convert.ToInt32(sched_nth_what);
+                                                if (schedule.ValidateScheduleNthN(sched_nth_n)) schedule.Monthly.Nth.N = Convert.ToInt32(sched_nth_n);
+                                                if (schedule.ValidateScheduleNthWhat(sched_nth_what)) schedule.Monthly.Nth.What = Convert.ToInt32(sched_nth_what);
                                                 break;
                                         }
                                     }
@@ -10895,12 +10887,12 @@ namespace Route4MeSDKUnitTest
                                 case "annually":
                                     if (schedule.ValidateScheduleUseNth(sched_annually_usenth))
                                     {
-                                        schedule.annually.every = iEvery;
-                                        schedule.annually.use_nth = Convert.ToBoolean(sched_annually_usenth);
-                                        if (schedule.annually.use_nth)
+                                        schedule.Annually.Every = iEvery;
+                                        schedule.Annually.UseNth = Convert.ToBoolean(sched_annually_usenth);
+                                        if (schedule.Annually.UseNth)
                                         {
-                                            if (schedule.ValidateScheduleNthN(sched_nth_n)) schedule.annually.nth.n = Convert.ToInt32(sched_nth_n);
-                                            if (schedule.ValidateScheduleNthWhat(sched_nth_what)) schedule.annually.nth.what = Convert.ToInt32(sched_nth_what);
+                                            if (schedule.ValidateScheduleNthN(sched_nth_n)) schedule.Annually.Nth.N = Convert.ToInt32(sched_nth_n);
+                                            if (schedule.ValidateScheduleNthWhat(sched_nth_what)) schedule.Annually.Nth.What = Convert.ToInt32(sched_nth_what);
                                         }
                                         else
                                         {
@@ -10913,7 +10905,7 @@ namespace Route4MeSDKUnitTest
                                                 {
                                                     lsMonths.Add(Convert.ToInt32(arYearmonths[i]));
                                                 }
-                                                schedule.annually.months = lsMonths.ToArray();
+                                                schedule.Annually.Months = lsMonths.ToArray();
                                             }
                                         }
                                     }
@@ -11008,8 +11000,8 @@ namespace Route4MeSDKUnitTest
             {
                 HybridOptimizationParameters hparams = new HybridOptimizationParameters()
                 {
-                    target_date_string = ScheduledDay,
-                    timezone_offset_minutes = -240
+                    TargetDateString = ScheduledDay,
+                    TimezoneOffsetMinutes = -240
                 };
 
                 DataObject resultOptimization = route4Me.GetHybridOptimization(hparams, out errorString1);
@@ -11030,9 +11022,9 @@ namespace Route4MeSDKUnitTest
                 //============== Add Depot To Hybrid Optimization ===============
                 HybridDepotParameters hDepotParams = new HybridDepotParameters()
                 {
-                    optimization_problem_id = HybridOptimizationId,
-                    delete_old_depots = true,
-                    new_depots = new Address[] { Depots[lsScheduledDays.IndexOf(ScheduledDay)] }
+                    OptimizationProblemId = HybridOptimizationId,
+                    DeleteOldDepots = true,
+                    NewDepots = new Address[] { Depots[lsScheduledDays.IndexOf(ScheduledDay)] }
                 };
 
                 var addDepotResult = route4Me.AddDepotsToHybridOptimization(hDepotParams, out errorString3);
@@ -11072,7 +11064,7 @@ namespace Route4MeSDKUnitTest
 
             // Comment 2 lines bellow if you have put in the above line your valid key.
             Assert.IsTrue(1 > 0, "");
-            return;
+            if (ApiKey.Length > 10) return;
 
             Route4MeManager route4Me = new Route4MeManager(ApiKey);
 
@@ -11207,8 +11199,8 @@ namespace Route4MeSDKUnitTest
             {
                 HybridOptimizationParameters hparams = new HybridOptimizationParameters()
                 {
-                    target_date_string = ScheduledDay,
-                    timezone_offset_minutes = 480
+                    TargetDateString = ScheduledDay,
+                    TimezoneOffsetMinutes = 480
                 };
 
                 DataObject resultOptimization = route4Me.GetHybridOptimization(hparams, out errorString1);
@@ -11231,9 +11223,9 @@ namespace Route4MeSDKUnitTest
                 //============== Add Depot To Hybrid Optimization ===============
                 HybridDepotParameters hDepotParams = new HybridDepotParameters()
                 {
-                    optimization_problem_id = HybridOptimizationId,
-                    delete_old_depots = true,
-                    new_depots = new Address[] { Depots[lsScheduledDays.IndexOf(ScheduledDay)] }
+                    OptimizationProblemId = HybridOptimizationId,
+                    DeleteOldDepots = true,
+                    NewDepots = new Address[] { Depots[lsScheduledDays.IndexOf(ScheduledDay)] }
                 };
 
                 var addDepotResult = route4Me.AddDepotsToHybridOptimization(hDepotParams, out errorString3);
@@ -11468,7 +11460,6 @@ namespace Route4MeSDKUnitTest
             RouteParameters parameters = new RouteParameters()
             {
                 AlgorithmType = AlgorithmType.TSP,
-                StoreRoute = false,
                 RouteName = "Single Driver Route 10 Stops Test",
 
                 RouteDate = R4MeUtils.ConvertToUnixTimestamp(DateTime.UtcNow.Date.AddDays(1)),
@@ -11575,7 +11566,6 @@ namespace Route4MeSDKUnitTest
             RouteParameters parameters = new RouteParameters()
             {
                 AlgorithmType = AlgorithmType.TSP,
-                StoreRoute = false,
                 RouteName = "Single Driver Round Trip",
 
                 RouteDate = R4MeUtils.ConvertToUnixTimestamp(DateTime.UtcNow.Date.AddDays(1)),
@@ -11819,7 +11809,6 @@ namespace Route4MeSDKUnitTest
             {
                 AlgorithmType = AlgorithmType.CVRP_TW_MD,
                 RouteName = "Multiple Depot, Multiple Driver with 24 Stops, Time Window",
-                StoreRoute = false,
 
                 RouteDate = R4MeUtils.ConvertToUnixTimestamp(DateTime.UtcNow.Date.AddDays(1)),
                 RouteTime = 60 * 60 * 7,
