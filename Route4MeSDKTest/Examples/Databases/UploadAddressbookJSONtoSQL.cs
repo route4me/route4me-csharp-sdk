@@ -22,7 +22,7 @@ namespace Route4MeSDK.Examples
 
                 Console.WriteLine("Connection opened");
 
-                sqlDB.Json2Table(@"Data/JSON/Addressbook Get Contacts RESPONSE.json", "addressbook_v4", "id", R4M_DataType.Addressbook);
+                sqlDB.Json2Table(@"Data/JSON/Addressbook Get Contacts RESPONSE.json", R4M_DataType.Addressbook);
 
                 Console.WriteLine("The file 'Addressbook Get Contacts RESPONSE.json' was uploaded to the SQL server.");
             }
