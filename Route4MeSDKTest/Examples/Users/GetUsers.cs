@@ -23,9 +23,9 @@ namespace Route4MeSDK.Examples
 
       if (dataObjects != null)
       {
-        if (dataObjects.results != null)
+        if (dataObjects.Results != null)
         {
-            Console.WriteLine("GetUsers executed successfully, {0} users returned", dataObjects.results.Length);
+            Console.WriteLine("GetUsers executed successfully, {0} users returned", dataObjects.Results.Length);
             Console.WriteLine("");
         } else Console.WriteLine("GetUsers error: {0}", errorString);
 

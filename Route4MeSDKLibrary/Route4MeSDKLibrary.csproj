@@ -79,6 +79,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataTypes\ActivityMember.cs" />
     <Compile Include="DataTypes\AddressBookGroupFilter.cs" />
     <Compile Include="Consts.cs" />
     <Compile Include="DataTypes\Activity.cs" />
@@ -89,12 +90,14 @@
     <Compile Include="DataTypes\AddressBookGroupRule.cs" />
     <Compile Include="DataTypes\AddressCustomNote.cs" />
     <Compile Include="DataTypes\AddressGeocoded.cs" />
+    <Compile Include="DataTypes\AddressManifest.cs" />
     <Compile Include="DataTypes\AddressNote.cs" />
     <Compile Include="DataTypes\AddressForGeocoding.cs" />
     <Compile Include="DataTypes\AvoidanceZone.cs" />
     <Compile Include="DataTypes\cDatabase.cs" />
     <Compile Include="DataTypes\Country.cs" />
     <Compile Include="DataTypes\CustomNoteType.cs" />
+    <Compile Include="DataTypes\DatabaseHelper.cs" />
     <Compile Include="DataTypes\DataObject.cs" />
     <Compile Include="DataTypes\Direction.cs" />
     <Compile Include="DataTypes\DirectionLocation.cs" />

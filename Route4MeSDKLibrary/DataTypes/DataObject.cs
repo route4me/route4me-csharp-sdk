@@ -29,6 +29,18 @@ namespace Route4MeSDK.DataTypes
         public string[] UserErrors { get; set; }
 
         /// <summary>
+        /// An array of the optimization errors
+        /// </summary>
+        [DataMember(Name = "optimization_errors")]
+        public string[] OptimizationErrors { get; set; }
+
+        /// <summary>
+        /// When the Optimization Problem was completed.
+        /// </summary>
+        [DataMember(Name = "optimization_completed_timestamp", EmitDefaultValue = false)]
+        public long? OptimizationCompletedTimestamp { get; set; }
+
+        /// <summary>
         /// If true it means the solution was not returned (it is being computed in the background)
         /// </summary>
         [DataMember(Name = "sent_to_background")]
