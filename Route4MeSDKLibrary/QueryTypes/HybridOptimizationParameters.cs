@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using Route4MeSDK.DataTypes;
+using System.Runtime.Serialization;
 
 namespace Route4MeSDK.QueryTypes
 {

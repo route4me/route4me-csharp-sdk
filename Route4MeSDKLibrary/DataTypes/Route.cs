@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 
 namespace Route4MeSDK.DataTypes
 {
@@ -53,25 +51,10 @@ namespace Route4MeSDK.DataTypes
         public string MemberTrackingSubheadline { get; set; }
 
         /// <summary>
-        /// Route rating done by a user.
-        /// <para>Available values: <value>0, 1, 2, 3, 4, 5</value></para>
-        /// <remarks><para>A null value means no rating was given. 
-        /// Users can rate routes so that future optimizations take these ratings into account.</para></remarks>
-        /// </summary>
-        [DataMember(Name = "user_route_rating", EmitDefaultValue = false)]
-        public int? UserRouteRating { get; set; }
-
-        /// <summary>
         /// If true, the order is approved for execution
         /// </summary>
         [DataMember(Name = "approved_for_execution")]
         public bool ApprovedForExecution { get; set; }
-
-        /// <summary>
-        /// If true, route is unrouted.
-        /// </summary>
-        [DataMember(Name = "is_unrouted")]
-        public bool IsUnrouted { get; set; }
 
         /// <summary>
         /// Counter of the approved revisions
@@ -113,7 +96,7 @@ namespace Route4MeSDK.DataTypes
         /// Miles per gallon
         /// </summary>
         [DataMember(Name = "mpg", EmitDefaultValue = false)]
-        public string Mpg { get; set; }
+        public string mpg { get; set; }
 
         /// <summary>
         /// Total route's trip distance
@@ -132,99 +115,6 @@ namespace Route4MeSDK.DataTypes
         /// </summary>
         [DataMember(Name = "route_duration_sec", EmitDefaultValue = false)]
         public int? RouteDurationSec { get; set; }
-
-        /// <summary>
-        /// Planned total route duration.
-        /// <remarks><para>
-        /// The duration between the latest window end and the earliest window start.
-        /// </para></remarks>
-        /// </summary>
-        [DataMember(Name = "planned_total_route_duration", EmitDefaultValue = false)]
-        public int? PlannedTotalRouteDuration { get; set; }
-
-        /// <summary>
-        /// Actual travel distance.
-        /// </summary>
-        [DataMember(Name = "actual_travel_distance")]
-        public double? ActualTravelDistance { get; set; }
-
-        /// <summary>
-        /// Actual travel time.
-        /// </summary>
-        [DataMember(Name = "actual_travel_time")]
-        public int? ActualTravelTime { get; set; }
-
-        /// <summary>
-        /// Actual footsteps.
-        /// </summary>
-        [DataMember(Name = "actual_footsteps")]
-        public int? ActualFootSteps { get; set; }
-
-        /// <summary>
-        /// Working time
-        /// </summary>
-        [DataMember(Name = "working_time")]
-        public int? WorkingTime { get; set; }
-
-        /// <summary>
-        /// Driving time
-        /// </summary>
-        [DataMember(Name = "driving_time")]
-        public int? DrivingTime { get; set; }
-
-        /// <summary>
-        /// Idling time
-        /// </summary>
-        [DataMember(Name = "idling_time")]
-        public int? IdlingTime { get; set; }
-
-        /// <summary>
-        /// Paying miles
-        /// </summary>
-        [DataMember(Name = "paying_miles")]
-        public double? PayingMiles { get; set; }
-
-        /// <summary>
-        /// Channel name.
-        /// </summary>
-        [DataMember(Name = "channel_name")]
-        public string ChannelName { get; set; }
-
-        /// <summary>
-        /// Geofence polygon type.
-        /// </summary>
-        [DataMember(Name = "geofence_polygon_type")]
-        public string GeofencePolygonType { get; set; }
-
-        /// <summary>
-        /// Geofence polygon size.
-        /// </summary>
-        [DataMember(Name = "geofence_polygon_size")]
-        public int? GeofencePolygonSize { get; set; }
-
-        /// <summary>
-        /// Destination count.
-        /// </summary>
-        [DataMember(Name = "destination_count")]
-        public int? DestinationCount { get; set; }
-
-        /// <summary>
-        /// Notes count in the route.
-        /// </summary>
-        [DataMember(Name = "notes_count")]
-        public int? NotesCount { get; set; }
-
-        /// <summary>
-        /// Vehicle.
-        /// </summary>
-        [DataMember(Name = "vehicle")]
-        public String Vehicle { get; set; }
-
-        /// <summary>
-        /// Member config key-value pairs.
-        /// </summary>
-        [DataMember(Name = "member_config_storage")]
-        public Dictionary<String,String> MemberConfigStorage { get; set; }
 
         /// <summary>
         /// Route notes

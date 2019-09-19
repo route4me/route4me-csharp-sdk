@@ -83,6 +83,7 @@ namespace Route4MeSDK.QueryTypes
         [DataMember(Name = "query")]
         public string Query { get; set; }
 
+
         /// <summary>
         /// Specifies which address book contacts to display.
         /// <para>Available values are:

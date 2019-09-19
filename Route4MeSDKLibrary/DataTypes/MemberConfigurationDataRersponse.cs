@@ -1,31 +1,23 @@
-﻿using Route4MeSDK.QueryTypes;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 
 namespace Route4MeSDK.DataTypes
 {
     /// <summary>
-    /// Response structure for the member's configuration data request.
+    /// Response structure for the member's configuration data request
     /// </summary>
     [DataContract]
-    public sealed class MemberConfigurationDataResponse : GenericParameters
+    public sealed class MemberConfigurationDataResponse
     {
         /// <summary>
-        /// Result of the member configuration request. 
-        /// <para><remarks>If equal to 'OK' request finished successfully.</remarks></para>
+        /// The member's configuration key
         /// </summary>
-        [DataMember(Name = "result", EmitDefaultValue = false)]
-        public string Result { get; set; }
+        [DataMember(Name = "config_key", EmitDefaultValue = false)]
+        public string result { get; set; }
 
         /// <summary>
         /// The member's configutration data. See <see cref="MemberConfigurationData"/>
         /// </summary>
         [DataMember(Name = "data", EmitDefaultValue = false)]
         public MemberConfigurationData[] data { get; set; }
-
-        /// <summary>
-        /// Number of the affected member configuration records.
-        /// </summary>
-        [DataMember(Name = "affected", EmitDefaultValue = false)]
-        public int Affected { get; set; }
     }
 }

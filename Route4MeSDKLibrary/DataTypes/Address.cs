@@ -109,12 +109,6 @@ namespace Route4MeSDK.DataTypes
         public string OptimizationProblemId { get; set; }
 
         /// <summary>
-        /// The route name.
-        /// </summary>
-        [DataMember(Name = "route_name", EmitDefaultValue = false)]
-        public string RouteName { get; set; }
-
-        /// <summary>
         /// The destination's sequence number in the route.
         /// </summary>
         [DataMember(Name = "sequence_no", EmitDefaultValue = false)]
@@ -421,12 +415,6 @@ namespace Route4MeSDK.DataTypes
         public AddressNote[] Notes { get; set; }
 
         /// <summary>
-        /// The route path point.
-        /// </summary>
-        [DataMember(Name = "path_to_next", EmitDefaultValue = false)]
-        public GeoPoint[] PathToNext { get; set; }
-
-        /// <summary>
         /// If present, the priority will sequence addresses in all the optimal routes so that
         /// higher priority addresses are general at the beginning of the route sequence.
         /// 1 is the highest priority, 100000 is the lowest.
@@ -477,11 +465,5 @@ namespace Route4MeSDK.DataTypes
         /// </summary>
         [DataMember(Name = "tracking_number", EmitDefaultValue = false)]
         public string tracking_number { get; set; }
-
-        /// <summary>
-        /// Manifest of a route address.
-        /// </summary>
-        [DataMember(Name = "manifest", EmitDefaultValue = false)]
-        public AddressManifest Manifest { get; set; }
     }
 }
