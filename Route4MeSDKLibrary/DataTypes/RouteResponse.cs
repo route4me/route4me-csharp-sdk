@@ -1,291 +1,233 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 
 namespace Route4MeSDK.DataTypes
 {
+    /// <summary>
+    /// Response from a route request.
+    /// </summary>
     [DataContract]
     public sealed class RouteResponse
     {
+        /// <summary>
+        /// The route ID.
+        /// </summary>
         [DataMember(Name = "route_id")]
-        public string RouteID
-        {
-            get { return m_RouteID; }
-            set { m_RouteID = value; }
-        }
-        private string m_RouteID;
-
-        [DataMember(Name = "optimization_problem_id")]
-        public string OptimizationProblemId
-        {
-            get { return m_OptimizationProblemId; }
-            set { m_OptimizationProblemId = value; }
-        }
-        private string m_OptimizationProblemId;
+        public string RouteID { get; set; }
 
         /// <summary>
-        /// Route rating by user [0 - 5]
+        /// The optimization problem ID.
+        /// </summary>
+        [DataMember(Name = "optimization_problem_id")]
+        public string OptimizationProblemId { get; set; }
+
+
+        /// <summary>
+        /// Route rating by user [0 - 5].
         /// </summary>
         [DataMember(Name = "user_route_rating")]
-        public System.Nullable<int> UserRouteRating
-        {
-            get { return m_UserRouteRating; }
-            set { m_UserRouteRating = value; }
-        }
-        private System.Nullable<int> m_UserRouteRating;
+        public Nullable<int> UserRouteRating { get; set; }
 
+        /// <summary>
+        /// Route owner's member ID.
+        /// </summary>
         [DataMember(Name = "member_id")]
-        public System.Nullable<int> MemberId
-        {
-            get { return m_MemberId; }
-            set { m_MemberId = value; }
-        }
-        private System.Nullable<int> m_MemberId;
+        public Nullable<int> MemberId { get; set; }
 
+        /// <summary>
+        /// Route owner's email.
+        /// </summary>
         [DataMember(Name = "member_email")]
-        public string MemberEmail
-        {
-            get { return m_MemberEmail; }
-            set { m_MemberEmail = value; }
-        }
-        private string m_MemberEmail;
+        public string MemberEmail { get; set; }
 
+        /// <summary>
+        /// Route owner's first name.
+        /// </summary>
         [DataMember(Name = "member_first_name")]
-        public string MemberFirstName
-        {
-            get { return m_MemberFirstName; }
-            set { m_MemberFirstName = value; }
-        }
-        private string m_MemberFirstName;
+        public string MemberFirstName { get; set; }
 
+        /// <summary>
+        /// Route owner's last name.
+        /// </summary>
         [DataMember(Name = "member_last_name")]
-        public string MemberLastName
-        {
-            get { return m_MemberLastName; }
-            set { m_MemberLastName = value; }
-        }
-        private string m_MemberLastName;
+        public string MemberLastName { get; set; }
 
+        /// <summary>
+        /// Channel name.
+        /// </summary>
         [DataMember(Name = "channel_name")]
-        public string ChannelName
-        {
-            get { return m_ChannelName; }
-            set { m_ChannelName = value; }
-        }
-        private string m_ChannelName;
+        public string ChannelName { get; set; }
 
+        /// <summary>
+        /// Vehicle alias.
+        /// </summary>
         [DataMember(Name = "vehicle_alias")]
-        public string VehicleAlias
-        {
-            get { return m_VehicleAlias; }
-            set { m_VehicleAlias = value; }
-        }
-        private string m_VehicleAlias;
+        public string VehicleAlias { get; set; }
 
+        /// <summary>
+        /// Driver alias.
+        /// </summary>
         [DataMember(Name = "driver_alias")]
-        public string DriverAlias
-        {
-            get { return m_DriverAlias; }
-            set { m_DriverAlias = value; }
-        }
-        private string m_DriverAlias;
+        public string DriverAlias { get; set; }
 
+        /// <summary>
+        /// The total distance of the route trip.
+        /// </summary>
         [DataMember(Name = "trip_distance")]
-        public System.Nullable<double> TripDistance
-        {
-            get { return m_TripDistance; }
-            set { m_TripDistance = value; }
-        }
-        private System.Nullable<double> m_TripDistance;
+        public Nullable<double> TripDistance { get; set; }
 
+        /// <summary>
+        /// If true, route is unrouted.
+        /// </summary>
         [DataMember(Name = "is_unrouted")]
-        public bool IsUnrouted
-        {
-            get { return m_IsUnrouted; }
-            set { m_IsUnrouted = value; }
-        }
-        private bool m_IsUnrouted;
+        public bool IsUnrouted { get; set; }
 
+        /// <summary>
+        /// Total cost of a route.
+        /// </summary>
         [DataMember(Name = "route_cost")]
-        public System.Nullable<double> RouteCost
-        {
-            get { return m_RouteCost; }
-            set { m_RouteCost = value; }
-        }
-        private System.Nullable<double> m_RouteCost;
+        public Nullable<double> RouteCost { get; set; }
 
+        /// <summary>
+        /// Total revenue of a route.
+        /// </summary>
         [DataMember(Name = "route_revenue")]
-        public System.Nullable<double> RouteRevenue
-        {
-            get { return m_RouteRevenue; }
-            set { m_RouteRevenue = value; }
-        }
-        private System.Nullable<double> m_RouteRevenue;
+        public Nullable<double> RouteRevenue { get; set; }
 
+        /// <summary>
+        /// Net revenue per distance unit.
+        /// </summary>
         [DataMember(Name = "net_revenue_per_distance_unit")]
-        public System.Nullable<double> NetRevenuePerDistanceUnit
-        {
-            get { return m_NetRevenuePerDistanceUnit; }
-            set { m_NetRevenuePerDistanceUnit = value; }
-        }
-        private System.Nullable<double> m_NetRevenuePerDistanceUnit;
+        public Nullable<double> NetRevenuePerDistanceUnit { get; set; }
 
+        /// <summary>
+        /// When the route was created.
+        /// </summary>
         [DataMember(Name = "created_timestamp")]
-        public System.Nullable<int> CreatedTimestamp
-        {
-            get { return m_CreatedTimestamp; }
-            set { m_CreatedTimestamp = value; }
-        }
-        private System.Nullable<int> m_CreatedTimestamp;
+        public Nullable<int> CreatedTimestamp { get; set; }
 
+        /// <summary>
+        /// Miles per gallon.
+        /// </summary>
         [DataMember(Name = "mpg")]
-        public System.Nullable<double> mpg
-        {
-            get { return m_mpg; }
-            set { m_mpg = value; }
-        }
-        private System.Nullable<double> m_mpg;
+        public Nullable<double> mpg { get; set; }
 
+        /// <summary>
+        /// Gas price.
+        /// </summary>
         [DataMember(Name = "gas_price")]
-        public System.Nullable<double> GasPrice
-        {
-            get { return m_GasPrice; }
-            set { m_GasPrice = value; }
-        }
-        private System.Nullable<double> m_GasPrice;
+        public Nullable<double> GasPrice { get; set; }
 
+        /// <summary>
+        /// Total route duration (seconds).
+        /// <remarks><para>
+        /// Sum of the trip durations to the next addresses.
+        /// </para></remarks>
+        /// </summary>
         [DataMember(Name = "route_duration_sec")]
-        public System.Nullable<int> RouteDurationSec
-        {
-            get { return m_RouteDurationSec; }
-            set { m_RouteDurationSec = value; }
-        }
-        private System.Nullable<int> m_RouteDurationSec;
+        public Nullable<int> RouteDurationSec { get; set; }
 
+        /// <summary>
+        /// Planned total route duration.
+        /// <remarks><para>
+        /// The duration between the latest window end and the earliest window start.
+        /// </para></remarks>
+        /// </summary>
         [DataMember(Name = "planned_total_route_duration")]
-        public System.Nullable<int> PlannedTotalRouteDuration
-        {
-            get { return m_PlannedTotalRouteDuration; }
-            set { m_PlannedTotalRouteDuration = value; }
-        }
-        private System.Nullable<int> m_PlannedTotalRouteDuration;
+        public Nullable<int> PlannedTotalRouteDuration { get; set; }
 
+        /// <summary>
+        /// Actual travel distance.
+        /// </summary>
         [DataMember(Name = "actual_travel_distance")]
-        public System.Nullable<double> ActualTravelDistance
-        {
-            get { return m_ActualTravelDistance; }
-            set { m_ActualTravelDistance = value; }
-        }
-        private System.Nullable<double> m_ActualTravelDistance;
+        public Nullable<double> ActualTravelDistance { get; set; }
 
+        /// <summary>
+        /// Actual travel time.
+        /// </summary>
         [DataMember(Name = "actual_travel_time")]
-        public System.Nullable<int> ActualTravelTime
-        {
-            get { return m_ActualTravelTime; }
-            set { m_ActualTravelTime = value; }
-        }
-        private System.Nullable<int> m_ActualTravelTime;
+        public Nullable<int> ActualTravelTime { get; set; }
 
+        /// <summary>
+        /// Actual footsteps.
+        /// </summary>
         [DataMember(Name = "actual_footsteps")]
-        public System.Nullable<int> ActualFootSteps
-        {
-            get { return m_ActualFootSteps; }
-            set { m_ActualFootSteps = value; }
-        }
-        private System.Nullable<int> m_ActualFootSteps;
+        public Nullable<int> ActualFootSteps { get; set; }
 
+        /// <summary>
+        /// Working time
+        /// </summary>
         [DataMember(Name = "working_time")]
-        public System.Nullable<int> WorkingTime
-        {
-            get { return m_WorkingTime; }
-            set { m_WorkingTime = value; }
-        }
-        private System.Nullable<int> m_WorkingTime;
+        public Nullable<int> WorkingTime { get; set; }
 
+        /// <summary>
+        /// Driving time
+        /// </summary>
         [DataMember(Name = "driving_time")]
-        public System.Nullable<int> DrivingTime
-        {
-            get { return m_DrivingTime; }
-            set { m_DrivingTime = value; }
-        }
-        private System.Nullable<int> m_DrivingTime;
+        public Nullable<int> DrivingTime { get; set; }
 
+        /// <summary>
+        /// Idling time
+        /// </summary>
         [DataMember(Name = "idling_time")]
-        public System.Nullable<int> IdlingTime
-        {
-            get { return m_IdlingTime; }
-            set { m_IdlingTime = value; }
-        }
-        private System.Nullable<int> m_IdlingTime;
+        public Nullable<int> IdlingTime { get; set; }
 
+        /// <summary>
+        /// Paying miles
+        /// </summary>
         [DataMember(Name = "paying_miles")]
-        public System.Nullable<double> PayingMiles
-        {
-            get { return m_PayingMiles; }
-            set { m_PayingMiles = value; }
-        }
-        private System.Nullable<double> m_PayingMiles;
+        public Nullable<double> PayingMiles { get; set; }
 
+        /// <summary>
+        /// Geofence polygon type.
+        /// </summary>
         [DataMember(Name = "geofence_polygon_type")]
-        public string GeofencePolygonType
-        {
-            get { return m_GeofencePolygonType; }
-            set { m_GeofencePolygonType = value; }
-        }
-        private string m_GeofencePolygonType;
+        public string GeofencePolygonType { get; set; }
 
+        /// <summary>
+        /// Geofence polygon size.
+        /// </summary>
         [DataMember(Name = "geofence_polygon_size")]
-        public System.Nullable<int> GeofencePolygonSize
-        {
-            get { return m_GeofencePolygonSize; }
-            set { m_GeofencePolygonSize = value; }
-        }
-        private System.Nullable<int> m_GeofencePolygonSize;
+        public Nullable<int> GeofencePolygonSize { get; set; }
 
+        /// <summary>
+        /// The route parameters. See <see cref="RouteParameters"/>
+        /// </summary>
         [DataMember(Name = "parameters")]
-        public RouteParameters Parameters
-        {
-            get { return m_Parameters; }
-            set { m_Parameters = value; }
-        }
-        private RouteParameters m_Parameters;
+        public RouteParameters Parameters { get; set; }
 
+        /// <summary>
+        /// An array of the Address type objects. 
+        /// See <see cref="Address"/>
+        /// </summary>
         [DataMember(Name = "addresses")]
-        public Address[] Addresses
-        {
-            get { return m_Addresses; }
-            set { m_Addresses = value; }
-        }
-        private Address[] m_Addresses;
+        public Address[] Addresses { get; set; }
 
+        /// <summary>
+        /// Links to the generated routes. See <see cref="DataTypes.Links"/>
+        /// </summary>
         [DataMember(Name = "links")]
-        public Links Links
-        {
-            get { return m_Links; }
-            set { m_Links = value; }
-        }
-        private Links m_Links;
+        public Links Links { get; set; }
 
+        /// <summary>
+        /// An array of the AddressNote type objects. 
+        /// See <see cref="DataTypes.AddressNote"/>
+        /// </summary>
         [DataMember(Name = "notes")]
-        public AddressNote[] Notes
-        {
-            get { return m_Notes; }
-            set { m_Notes = value; }
-        }
-        private AddressNote[] m_Notes;
+        public AddressNote[] Notes { get; set; }
 
+        /// <summary>
+        /// Edge-wise path to be drawn on the map. 
+        /// See <see cref="DataTypes.GeoPoint"/>
+        /// </summary>
         [DataMember(Name = "path")]
-        public GeoPoint[] Path
-        {
-            get { return m_Path; }
-            set { m_Path = value; }
-        }
-        private GeoPoint[] m_Path;
+        public GeoPoint[] Path { get; set; }
 
+        /// <summary>
+        /// Edge by edge turn-by-turn directions. 
+        /// See <see cref="DataTypes.Direction"/>
+        /// </summary>
         [DataMember(Name = "directions")]
-        public Direction[] Directions
-        {
-            get { return m_Directions; }
-            set { m_Directions = value; }
-        }
-        private Direction[] m_Directions;
+        public Direction[] Directions { get; set; }
     }
 }

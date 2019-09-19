@@ -3,7 +3,7 @@
 namespace Route4MeSDK.DataTypes
 {
   /// <summary>
-  /// Territory parameters
+  /// Territory data structure.
   /// </summary>
   [DataContract]
   public sealed class Territory
@@ -15,7 +15,7 @@ namespace Route4MeSDK.DataTypes
     public string Type { get; set; }
 
     /// <summary>
-    /// Territory figure data
+    /// Territory shape data
     /// </summary>
     [DataMember(Name = "data")]
     public string[] Data { get; set; }

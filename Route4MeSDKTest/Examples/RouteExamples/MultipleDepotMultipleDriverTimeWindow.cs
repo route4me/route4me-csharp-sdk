@@ -664,7 +664,6 @@ namespace Route4MeSDK.Examples
       {
         AlgorithmType = AlgorithmType.CVRP_TW_MD,
         RouteName     = "Multiple Depot, Multiple Driver, Time Window",
-        StoreRoute    = false,
 
         RouteDate            = R4MeUtils.ConvertToUnixTimestamp(DateTime.UtcNow.Date.AddDays(1)),
         RouteTime            = 60 * 60 * 7,

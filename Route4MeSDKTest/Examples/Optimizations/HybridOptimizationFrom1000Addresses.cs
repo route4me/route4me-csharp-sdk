@@ -81,37 +81,37 @@ namespace Route4MeSDK.Examples
                     DateTime dt = DateTime.Now;
                     //if (schedule.ValidateScheduleMode(sched_mode))
                     //{
-                    schedule.mode = sched_mode.ToString();
+                    schedule.Mode = sched_mode.ToString();
                     if (schedule.ValidateScheduleEnabled(sched_enabled))
                     {
-                        schedule.enabled = Convert.ToBoolean(sched_enabled);
+                        schedule.Enabled = Convert.ToBoolean(sched_enabled);
                         if (schedule.ValidateScheduleEvery(sched_every))
                         {
                             int iEvery = Convert.ToInt32(sched_every);
-                            switch (schedule.mode)
+                            switch (schedule.Mode)
                             {
                                 case "daily":
-                                    schedule.daily.every = iEvery;
+                                    schedule.Daily.Every = iEvery;
                                     break;
                                 case "weekly":
                                     if (schedule.ValidateScheduleWeekdays(sched_weekdays))
                                     {
-                                        schedule.weekly.every = iEvery;
+                                        schedule.Weekly.Every = iEvery;
                                         string[] arWeekdays = sched_weekdays.Split(',');
                                         List<int> lsWeekdays = new List<int>();
                                         for (int i = 0; i < arWeekdays.Length; i++)
                                         {
                                             lsWeekdays.Add(Convert.ToInt32(arWeekdays[i]));
                                         }
-                                        schedule.weekly.weekdays = lsWeekdays.ToArray();
+                                        schedule.Weekly.Weekdays = lsWeekdays.ToArray();
                                     }
                                     break;
                                 case "monthly":
                                     if (schedule.ValidateScheduleMonthlyMode(sched_monthly_mode))
                                     {
-                                        schedule.monthly.every = iEvery;
-                                        schedule.monthly.mode = sched_monthly_mode.ToString();
-                                        switch (schedule.monthly.mode)
+                                        schedule.Monthly.Every = iEvery;
+                                        schedule.Monthly.Mode = sched_monthly_mode.ToString();
+                                        switch (schedule.Monthly.Mode)
                                         {
                                             case "dates":
                                                 if (schedule.ValidateScheduleMonthDays(sched_monthly_dates))
@@ -122,12 +122,12 @@ namespace Route4MeSDK.Examples
                                                     {
                                                         lsMonthdays.Add(Convert.ToInt32(arMonthdays[i]));
                                                     }
-                                                    schedule.monthly.dates = lsMonthdays.ToArray();
+                                                    schedule.Monthly.Dates = lsMonthdays.ToArray();
                                                 }
                                                 break;
                                             case "nth":
-                                                if (schedule.ValidateScheduleNthN(sched_nth_n)) schedule.monthly.nth.n = Convert.ToInt32(sched_nth_n);
-                                                if (schedule.ValidateScheduleNthWhat(sched_nth_what)) schedule.monthly.nth.what = Convert.ToInt32(sched_nth_what);
+                                                if (schedule.ValidateScheduleNthN(sched_nth_n)) schedule.Monthly.Nth.N = Convert.ToInt32(sched_nth_n);
+                                                if (schedule.ValidateScheduleNthWhat(sched_nth_what)) schedule.Monthly.Nth.What = Convert.ToInt32(sched_nth_what);
                                                 break;
                                         }
                                     }
@@ -135,12 +135,12 @@ namespace Route4MeSDK.Examples
                                 case "annually":
                                     if (schedule.ValidateScheduleUseNth(sched_annually_usenth))
                                     {
-                                        schedule.annually.every = iEvery;
-                                        schedule.annually.use_nth = Convert.ToBoolean(sched_annually_usenth);
-                                        if (schedule.annually.use_nth)
+                                        schedule.Annually.Every = iEvery;
+                                        schedule.Annually.UseNth = Convert.ToBoolean(sched_annually_usenth);
+                                        if (schedule.Annually.UseNth)
                                         {
-                                            if (schedule.ValidateScheduleNthN(sched_nth_n)) schedule.annually.nth.n = Convert.ToInt32(sched_nth_n);
-                                            if (schedule.ValidateScheduleNthWhat(sched_nth_what)) schedule.annually.nth.what = Convert.ToInt32(sched_nth_what);
+                                            if (schedule.ValidateScheduleNthN(sched_nth_n)) schedule.Annually.Nth.N = Convert.ToInt32(sched_nth_n);
+                                            if (schedule.ValidateScheduleNthWhat(sched_nth_what)) schedule.Annually.Nth.What = Convert.ToInt32(sched_nth_what);
                                         }
                                         else
                                         {
@@ -152,7 +152,7 @@ namespace Route4MeSDK.Examples
                                                 {
                                                     lsMonths.Add(Convert.ToInt32(arYearmonths[i]));
                                                 }
-                                                schedule.annually.months = lsMonths.ToArray();
+                                                schedule.Annually.Months = lsMonths.ToArray();
                                             }
                                         }
                                     }
@@ -240,11 +240,11 @@ namespace Route4MeSDK.Examples
             {
                 HybridOptimizationParameters hparams = new HybridOptimizationParameters()
                 {
-                    target_date_string = ScheduledDay,
-                    timezone_offset_minutes = -240
+                    TargetDateString = ScheduledDay,
+                    TimezoneOffsetMinutes = -240
                 };
 
-                DataObject resultOptimization = route4Me.GetOHybridptimization(hparams, out errorString1);
+                DataObject resultOptimization = route4Me.GetHybridOptimization(hparams, out errorString1);
 
                 string HybridOptimizationId = "";
 
@@ -264,9 +264,9 @@ namespace Route4MeSDK.Examples
                 //============== Add Depot To Hybrid Optimization ===============
                 HybridDepotParameters hDepotParams = new HybridDepotParameters()
                 {
-                    optimization_problem_id = HybridOptimizationId,
-                    delete_old_depots = true,
-                    new_depots = new Address[] { Depots[lsScheduledDays.IndexOf(ScheduledDay)] }
+                    OptimizationProblemId = HybridOptimizationId,
+                    DeleteOldDepots = true,
+                    NewDepots = new Address[] { Depots[lsScheduledDays.IndexOf(ScheduledDay)] }
                 };
 
                 var addDepotResult = route4Me.AddDepotsToHybridOptimization(hDepotParams, out errorString3);

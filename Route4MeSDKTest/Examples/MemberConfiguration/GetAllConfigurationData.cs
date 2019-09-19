@@ -18,19 +18,19 @@ namespace Route4MeSDK.Examples
 
             // Run the query
             string errorString = "";
-            MemberConfigurationDataRersponse result = route4Me.GetConfigurationData(@params, out errorString);
+            MemberConfigurationDataResponse result = route4Me.GetConfigurationData(@params, out errorString);
 
             Console.WriteLine("");
 
             if (result != null)
             {
                 Console.WriteLine("GetAllConfigurationData executed successfully");
-                Console.WriteLine("Result: " + result.result);
+                Console.WriteLine("Result: " + result.Result);
                 foreach (MemberConfigurationData mc_data in result.data)
                 {
-                    Console.WriteLine("member_id= " + mc_data.member_id);
-                    Console.WriteLine("config_key= " + mc_data.config_key);
-                    Console.WriteLine("config_value= " + mc_data.config_value);
+                    Console.WriteLine("MemberId= " + mc_data.MemberId);
+                    Console.WriteLine("ConfigKey= " + mc_data.ConfigKey);
+                    Console.WriteLine("ConfigValue= " + mc_data.ConfigValue);
                     Console.WriteLine("---------------------------");
                 }
             }
