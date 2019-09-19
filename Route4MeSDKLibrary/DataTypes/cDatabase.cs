@@ -9,6 +9,10 @@ using System.Configuration;
 using System.Data.OleDb;
 using System.Data.SqlServerCe;
 using System.Web.Script;
+using System.Reflection;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Route4MeSDK.DataTypes
 {
@@ -48,18 +52,18 @@ namespace Route4MeSDK.DataTypes
     /// </summary>
     public class cDatabase : IDisposable 
     {
-        private IDbConnection _con;
-        private IDbCommand _cmd;
+        private readonly IDbConnection _con;
+        private readonly IDbCommand _cmd;
 
         private IDbTransaction _transaction;
-        private DbDataAdapter _adapter;
-        private IDataReader _dr;
-        private DbProviderFactory _factory;
-        private ConnectionStringSettings _conStngInstitute;
+        private readonly DbDataAdapter _adapter;
+        //private IDataReader _dr;
+        private readonly DbProviderFactory _factory;
+        private readonly ConnectionStringSettings _conStngInstitute;
 
         private bool _isDisposed;
 
-        private string sStartupFolder;
+        //private readonly string StartupFolder;
 
         /// <summary>
         /// The class constructor.
@@ -99,7 +103,7 @@ namespace Route4MeSDK.DataTypes
 
             _isDisposed = false;
 
-            sStartupFolder = AppDomain.CurrentDomain.BaseDirectory;
+            //StartupFolder = AppDomain.CurrentDomain.BaseDirectory;
         }
 
         /// <summary>
@@ -148,11 +152,13 @@ namespace Route4MeSDK.DataTypes
                 _cmd.Dispose();
             }
 
+            /*
             if (_dr != null)
             {
                 _dr.Close();
                 _dr.Dispose();
             }
+            */
         } 
 
         /// <summary>
@@ -185,7 +191,7 @@ namespace Route4MeSDK.DataTypes
         /// <returns></returns>
         public int ExecuteMulticoomandSql(string sQuery)
         {
-            int iRet = 0;
+            int iRet;
             try
             {
                 sQuery = sQuery.Replace(";", ";^");
@@ -228,22 +234,18 @@ namespace Route4MeSDK.DataTypes
                                 iRet = _cmd.ExecuteNonQuery();
                                 sCurCommand = "";
                             }
-                            
                         }
-
                     }
                 }
 
                 _transaction.Commit();
 
-                iRet = 1;
-
-                return iRet;
+                return 1;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(":( Transaction failed... " + ex.Message); _transaction.Rollback();
-                iRet = 0; return iRet;
+                return 0;
             }
             
         }
@@ -259,7 +261,7 @@ namespace Route4MeSDK.DataTypes
 
             try
             {
-                tblDictionary = fillTable("SELECT * FROM csv_to_api_dictionary WHERE table_name='" + sTableName+"'");
+                tblDictionary = FillTable("SELECT * FROM csv_to_api_dictionary WHERE table_name='" + sTableName+"'");
                 return tblDictionary;
             }
             catch (Exception ex) { Console.WriteLine(":( csv_to_api_dictionary table reading failed!.. "+ex.Message); }
@@ -561,7 +563,7 @@ namespace Route4MeSDK.DataTypes
         {
             if (!CheckDataFolder(sFileName, true)) return;
 
-            DataTable tblTemp = fillTable("SELECT * FROM "+sTableName);
+            DataTable tblTemp = FillTable("SELECT * FROM "+sTableName);
 
             List<string> lsCsvContent = new List<string>();
 
@@ -738,12 +740,12 @@ namespace Route4MeSDK.DataTypes
                     sQueryValue = oValue.ToString();
                     break;
                 case "DateTime":
-                    DateTime dt1900 = new DateTime(1900, 1, 1, 0, 0, 0);
-                    if (DateTime.TryParse(oValue.ToString(), out dt1900))
+                    if (R4MeUtils.ValiateStandardObjectValue(oValue, "DateTime"))
                     {
-                        dt1900 = Convert.ToDateTime(oValue);
-                        sQueryValue = (_conStngInstitute.ProviderName == "System.Data.OleDb") 
-                            ? "#" + dt1900.ToString("yyyy-MM-dd HH:mm:ss") + "#" 
+                        DateTime dt1900 = Convert.ToDateTime(oValue);
+
+                        sQueryValue = (_conStngInstitute.ProviderName == "System.Data.OleDb")
+                            ? "#" + dt1900.ToString("yyyy-MM-dd HH:mm:ss") + "#"
                             : "'" + dt1900.ToString("yyyy-MM-dd HH:mm:ss") + "'";
                     }
                     break;
@@ -766,16 +768,15 @@ namespace Route4MeSDK.DataTypes
             switch (PropertyName)
             {
                 case "day_scheduled_for_YYMMDD":
-                    DateTime dt1900 = new DateTime(1900, 1, 1, 0, 0, 0);
-                    if (DateTime.TryParse(oValue.ToString(), out dt1900))
+                    if (R4MeUtils.ValiateStandardObjectValue(oValue, "DateTime"))
                     {
-                        dt1900 = Convert.ToDateTime(oValue);
+                        DateTime dt1900 = Convert.ToDateTime(oValue);
                         return dt1900.ToShortDateString();
                     }
                     else sQueryValue=null;
                     break;
                 case "EXT_FIELD_custom_data":
-                    System.Text.StringBuilder sbOrderCustom = new System.Text.StringBuilder();
+                    StringBuilder sbOrderCustom = new StringBuilder();
                     sbOrderCustom.Append("{");
                     foreach (KeyValuePair<string, object> kvpair in (Dictionary<string, object>)oValue)
                     {
@@ -789,7 +790,7 @@ namespace Route4MeSDK.DataTypes
                     sQueryValue += "}";
                     break;
                 case "address_custom_data":
-                    System.Text.StringBuilder sbCustom = new System.Text.StringBuilder();
+                    StringBuilder sbCustom = new StringBuilder();
                     sbCustom.Append("{");
                     foreach (KeyValuePair<string, string> kvpair in (Dictionary<string, string>)oValue)
                     {
@@ -812,7 +813,7 @@ namespace Route4MeSDK.DataTypes
                     }
                     break;
                 case "schedule_blacklist":
-                     System.Text.StringBuilder sbBlackList = new System.Text.StringBuilder();
+                     StringBuilder sbBlackList = new StringBuilder();
                      foreach (string dt1 in (string[])oValue)
                      {
                          sbBlackList.Append("\""+dt1+"\",");
@@ -835,7 +836,7 @@ namespace Route4MeSDK.DataTypes
         /// <param name="sTableName">The database table name.</param>
         /// <param name="sIdName">The name of the ID column.</param>
         /// <param name="r4m_dtype">A Route4Me object type.</param>
-        public void Json2Table(string sFileName, string sTableName, string sIdName, R4M_DataType r4m_dtype)
+        public void Json2Table(string sFileName, R4M_DataType r4m_dtype)
         {
             if (!File.Exists(sFileName))
             {
@@ -1002,10 +1003,13 @@ namespace Route4MeSDK.DataTypes
 
             object result = ExecuteScalar(sCom);
 
+            return R4MeUtils.ValiateStandardObjectValue(result, "Int32") ? Convert.ToInt32(result) == 0 : true;
+            /*
             int iRows = -1;
             if (int.TryParse(result.ToString(), out iRows)) iRows = Convert.ToInt32(result);
 
             return (iRows > 0) ? false : true;
+            */
         }
 
         /// <summary>
@@ -1016,17 +1020,14 @@ namespace Route4MeSDK.DataTypes
         /// <returns>True if the address is new.</returns>
         public bool IsNewAddressID(string sTableName, object oAddressId)
         {
-            int AddressId = -1;
-            if (int.TryParse(oAddressId.ToString(), out AddressId)) AddressId = Convert.ToInt32(oAddressId); else return true;
+            int AddressId = R4MeUtils.ValiateStandardObjectValue(oAddressId, "Int32") ? Convert.ToInt32(oAddressId) : -1;
+            if (AddressId == -1) return true;
 
             string sCom = @"SELECT COUNT(*) as rba FROM " + sTableName + " WHERE address_id=" + AddressId;
 
             object result = ExecuteScalar(sCom);
 
-            int iRows = -1;
-            if (int.TryParse(result.ToString(), out iRows)) iRows = Convert.ToInt32(result);
-
-            return (iRows > 0) ? false : true;
+            return R4MeUtils.ValiateStandardObjectValue(result, "Int32") ? Convert.ToInt32(result) == 0 : true;
         }
 
         /// <summary>
@@ -1037,17 +1038,14 @@ namespace Route4MeSDK.DataTypes
         /// <returns>True if the order is new.</returns>
         public bool IsNewOrderID(string sTableName, object oOrderId)
         {
-            int OrderId = -1;
-            if (int.TryParse(oOrderId.ToString(), out OrderId)) OrderId = Convert.ToInt32(oOrderId); else return true;
+            int OrderId = R4MeUtils.ValiateStandardObjectValue(oOrderId, "Int32") ? Convert.ToInt32(oOrderId) : -1;
+            if (OrderId == -1) return true;
 
             string sCom = @"SELECT COUNT(*) as rba FROM " + sTableName + " WHERE order_id=" + OrderId;
 
             object result = ExecuteScalar(sCom);
 
-            int iRows = -1;
-            if (int.TryParse(result.ToString(), out iRows)) iRows = Convert.ToInt32(result);
-
-            return (iRows > 0) ? false : true;
+            return R4MeUtils.ValiateStandardObjectValue(result, "Int32") ? Convert.ToInt32(result) == 0 : true;
         }
 
         /// <summary>
@@ -1057,13 +1055,11 @@ namespace Route4MeSDK.DataTypes
         /// <returns>Scalar object</returns>
         public object ExecuteScalar(string sQuery)
         {
-            object result = null;
-
             try
             {
                 OpenConnection();
                 _cmd.CommandText = sQuery;
-                result = _cmd.ExecuteScalar();
+                object result = _cmd.ExecuteScalar();
 
                 int iResult = -1;
                 if (int.TryParse(result.ToString(), out iResult)) iResult = Convert.ToInt32(result);
@@ -1078,7 +1074,6 @@ namespace Route4MeSDK.DataTypes
             {
                 CloseConnection();
             }
-
         }
 
         /// <summary>
@@ -1101,7 +1096,7 @@ namespace Route4MeSDK.DataTypes
             finally
             {
                 CloseConnection();
-             }
+            }
             
         }
 
@@ -1116,23 +1111,20 @@ namespace Route4MeSDK.DataTypes
             bool isValid = false;
 
             string sType = col.DataType.Name;
-
+            
             switch (sType)
             {
                 case "Int32":
-                    int i_val = -1;
-                    if (int.TryParse(value.ToString(), out i_val)) isValid = true;
+                    isValid = R4MeUtils.ValiateStandardObjectValue(value, "Int32");
                     break;
                 case "String":
                     if (value.ToString().Length>0) isValid = true;
                     break;
                 case "Double":
-                    double d_val = 0;
-                    if (double.TryParse(value.ToString(), out d_val)) isValid = true;
+                    isValid = R4MeUtils.ValiateStandardObjectValue(value, "Double");
                     break;
                 case "DateTime":
-                    DateTime dt1908 = new DateTime(1899,1,1,0,0,0);
-                    if (DateTime.TryParse(value.ToString(), out dt1908)) isValid = true;
+                    isValid = R4MeUtils.ValiateStandardObjectValue(value, "DateTime");
                     break;
             }
 
@@ -1144,7 +1136,7 @@ namespace Route4MeSDK.DataTypes
         /// </summary>
         /// <param name="sSQLSelect">SQL query text.</param>
         /// <returns>The datatable.</returns>
-        public DataTable fillTable(string sSQLSelect)
+        public DataTable FillTable(string sSQLSelect)
         {
             DataTable dtbElements = new DataTable();
             
@@ -1165,6 +1157,118 @@ namespace Route4MeSDK.DataTypes
                 CloseConnection();
             }
             
+        }
+
+        /// <summary>
+        /// Creates a DataTable from a class type's public properties and adds a new DataRow to the table for each class passed as a parameter.
+        /// The DataColumns of the table will match the name and type of the public properties.
+        /// </summary>
+        /// <param name="ClassCollection">A class or array of class to fill the DataTable with.</param>
+        /// <returns>A DataTable who's DataColumns match the name and type of each class T's public properties.</returns>
+        public static DataTable ClassToDatatable<T>() where T : class
+        {
+            Type classType = typeof(T);
+            DataTable result = new DataTable(classType.UnderlyingSystemType.Name);
+
+            foreach (PropertyInfo property in classType.GetProperties())
+            {
+                DataColumn column = new DataColumn();
+                if (property.CustomAttributes.First().NamedArguments.Count < 1) continue;
+
+                column.ColumnName = property.CustomAttributes.First().NamedArguments.First().TypedValue.Value.ToString();
+                if (property.PropertyType.Name.Contains("Nullable"))
+                {
+                    column.DataType = Type.GetType(GetDataTypeFromNullableType(property.PropertyType.ToString()));
+                }
+                else
+                {
+                    column.DataType = property.PropertyType;
+                }
+
+                
+
+                if (DatabaseHelper.IsNullableType(column.DataType) && column.DataType.IsGenericType)
+                {   // If Nullable<>, this is how we get the underlying Type...
+                    column.DataType = column.DataType.GenericTypeArguments.FirstOrDefault();
+                }
+                else
+                {   // True by default, so set it false
+                    column.AllowDBNull = false;
+                }
+
+                // Add column
+                result.Columns.Add(column);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Creates a SQL script that creates a table where the columns matches that of the specified DataTable.
+        /// </summary>
+        public static string CreateTableSqlScript(DataTable Table)
+        {
+            if (DatabaseHelper.IsValidDatatable(Table, IgnoreRows: false))
+                return string.Empty;
+
+            StringBuilder result = new StringBuilder();
+            result.AppendFormat("CREATE TABLE [{0}] ({1}", Table.TableName, Environment.NewLine);
+
+            bool FirstTime = true;
+            foreach (DataColumn column in Table.Columns.OfType<DataColumn>())
+            {
+                if (FirstTime) FirstTime = false;
+                else
+                    result.Append(",");
+
+                result.AppendFormat("[{0}] {1} {2}NULL{3}",
+                    column.ColumnName,
+                    GetDataTypeString(column.DataType),
+                    column.AllowDBNull ? "" : "NOT ",
+                    Environment.NewLine
+                );
+            }
+            result.AppendFormat(") ON [PRIMARY]{0}GO", Environment.NewLine);
+
+            return result.ToString();
+        }
+
+        /// <summary>
+        /// Returns the SQL data type equivalent, as a string for use in SQL script generation methods.
+        /// </summary>
+        private static string GetDataTypeString(Type DataType)
+        {
+            switch (DataType.Name)
+            {
+                case "Boolean": return "[bit]";
+                case "Char": return "[char]";
+                case "SByte": return "[tinyint]";
+                case "Int16": return "[smallint]";
+                case "Int32": return "[int]";
+                case "Int64": return "[bigint]";
+                case "Byte": return "[tinyint] UNSIGNED";
+                case "UInt16": return "[smallint] UNSIGNED";
+                case "UInt32": return "[int] UNSIGNED";
+                case "UInt64": return "[bigint] UNSIGNED";
+                case "Single": return "[float]";
+                case "Double": return "[double]";
+                case "Decimal": return "[decimal]";
+                case "DateTime": return "[datetime]";
+                case "Guid": return "[uniqueidentifier]";
+                case "Object": return "[variant]";
+                case "String": return "[nvarchar](250)";
+                default: return "[nvarchar](MAX)";
+            }
+        }
+
+        private static string GetDataTypeFromNullableType(String nullableType)
+        {
+            int i1 = nullableType.IndexOf(@"[System.", 0);
+
+            string output = nullableType.Substring(i1+1);
+            int i2 = output.IndexOf(@"]", 0);
+            output = output.Substring(0, i2);
+            return output;
+
         }
     }
 }

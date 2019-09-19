@@ -22,7 +22,7 @@ namespace Route4MeSDK.Examples
 
                 Console.WriteLine("Connection opened");
 
-                sqlDB.Json2Table(@"Data/JSON/get orders RESPONSE.json", "orders", "id", R4M_DataType.Order);
+                sqlDB.Json2Table(@"Data/JSON/get orders RESPONSE.json", R4M_DataType.Order);
 
                 Console.WriteLine("The JSON file was uploaded to the SQL server.");
             }

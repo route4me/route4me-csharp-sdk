@@ -16,8 +16,8 @@ namespace Route4MeSDK.Examples
 
             MemberConfigurationParameters @params = new MemberConfigurationParameters
             {
-                config_key = "destination_icon_uri",
-                config_value = "444"
+                ConfigKey = "destination_icon_uri",
+                ConfigValue = "444"
             };
 
             // Run the query

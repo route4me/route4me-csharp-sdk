@@ -126,7 +126,7 @@ namespace Route4MeSDK.DataTypes
         public string timezone { get; set; }
 
         /// <summary>
-        /// Registration country ID of a user
+        /// Registration country ID of a user.
         /// </summary>
         [DataMember(Name = "user_reg_country_id")]
         public string user_reg_country_id { get; set; }

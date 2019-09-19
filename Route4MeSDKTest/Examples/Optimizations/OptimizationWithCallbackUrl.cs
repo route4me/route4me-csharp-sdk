@@ -156,9 +156,7 @@ namespace Route4MeSDK.Examples
             RouteParameters parameters = new RouteParameters()
             {
                 AlgorithmType = AlgorithmType.TSP,
-                StoreRoute = false,
                 RouteName = "Single Driver Multiple TimeWindows 12 Stops",
-                SharedPublicly = "true",
 
                 RouteDate = R4MeUtils.ConvertToUnixTimestamp(DateTime.UtcNow.Date.AddDays(1)),
                 RouteTime = 5 * 3600 + 30 * 60,
