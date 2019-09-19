@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace Route4MeSDK.DataTypes
@@ -110,7 +111,7 @@ namespace Route4MeSDK.DataTypes
         /// Miles per gallon.
         /// </summary>
         [DataMember(Name = "mpg")]
-        public Nullable<double> mpg { get; set; }
+        public Nullable<double> Mpg { get; set; }
 
         /// <summary>
         /// Gas price.
@@ -191,6 +192,18 @@ namespace Route4MeSDK.DataTypes
         public Nullable<int> GeofencePolygonSize { get; set; }
 
         /// <summary>
+        /// Destination count.
+        /// </summary>
+        [DataMember(Name = "destination_count")]
+        public int? DestinationCount { get; set; }
+
+        /// <summary>
+        /// Notes count in the route.
+        /// </summary>
+        [DataMember(Name = "notes_count")]
+        public int? NotesCount { get; set; }
+
+        /// <summary>
         /// The route parameters. See <see cref="RouteParameters"/>
         /// </summary>
         [DataMember(Name = "parameters")]
@@ -208,6 +221,12 @@ namespace Route4MeSDK.DataTypes
         /// </summary>
         [DataMember(Name = "links")]
         public Links Links { get; set; }
+
+        /// <summary>
+        /// Member config key-value pairs.
+        /// </summary>
+        [DataMember(Name = "member_config_storage")]
+        public Dictionary<String, String> MemberConfigStorage { get; set; }
 
         /// <summary>
         /// An array of the AddressNote type objects. 

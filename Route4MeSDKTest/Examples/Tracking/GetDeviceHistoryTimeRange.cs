@@ -24,9 +24,9 @@ namespace Route4MeSDK.Examples
             {
                 Format = "csv",
                 RouteId = routeId,
-                time_period = "custom",
-                start_date = uStartTime,
-                end_date = uEndTime
+                TimePeriod = "custom",
+                StartDate = uStartTime,
+                EndDate = uEndTime
             };
 
             string errorString = "";
