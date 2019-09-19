@@ -87,11 +87,5 @@ namespace Route4MeSDK.DataTypes
         [DataMember(Name = "device_type")]
         public string DeviceType { get; set; }
 
-        /// <summary>
-        /// Custom address botes
-        /// </summary>
-        [DataMember(Name = "custom_types")]
-        public CustomNoteType[] CustomTypes { get; set; }
-
     }
 }

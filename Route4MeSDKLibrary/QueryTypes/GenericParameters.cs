@@ -29,7 +29,6 @@ namespace Route4MeSDK.QueryTypes
     [KnownType(typeof(AvoidanceZoneQuery))]
     [KnownType(typeof(GeocodingParameters))]
     [KnownType(typeof(MemberParameters))]
-    [KnownType(typeof(MemberConfigurationParameters))]
     [KnownType(typeof(VehicleV4Parameters))]
     [KnownType(typeof(VehicleV4Response))]
     public class GenericParameters
