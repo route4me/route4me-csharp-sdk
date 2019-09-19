@@ -1,6 +1,7 @@
 Route4MeSDK.sln
 Route4MeSDKTest/Route4MeSDKTest.csproj
 shortTest.cs
+.vs/
 *.userprefs
 /**/obj/
 /packages/

@@ -139,11 +139,11 @@ namespace Route4MeSDK.Examples
             {
                 HybridOptimizationParameters hparams = new HybridOptimizationParameters()
                 {
-                    target_date_string = ScheduledDay,
-                    timezone_offset_minutes = 480
+                    TargetDateString = ScheduledDay,
+                    TimezoneOffsetMinutes = 480
                 };
 
-                DataObject resultOptimization = route4Me.GetOHybridptimization(hparams, out errorString1);
+                DataObject resultOptimization = route4Me.GetHybridOptimization(hparams, out errorString1);
 
                 string HybridOptimizationId = "";
 
@@ -163,9 +163,9 @@ namespace Route4MeSDK.Examples
                 //============== Add Depot To Hybrid Optimization ===============
                 HybridDepotParameters hDepotParams = new HybridDepotParameters()
                 {
-                    optimization_problem_id = HybridOptimizationId,
-                    delete_old_depots = true,
-                    new_depots = new Address[] { Depots[lsScheduledDays.IndexOf(ScheduledDay)] }
+                    OptimizationProblemId = HybridOptimizationId,
+                    DeleteOldDepots = true,
+                    NewDepots = new Address[] { Depots[lsScheduledDays.IndexOf(ScheduledDay)] }
                 };
 
                 var addDepotResult = route4Me.AddDepotsToHybridOptimization(hDepotParams, out errorString3);

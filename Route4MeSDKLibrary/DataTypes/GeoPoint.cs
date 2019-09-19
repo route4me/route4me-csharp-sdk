@@ -2,23 +2,23 @@
 
 namespace Route4MeSDK.DataTypes
 {
+    /// <summary>
+    /// Geographic point structure
+    /// </summary>
     [DataContract]
     public sealed class GeoPoint
     {
+        /// <summary>
+        /// Latitude
+        /// </summary>
         [DataMember(Name = "lat")]
-        public double Latitude
-        {
-            get { return m_Latitude; }
-            set { m_Latitude = value; }
-        }
-        private double m_Latitude;
+        public double Latitude { get; set; }
 
+        /// <summary>
+        /// Longitude
+        /// </summary>
         [DataMember(Name = "lng")]
-        public double Longitude
-        {
-            get { return m_Longitude; }
-            set { m_Longitude = value; }
-        }
-        private double m_Longitude;
+        public double Longitude { get; set; }
+
     }
 }
