@@ -1507,6 +1507,16 @@ namespace Route4MeSDK
             return (response != null) ? response.Results : null;
 		}
 
+        public Activity[] GetActiviies(ActivityParameters activityParameters, out string errorString)
+        {
+            GetActivitiesResponse response = GetJsonObjectFromAPI<GetActivitiesResponse>(activityParameters,
+                                                                 R4MEInfrastructureSettings.GetActivitiesHost,
+                                                                 HttpMethodType.Get,
+                                                                 out errorString);
+
+            return (response != null) ? response.Results : null;
+        }
+
         /// <summary>
         /// Creates a user's activity by sending a custom message to the activity stream.
         /// </summary>
@@ -2439,14 +2449,57 @@ namespace Route4MeSDK
             return GetJsonObjectFromAPI<DataObject>(request, R4MEInfrastructureSettings.ApiHost, HttpMethodType.Put, false, out errorString);
 		}
 
-		#endregion
+        #endregion
 
-		#region Geocoding
+        #region Order Custom User Field
+
+        public OrderCustomField[] GetOrderCustomUserFields(out string errorString)
+        {
+            var genParams = new GenericParameters(); 
+
+            OrderCustomField[] response = GetJsonObjectFromAPI<OrderCustomField[]>(genParams,
+                                                                 R4MEInfrastructureSettings.OrderCustomField,
+                                                                 HttpMethodType.Get,
+                                                                 out errorString);
+
+            return response;
+        }
+
+        public OrderCustomFieldCreateResponse CreateOrderCustomUserField(OrderCustomFieldParameters orderCustomUserField, out string errorString)
+        {
+            return GetJsonObjectFromAPI<OrderCustomFieldCreateResponse>
+                (orderCustomUserField, R4MEInfrastructureSettings.OrderCustomField, 
+                HttpMethodType.Post, false, out errorString);
+
+        }
+
+        public OrderCustomFieldCreateResponse RemoveOrderCustomUserField(OrderCustomFieldParameters orderCustomUserField, out string errorString)
+        {
+            return GetJsonObjectFromAPI<OrderCustomFieldCreateResponse>
+                (orderCustomUserField, R4MEInfrastructureSettings.OrderCustomField, 
+                HttpMethodType.Delete, false, out errorString);
+        }
+
+        public OrderCustomFieldCreateResponse UpdateOrderCustomUserField(OrderCustomFieldParameters orderCustomUserFieldParams, out string errorString)
+        {
+            orderCustomUserFieldParams.PrepareForSerialization();
+
+            var orderCustomField = GetJsonObjectFromAPI<OrderCustomFieldCreateResponse>
+                (orderCustomUserFieldParams, R4MEInfrastructureSettings.OrderCustomField,
+                HttpMethodType.Put, false, out errorString);
+
+            return orderCustomField;
+
+        }
+
+        #endregion
+
+        #region Geocoding
 
         /// <summary>
         /// The request parameters for the geocoding process.
         /// </summary>
-		[DataContract()]
+        [DataContract()]
 		private sealed class GeocodingRequest : GenericParameters
 		{
             /// <value>The list of the addresses delimited by the symbol '|'</value>

@@ -31,6 +31,7 @@ namespace Route4MeSDK.QueryTypes
     [KnownType(typeof(MemberParameters))]
     [KnownType(typeof(VehicleV4Parameters))]
     [KnownType(typeof(VehicleV4Response))]
+    [KnownType(typeof(OrderCustomFieldParameters))]
     public class GenericParameters
     {
         #region Fields

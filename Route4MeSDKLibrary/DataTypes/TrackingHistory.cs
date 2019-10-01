@@ -15,25 +15,31 @@ namespace Route4MeSDK.DataTypes
         /// Speed at the time of the location transaction event.
         /// </summary>
         [DataMember(Name = "s")]
-        public double? Speed { get; set; }
+        public string Speed { get; set; }
 
         /// <summary>
         /// Latitude at the time of the location transaction event.
         /// </summary>
         [DataMember(Name = "lt")]
-        public double? Latitude { get; set; }
+        public string Latitude { get; set; }
+
+        /// <summary>
+        /// Member ID.
+        /// </summary>
+        [DataMember(Name = "m")]
+        public int? MemberId { get; set; }
 
         /// <summary>
         /// Longitude at the time of the location transaction event.
         /// </summary>
         [DataMember(Name = "lg")]
-        public double? Longitude { get; set; }
+        public string Longitude { get; set; }
 
         /// <summary>
         /// Direction/heading at the time of the location transaction event.
         /// </summary>
         [DataMember(Name = "d")]
-        public string D { get; set; }
+        public int? D { get; set; }
 
         /// <summary>
         /// The original timestamp in unix timestamp format at the moment location transaction event.
@@ -46,5 +52,11 @@ namespace Route4MeSDK.DataTypes
         /// </summary>
         [DataMember(Name = "ts_friendly")]
         public string TimeStampFriendly { get; set; }
+
+        /// <summary>
+        /// Package src (e.g. 'R4M').
+        /// </summary>
+        [DataMember(Name = "src")]
+        public string Src { get; set; }
     }
 }

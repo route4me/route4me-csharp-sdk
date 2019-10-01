@@ -180,5 +180,8 @@ namespace Route4MeSDK.DataTypes
         [DataMember(Name = "order_icon", EmitDefaultValue = false)]
         public string order_icon { get; set; }
 
+
+        [DataMember(Name = "custom_user_fields", EmitDefaultValue = false)]
+        public string CustomUserFields { get; set; }
     }
 }

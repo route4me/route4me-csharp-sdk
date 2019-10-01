@@ -318,6 +318,9 @@ namespace Route4MeSDK.DataTypes
         [DataMember(Name = "distance_to_next_destination", EmitDefaultValue = false)]
         public double? DistanceToNextDestination { get; set; }
 
+        [DataMember(Name = "udu_distance_to_next_destination", EmitDefaultValue = false)]
+        public double? UduDistanceToNextDestination { get; set; }
+
         /// <summary>
         /// Generated time window start.
         /// </summary>
@@ -465,5 +468,17 @@ namespace Route4MeSDK.DataTypes
         /// </summary>
         [DataMember(Name = "tracking_number", EmitDefaultValue = false)]
         public string tracking_number { get; set; }
+
+        /// <summary>
+        /// Wait time to next destination.
+        /// </summary>
+        [DataMember(Name = "wait_time_to_next_destination", EmitDefaultValue = false)]
+        public int? WaitTimeToNextDestination { get; set; }
+
+        /// <summary>
+        /// Manifest of a route address.
+        /// </summary>
+        [DataMember(Name = "manifest", EmitDefaultValue = false)]
+        public AddressManifest Manifest { get; set; }
     }
 }

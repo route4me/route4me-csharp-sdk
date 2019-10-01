@@ -192,8 +192,7 @@ namespace Route4MeSDK.DataTypes
         [DataMember(Name = "route_email", EmitDefaultValue = false)]
         public string RouteEmail { get; set; }
 
-        /// <summary>Type of route being created: ENUM(api,null)</summary>
-        /// <value>The type of the route.</value>
+        [Obsolete("The parameter 'route_type' isn't included in route parameters.")]
         [DataMember(Name = "route_type", EmitDefaultValue = false)]
         public string RouteType { get; set; }
 
@@ -231,12 +230,11 @@ namespace Route4MeSDK.DataTypes
         [DataMember(Name = "member_id", EmitDefaultValue = false)]
         public string MemberId { get; set; }
 
-
         /// <summary>
         /// Specify the ip address of the remote user making this optimization request.
         /// </summary>
         [DataMember(Name = "ip", EmitDefaultValue = false)]
-        public string Ip { get; set; }
+        public int? Ip { get; set; }
 
         /// <summary>
         /// The method to use when compute the distance between the points in a route.
@@ -372,6 +370,84 @@ namespace Route4MeSDK.DataTypes
         public double? TruckLengthMeters { get; set; }
 
         /// <summary>
+        /// Array of the truck hazardous goods.
+        /// </summary>
+        [DataMember(Name = "truck_hazardous_goods", EmitDefaultValue = false)]
+        public string[] TruckHazardousGoods { get; set; }
+
+        /// <summary>
+        /// Truck axles number.
+        /// </summary>
+        [DataMember(Name = "truck_axles", EmitDefaultValue = false)]
+        public int? TruckAxles { get; set; }
+
+        /// <summary>
+        /// Truck toll road usage. enum: ["YES", "NO"]
+        /// </summary>
+        [DataMember(Name = "truck_toll_road_usage", EmitDefaultValue = false)]
+        public string TruckTollRoadUsage { get; set; }
+
+        /// <summary>
+        /// Truck avoid ferries. enum: ["YES", "NO"]
+        /// </summary>
+        [DataMember(Name = "truck_avoid_ferries", EmitDefaultValue = false)]
+        public string TruckAvoidFerries { get; set; }
+
+        /// <summary>
+        /// Truck highway only. enum: ["YES", "NO"]
+        /// </summary>
+        [DataMember(Name = "truck_hwy_only", EmitDefaultValue = false)]
+        public string TruckHwyOnly { get; set; }
+
+        /// <summary>
+        /// Truck of the type Long Combination Vehicle. enum: ["YES", "NO"]
+        /// </summary>
+        [DataMember(Name = "truck_lcv", EmitDefaultValue = false)]
+        public string TruckLcv { get; set; }
+
+        /// <summary>
+        /// Avoid international borders. enum: ["YES", "NO"]
+        /// </summary>
+        [DataMember(Name = "truck_borders", EmitDefaultValue = false)]
+        public string TruckBorders { get; set; }
+
+        /// <summary>
+        ///Truck side street adherence.
+        /// enum: ["OFF", "MINIMAL","MODERATE","AVERAGE","STRICT","ADHERE","STRONGLYHERE"]
+        /// </summary>
+        [DataMember(Name = "truck_side_street_adherence", EmitDefaultValue = false)]
+        public string TruckSideStreetAdherence { get; set; }
+
+        /// <summary>
+        /// Truck configuration.
+        /// enum: ["NONE","PASSENGER","28_DOUBLETRAILER","48_STRAIGHT_TRUCK",
+        /// "48_SEMI_TRAILER","53_SEMI_TRAILER","FULLSIZEVAN","26_STRAIGHT_TRUCK"]
+        /// </summary>
+        [DataMember(Name = "truck_config", EmitDefaultValue = false)]
+        public string TruckConfig { get; set; }
+
+        /// <summary>
+        /// Truck dimension unit. enum: ["mi","km"]
+        /// </summary>
+        [DataMember(Name = "truck_dim_unit", EmitDefaultValue = false)]
+        public string TruckDimUnit { get; set; }
+
+        /// <summary>
+        /// Truck type. 
+        /// enum: ["suv","pickup_truck","van","18wheeler","cabin","waste_disposal",
+        /// "tree_cutting","bigrig","cement_mixer","livestock_carrier","dairy",
+        /// "tractor_trailer"]
+        /// </summary>
+        [DataMember(Name = "truck_type", EmitDefaultValue = false)]
+        public string TruckType { get; set; }
+
+        /// <summary>
+        /// If travel_mode = 'Trucking', specifies the truck weight (required)
+        /// </summary>
+        [DataMember(Name = "truck_weight", EmitDefaultValue = false)]
+        public double? TruckWeight { get; set; }
+
+        /// <summary>
         /// The minimum number of stops permitted per created subroute.
         /// </summary>
         [DataMember(Name = "min_tour_size", EmitDefaultValue = false)]
@@ -412,12 +488,29 @@ namespace Route4MeSDK.DataTypes
         public int? RightTurn { get; set; }
 
         /// <summary>
+        /// Route travel time slowdown (e.g. 25 (means 25% slowdown))
+        /// </summary>
+        [DataMember(Name = "route_time_multiplier", EmitDefaultValue = false)]
+        public decimal? RouteTimeMultiplier { get; set; }
+
+        /// <summary>
+        /// Route service time slowdown (e.g. 10 (means 10% slowdown))
+        /// </summary>
+        [DataMember(Name = "route_service_time_multiplier", EmitDefaultValue = false)]
+        public decimal? RoutServiceTimeMultiplier { get; set; }
+
+        /// <summary>
+        /// Optimization engine (e.g. '1','2' etc)
+        /// </summary>
+        [DataMember(Name = "optimization_engine", EmitDefaultValue = false)]
+        public string OptimizationEngine { get; set; }
+
+        /// <summary>
         /// If the service time is specified, all the route addresses wil have same service time. 
         /// See <see cref="OverrideAddresses"/>
         /// </summary>
         [DataMember(Name = "override_addresses", EmitDefaultValue = false)]
         public OverrideAddresses overrideAddresses { get; set; }
-
     }
 
     /// <summary>
