@@ -31,7 +31,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>false</SignAssembly>
+    <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>
@@ -88,6 +88,7 @@
     <Compile Include="DataTypes\AddressBookGroupRule.cs" />
     <Compile Include="DataTypes\AddressCustomNote.cs" />
     <Compile Include="DataTypes\AddressGeocoded.cs" />
+    <Compile Include="DataTypes\AddressManifest.cs" />
     <Compile Include="DataTypes\AddressNote.cs" />
     <Compile Include="DataTypes\AddressForGeocoding.cs" />
     <Compile Include="DataTypes\AvoidanceZone.cs" />
@@ -95,6 +96,13 @@
     <Compile Include="DataTypes\Country.cs" />
     <Compile Include="DataTypes\CustomNoteType.cs" />
     <Compile Include="DataTypes\DataObject.cs" />
+    <Compile Include="DataTypes\DeviceLocationGap.cs" />
+    <Compile Include="DataTypes\DeviceLocationHistoryResponse.cs" />
+    <Compile Include="DataTypes\DeviceLocationLeg.cs" />
+    <Compile Include="DataTypes\DeviceLocationMatching.cs" />
+    <Compile Include="DataTypes\DeviceLocationMmd.cs" />
+    <Compile Include="DataTypes\DeviceLocationSummary.cs" />
+    <Compile Include="DataTypes\DeviceLocationTracePoint.cs" />
     <Compile Include="DataTypes\Direction.cs" />
     <Compile Include="DataTypes\DirectionLocation.cs" />
     <Compile Include="DataTypes\DirectionPathPoint.cs" />
@@ -112,6 +120,8 @@
     <Compile Include="DataTypes\MemberResponse.cs" />
     <Compile Include="DataTypes\MemberResponseV4.cs" />
     <Compile Include="DataTypes\Order.cs" />
+    <Compile Include="DataTypes\OrderCustomField.cs" />
+    <Compile Include="DataTypes\OrderCustomFieldCreateResponse.cs" />
     <Compile Include="DataTypes\OrdersResponse.cs" />
     <Compile Include="DataTypes\Route.cs" />
     <Compile Include="DataTypes\RouteParameters.cs" />
@@ -156,6 +166,7 @@
     <Compile Include="QueryTypes\MergeRoutesQuery.cs" />
     <Compile Include="QueryTypes\NoteParameters.cs" />
     <Compile Include="QueryTypes\OptimizationParameters.cs" />
+    <Compile Include="QueryTypes\OrderCustomFieldParameters.cs" />
     <Compile Include="QueryTypes\OrderParameters.cs" />
     <Compile Include="QueryTypes\RouteParametersQuery.cs" />
     <Compile Include="QueryTypes\TelematicsVendorParameters.cs" />
@@ -173,6 +184,7 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
+    <None Include="Route4MeExcelAddIn_1_TemporaryKey.pfx" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

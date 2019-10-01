@@ -58,8 +58,8 @@ namespace Route4MeSDKUnitTest
 
             RouteParametersQuery routeParameters = new RouteParametersQuery()
             {
-                Limit = 30,
-                Offset = 0
+                Limit = 1,
+                Offset = 15
             };
 
             // Run the query
@@ -7622,7 +7622,7 @@ namespace Route4MeSDKUnitTest
     }
 
 
-        [TestClass]
+    [TestClass]
     public class AvoidanseZonesGroup
     {
         static string c_ApiKey = ApiKeys.actualApiKey;
@@ -8509,6 +8509,157 @@ namespace Route4MeSDKUnitTest
     }
 
     [TestClass]
+    public class OrderCustomUserFieldsGroup
+    {
+        static string skip;
+        static string c_ApiKey = ApiKeys.actualApiKey; // This group allowed only for business and higher account types --- put in the parameter an appropriate API key
+        static string c_ApiKey_1 = ApiKeys.demoApiKey; //
+        static List<int> lsOrderCustomUserFieldIDs = new List<int>();
+
+        [ClassInitialize()]
+        public static void OrderCustomUserFieldsInitialize(TestContext context)
+        {
+            if (c_ApiKey == c_ApiKey_1) skip = "yes"; else skip = "no";
+
+            if (skip == "yes") return;
+
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            var orderCustomFieldParams = new OrderCustomFieldParameters()
+            {
+                OrderCustomFieldName = "CustomField33",
+                OrderCustomFieldLabel = "Custom Field 33",
+                OrderCustomFieldType = "checkbox",
+                OrderCustomFieldTypeInfo = new Dictionary<string, object>()
+                {
+                    {"short_label", "cFl33" },
+                    {"description", "This is test order custom field" },
+                    {"custom field no", 10 }
+                }
+            };
+
+            var createdCustomField = route4Me.CreateOrderCustomUserField(orderCustomFieldParams, out string errorString);
+
+            Assert.IsInstanceOfType(createdCustomField, typeof(OrderCustomFieldCreateResponse), "Cannot initialize the class OrderCustomUserFieldsGroup. " + errorString);
+
+            lsOrderCustomUserFieldIDs = new List<int>()
+            {
+                createdCustomField.Data.OrderCustomFieldId
+            };
+        }
+
+        [TestMethod]
+        public void GetOrderCustomUserFieldsTest()
+        {
+            if (skip == "yes") return;
+
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            string errorString;
+            var orderCustomUserFields = route4Me.GetOrderCustomUserFields(out errorString);
+
+            Assert.IsInstanceOfType(orderCustomUserFields, typeof(OrderCustomField[]), "GetOrderCustomUserFieldsTest failed. " + errorString);
+        }
+
+        [TestMethod]
+        public void CreateOrderCustomUserFieldTest()
+        {
+            if (skip == "yes") return;
+
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            var orderCustomFieldParams = new OrderCustomFieldParameters()
+            {
+                OrderCustomFieldName = "CustomField44",
+                OrderCustomFieldLabel = "Custom Field 44",
+                OrderCustomFieldType = "checkbox",
+                OrderCustomFieldTypeInfo = new Dictionary<string, object>()
+                {
+                    {"short_label", "cFl44" },
+                    {"description", "This is test order custom field" },
+                    {"custom field no", 11 }
+                }
+            };
+
+            var orderCustomUserField = route4Me.CreateOrderCustomUserField(orderCustomFieldParams, out string errorString);
+
+            Assert.IsInstanceOfType(orderCustomUserField, typeof(OrderCustomFieldCreateResponse), "CreateOrderCustomUserFieldTest failed. " + errorString);
+
+            lsOrderCustomUserFieldIDs.Add(orderCustomUserField.Data.OrderCustomFieldId);
+        }
+
+        [TestMethod]
+        public void UpdateOrderCustomUserFieldTest()
+        {
+            if (skip == "yes") return;
+
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            var orderCustomFieldParams = new OrderCustomFieldParameters()
+            {
+                OrderCustomFieldId = lsOrderCustomUserFieldIDs[lsOrderCustomUserFieldIDs.Count - 1],
+                OrderCustomFieldLabel = "Custom Field 55",
+                OrderCustomFieldType = "checkbox",
+                OrderCustomFieldTypeInfo = new Dictionary<string, object>()
+                {
+                    {"short_label", "cFl55" },
+                    {"description", "This is updated test order custom field" },
+                    {"custom field no", 12 }
+                }
+            };
+
+            var orderCustomUserField = route4Me.UpdateOrderCustomUserField(orderCustomFieldParams, out string errorString);
+
+            Assert.IsInstanceOfType(orderCustomUserField, typeof(OrderCustomFieldCreateResponse), "UpdateOrderCustomUserFieldTest failed. " + errorString);
+
+            Assert.AreEqual("Custom Field 55", orderCustomUserField.Data.OrderCustomFieldLabel, "UpdateOrderCustomUserFieldTest failed. " + errorString);
+        }
+
+        [TestMethod]
+        public void RemoveOrderCustomUserFieldTest()
+        {
+            if (skip == "yes") return;
+
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            int orderCustomFieldId = lsOrderCustomUserFieldIDs[lsOrderCustomUserFieldIDs.Count - 1];
+
+            var orderCustomFieldParams = new OrderCustomFieldParameters()
+            {
+                OrderCustomFieldId = orderCustomFieldId
+            };
+
+            var response = route4Me.RemoveOrderCustomUserField(orderCustomFieldParams, out string errorString);
+
+            Assert.IsTrue(response.Affected == 1, "RemoveOrderCustomUserFieldTest failed. " + errorString);
+
+            lsOrderCustomUserFieldIDs.Remove(orderCustomFieldId);
+        }
+
+        [ClassCleanup]
+        public static void RemoveOrderCustomUserFields()
+        {
+            if (skip == "yes") return;
+
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            foreach (var customFieldId in lsOrderCustomUserFieldIDs)
+            {
+                var customFieldParam = new OrderCustomFieldParameters()
+                {
+                    OrderCustomFieldId = customFieldId
+                };
+
+                var removeResult = route4Me.RemoveOrderCustomUserField(customFieldParam, out string errorString);
+
+                Assert.IsTrue(removeResult.Affected == 1, "Cannot remove order customuser field with id=" + customFieldId + ". " + errorString);
+            }
+
+            lsOrderCustomUserFieldIDs.Clear();
+        }
+    }
+
+    [TestClass]
     public class ActivitiesGroup
     {
         static string c_ApiKey = ApiKeys.actualApiKey;
@@ -8595,6 +8746,37 @@ namespace Route4MeSDKUnitTest
             Activity[] activities = route4Me.GetActivityFeed(activityParameters, out errorString);
 
             Assert.IsInstanceOfType(activities, typeof(Activity[]), "GetActivitiesTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void GetActivitiesByMemberTest()
+        {
+            if (c_ApiKey == ApiKeys.demoApiKey) return;
+
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            GenericParameters parameters = new GenericParameters()
+            {
+            };
+
+            string userErrorString;
+            var response = route4Me.GetUsers(parameters, out userErrorString);
+
+            Assert.IsInstanceOfType(response.results, typeof(MemberResponseV4[]), "GetActivitiesByMemberTest failed - cannot get users");
+            Assert.IsTrue(response.results.Length > 1, "Cannot retrieve more than 1 users");
+
+            ActivityParameters activityParameters = new ActivityParameters()
+            {
+                MemberId = response.results[1].member_id!=null ? Convert.ToInt32(response.results[1].member_id) : -1,
+                Offset = 0,
+                Limit = 10
+            };
+
+            // Run the query
+            string errorString;
+            Activity[] activities = route4Me.GetActiviies(activityParameters, out errorString);
+
+            Assert.IsInstanceOfType(activities, typeof(Activity[]), "GetActivitiesByMemberTest failed... " + errorString);
         }
 
         [TestMethod]

@@ -84,9 +84,28 @@ namespace Route4MeSDK.DataTypes
         public int? EstimatedDepartureTimeTs { get; set; }
 
         /// <summary>
+        /// Scheduled arrival time. 
+        /// </summary>
+        [DataMember(Name = "scheduled_arrival_time_ts", EmitDefaultValue = false)]
+        public int? ScheduledArrivalTimeTs { get; set; }
+
+        /// <summary>
+        /// Scheduled departure time.
+        /// </summary>
+        [DataMember(Name = "scheduled_departure_time_ts", EmitDefaultValue = false)]
+        public int? ScheduledDepartureTimeTs { get; set; }
+
+        /// <summary>
         /// This is the difference between the originally projected arrival time and Actual Arrival Time.
         /// </summary>
         [DataMember(Name = "time_impact", EmitDefaultValue = false)]
         public int? TimeImpact { get; set; }
+
+        /// <summary>
+        /// Distance traversed before reaching this address.
+        /// </summary>
+        [DataMember(Name = "udu_running_distance", EmitDefaultValue = false)]
+        public double? UduRunningDistance { get; set; }
     }
 }
+

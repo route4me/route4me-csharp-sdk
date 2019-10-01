@@ -51,6 +51,12 @@ namespace Route4MeSDK.DataTypes
         public string CompassDirection { get; set; }
 
         ///<summary>
+        /// UDU Distance (UDU: User Distance Unit).
+        ///</summary>
+        [DataMember(Name = "udu_distance")]
+        public decimal? UduDistance { get; set; }
+
+        ///<summary>
         /// Direction step duration(seconds)
         ///</summary>
         [DataMember(Name = "duration_sec")]
