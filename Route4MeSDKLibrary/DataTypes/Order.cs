@@ -182,6 +182,6 @@ namespace Route4MeSDK.DataTypes
 
 
         [DataMember(Name = "custom_user_fields", EmitDefaultValue = false)]
-        public string CustomUserFields { get; set; }
+        public OrderCustomField[] CustomUserFields { get; set; }
     }
 }
