@@ -35,6 +35,12 @@ namespace Route4MeSDK.DataTypes
         public string OrderCustomFieldType { get; set; }
 
         /// <summary>
+        /// Custom order field value.
+        /// </summary>
+        [DataMember(Name = "order_custom_field_value", EmitDefaultValue = false)]
+        public string OrderCustomFieldValue { get; set; }
+
+        /// <summary>
         /// Account owner member ID.
         /// </summary>
         [DataMember(Name = "root_owner_member_id", EmitDefaultValue = false)]
