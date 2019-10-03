@@ -1,8 +1,6 @@
 ﻿using Moq;
 using System;
 using System.Threading;
-using System.Data;
-using System.Data.OleDb;
 using System.IO;
 using System.Runtime.Serialization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -16,7 +14,6 @@ using System.Reflection;
 using System.CodeDom.Compiler;
 using CsvHelper;
 using System.Linq;
-using Route4MeSDKLibrary.DataTypes;
 
 namespace Route4MeSDKUnitTest
 {
@@ -8058,7 +8055,8 @@ namespace Route4MeSDKUnitTest
         static string c_ApiKey_1 = ApiKeys.demoApiKey; //
         static TestDataRepository tdr;
         static List<string> lsOptimizationIDs;
-        static List<string> lsOrders = new List<string>();
+        static List<string> lsOrderIds = new List<string>();
+        static List<Order> lsOrders = new List<Order>();
 
         [ClassInitialize()]
         public static void CreateOrderTest(TestContext context)
@@ -8088,7 +8086,15 @@ namespace Route4MeSDKUnitTest
                 address_alias = "Test AddressAlias " + (new Random()).Next().ToString(),
                 cached_lat = 37.773972,
                 cached_lng = -122.431297,
-                day_scheduled_for_YYMMDD = dtTomorrow.ToString("yyyy-MM-dd")
+                day_scheduled_for_YYMMDD = dtTomorrow.ToString("yyyy-MM-dd"),
+                CustomUserFields = new OrderCustomField[]
+                {
+                    new OrderCustomField()
+                    {
+                        OrderCustomFieldId = 93,
+                        OrderCustomFieldValue = "false"
+                    }
+                }
             };
 
             if (c_ApiKey != c_ApiKey_1)
@@ -8099,7 +8105,8 @@ namespace Route4MeSDKUnitTest
 
                 Assert.IsNotNull(resultOrder, "CreateOrderTest failed... " + errorString);
 
-                lsOrders.Add(resultOrder.order_id.ToString());
+                lsOrderIds.Add(resultOrder.order_id.ToString());
+                lsOrders.Add(resultOrder);
             }
             else
             {
@@ -8136,7 +8143,7 @@ namespace Route4MeSDKUnitTest
 
             string orderIds = "";
 
-            foreach (string ord1 in lsOrders) orderIds += ord1 + ",";
+            foreach (string ord1 in lsOrderIds) orderIds += ord1 + ",";
             orderIds = orderIds.TrimEnd(',');
 
             OrderParameters orderParameters = new OrderParameters()
@@ -8236,7 +8243,7 @@ namespace Route4MeSDKUnitTest
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
             Order order = null;
-            string orderId = lsOrders.Count > 0 ? lsOrders[0] : "";
+            string orderId = lsOrderIds.Count > 0 ? lsOrderIds[0] : "";
 
             Assert.IsFalse(orderId == "", "There is no order for updating...");
 
@@ -8408,6 +8415,64 @@ namespace Route4MeSDKUnitTest
         }
 
         [TestMethod]
+        public void CreateOrderWithCustomFieldTest()
+        {
+            if (skip == "yes") return;
+
+            var route4Me = new Route4MeManager(c_ApiKey);
+
+            var orderParams = new Order()
+            {
+                address_1 = "1358 E Luzerne St, Philadelphia, PA 19124, US",
+                cached_lat = 48.335991,
+                cached_lng = 31.18287,
+                day_scheduled_for_YYMMDD = "2019-10-11",
+                address_alias = "Auto test address",
+                CustomUserFields = new OrderCustomField[]
+                {
+                    new OrderCustomField()
+                    {
+                        OrderCustomFieldId = 93,
+                        OrderCustomFieldValue = "false"
+                    }
+                }
+            };
+
+            var result = route4Me.AddOrder(orderParams, out string errorString);
+
+            Assert.IsNotNull(result, "AddOrdersToRouteTest failed... " + errorString);
+
+            lsOrderIds.Add(result.order_id.ToString());
+
+            lsOrders.Add(result);
+        }
+
+        [TestMethod]
+        public void UpdateOrderWithCustomFieldTest()
+        {
+            if (skip == "yes") return;
+
+            var route4Me = new Route4MeManager(c_ApiKey);
+
+            var order = lsOrders[lsOrders.Count - 1];
+
+            order.CustomUserFields = new OrderCustomField[]
+            {
+                new OrderCustomField()
+                {
+                    OrderCustomFieldId = 93,
+                    OrderCustomFieldValue = "true"
+                }
+            };
+
+            var result = route4Me.UpdateOrder(order, out string errorString);
+
+            Assert.IsNotNull(result, "AddOrdersToRouteTest failed... " + errorString);
+        }
+
+
+
+        [TestMethod]
         public void AddOrdersToRouteTest()
         {
             if (skip == "yes") return;
@@ -8494,17 +8559,22 @@ namespace Route4MeSDKUnitTest
         {
             if (skip == "yes") return;
 
-            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+            var route4Me = new Route4MeManager(c_ApiKey);
 
             // Run the query
             string errorString;
-            bool removed = route4Me.RemoveOrders(lsOrders.ToArray(), out errorString);
+            bool removed = route4Me.RemoveOrders(lsOrderIds.ToArray(), out errorString);
+
+            lsOrders.Clear();
+            lsOrderIds.Clear();
 
             Assert.IsTrue(removed, "RemoveOrdersTest failed... " + errorString);
 
             bool result = tdr.RemoveOptimization(lsOptimizationIDs.ToArray());
 
             Assert.IsTrue(result, "Removing of the testing optimization problem failed...");
+
+            lsOptimizationIDs.Clear();
         }
     }
 
