@@ -19,7 +19,7 @@ namespace Route4MeSDKUnitTest
 {
     public class ApiKeys
     {
-        public const string actualApiKey = "51d0c0701ce83855c9f62d0440096e7c";
+        public const string actualApiKey = "11111111111111111111111111111111";
         public const string demoApiKey = "11111111111111111111111111111111";
     }
     
@@ -69,6 +69,8 @@ namespace Route4MeSDKUnitTest
         [TestMethod]
         public void GetRoutesFromDateRangeTest()
         {
+            if (c_ApiKey == ApiKeys.demoApiKey) return;
+
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
             RouteParametersQuery routeParameters = new RouteParametersQuery()
@@ -10092,6 +10094,8 @@ namespace Route4MeSDKUnitTest
         [TestMethod]
         public void CreatetVehicleTest()
         {
+            if (c_ApiKey == ApiKeys.demoApiKey) return;
+
             // Create common vehicle
             VehicleV4Parameters commonVehicleParams = new VehicleV4Parameters()
             {
@@ -10240,6 +10244,8 @@ namespace Route4MeSDKUnitTest
         [TestMethod]
         public void updateVehicleTest()
         {
+            if (c_ApiKey == ApiKeys.demoApiKey) return;
+
             if (lsVehicleIDs.Count < 1)
             {
                 VehicleV4Parameters newVehicle = new VehicleV4Parameters()
