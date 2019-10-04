@@ -30,7 +30,13 @@ namespace Route4MeSDK.DataTypes
         /// The locations comprised in the territory.
         ///</summary>
         [DataMember(Name = "addresses")]
-        public int[] addresses { get; set; }
+        public int[] Addresses { get; set; }
+
+        ///<summary>
+        /// The orders comprised in the territory.
+        ///</summary>
+        [DataMember(Name = "orders")]
+        public int[] Orders { get; set; }
 
         ///<summary>
         /// Member Id.
