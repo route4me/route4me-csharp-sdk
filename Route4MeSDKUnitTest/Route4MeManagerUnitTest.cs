@@ -9815,7 +9815,7 @@ namespace Route4MeSDKUnitTest
 
             MemberParametersV4 @params = new MemberParametersV4
             {
-                member_id = createdMemberID!=null ? createdMemberID : Convert.ToInt32(lsMembers[lsMembers.Count - 1]),
+                member_id = Convert.ToInt32(lsMembers[lsMembers.Count - 1]),
                 member_phone = "571-259-5939"
             };
 
