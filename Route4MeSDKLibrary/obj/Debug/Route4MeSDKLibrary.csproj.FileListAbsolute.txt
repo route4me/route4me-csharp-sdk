@@ -1,0 +1,5 @@
+C:\Users\User\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKLibrary\bin\Debug\Route4MeSDKLibrary.dll
+C:\Users\User\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKLibrary\bin\Debug\Route4MeSDKLibrary.pdb
+C:\Users\User\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKLibrary\obj\Debug\Route4MeSDKLibrary.csproj.CoreCompileInputs.cache
+C:\Users\User\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKLibrary\obj\Debug\Route4MeSDKLibrary.dll
+C:\Users\User\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKLibrary\obj\Debug\Route4MeSDKLibrary.pdb
