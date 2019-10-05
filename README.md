@@ -51,7 +51,7 @@ Yes. All routes are permanently stored in the database and are no longer accessi
 
 
 ### Can I incorporate your API into my mobile application?
-Route4Me’s route planning and optimization technology can only be added into applications that do not directly compete with Route4Me. 
+Route4Me’s route planning and optimization technology can only be added into applications that do not directly compete with Route4Me.
 This means the application’s primary capabilities must be unrelated to route optimization, route planning, or navigation.
 
 ### Can I pay you to develop a custom algorithm?
@@ -69,7 +69,7 @@ Because Route4Me processes all routes asynchronously, Route4Me will conveniently
 
 ### Does the Route4Me API and SDK work in my country?
 Route4Me.com, as well as all of Route4Me’s mobile applications use the Route4Me SDK’s and API.
-Since Route4Me works globally, this means that all of Route4Me’s capabilities are available using the SDK’s in every country 
+Since Route4Me works globally, this means that all of Route4Me’s capabilities are available using the SDK’s in every country
 
 
 ### Will the Route4Me API/SDK work in my program on the Mac, PC, or Linux?
@@ -127,7 +127,7 @@ namespace Route4MeSDK.Examples
                         //multiple depot routes can have multiple addresses marked as depots
                         //and the optimization algorithm will determine the optimal departure depot
                         //for each generated route
-                        IsDepot       = true, 
+                        IsDepot       = true,
                         Latitude      = 40.7636197, //all addresses must be properly geocoded
                         Longitude     = -73.9744388, //all addresses must be properly geocoded
                         Time          = 0 },
@@ -166,7 +166,7 @@ namespace Route4MeSDK.Examples
                         Alias         = "Toga Bike Shop",
                         Latitude      = 40.7753077,//all addresses must be properly geocoded
                         Longitude     = -73.9861529,//all addresses must be properly geocoded
-                        Time          = 0 }, 
+                        Time          = 0 },
 
         new Address() { AddressString = "555 W 57th St New York, NY 10019",
                         Alias         = "BMW of Manhattan",
