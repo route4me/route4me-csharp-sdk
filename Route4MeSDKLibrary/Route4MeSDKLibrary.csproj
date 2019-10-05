@@ -138,6 +138,7 @@
     <Compile Include="DataTypes\TerritoryZone.cs" />
     <Compile Include="DataTypes\TrackingHistory.cs" />
     <Compile Include="DataTypes\User.cs" />
+    <Compile Include="DataTypes\UserLocation.cs" />
     <Compile Include="DataTypes\VehicleResponse.cs" />
     <Compile Include="DataTypes\VehiclesPaginated.cs" />
     <Compile Include="DataTypes\VehicleV4Response.cs" />
