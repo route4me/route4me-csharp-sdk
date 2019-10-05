@@ -56,6 +56,7 @@ namespace Route4MeSDK
         //public const string AssetTracking = MainHost + "/api/asset/find_route.php";
         public const string AssetTracking = MainHost + "/api.v4/status.php";
         public const string DeviceLocation = MainHost + "/api/track/get_device_location.php";
+        public const string UserLocation = MainHost + "/api/track/view_user_locations.php";
 
         public const string ViewVehicles = MainHost + "/api/vehicles/view_vehicles.php";
         //public const string Vehicle_V4 = MainHost + "/api.v4/vehicle.php";

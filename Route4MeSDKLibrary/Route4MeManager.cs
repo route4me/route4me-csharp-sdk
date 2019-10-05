@@ -959,14 +959,45 @@ namespace Route4MeSDK
             return GetJsonObjectFromAPI<FindAssetResponse>(request, R4MEInfrastructureSettings.AssetTracking, HttpMethodType.Get, false, out errorString);
 		}
 
-		#endregion
+        /// <summary>
+        /// Get user locations
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <param name="errorString"></param>
+        /// <returns></returns>
+        public Dictionary<string,UserLocation> GetUserLocations(GenericParameters parameters, out string errorString)
+        {
+            var userLocations = GetJsonObjectFromAPI<Dictionary<string, UserLocation>>(parameters, 
+                R4MEInfrastructureSettings.UserLocation, 
+                HttpMethodType.Get, 
+                false,out errorString);
 
-		#region Users
+            return userLocations;
+        }
+
+        public UserLocation[] GetUserLocationsAsync(GenericParameters parameters, out string errorString)
+        {
+            Task<Tuple<UserLocation[], string>> result = GetJsonObjectFromAPIAsync<UserLocation[]>(parameters,
+                R4MEInfrastructureSettings.UserLocation,
+                HttpMethodType.Get,
+                false);
+
+            result.Wait();
+
+            errorString = "";
+            if (result.IsFaulted || result.IsCanceled) errorString = result.Result.Item2;
+
+            return result.Result.Item1;
+        }
+
+        #endregion
+
+        #region Users
 
         /// <summary>
         /// The response for the get users process
         /// </summary>
-		[DataContract]
+        [DataContract]
 		public sealed class GetUsersResponse
 		{
             /// <value>The array of the User objects</value>
@@ -3232,7 +3263,7 @@ namespace Route4MeSDK
 			  where T : class
 		{
 			T result = default(T);
-			errorMessage = string.Empty;
+			    errorMessage = string.Empty;
 
 			try
 			{
