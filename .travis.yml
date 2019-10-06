@@ -5,14 +5,14 @@
 #
 # =============================================================================
 
-sudo: false
+sudo: required
 language: csharp
 solution: Route4MeSDK.sln
 
-mono:
-  - latest
-  - 3.8.0
-#  - 2.10.8 # fails: https://travis-ci.org/maxkoryukov/route4me-csharp-sdk/jobs/194265821
+mono: none
+#  - latest
+#  - 3.8.0  The project is upgraded to .Net 4.6.1 and this point will be failed
+#  - 2.10.8 # fails: https://travis-ci.org/maxkoryukov/route4me-csharp-sdk/jobs/194265821  
 
 # dotnet:
 #   - 1.0.0-preview2-003121
@@ -23,5 +23,5 @@ cache:
 
 script:
   - xbuild /p:Configuration=Release ./Route4MeSDKLibrary/Route4MeSDKLibrary.csproj
-  - xbuild /p:Configuration=Release ./Route4MeSDKUnitTest/Route4MeSDKUnitTest.csproj
-#  - mono ./packages/NUnit.ConsoleRunner.3.6.0/tools/nunit3-console.exe ./Route4MeSDKUnitTest/bin/Debug/Route4MeSDKUnitTest.dll
+#  - xbuild /p:Configuration=Release ./Route4MeSDKUnitTest/Route4MeSDKUnitTest.csproj
+#  - mono ./packages/NUnit.ConsoleRunner.3.6.0/tools/nunit3-console.exe ./Route4MeSDKUnitTest/bin/Debug/Route4MeSDKUnitTest.dll # MsTest Not supported on Travis

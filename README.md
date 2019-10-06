@@ -1,10 +1,13 @@
 # Route4Me Route Optimization SaaS C# SDK
 
+[![Build Status](https://travis-ci.org/route4me/route4me-csharp-sdk.svg?branch=master)](https://travis-ci.org/route4me/route4me-csharp-sdk)
+[![Build status](https://ci.appveyor.com/api/projects/status/8iq2b0ctti0lw79k?svg=true)](https://ci.appveyor.com/project/novapulsar/route4me-csharp-sdk)
+
 
 ### What does the Route4Me SDK permit me to do?
-This SDK makes it easier for you use the Route4Me API, which creates optimally sequenced driving routes for many drivers.
+This SDK makes it easier for you use the Route4Me API, which creates optimally sequenced driving routes for many drivers. 
 
-### Who can use the Route4Me SDK (and API)?
+### Who can use the Route4Me SDK (and API)? 
 The service is typically used by organizations who must route many drivers to many destinations. In addition to route optimization for new (future) routes, the API can also be used to analyze historical routes, and to distribute routes to field personnel.
 
 ### Who is prohibited from using the Route4Me SDK (and API)?
@@ -51,7 +54,7 @@ Yes. All routes are permanently stored in the database and are no longer accessi
 
 
 ### Can I incorporate your API into my mobile application?
-Route4Me’s route planning and optimization technology can only be added into applications that do not directly compete with Route4Me.
+Route4Me’s route planning and optimization technology can only be added into applications that do not directly compete with Route4Me. 
 This means the application’s primary capabilities must be unrelated to route optimization, route planning, or navigation.
 
 ### Can I pay you to develop a custom algorithm?
@@ -69,7 +72,7 @@ Because Route4Me processes all routes asynchronously, Route4Me will conveniently
 
 ### Does the Route4Me API and SDK work in my country?
 Route4Me.com, as well as all of Route4Me’s mobile applications use the Route4Me SDK’s and API.
-Since Route4Me works globally, this means that all of Route4Me’s capabilities are available using the SDK’s in every country
+Since Route4Me works globally, this means that all of Route4Me’s capabilities are available using the SDK’s in every country 
 
 
 ### Will the Route4Me API/SDK work in my program on the Mac, PC, or Linux?
@@ -127,7 +130,7 @@ namespace Route4MeSDK.Examples
                         //multiple depot routes can have multiple addresses marked as depots
                         //and the optimization algorithm will determine the optimal departure depot
                         //for each generated route
-                        IsDepot       = true,
+                        IsDepot       = true, 
                         Latitude      = 40.7636197, //all addresses must be properly geocoded
                         Longitude     = -73.9744388, //all addresses must be properly geocoded
                         Time          = 0 },
@@ -166,7 +169,7 @@ namespace Route4MeSDK.Examples
                         Alias         = "Toga Bike Shop",
                         Latitude      = 40.7753077,//all addresses must be properly geocoded
                         Longitude     = -73.9861529,//all addresses must be properly geocoded
-                        Time          = 0 },
+                        Time          = 0 }, 
 
         new Address() { AddressString = "555 W 57th St New York, NY 10019",
                         Alias         = "BMW of Manhattan",
@@ -218,78 +221,3 @@ namespace Route4MeSDK.Examples
 }
 
 ```
-
--------------------
-##Optimization Problem Types
-
-Route4Me provides solutions for different types of routes:
-
-### Single depot, Single Driver
-
-Single Depot, Single Driver is particular case of an Optimization Problem of VRP (Vehicle Routing Problem), in which a vehicle departs from a depot and visits a set of customers.
-
-See video tutorial at [Single Driver, Single Depot](http://support.route4me.com/route-planning-help.php?id=manual0:tutorial2:chapter1:subchapter1)
-
-Required parameters: addresses, api_key, algorithm_types.
-
-see detailed description of parameters and sample values [here] (https://www.route4me.com/api/demo/add_optimization_problem.php?sample=Single%20Depot,%20Single%20Driver)
-
-### Single Driver Route 10 Stops
-
-Single Depot, Single Driver and 10 stops is particular case of an Optimization Problem, in which a vehicle departs from a depot, visits 10 stops and ends exactly in the 10th stop.
-
-Required parameters: addresses, api_key, algorithm_types.
-
-see detailed description of parameters and sample values [here] (https://www.route4me.com/api/demo/add_optimization_problem.php?sample=Single%20Driver%20Route%2010%20Stops)
-
-### Single Driver Round Trip
-
-Single Driver Round Trip is particular case of an Optimization Problem, in which a vehicle departs from a depot, visits a set of customers and ends it's routes in the depot.
-
-Required parameters: addresses, api_key, algorithm_types.
-
-see detailed description of parameters and sample values [here] (https://www.route4me.com/api/demo/add_optimization_problem.php?sample=Single%20Driver%20Round%20Trip)
-
-### Single Depot, Multiple Driver
-
-Single Depot, Multiple Driver is particular case of an Optimization Problem, in which multiple vehicles depart from a depot, visit a set of customers and end their routes in the depot.
-
-See video tutorial at [Single Depot, Multiple Driver](http://support.route4me.com/route-planning-help.php?id=manual0:tutorial2:chapter1:subchapter2)
-
-Required parameters: addresses, api_key, algorithm_types.
-
-see detailed description of parameters and sample values [here] (https://www.route4me.com/api/demo/add_optimization_problem.php?sample=Single%20Depot,%20Multiple%20Driver)
-
-### Single Depot, Multiple Driver, Time window
-
-Single Depot, Multiple Driver, Time window is particular case of an Optimization Problem with time constraints, in which multiple vehicles depart from a depot, visit a set of customers and end their routes in the depot.
-
-Required parameters: addresses, api_key, algorithm_types.
-
-see detailed description of parameters and sample values [here] (https://www.route4me.com/api/demo/add_optimization_problem.php?sample=Single%20Depot,%20Multiple%20Driver,%20Time%20window)
-
-### Multiple Depot, Multiple Driver
-
-Multiple Depot, Multiple Driver is particular case of an Optimization Problem, in which multiple vehicles depart from the multiple depot, visit a set of customers and end their routes in the depots.
-
-See video tutorial at [Multiple Depot, Multiple](http://support.route4me.com/route-planning-help.php?id=manual0:tutorial2:chapter2:subchapter1)
-
-Required parameters: addresses, api_key, algorithm_types.
-
-see detailed description of parameters and sample values [here] (https://www.route4me.com/api/demo/add_optimization_problem.php?sample=Multiple%20Depot,%20Multiple%20Driver)
-
-### Multiple Depot, Multiple Driver, Time window
-
-Multiple Depot, Multiple Driver, Time window is particular case of an Optimization Problem with time constraints, in which multiple vehicles depart from the multiple depot, visit a set of customers and end their routes in the depots.
-
-See video tutorial at [Multiple Depot, Multiple Driver, Time window](http://support.route4me.com/route-planning-help.php?id=manual0:tutorial2:chapter2:subchapter2)
-
-Required parameters: addresses, api_key, algorithm_types.
-
-see detailed description of parameters and sample values [here] (https://www.route4me.com/api/demo/add_optimization_problem.php?sample=Multiple%20Depot,%20Multiple%20Driver,%20Time%20window)
-
-...
-
-**See other interesting video tutorials about Different Types of Routes [here](http://support.route4me.com/route-planning-help.php?id=manual0:tutorial2)**
-
--------------------
