@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29306.81
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Route4MeSDKLibrary", "Route4MeSDKLibrary\Route4MeSDKLibrary.csproj", "{37E5D3FC-BBF7-4BD8-98E6-A58DC9138D98}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Route4MeSDKTest", "Route4MeSDKTest\Route4MeSDKTest.csproj", "{DBA0AA41-4223-4404-B3E6-4948FE147A40}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Route4MeSDKUnitTest", "Route4MeSDKUnitTest\Route4MeSDKUnitTest.csproj", "{2F85C71C-685A-4353-9A1B-7A1E3C409325}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,8 +23,15 @@ Global
 		{DBA0AA41-4223-4404-B3E6-4948FE147A40}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DBA0AA41-4223-4404-B3E6-4948FE147A40}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DBA0AA41-4223-4404-B3E6-4948FE147A40}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F85C71C-685A-4353-9A1B-7A1E3C409325}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F85C71C-685A-4353-9A1B-7A1E3C409325}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F85C71C-685A-4353-9A1B-7A1E3C409325}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F85C71C-685A-4353-9A1B-7A1E3C409325}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {09D7E376-BD90-4E92-BCFF-8A07E3683B95}
 	EndGlobalSection
 EndGlobal

@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<connectionStrings>
+  <conMySQL connectionString="Driver={MySQL ODBC 5.3 Unicode Driver};Server=localhost;Port=3306;Database=r4me_db;User=root; Password=ol123456;Option=3;"
+       providerName="System.Data.Odbc"/>
+  <conMSSQL connectionString="Server=.\SQLExpress; Database=r4me_db; Trusted_Connection=Yes;"
+    providerName="System.Data.SqlClient"/>
+  <conOLEDB connectionString="Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Documents and Settings\Internet Account\My Documents\Visual Studio 2008\Projects\ConsoleApplication1\ConsoleApplication1\Data\Institute.mdb;Persist Security Info=True"
+    providerName="System.Data.OleDb"/>
+  <conPostgreSQL connectionString="Driver={PostgreSQL UNICODE};Server=localhost;Port=5433;Database=r4me_db;Uid=postgres; Pwd=ol123456;timeout=1000;"
+         providerName="System.Data.Odbc"/>
+
+</connectionStrings>

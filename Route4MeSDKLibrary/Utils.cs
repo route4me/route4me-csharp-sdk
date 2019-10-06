@@ -55,9 +55,10 @@ namespace Route4MeSDK
 
       using (var memoryStream = new MemoryStream())
       {
+          if (obj == null) return result;
         writer.WriteObject(memoryStream, obj);
 
-        result = Encoding.Default.GetString(memoryStream.ToArray());
+        result = Encoding.UTF8.GetString(memoryStream.ToArray());
       }
 
       return result;
@@ -98,7 +99,8 @@ namespace Route4MeSDK
     public static long ConvertToUnixTimestamp(DateTime date)
     {
       DateTime origin = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-      TimeSpan diff = date.ToUniversalTime() - origin;
+      if (date < origin) date = new DateTime(1970, 1, 1, date.Hour, date.Minute, date.Second);
+      TimeSpan diff = date - origin;
       return (long)Math.Floor(diff.TotalSeconds);
     }
 
