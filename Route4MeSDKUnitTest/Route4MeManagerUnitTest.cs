@@ -9708,7 +9708,13 @@ namespace Route4MeSDKUnitTest
         [ClassInitialize()]
         public static void UserGroupInitialize(TestContext context)
         {
-            if (c_ApiKey == c_ApiKey_1) skip = "yes"; else skip = "no";
+            if (c_ApiKey == c_ApiKey_1)
+            {
+                skip = "yes";
+                return;
+            }
+            else skip = "no";
+
             lsMembers = new List<string>();
 
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
@@ -9818,6 +9824,8 @@ namespace Route4MeSDKUnitTest
         [TestMethod]
         public void GetUserByIdTest()
         {
+            if (skip == "yes") return;
+
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
             int memberID = Convert.ToInt32(lsMembers[0]);
@@ -9833,6 +9841,8 @@ namespace Route4MeSDKUnitTest
         [TestMethod]
         public void GetUsersTest()
         {
+            if (skip == "yes") return;
+
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
             GenericParameters parameters = new GenericParameters()
@@ -9849,6 +9859,8 @@ namespace Route4MeSDKUnitTest
         [TestMethod]
         public void UpdateUserTest()
         {
+            if (skip == "yes") return;
+
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
             Console.WriteLine("createdMemberID -> " + createdMemberID);
@@ -9869,6 +9881,8 @@ namespace Route4MeSDKUnitTest
         [TestMethod]
         public void UserAuthenticationTest()
         {
+            if (skip == "yes") return;
+
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
             MemberParameters @params = new MemberParameters
@@ -9888,6 +9902,8 @@ namespace Route4MeSDKUnitTest
         [TestMethod]
         public void UserRegistrationTest()
         {
+            if (skip == "yes") return;
+
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
             MemberParameters @params = new MemberParameters
@@ -9915,6 +9931,8 @@ namespace Route4MeSDKUnitTest
         [TestMethod]
         public void ValidateSessionTest()
         {
+            if (skip == "yes") return;
+
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
             MemberParameters @params = new MemberParameters
@@ -9934,6 +9952,8 @@ namespace Route4MeSDKUnitTest
         [TestMethod]
         public void DeleteUserTest()
         {
+            if (skip == "yes") return;
+
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
             MemberParametersV4 @params = new MemberParametersV4 { member_id = Convert.ToInt32(lsMembers[lsMembers.Count - 1]) };
@@ -9950,6 +9970,8 @@ namespace Route4MeSDKUnitTest
         [ClassCleanup()]
         public static void UsersGroupCleanup()
         {
+            if (skip == "yes") return;
+
             var route4Me = new Route4MeManager(c_ApiKey);
             var parameters = new MemberParametersV4();
             string errorString = "";
