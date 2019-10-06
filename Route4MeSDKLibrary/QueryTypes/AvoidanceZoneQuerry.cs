@@ -1,23 +1,22 @@
-﻿using Route4MeSDK.DataTypes;
-using System.Runtime.Serialization;
-
-namespace Route4MeSDK.QueryTypes
+﻿namespace Route4MeSDK.QueryTypes
 {
-  /// <summary>
-  /// Avoidance zone query
-  /// </summary>
-  public sealed class AvoidanceZoneQuery : GenericParameters
-  {
     /// <summary>
-    /// Device Id
+    /// Parameters for the avoidance zone(s) request
     /// </summary>
-    [HttpQueryMemberAttribute(Name = "device_id", EmitDefaultValue = false)]
-    public string DeviceID { get; set; }
+    public sealed class AvoidanceZoneQuery : GenericParameters
+    {
+        /// <summary>
+        /// Unique ID of a device.
+        /// <remarks><para>Query parameter.</para></remarks>
+        /// </summary>
+        [HttpQueryMemberAttribute(Name = "device_id", EmitDefaultValue = false)]
+        public string DeviceID { get; set; }
 
-    /// <summary>
-    /// Territory Id
-    /// </summary>
-    [HttpQueryMemberAttribute(Name = "territory_id", EmitDefaultValue = false)]
-    public string TerritoryId { get; set; }
-  }
+        /// <summary>
+        /// Unique ID of the territory.
+        /// <remarks><para>Query parameter.</para></remarks>
+        /// </summary>
+        [HttpQueryMemberAttribute(Name = "territory_id", EmitDefaultValue = false)]
+        public string TerritoryId { get; set; }
+    }
 }
