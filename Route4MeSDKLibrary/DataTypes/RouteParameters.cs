@@ -234,7 +234,7 @@ namespace Route4MeSDK.DataTypes
         /// Specify the ip address of the remote user making this optimization request.
         /// </summary>
         [DataMember(Name = "ip", EmitDefaultValue = false)]
-        public int? Ip { get; set; }
+        public long? Ip { get; set; }
 
         /// <summary>
         /// The method to use when compute the distance between the points in a route.

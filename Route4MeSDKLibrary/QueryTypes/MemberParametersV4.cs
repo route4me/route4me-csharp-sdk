@@ -1,126 +1,70 @@
-﻿using System;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 using System.Collections.Generic;
 
 namespace Route4MeSDK.QueryTypes
 {
-    /// <summary>
-    /// Parameters for the member request.
-    /// </summary>
-    /// <seealso cref="Route4MeSDK.QueryTypes.GenericParameters" />
     public sealed class MemberParametersV4 : GenericParameters
     {
-        /// <summary>
-        /// Unique ID of a member.
-        /// <remarks><para>Query parameter.</para></remarks>
-        /// </summary>
         [HttpQueryMemberAttribute(Name = "member_id", EmitDefaultValue = false)]
-        public Nullable<int> member_id { get; set; }
+        public System.Nullable<int> member_id
+        {
+            get { return m_member_id; }
+            set { m_member_id = value; }
+        }
+        private System.Nullable<int> m_member_id;
 
-        /// <summary>
-        /// Unique ID of a device.
-        /// <remarks><para>Query parameter.</para></remarks>
-        /// </summary>
         [HttpQueryMemberAttribute(Name = "device_id", EmitDefaultValue = false)]
         public string device_id { get; set; }
 
-        /// <summary>
-        /// If true, routed addresses will be hidden.
-        /// <remarks><para>Data member parameter.</para></remarks>
-        /// </summary>
         [DataMember(Name = "HIDE_ROUTED_ADDRESSES", EmitDefaultValue = false)]
         public string HIDE_ROUTED_ADDRESSES { get; set; }
 
-        /// <summary>
-        /// If true, visited addresses will be hidden.
-        /// <remarks><para>Data member parameter.</para></remarks>
-        /// </summary>
         [DataMember(Name = "HIDE_VISITED_ADDRESSES", EmitDefaultValue = false)]
         public string HIDE_VISITED_ADDRESSES { get; set; }
 
-        /// <summary>
-        /// If true, a user has readonly access.
-        /// <remarks><para>Data member parameter.</para></remarks>
-        /// </summary>
         [DataMember(Name = "READONLY_USER", EmitDefaultValue = false)]
         public string READONLY_USER { get; set; }
 
-        /// <summary>
-        /// If true, nonfuture routes will be hidden.
-        /// <remarks><para>Data member parameter.</para></remarks>
-        /// </summary>
         [DataMember(Name = "HIDE_NONFUTURE_ROUTES", EmitDefaultValue = false)]
         public string HIDE_NONFUTURE_ROUTES { get; set; }
 
-        /// <summary>
-        /// If true, all vehicles are visible in a user's account.
-        /// <remarks><para>Data member parameter.</para></remarks>
-        /// </summary>
         [DataMember(Name = "SHOW_ALL_VEHICLES", EmitDefaultValue = false)]
         public string SHOW_ALL_VEHICLES { get; set; }
 
-        /// <summary>
-        /// If true, all drivers are visible in a user's account.
-        /// <remarks><para>Data member parameter.</para></remarks>
-        /// </summary>
         [DataMember(Name = "SHOW_ALL_DRIVERS", EmitDefaultValue = false)]
         public string SHOW_ALL_DRIVERS { get; set; }
 
-        /// <summary>
-        /// Member phone number.
-        /// <remarks><para>Data member parameter.</para></remarks>
-        /// </summary>
         [DataMember(Name = "member_phone", EmitDefaultValue = false)]
-        public string member_phone { get; set; }
+        public string member_phone
+        {
+            get { return m_member_phone; }
+            set { m_member_phone = value; }
+        }
+        private string m_member_phone;
 
-        /// <summary>
-        /// Member location zipcode.
-        /// <remarks><para>Data member parameter.</para></remarks>
-        /// </summary>
         [DataMember(Name = "member_zipcode", EmitDefaultValue = false)]
-        public string member_zipcode { get; set; }
+        public string member_zipcode
+        {
+            get { return m_member_zipcode; }
+            set { m_member_zipcode = value; }
+        }
+        private string m_member_zipcode;
 
-        /// <summary>
-        /// Registration country ID of a user.
-        /// <remarks><para>Data member parameter.</para></remarks>
-        /// </summary>
         [DataMember(Name = "user_reg_country_id", EmitDefaultValue = false)]
         public int? user_reg_country_id { get; set; }
 
-        /// <summary>
-        /// Registration state ID of a user.
-        /// <remarks><para>Data member parameter.</para></remarks>
-        /// </summary>
         [DataMember(Name = "user_reg_state_id", EmitDefaultValue = false)]
         public int? user_reg_state_id { get; set; }
 
-        /// <summary>
-        /// Preferred language.
-        /// <para>Available values: </para> <value>'en', 'fr'</value>
-        /// <remarks><para>Data member parameter.</para></remarks>
-        /// </summary>
         [DataMember(Name = "preferred_language", EmitDefaultValue = false)]
         public string preferred_language { get; set; }
 
-        /// <summary>
-        /// Preferred units.
-        /// <para>Available values: </para> <value>'mi', 'km'</value>
-        /// <remarks><para>Data member parameter.</para></remarks>
-        /// </summary>
         [DataMember(Name = "preferred_units", EmitDefaultValue = false)]
         public string preferred_units { get; set; }
 
-        /// <summary>
-        /// Member timezone zipcode.
-        /// <remarks><para>Data member parameter.</para></remarks>
-        /// </summary>
         [DataMember(Name = "timezone", EmitDefaultValue = false)]
         public string timezone { get; set; }
 
-        /// <summary>
-        /// Custom data of a member.
-        /// <remarks><para>Data member parameter.</para></remarks>
-        /// </summary>
         [DataMember(Name = "custom_data", EmitDefaultValue = false)]
         public Dictionary<string, string> custom_data
         {
@@ -171,62 +115,64 @@ namespace Route4MeSDK.QueryTypes
         }
         private Dictionary<string, string> _custom_data;
 
-        /// <summary>
-        /// Allowed maximum routes number per month.
-        /// <remarks><para>Query parameter.</para></remarks>
-        /// </summary>
         [HttpQueryMemberAttribute(Name = "route_count", EmitDefaultValue = false)]
-        public Nullable<int> route_count { get; set; }
+        public System.Nullable<int> route_count
+        {
+            get { return m_route_count; }
+            set { m_route_count = value; }
+        }
+        private System.Nullable<int> m_route_count;
 
-        /// <summary>
-        /// Member email.
-        /// <remarks><para>Data member parameter.</para></remarks>
-        /// </summary>
         [DataMember(Name = "member_email", EmitDefaultValue = false)]
-        public string member_email { get; set; }
+        public string member_email
+        {
+            get { return m_member_email; }
+            set { m_member_email = value; }
+        }
+        private string m_member_email;
 
-        /// <summary>
-        /// Member type. Available values:
-        /// <para>PRIMARY_ACCOUNT, SUB_ACCOUNT_ADMIN, SUB_ACCOUNT_REGIONAL_MANAGER,</para>
-        /// <para>SUB_ACCOUNT_DISPATCHER, SUB_ACCOUNT_PLANNER, SUB_ACCOUNT_DRIVER</para>
-        /// <remarks><para>Data member parameter.</para></remarks>
-        /// </summary>
         [DataMember(Name = "member_type", EmitDefaultValue = false)]
-        public string member_type { get; set; }
+        public string member_type
+        {
+            get { return m_member_type; }
+            set { m_member_type = value; }
+        }
+        private string m_member_type;
 
-        /// <summary>
-        /// Member birth date.
-        /// <remarks><para>Data member parameter.</para></remarks>
-        /// </summary>
         [DataMember(Name = "date_of_birth", EmitDefaultValue = false)]
-        public string date_of_birth { get; set; }
+        public string date_of_birth
+        {
+            get { return m_date_of_birth; }
+            set { m_date_of_birth = value; }
+        }
+        private string m_date_of_birth;
 
-        /// <summary>
-        /// Member password.
-        /// <remarks><para>Data member parameter.</para></remarks>
-        /// </summary>
+        [DataMember(Name = "member_first_name", EmitDefaultValue = false)]
+        public string member_first_name
+        {
+            get { return m_member_first_name; }
+            set { m_member_first_name = value; }
+        }
+        private string m_member_first_name;
+
         [DataMember(Name = "member_password", EmitDefaultValue = false)]
-        public string member_password { get; set; }
+        public string member_password
+        {
+            get { return m_member_password; }
+            set { m_member_password = value; }
+        }
+        private string m_member_password;
 
-        /// <summary>
-        /// Unique ID of the member's account owner.
-        /// <remarks><para>Data member parameter.</para></remarks>
-        /// </summary>
         [DataMember(Name = "OWNER_MEMBER_ID", EmitDefaultValue = false)]
         public int? OWNER_MEMBER_ID { get; set; }
 
-        // <summary>
-        /// First name of a member.
-        /// <remarks><para>Data member parameter.</para></remarks>
-        /// </summary>
-        [DataMember(Name = "member_first_name", EmitDefaultValue = false)]
-        public string member_first_name { get; set; }
-
-        // <summary>
-        /// Last name of a member.
-        /// <remarks><para>Data member parameter.</para></remarks>
-        /// </summary>
         [DataMember(Name = "member_last_name", EmitDefaultValue = false)]
-        public string member_last_name { get; set; }
+        public string member_last_name
+        {
+            get { return m_member_last_name; }
+            set { m_member_last_name = value; }
+        }
+        private string m_member_last_name;
+
     }
 }
