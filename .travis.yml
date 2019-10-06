@@ -9,7 +9,11 @@ sudo: required
 language: csharp
 solution: Route4MeSDK.sln
 
-mono: none
+runtime:
+  - name: mono
+    version: 4 
+    
+#mono: none
 #  - latest
 #  - 3.8.0  The project is upgraded to .Net 4.6.1 and this point will be failed
 #  - 2.10.8 # fails: https://travis-ci.org/maxkoryukov/route4me-csharp-sdk/jobs/194265821  
