@@ -9,9 +9,9 @@ sudo: required
 language: csharp
 solution: Route4MeSDK.sln
 
-runtime:
-  - name: mono
-    version: 4 
+mono:
+  - latest
+  - 3.12.0 
     
 #mono: none
 #  - latest
