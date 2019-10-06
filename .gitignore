@@ -1,0 +1,9 @@
+Route4MeSDK.sln
+Route4MeSDKTest/Route4MeSDKTest.csproj
+shortTest.cs
+# Visual Studio 2015/2017 cache/options directory
+.vs/
+*.userprefs
+/**/obj/
+/packages/
+/TestResults/
