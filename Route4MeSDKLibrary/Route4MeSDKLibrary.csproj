@@ -168,6 +168,7 @@
     <Compile Include="QueryTypes\NoteParameters.cs" />
     <Compile Include="QueryTypes\OptimizationParameters.cs" />
     <Compile Include="QueryTypes\OrderCustomFieldParameters.cs" />
+    <Compile Include="QueryTypes\OrderFilterParameters.cs" />
     <Compile Include="QueryTypes\OrderParameters.cs" />
     <Compile Include="QueryTypes\RouteParametersQuery.cs" />
     <Compile Include="QueryTypes\TelematicsVendorParameters.cs" />
