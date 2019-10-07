@@ -8196,6 +8196,31 @@ namespace Route4MeSDKUnitTest
         }
 
         [TestMethod]
+        public void GetOrdersByScheduleFilter()
+        {
+            if (skip == "yes") return;
+
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            string startDate = (DateTime.Now + (new TimeSpan(1, 0, 0, 0))).ToString("yyyy-MM-dd");
+            string endDate = (DateTime.Now + (new TimeSpan(31, 0, 0, 0))).ToString("yyyy-MM-dd");
+
+            var oParams = new OrderFilterParameters()
+            {
+                Filter = new FilterDetails()
+                {
+                    Display = "all",
+                    Limit = 10,
+                    Scheduled_for_YYMMDD = new string[] { startDate, endDate }
+                }
+            };
+
+            Order[] orders = route4Me.FilterOrders(oParams, out string errorString);
+
+            Assert.IsInstanceOfType(orders, typeof(Order[]), "GetOrdersByScheduleFilter failed... " + errorString);
+        }
+
+        [TestMethod]
         public void GetOrdersBySpecifiedTextTest()
         {
             if (skip == "yes") return;

@@ -20,11 +20,11 @@ namespace Route4MeSDK.FastProcessing
         const long offset = 0x10000000; // 256 megabytes
         const long length = 0x20000000; // 512 megabytes
 
-        //string jsonFileName;
+        string jsonFileName;
 
         public int jsonObjectsChunkSize { get; set; }
 
-        //private ManualResetEvent manualResetEvent = null;
+        private ManualResetEvent manualResetEvent = null;
 
         #region // Event handler for the JsonFileChunkIsReady event
         public event EventHandler<JsonFileChunkIsReadyArgs> JsonFileChunkIsReady;

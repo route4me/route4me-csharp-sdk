@@ -2329,6 +2329,20 @@ namespace Route4MeSDK
             return (response != null) ? response.Results : null;
 		}
 
+        /// <summary>
+        /// Filter for the orders filtering
+        /// </summary>
+        /// <param name="orderFilter">The OrderFilterParameters object as a HTTP request payload</param>
+        /// <param name="errorString">out: Error as string</param>
+        /// <returns>Array of the Order type objects</returns>
+        public Order[] FilterOrders(OrderFilterParameters orderFilter, out string errorString)
+        {
+            GetOrdersResponse response = GetJsonObjectFromAPI<GetOrdersResponse>(orderFilter,
+                R4MEInfrastructureSettings.Order, HttpMethodType.Post, out errorString);
+
+            return (response != null) ? response.Results : null;
+        }
+
 		/// <summary>
 		/// Creates an order
 		/// </summary>
