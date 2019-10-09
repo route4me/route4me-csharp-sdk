@@ -1179,6 +1179,19 @@ namespace Route4MeSDK
             return GetJsonObjectFromAPI<MemberConfigurationResponse>(confParams, R4MEInfrastructureSettings.UserConfiguration, HttpMethodType.Post, out errorString);
 		}
 
+        public MemberConfigurationResponse CreateNewConfigurationKey(MemberConfigurationParameters[] confParams, out string errorString)
+        {
+            GenericParameters genParams = new GenericParameters();
+
+            var httpContent = new StringContent(fastJSON.JSON.ToJSON(confParams), System.Text.Encoding.UTF8, "application/json");
+
+            var response = GetJsonObjectFromAPI<MemberConfigurationResponse>
+                (genParams, R4MEInfrastructureSettings.UserConfiguration,
+                HttpMethodType.Post, httpContent, out errorString);
+
+            return response;
+        }
+
         /// <summary>
         /// Removes a user's configuration key
         /// </summary>

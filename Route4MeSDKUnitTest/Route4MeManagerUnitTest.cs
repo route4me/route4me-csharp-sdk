@@ -8624,27 +8624,36 @@ namespace Route4MeSDKUnitTest
 
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
-            var orderCustomFieldParams = new OrderCustomFieldParameters()
+            var orderCustomUserFields = route4Me.GetOrderCustomUserFields(out string errorString);
+
+            int customFieldId;
+
+            if (orderCustomUserFields.Where(x => x.OrderCustomFieldName== "CustomField33").Count()>0)
             {
-                OrderCustomFieldName = "CustomField33",
-                OrderCustomFieldLabel = "Custom Field 33",
-                OrderCustomFieldType = "checkbox",
-                OrderCustomFieldTypeInfo = new Dictionary<string, object>()
+                customFieldId = orderCustomUserFields.Where(x => x.OrderCustomFieldName == "CustomField33")
+                    .FirstOrDefault().OrderCustomFieldId;
+            }
+            else
+            {
+                var orderCustomFieldParams = new OrderCustomFieldParameters()
+                {
+                    OrderCustomFieldName = "CustomField33",
+                    OrderCustomFieldLabel = "Custom Field 33",
+                    OrderCustomFieldType = "checkbox",
+                    OrderCustomFieldTypeInfo = new Dictionary<string, object>()
                 {
                     {"short_label", "cFl33" },
                     {"description", "This is test order custom field" },
                     {"custom field no", 10 }
                 }
-            };
+                };
 
-            var createdCustomField = route4Me.CreateOrderCustomUserField(orderCustomFieldParams, out string errorString);
+                var createdCustomField = route4Me.CreateOrderCustomUserField(orderCustomFieldParams, out errorString);
+                Assert.IsInstanceOfType(createdCustomField, typeof(OrderCustomFieldCreateResponse), "Cannot initialize the class OrderCustomUserFieldsGroup. " + errorString);
+                customFieldId = createdCustomField.Data.OrderCustomFieldId;
+            }
 
-            Assert.IsInstanceOfType(createdCustomField, typeof(OrderCustomFieldCreateResponse), "Cannot initialize the class OrderCustomUserFieldsGroup. " + errorString);
-
-            lsOrderCustomUserFieldIDs = new List<int>()
-            {
-                createdCustomField.Data.OrderCustomFieldId
-            };
+            lsOrderCustomUserFieldIDs = new List<int>() { customFieldId };
         }
 
         [TestMethod]
@@ -10014,23 +10023,37 @@ namespace Route4MeSDKUnitTest
     public class MemberConfigurationGroup
     {
         static string c_ApiKey = ApiKeys.actualApiKey;
+        static List<string> lsConfigurationKeys;
 
         [ClassInitialize()]
         public static void MemberConfigurationGroupInitialize(TestContext context)
         {
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
+            lsConfigurationKeys = new List<string>();
+
             MemberConfigurationParameters @params = new MemberConfigurationParameters
             {
-                config_key = "My height",
-                config_value = "value"
+                config_key = "Test My height",
+                config_value = "180"
             };
 
             // Run the query
-            string errorString = "";
-            MemberConfigurationResponse result = route4Me.CreateNewConfigurationKey(@params, out errorString);
-
+            var result = route4Me.CreateNewConfigurationKey(@params, out string errorString);
             Assert.IsNotNull(result, "AddNewConfigurationKeyTest failed... " + errorString);
+
+            lsConfigurationKeys.Add("Test My height");
+
+            MemberConfigurationParameters keyrParams = new MemberConfigurationParameters
+            {
+                config_key = "Test Remove Key",
+                config_value = "remove"
+            };
+
+            var result2 = route4Me.CreateNewConfigurationKey(keyrParams, out errorString);
+            Assert.IsNotNull(result2, "AddNewConfigurationKeyTest failed... " + errorString);
+
+            lsConfigurationKeys.Add("Test Remove Key");
         }
 
         [TestMethod]
@@ -10040,15 +10063,44 @@ namespace Route4MeSDKUnitTest
 
             MemberConfigurationParameters @params = new MemberConfigurationParameters
             {
-                config_key = "destination_icon_uri",
-                config_value = "value"
+                config_key = "Test My weight",
+                config_value = "100"
             };
 
             // Run the query
-            string errorString = "";
-            MemberConfigurationResponse result = route4Me.CreateNewConfigurationKey(@params, out errorString);
+            var result = route4Me.CreateNewConfigurationKey(@params, out string errorString);
 
             Assert.IsNotNull(result, "AddNewConfigurationKeyTest failed... " + errorString);
+
+            lsConfigurationKeys.Add("Test My weight");
+        }
+
+        [TestMethod]
+        public void AddConfigurationKeyArrayTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            MemberConfigurationParameters[] parametersArray = new MemberConfigurationParameters[]
+                {
+                    new MemberConfigurationParameters
+                    {
+                        config_key = "Test My Height",
+                        config_value = "185"
+                    },
+                    new MemberConfigurationParameters
+                    {
+                        config_key = "Test My Weight",
+                        config_value = "110"
+                    },
+                };
+
+            // Run the query
+            var result = route4Me.CreateNewConfigurationKey(parametersArray, out string errorString);
+
+            Assert.IsNotNull(result, "AddNewConfigurationKeyTest failed... " + errorString);
+
+            lsConfigurationKeys.Add("Test My Height");
+            lsConfigurationKeys.Add("Test My Weight");
         }
 
         [TestMethod]
@@ -10070,11 +10122,10 @@ namespace Route4MeSDKUnitTest
         {
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
-            MemberConfigurationParameters @params = new MemberConfigurationParameters { config_key = "destination_icon_uri" };
+            var @params = new MemberConfigurationParameters { config_key = "Test My height" };
 
             // Run the query
-            string errorString = "";
-            MemberConfigurationDataResponse result = route4Me.GetConfigurationData(@params, out errorString);
+            var result = route4Me.GetConfigurationData(@params, out string errorString);
 
             Assert.IsNotNull(result, "GetSpecificConfigurationKeyDataTest failed... " + errorString);
         }
@@ -10086,13 +10137,12 @@ namespace Route4MeSDKUnitTest
 
             MemberConfigurationParameters @params = new MemberConfigurationParameters
             {
-                config_key = "destination_icon_uri",
-                config_value = "444"
+                config_key = "Test My height",
+                config_value = "190"
             };
 
             // Run the query
-            string errorString = "";
-            MemberConfigurationResponse result = route4Me.UpdateConfigurationKey(@params, out errorString);
+            var result = route4Me.UpdateConfigurationKey(@params, out string errorString);
 
             Assert.IsNotNull(result, "UpdateConfigurationKeyTest failed... " + errorString);
         }
@@ -10102,13 +10152,14 @@ namespace Route4MeSDKUnitTest
         {
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
-            MemberConfigurationParameters @params = new MemberConfigurationParameters { config_key = "My height" };
+            var @params = new MemberConfigurationParameters { config_key = "Test Remove Key" };
 
             // Run the query
-            string errorString = "";
-            MemberConfigurationResponse result = route4Me.RemoveConfigurationKey(@params, out errorString);
+            var result = route4Me.RemoveConfigurationKey(@params, out string errorString);
 
             Assert.IsNotNull(result, "RemoveConfigurationKeyTest failed... " + errorString);
+
+            lsConfigurationKeys.Remove("Test Remove Key");
         }
 
         [ClassCleanup()]
@@ -10116,13 +10167,12 @@ namespace Route4MeSDKUnitTest
         {
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
-            MemberConfigurationParameters @params = new MemberConfigurationParameters { config_key = "destination_icon_uri" };
-
-            // Run the query
-            string errorString = "";
-            MemberConfigurationResponse result = route4Me.RemoveConfigurationKey(@params, out errorString);
-
-            Assert.IsNotNull(result, "MemberConfigurationGroupCleanup failed...");
+            foreach (var testKey in lsConfigurationKeys)
+            {
+                var @params = new MemberConfigurationParameters { config_key = testKey };
+                var result = route4Me.RemoveConfigurationKey(@params, out string errorString);
+                Assert.IsNotNull(result, "MemberConfigurationGroupCleanup failed...");
+            }
         }
     }
 
