@@ -225,6 +225,56 @@ namespace Route4MeSDKUnitTest
         }
 
         [TestMethod]
+        public void UpdateRouteCustomDataTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            string routeId = tdr.SD10Stops_route_id;
+            var routeDestionationId = tdr.SD10Stops_route.Addresses[3].RouteDestinationId;
+
+            Assert.IsNotNull(routeId, "routeId_SingleDriverRoute10Stops is null...");
+
+            var parameters = new RouteParametersQuery()
+            {
+                RouteId = routeId,
+                RouteDestinationId = routeDestionationId
+            };
+
+            var customData = new Dictionary<string, string>()
+            {
+                {"animal", "lion" },
+                {"bird", "budgie" }
+            };
+
+            string errorString;
+            var result = route4Me.UpdateRouteCustomData(parameters, customData, out errorString);
+
+            Assert.IsNotNull(result, "UpdateRouteCustomDataTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void RouteOriginParameterTest()
+        {
+            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+
+            string routeId = tdr.SD10Stops_route_id;
+            Assert.IsNotNull(routeId, "routeId_SingleDriverRoute10Stops is null...");
+
+            var routeParameters = new RouteParametersQuery()
+            {
+                RouteId = routeId,
+                Original = true
+            };
+
+            string errorString;
+            var route = route4Me.GetRoute(routeParameters, out errorString);
+
+            Assert.IsNotNull(route, "RouteOriginParameterTest failed. " + errorString);
+            Assert.IsNotNull(route.OriginalRoute, "RouteOriginParameterTest failed. " + errorString);
+            Assert.IsInstanceOfType(route.OriginalRoute, typeof(DataObjectRoute), "RouteOriginParameterTest failed. " + errorString);
+        }
+
+        [TestMethod]
         public void ReoptimizeRouteTest()
         {
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
@@ -263,6 +313,29 @@ namespace Route4MeSDKUnitTest
             string routeId_DuplicateRoute = route4Me.DuplicateRoute(routeParameters, out errorString);
 
             Assert.IsNotNull(routeId_DuplicateRoute, "DuplicateRouteTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void ShareRouteTest()
+        {
+            var route4Me = new Route4MeManager(c_ApiKey);
+
+            string routeId = tdr.SD10Stops_route_id;
+            Assert.IsNotNull(routeId, "routeId is null...");
+
+            var routeParameters = new RouteParametersQuery()
+            {
+                RouteId = routeId,
+                ResponseFormat = "json"
+            };
+
+            string email = "regression.autotests+testcsharp123@gmail.com";
+
+            // Run the query
+            string errorString;
+            var result = route4Me.RouteSharing(routeParameters, email, out errorString);
+
+            Assert.IsTrue(result, "ShareRouteTest failed... " + errorString);
         }
 
         [TestMethod]
