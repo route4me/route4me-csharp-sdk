@@ -252,5 +252,11 @@ namespace Route4MeSDK.DataTypes
         /// </summary>
         [DataMember(Name = "member_config_storage", EmitDefaultValue = false)]
         public Dictionary<string, string> MemberConfigStorage { get; set; }
+
+        /// <summary>
+        /// Original route.
+        /// </summary>
+        [DataMember(Name = "original_route", EmitDefaultValue = false)]
+        public DataObjectRoute OriginalRoute { get; set; }
     }
 }
