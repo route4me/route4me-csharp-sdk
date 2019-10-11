@@ -17,6 +17,12 @@ namespace Route4MeSDK.QueryTypes
         [DataMember(Name = "is_deleted", EmitDefaultValue = false)]
         public bool? IsDeleted  {get; set;}
 
+        /// <summary>
+        /// Required for a vehicle creating.
+        /// </summary>
+        [DataMember(Name = "vehicle_name", EmitDefaultValue = false)]
+        public string VehicleName { get; set; }
+
         [DataMember(Name = "vehicle_alias", EmitDefaultValue = false)]
         public string VehicleAlias { get; set; }
 
@@ -65,6 +71,10 @@ namespace Route4MeSDK.QueryTypes
         [DataMember(Name = "license_end_date", EmitDefaultValue = false)]
         public string LicenseEndDate {get; set;}
 
+        /// <summary>
+        /// Vehicle axle count.
+        /// Available values: 2,3,4
+        /// </summary>
         [DataMember(Name = "vehicle_axle_count", EmitDefaultValue = false)]
         public int? VehicleAxleCount {get; set;}
 

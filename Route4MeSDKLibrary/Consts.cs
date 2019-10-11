@@ -59,7 +59,7 @@ namespace Route4MeSDK
         public const string UserLocation = MainHost + "/api/track/view_user_locations.php";
 
         public const string ViewVehicles = MainHost + "/api/vehicles/view_vehicles.php";
-        //public const string Vehicle_V4 = MainHost + "/api.v4/vehicle.php";
+        public const string Vehicle_V4_API = MainHost + "/api.v4/vehicle.php";
         public const string Vehicle_V4 = "https://wh.route4me.com/modules/api/vehicles";
 
         public const string HybridOptimization = MainHost + "/api.v4/hybrid_date_optimization.php";
