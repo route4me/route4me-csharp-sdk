@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Moq;
+using System;
 using System.Threading;
 using System.IO;
 using System.Runtime.Serialization;
@@ -88,16 +89,16 @@ namespace Route4MeSDKUnitTest
         [TestMethod]
         public void GetRouteTest()
         {
-            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+            var route4Me = new Route4MeManager(c_ApiKey);
 
-            RouteParametersQuery routeParameters = new RouteParametersQuery()
+            var routeParameters = new RouteParametersQuery()
             {
                 RouteId = tdr.SD10Stops_route_id
             };
 
             // Run the query
             string errorString;
-            DataObjectRoute dataObject = route4Me.GetRoute(routeParameters, out errorString);
+            var dataObject = route4Me.GetRoute(routeParameters, out errorString);
 
             Assert.IsNotNull(dataObject, "GetRouteTest failed... " + errorString);
         }
@@ -221,6 +222,67 @@ namespace Route4MeSDKUnitTest
             DataObjectRoute dataObject = route4Me.UpdateRoute(routeParameters, out errorString);
 
             Assert.IsNotNull(dataObject, "UpdateRouteTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void AssignVehicleToRouteTest()
+        {
+            var route4Me = new Route4MeManager(c_ApiKey);
+
+            var vehicleGroup = new VehiclesGroup();
+            var vehicles = vehicleGroup.getVehiclesList();
+
+            int randomNumber = (new Random()).Next(0, vehicles.PerPage-1);
+            var vehicleId = vehicles.Data[randomNumber].VehicleId;
+
+            string routeId = tdr.SD10Stops_route_id;
+            Assert.IsNotNull(routeId, "routeId_SingleDriverRoute10Stops is null...");
+
+            var routeParameters = new RouteParametersQuery()
+            {
+                RouteId = routeId,
+                Parameters = new RouteParameters()
+                {
+                    VehicleId = vehicleId
+                }
+            };
+
+            string errorString;
+            route4Me.UpdateRoute(routeParameters, out errorString);
+
+            var route = route4Me.GetRoute(new RouteParametersQuery() { RouteId = routeId }, out errorString);
+
+            Assert.IsInstanceOfType(route.Vehilce,typeof(VehicleV4Response), "AssignVehicleToRouteTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void AssignMemberToRouteTest()
+        {
+            var route4Me = new Route4MeManager(c_ApiKey);
+
+            string errorString;
+            var members = route4Me.GetUsers(new GenericParameters(), out errorString);
+
+            int randomNumber = (new Random()).Next(0, members.results.Length - 1);
+            var memberId = members.results[randomNumber].member_id;
+
+            string routeId = tdr.SD10Stops_route_id;
+            Assert.IsNotNull(routeId, "routeId_SingleDriverRoute10Stops is null...");
+
+            var routeParameters = new RouteParametersQuery()
+            {
+                RouteId = routeId,
+                Parameters = new RouteParameters()
+                {
+                    MemberId = memberId
+                }
+            };
+
+            route4Me.UpdateRoute(routeParameters, out errorString);
+
+            var route = route4Me.GetRoute(new RouteParametersQuery() { RouteId = routeId }, out errorString);
+
+            Assert.IsTrue(route.MemberId == memberId, "AssignMemberToRouteTest failed... " + errorString);
         }
 
         [TestMethod]
@@ -9932,14 +9994,14 @@ namespace Route4MeSDKUnitTest
         {
             if (skip == "yes") return;
 
-            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+            var route4Me = new Route4MeManager(c_ApiKey);
 
             int memberID = Convert.ToInt32(lsMembers[0]);
-            MemberParametersV4 @params = new MemberParametersV4 { member_id = memberID };
+            var @params = new MemberParametersV4 { member_id = memberID };
 
             // Run the query
             string errorString = "";
-            MemberResponseV4 result = route4Me.GetUserById(@params, out errorString);
+            var result = route4Me.GetUserById(@params, out errorString);
 
             Assert.IsNotNull(result, "GetUserByIdTest... " + errorString);
         }
@@ -9949,15 +10011,15 @@ namespace Route4MeSDKUnitTest
         {
             if (skip == "yes") return;
 
-            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+            var route4Me = new Route4MeManager(c_ApiKey);
 
-            GenericParameters parameters = new GenericParameters()
+            var parameters = new GenericParameters()
             {
             };
 
             // Run the query
             string errorString;
-            Route4MeManager.GetUsersResponse dataObjects = route4Me.GetUsers(parameters, out errorString);
+            var dataObjects = route4Me.GetUsers(parameters, out errorString);
 
             Assert.IsInstanceOfType(dataObjects, typeof(Route4MeManager.GetUsersResponse), "GetUsersTest failed... " + errorString);
         }
@@ -10260,22 +10322,23 @@ namespace Route4MeSDKUnitTest
         {
             lsVehicleIDs = new List<string>();
 
-            VehiclesGroup vehicleGroup = new VehiclesGroup();
+            var vehicleGroup = new VehiclesGroup();
 
-            VehiclesPaginated vehicles = vehicleGroup.getVehiclesList();
+            var vehicles = vehicleGroup.getVehiclesList();
 
             if (vehicles.Total < 1)
             {
-                VehicleV4Parameters newVehicle = new VehicleV4Parameters()
+                var newVehicle = new VehicleV4Parameters()
                 {
                     VehicleAlias = "Ford Transit Test 6"
                 };
-                VehicleV4Response vehicle = vehicleGroup.createVehicle(newVehicle);
+
+                var vehicle = vehicleGroup.createVehicle(newVehicle);
                 lsVehicleIDs.Add(vehicle.VehicleId);
             }
             else
             {
-                foreach (VehicleV4Response veh1 in vehicles.Data)
+                foreach (var veh1 in vehicles.Data)
                 {
                     lsVehicleIDs.Add(veh1.VehicleId);
                 }
