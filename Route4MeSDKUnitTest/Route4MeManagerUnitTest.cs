@@ -1,5 +1,4 @@
-﻿using Moq;
-using System;
+﻿using System;
 using System.Threading;
 using System.IO;
 using System.Runtime.Serialization;
@@ -10316,14 +10315,16 @@ namespace Route4MeSDKUnitTest
             // Create common vehicle
             VehicleV4Parameters commonVehicleParams = new VehicleV4Parameters()
             {
+                VehicleName = "Ford Transit Test 6",
                 VehicleAlias = "Ford Transit Test 6"
             };
 
             VehicleV4Response commonVehicle = createVehicle(commonVehicleParams);
-
+            
             // Create a truck belonging to the class 6
             VehicleV4Parameters class6TruckParams = new VehicleV4Parameters()
             {
+                VehicleName = "GMC TopKick C5500",
                 VehicleAlias = "GMC TopKick C5500",
                 VehicleVin = "SAJXA01A06FN08012",
                 VehicleLicensePlate = "CVH4561",
@@ -10358,6 +10359,7 @@ namespace Route4MeSDKUnitTest
             // Create a truck belonging to the class 7
             VehicleV4Parameters class7TruckParams = new VehicleV4Parameters()
             {
+                VehicleName = "FORD F750",
                 VehicleAlias = "FORD F750",
                 VehicleVin = "1NPAX6EX2YD550743",
                 VehicleLicensePlate = "FFV9547",
@@ -10391,10 +10393,11 @@ namespace Route4MeSDKUnitTest
             };
 
             VehicleV4Response class7Truck = createVehicle(class7TruckParams);
-
+            
             // Create a truck belonging to the class 8
             VehicleV4Parameters class8TruckParams = new VehicleV4Parameters()
             {
+                VehicleName = "Peterbilt 579",
                 VehicleAlias = "Peterbilt 579",
                 VehicleVin = "1NP5DB9X93N507873",
                 VehicleLicensePlate = "PPV7516",
@@ -10404,7 +10407,7 @@ namespace Route4MeSDKUnitTest
                 VehicleRegCountryId = 223,
                 VehicleMake = "Peterbilt",
                 VehicleTypeID = "tractor_trailer",
-                VehicleAxleCount = 5,
+                VehicleAxleCount = 4,
                 MpgCity = 6,
                 MpgHighway = 12,
                 FuelType = "diesel",
@@ -10428,6 +10431,7 @@ namespace Route4MeSDKUnitTest
             };
 
             VehicleV4Response class8Truck = createVehicle(class8TruckParams);
+            
         }
 
         public VehicleV4Response createVehicle(VehicleV4Parameters vehicleParams)
@@ -10465,28 +10469,24 @@ namespace Route4MeSDKUnitTest
 
             if (lsVehicleIDs.Count < 1)
             {
-                VehicleV4Parameters newVehicle = new VehicleV4Parameters()
+                var newVehicle = new VehicleV4Parameters()
                 {
                     VehicleAlias = "Ford Transit Test 6"
                 };
 
-                VehicleV4Response vehicle = createVehicle(newVehicle);
+                var vehicle = createVehicle(newVehicle);
                 lsVehicleIDs.Add(vehicle.VehicleId);
             }
 
-            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+            var route4Me = new Route4MeManager(c_ApiKey);
 
             // TO DO: on this stage specifying of the parameter vehicle_alias is mandatory. Will be checked later
-            VehicleV4Parameters vehicleParams = new VehicleV4Parameters()
+            var vehicleParams = new VehicleV4Parameters()
             {
-                VehicleId = lsVehicleIDs[lsVehicleIDs.Count - 1],
-                VehicleAlias = "Ford Transit Test 4",
                 VehicleModelYear = 1995,
-                VehicleRegCountryId = 223,
+                VehicleYearAcquired = 2018,
                 VehicleMake = "Ford",
                 VehicleAxleCount = 2,
-                MpgCity = 8,
-                MpgHighway = 14,
                 FuelType = "unleaded 93",
                 HeightInches = 72,
                 WeightLb = 2000
@@ -10494,7 +10494,7 @@ namespace Route4MeSDKUnitTest
 
             // Run the query
             string errorString = "";
-            VehicleV4Response vehicles = route4Me.updateVehicle(vehicleParams, out errorString);
+            var vehicles = route4Me.updateVehicle(vehicleParams, lsVehicleIDs[lsVehicleIDs.Count - 1], out errorString);
 
             Assert.IsInstanceOfType(vehicles, typeof(VehicleV4Response), "updateVehicleTest failed... " + errorString);
         }
