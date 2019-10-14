@@ -16,4 +16,3 @@ C:\Users\User\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKLibrary\bin\Debug\
 C:\Users\User\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKLibrary\bin\Debug\SocketIoClientDotNet.dll.config
 C:\Users\User\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKLibrary\bin\Debug\System.Collections.Immutable.xml
 C:\Users\User\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKLibrary\obj\Debug\Route4MeSDKLibrary.csproj.CopyComplete
-C:\Users\User\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKLibrary\obj\Debug\Route4MeSDKLibrary.csprojAssemblyReference.cache

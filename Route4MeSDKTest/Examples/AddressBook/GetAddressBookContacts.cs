@@ -20,7 +20,7 @@ namespace Route4MeSDK.Examples
       // Run the query
       uint total;
       string errorString;
-      AddressBookContact[] contacts = route4Me.GetAddressBookContacts(addressBookParameters, out total, out errorString);
+      AddressBookContact[] contacts = route4Me.GetAddressBookLocation(addressBookParameters, out total, out errorString);
 
       Console.WriteLine("");
 

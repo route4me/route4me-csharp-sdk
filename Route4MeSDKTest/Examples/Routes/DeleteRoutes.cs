@@ -11,8 +11,6 @@ namespace Route4MeSDK.Examples
       // Create the manager with the api key
       Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
-      //routeIds = new string[] { "1" };
-
       // Run the query
       string errorString;
       string[] deletedRouteIds = route4Me.DeleteRoutes(routeIds, out errorString);

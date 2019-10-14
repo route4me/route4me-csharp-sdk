@@ -150,7 +150,7 @@ namespace Route4MeSDKTest
       examples.GetAddressBookContacts();
       if (contact1 != null)
       {
-        contact1.LastName = "Updated " + (new Random()).Next().ToString();
+        contact1.last_name = "Updated " + (new Random()).Next().ToString();
         examples.UpdateAddressBookContact(contact1);
       }
       else
@@ -159,9 +159,9 @@ namespace Route4MeSDKTest
       }
       List<string> addressIdsToRemove = new List<string>();
       if (contact1 != null)
-        addressIdsToRemove.Add(contact1.AddressId);
+        addressIdsToRemove.Add(contact1.address_id.ToString());
       if (contact2 != null)
-        addressIdsToRemove.Add(contact2.AddressId);
+        addressIdsToRemove.Add(contact2.address_id.ToString());
       examples.RemoveAddressBookContacts(addressIdsToRemove.ToArray());
 
       // Avoidance Zones
