@@ -6,7 +6,7 @@ namespace Route4MeSDK.Examples
 {
   public sealed partial class Route4MeExamples
   {
-    public void AddDestinationToOptimization(string optimizationProblemID, bool andReOptimize)
+    public DataObject AddDestinationToOptimization(string optimizationProblemID, bool andReOptimize)
     {
       // Create the manager with the api key
       Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
@@ -47,6 +47,8 @@ namespace Route4MeSDK.Examples
       {
         Console.WriteLine("AddDestinationToOptimization error: {0}", errorString);
       }
+
+      return dataObject;
     }
   }
 }

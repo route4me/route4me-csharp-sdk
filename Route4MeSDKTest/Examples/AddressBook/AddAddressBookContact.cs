@@ -13,10 +13,10 @@ namespace Route4MeSDK.Examples
 
       AddressBookContact contact = new AddressBookContact()
       {
-        FirstName = "Test FirstName " + (new Random()).Next().ToString(),
-        Address1 = "Test Address1 " + (new Random()).Next().ToString(),
-        CachedLat = 38.024654,
-        CachedLng = -77.338814
+        first_name = "Test FirstName " + (new Random()).Next().ToString(),
+        address_1 = "Test Address1 " + (new Random()).Next().ToString(),
+        cached_lat = 38.024654,
+        cached_lng = -77.338814
       };
 
       // Run the query
@@ -29,7 +29,7 @@ namespace Route4MeSDK.Examples
       {
         Console.WriteLine("AddAddressBookContact executed successfully");
 
-        Console.WriteLine("AddressId: {0}", resultContact.AddressId);
+        Console.WriteLine("AddressId: {0}", resultContact.address_id);
 
         return resultContact;
       }

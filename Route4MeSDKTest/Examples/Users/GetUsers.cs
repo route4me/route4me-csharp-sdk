@@ -17,20 +17,19 @@ namespace Route4MeSDK.Examples
 
       // Run the query
       string errorString;
-      User[] dataObjects = route4Me.GetUsers(parameters, out errorString);
+      Route4MeManager.GetUsersResponse dataObjects = route4Me.GetUsers(parameters, out errorString);
 
       Console.WriteLine("");
 
       if (dataObjects != null)
       {
-        Console.WriteLine("GetUsers executed successfully, {0} users returned", dataObjects.Length);
-        Console.WriteLine("");
+        if (dataObjects.results != null)
+        {
+            Console.WriteLine("GetUsers executed successfully, {0} users returned", dataObjects.results.Length);
+            Console.WriteLine("");
+        } else Console.WriteLine("GetUsers error: {0}", errorString);
 
-        //dataObjects.ForEach(user =>
-        //{
-        //  Console.WriteLine("User ID: {0}", user.MemberId);
-        //});
-      }
+            }
       else
       {
         Console.WriteLine("GetUsers error: {0}", errorString);

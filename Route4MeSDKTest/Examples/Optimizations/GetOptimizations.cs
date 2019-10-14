@@ -11,7 +11,7 @@ namespace Route4MeSDK.Examples
             // Create the manager with the api key
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
-            RouteParametersQuery queryParameters = new RouteParametersQuery()
+            OptimizationParameters queryParameters = new OptimizationParameters()
             {
                 Limit = 10,
                 Offset = 5
