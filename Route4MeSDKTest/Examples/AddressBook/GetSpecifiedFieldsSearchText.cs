@@ -24,15 +24,15 @@ namespace Route4MeSDK.Examples
             };
 
             // Run the query
-            uint total = 0;
+            //uint total = 0;
             string errorString = "";
-            List<object[]> contacts = route4Me.SearchAddressBookLocation(addressBookParameters, out total, out errorString);
+            var response = route4Me.SearchAddressBookLocation(addressBookParameters, out errorString);
 
             Console.WriteLine("");
 
-            if (contacts != null)
+            if (response != null)
             {
-                Console.WriteLine("GetSpecifiedFieldsSearchText executed successfully, {0} contacts returned, total = {1}", contacts.Count, total);
+                Console.WriteLine("GetSpecifiedFieldsSearchText executed successfully, {0} contacts returned, total = {1}", response.Results.Count, response.Total);
 
                 Console.WriteLine("");
             }

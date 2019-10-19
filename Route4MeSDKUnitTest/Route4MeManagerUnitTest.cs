@@ -202,24 +202,24 @@ namespace Route4MeSDKUnitTest
         [TestMethod]
         public void UpdateRouteTest()
         {
-            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+            var route4Me = new Route4MeManager(c_ApiKey);
 
             string routeId = tdr.SD10Stops_route_id;
             Assert.IsNotNull(routeId, "routeId_SingleDriverRoute10Stops is null...");
 
-            RouteParameters parametersNew = new RouteParameters()
+            var parametersNew = new RouteParameters()
             {
                 RouteName = "New name of the route"
             };
 
-            RouteParametersQuery routeParameters = new RouteParametersQuery()
+            var routeParameters = new RouteParametersQuery()
             {
                 RouteId = routeId,
                 Parameters = parametersNew
             };
 
             string errorString;
-            DataObjectRoute dataObject = route4Me.UpdateRoute(routeParameters, out errorString);
+            var dataObject = route4Me.UpdateRoute(routeParameters, out errorString);
 
             Assert.IsNotNull(dataObject, "UpdateRouteTest failed... " + errorString);
         }
@@ -7435,11 +7435,10 @@ namespace Route4MeSDKUnitTest
             };
 
             // Run the query
-            uint total = 0;
             string errorString = "";
-            AddressBookContact[] contacts = route4Me.GetAddressBookLocation(addressBookParameters, out total, out errorString);
+            var response = route4Me.SearchAddressBookLocation(addressBookParameters, out errorString);
 
-            Assert.IsInstanceOfType(contacts, typeof(AddressBookContact[]), "GetSpecifiedFieldsSearchTextTest failed... " + errorString);
+            Assert.IsInstanceOfType(response.Total, typeof(uint), "GetSpecifiedFieldsSearchTextTest failed... " + errorString);
         }
 
         [TestMethod]
@@ -10376,16 +10375,16 @@ namespace Route4MeSDKUnitTest
             if (c_ApiKey == ApiKeys.demoApiKey) return;
 
             // Create common vehicle
-            VehicleV4Parameters commonVehicleParams = new VehicleV4Parameters()
+            var commonVehicleParams = new VehicleV4Parameters()
             {
                 VehicleName = "Ford Transit Test 6",
                 VehicleAlias = "Ford Transit Test 6"
             };
 
-            VehicleV4Response commonVehicle = createVehicle(commonVehicleParams);
+            var commonVehicle = createVehicle(commonVehicleParams);
             
             // Create a truck belonging to the class 6
-            VehicleV4Parameters class6TruckParams = new VehicleV4Parameters()
+            var class6TruckParams = new VehicleV4Parameters()
             {
                 VehicleName = "GMC TopKick C5500",
                 VehicleAlias = "GMC TopKick C5500",
@@ -10417,10 +10416,10 @@ namespace Route4MeSDKUnitTest
                 TruckConfig = "FULLSIZEVAN"
             };
 
-            VehicleV4Response class6Truck = createVehicle(class6TruckParams);
+            var class6Truck = createVehicle(class6TruckParams);
 
             // Create a truck belonging to the class 7
-            VehicleV4Parameters class7TruckParams = new VehicleV4Parameters()
+            var class7TruckParams = new VehicleV4Parameters()
             {
                 VehicleName = "FORD F750",
                 VehicleAlias = "FORD F750",
@@ -10455,10 +10454,10 @@ namespace Route4MeSDKUnitTest
                 PurchasedNew = true
             };
 
-            VehicleV4Response class7Truck = createVehicle(class7TruckParams);
+            var class7Truck = createVehicle(class7TruckParams);
             
             // Create a truck belonging to the class 8
-            VehicleV4Parameters class8TruckParams = new VehicleV4Parameters()
+            var class8TruckParams = new VehicleV4Parameters()
             {
                 VehicleName = "Peterbilt 579",
                 VehicleAlias = "Peterbilt 579",
@@ -10493,16 +10492,15 @@ namespace Route4MeSDKUnitTest
                 PurchasedNew = true
             };
 
-            VehicleV4Response class8Truck = createVehicle(class8TruckParams);
-            
+            var class8Truck = createVehicle(class8TruckParams);
         }
 
         public VehicleV4Response createVehicle(VehicleV4Parameters vehicleParams)
         {
-            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+            var route4Me = new Route4MeManager(c_ApiKey);
 
             string errorString = "";
-            VehicleV4Response result = route4Me.CreateVehicle(vehicleParams, out errorString);
+            var result = route4Me.CreateVehicle(vehicleParams, out errorString);
 
             Assert.IsNotNull(result, "CreatetVehiclTest failed... " + errorString);
 
