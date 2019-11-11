@@ -19,7 +19,7 @@ namespace Route4MeSDKUnitTest
 {
     public class ApiKeys
     {
-        public const string actualApiKey = "11111111111111111111111111111111";
+        public const string actualApiKey = "51d0c0701ce83855c9f62d0440096e7c";
         public const string demoApiKey = "11111111111111111111111111111111";
     }
     
@@ -7190,12 +7190,31 @@ namespace Route4MeSDKUnitTest
         }
 
         [TestMethod]
+        public void AddCustomDataToContactTest()
+        {
+            var route4Me = new Route4MeManager(c_ApiKey);
+
+            contact1.address_custom_data = new Dictionary<string, string>()
+            {
+                {"Service type", "publishing"},
+                {"Facilities", "storage" },
+                {"Parking", "temporarry" }
+            };
+
+            // Run the query
+            string errorString;
+            var updatedContact = route4Me.UpdateAddressBookContact(contact1, out errorString);
+
+            Assert.IsNotNull(updatedContact.address_custom_data, "AddCustomDataToContactTest failed... " + errorString);
+        }
+
+        [TestMethod]
         public void AddScheduledAddressBookContactsTest()
         {
-            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+            var route4Me = new Route4MeManager(c_ApiKey);
 
             #region // Add a location, scheduled daily.
-            Schedule sched1 = new Schedule("daily", false)
+            var sched1 = new Schedule("daily", false)
             {
                 Enabled = true,
                 Mode = "daily",
@@ -7214,7 +7233,10 @@ namespace Route4MeSDKUnitTest
                 cached_lat = 38.141598,
                 cached_lng = -85.793846,
                 address_city = "Louisville",
-                address_custom_data = new Dictionary<string, string>() { { "scheduled", "yes" }, { "service type", "publishing" } },
+                address_custom_data = new Dictionary<string, string>() {
+                    { "scheduled", "yes" }, 
+                    { "service type", "publishing" } 
+                },
                 schedule = new List<Schedule>() { sched1 }
             };
 
