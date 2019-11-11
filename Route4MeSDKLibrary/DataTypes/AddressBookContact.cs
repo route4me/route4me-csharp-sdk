@@ -43,6 +43,12 @@ namespace Route4MeSDK.DataTypes
         public string address_2 { get; set; }
 
         /// <summary>
+        /// Unique ID of the member.
+        /// </summary>
+        [DataMember(Name = "member_id", EmitDefaultValue = false)]
+        public int? member_id { get; set; }
+
+        /// <summary>
         /// The contact's alias.
         /// </summary>
         [DataMember(Name = "address_alias", EmitDefaultValue = false)]
@@ -214,6 +220,30 @@ namespace Route4MeSDK.DataTypes
         /// </summary>
         [DataMember(Name = "schedule_blacklist", EmitDefaultValue = false)]
         public string[] schedule_blacklist { get; set; }
+
+        /// <summary>
+        /// Number of the routes containing the contact.
+        /// </summary>
+        [DataMember(Name = "in_route_count", EmitDefaultValue = false)]
+        public int? in_route_count { get; set; }
+
+        /// <summary>
+        /// Number of the visits to the contact.
+        /// </summary>
+        [DataMember(Name = "visited_count", EmitDefaultValue = false)]
+        public int? visited_count { get; set; }
+
+        /// <summary>
+        /// When the contact was last visited.
+        /// </summary>
+        [DataMember(Name = "last_visited_timestamp", EmitDefaultValue = false)]
+        public int? last_visited_timestamp { get; set; }
+
+        /// <summary>
+        /// When the contact was last routed.
+        /// </summary>
+        [DataMember(Name = "last_routed_timestamp", EmitDefaultValue = false)]
+        public int? last_routed_timestamp { get; set; }
 
         /// <summary>
         /// The service time at the contact's address.

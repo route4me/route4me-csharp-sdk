@@ -51,7 +51,6 @@ namespace Route4MeSDK.Examples
         Console.WriteLine("");
 
         Console.WriteLine("Optimization Problem ID: {0}", dataObject.OptimizationProblemId);
-        Console.WriteLine("State: {0}", dataObject.State);
         Console.WriteLine("");
 
         dataObject.TrackingHistory.ForEach(th =>

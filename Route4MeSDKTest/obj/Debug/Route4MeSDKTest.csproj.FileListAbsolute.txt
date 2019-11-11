@@ -4,7 +4,6 @@ C:\Users\User\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKTest\bin\Debug\Rou
 C:\Users\User\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKTest\bin\Debug\Route4MeSDKLibrary.dll
 C:\Users\User\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKTest\bin\Debug\Route4MeSDKLibrary.pdb
 C:\Users\User\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKTest\obj\Debug\Route4MeSDKTest.csprojAssemblyReference.cache
-C:\Users\User\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKTest\obj\Debug\Route4MeSDKTest.csproj.CoreCompileInputs.cache
 C:\Users\User\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKTest\obj\Debug\Route4MeSDKTest.csproj.CopyComplete
 C:\Users\User\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKTest\obj\Debug\Route4MeSDKTest.exe
 C:\Users\User\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKTest\obj\Debug\Route4MeSDKTest.pdb

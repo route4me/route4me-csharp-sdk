@@ -108,6 +108,7 @@
     <Compile Include="Examples\Addresses\ResequenceRouteDestinations.cs" />
     <Compile Include="Examples\AvoidanceZones\AddPolygonAvoidanceZone.cs" />
     <Compile Include="Examples\AvoidanceZones\AddRectAvoidanceZone.cs" />
+    <Compile Include="Examples\RouteExamples\AsyncMultipleDepotMultipleDriver.cs" />
     <Compile Include="Examples\Users\CreateUser.cs" />
     <Compile Include="Examples\Databases\GenerateSqlDatabase.cs" />
     <Compile Include="Examples\Databases\MakeAddressbookCSVsample.cs" />
