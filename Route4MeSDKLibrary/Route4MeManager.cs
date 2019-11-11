@@ -870,9 +870,9 @@ namespace Route4MeSDK
         /// </param>
         /// <param name="errorString">Returned error string in case of the processs failing</param>
         /// <returns>An optimization with the tracking data</returns>
-        public DataObject GetLastLocation(GenericParameters parameters, out string errorString)
+        public DataObjectRoute GetLastLocation(GenericParameters parameters, out string errorString)
 		{
-			var result = GetJsonObjectFromAPI<DataObject>(parameters,
+			var result = GetJsonObjectFromAPI<DataObjectRoute>(parameters,
 														  R4MEInfrastructureSettings.RouteHost,
 														  HttpMethodType.Get,
 														  false,
@@ -1997,6 +1997,10 @@ namespace Route4MeSDK
 		[DataContract()]
 		private sealed class SearchAddressBookLocationRequest : GenericParameters
 		{
+            /// <value>Comma-delimited list of the contact IDs</value>
+			[HttpQueryMemberAttribute(Name = "address_id", EmitDefaultValue = false)]
+            public string AddressId { get; set; }
+
             /// <value>The query text</value>
 			[HttpQueryMemberAttribute(Name = "query", EmitDefaultValue = false)]
             public string Query { get; set; }
@@ -2042,15 +2046,17 @@ namespace Route4MeSDK
         /// <returns>List of the selected fields values</returns>
 		public SearchAddressBookLocationResponse SearchAddressBookLocation(AddressBookParameters addressBookParameters, out string errorString)
 		{
-			SearchAddressBookLocationRequest request = new SearchAddressBookLocationRequest
-			{
-				Query = addressBookParameters.Query,
-				Fields = addressBookParameters.Fields,
-				Offset = addressBookParameters.Offset >= 0 ? (int)addressBookParameters.Offset : 0,
-				Limit = addressBookParameters.Limit >= 0 ? (int)addressBookParameters.Limit : 0
-			};
+            var request = new SearchAddressBookLocationRequest();
 
-			var response = GetJsonObjectFromAPI<SearchAddressBookLocationResponse>(request, R4MEInfrastructureSettings.AddressBook, HttpMethodType.Get, out errorString);
+            if (addressBookParameters.AddressId != null) request.AddressId = addressBookParameters.AddressId;
+            if (addressBookParameters.Query != null) request.Query = addressBookParameters.Query;
+            if (addressBookParameters.Fields != null) request.Fields = addressBookParameters.Fields;
+            if (addressBookParameters.Offset != null) request.Offset = addressBookParameters.Offset >= 0 ? (int)addressBookParameters.Offset : 0;
+            if (addressBookParameters.Limit != null) request.Limit = addressBookParameters.Limit >= 0 ? (int)addressBookParameters.Limit : 0;
+
+            request.PrepareForSerialization();
+
+            var response = GetJsonObjectFromAPI<SearchAddressBookLocationResponse>(request, R4MEInfrastructureSettings.AddressBook, HttpMethodType.Get, out errorString);
 
             //total = (response != null) ? response.Total : 0;
 

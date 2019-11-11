@@ -264,7 +264,12 @@ namespace Route4MeSDKUnitTest
             var members = route4Me.GetUsers(new GenericParameters(), out errorString);
 
             int randomNumber = (new Random()).Next(0, members.results.Length - 1);
-            var memberId = members.results[randomNumber].member_id;
+            //var memberId = members.results[randomNumber].member_id;
+            var memberId = members.results[randomNumber].member_id != null
+                ? Convert.ToInt32(members.results[randomNumber].member_id)
+                : -1;
+
+            Assert.IsTrue(memberId != -1, "AssignMemberToRouteTest failed - cannot retrieve random member ID");
 
             string routeId = tdr.SD10Stops_route_id;
             Assert.IsNotNull(routeId, "routeId_SingleDriverRoute10Stops is null...");

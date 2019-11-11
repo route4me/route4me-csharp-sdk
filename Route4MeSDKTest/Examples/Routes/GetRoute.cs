@@ -37,11 +37,7 @@ namespace Route4MeSDK.Examples
         Console.WriteLine("GetRoute executed successfully");
 
         Console.WriteLine("Route ID: {0}", dataObject.RouteID);
-        Console.WriteLine("State: {0}", dataObject.State);
-        /*foreach (Address a in dataObject.Addresses)
-        {
-          Console.WriteLine("addr: {0}, {1}, {2}, {3}, {4}", a.RouteDestinationId, a.Latitude, a.Longitude, a.Alias, a.AddressString);
-        }*/
+
         if (dataObject.Directions != null)
         {
           Console.WriteLine("Directions: lenth = {0}", dataObject.Directions.Length);

@@ -96,6 +96,7 @@
     <Compile Include="DataTypes\Country.cs" />
     <Compile Include="DataTypes\CustomNoteType.cs" />
     <Compile Include="DataTypes\DataObject.cs" />
+    <Compile Include="DataTypes\DataObjectBase.cs" />
     <Compile Include="DataTypes\DeviceLocationGap.cs" />
     <Compile Include="DataTypes\DeviceLocationHistoryResponse.cs" />
     <Compile Include="DataTypes\DeviceLocationLeg.cs" />

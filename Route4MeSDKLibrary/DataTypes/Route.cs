@@ -7,7 +7,7 @@ namespace Route4MeSDK.DataTypes
     /// The route data structure
     /// </summary>
     [DataContract]
-    public sealed class DataObjectRoute : DataObject
+    public sealed class DataObjectRoute : DataObjectBase
     {
         /// <summary>
         /// The route ID
@@ -26,7 +26,7 @@ namespace Route4MeSDK.DataTypes
         /// The member ID
         /// </summary>
         [DataMember(Name = "member_id", EmitDefaultValue = false)]
-        public string MemberId { get; set; }
+        public int? MemberId { get; set; }
 
         /// <summary>
         /// The member's email
@@ -154,7 +154,7 @@ namespace Route4MeSDK.DataTypes
         /// Planned total route duration (seconds).
         /// </summary>
         [DataMember(Name = "planned_total_route_duration", EmitDefaultValue = false)]
-        public int? PlannedTotalRrouteDuration { get; set; }
+        public int? PlannedTotalRouteDuration { get; set; }
 
         /// <summary>
         /// Total wait time (seconds).
@@ -240,6 +240,25 @@ namespace Route4MeSDK.DataTypes
         /// </summary>
         [DataMember(Name = "notes", EmitDefaultValue = false)]
         public AddressNote[] Notes { get; set; }
+
+        /// <summary>
+        /// Edge by edge turn-by-turn directions. See <see cref="Direction"/>
+        /// </summary>
+        [DataMember(Name = "directions")]
+        public Direction[] Directions { get; set; }
+
+        /// <summary>
+        /// Edge-wise path to be drawn on the map See <see cref="DirectionPathPoint"/>
+        /// </summary>
+        [DataMember(Name = "path")]
+        public DirectionPathPoint[] Path { get; set; }
+
+        /// <summary>
+        /// A collection of device tracking data with coordinates, speed, and timestamps.
+        /// <para>See <see cref="TrackingHistory"/></para>
+        /// </summary>
+        [DataMember(Name = "tracking_history")]
+        public TrackingHistory[] TrackingHistory { get; set; }
 
         /// <summary>
         /// A vehicle assigned to the route.

@@ -85,7 +85,7 @@ namespace Route4MeSDK.Examples
                 StoreRoute = true,
                 RouteName = "Test for equal sequences Single Driver Route 7 Stops",
                 DisableOptimization = false,
-                MemberId = "403634",
+                MemberId = 403634,
                 RouteDate = R4MeUtils.ConvertToUnixTimestamp(DateTime.UtcNow.Date.AddDays(1)),
                 RouteTime = 60 * 60 * 7,
                 RouteMaxDuration = 24*3600,

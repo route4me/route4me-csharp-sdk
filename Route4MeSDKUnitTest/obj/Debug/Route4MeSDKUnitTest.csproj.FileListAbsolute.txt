@@ -27,7 +27,6 @@ C:\Users\User\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKUnitTest\bin\Debug
 C:\Users\User\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKUnitTest\bin\Debug\Route4MeSDKLibrary.dll.config
 C:\Users\User\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKUnitTest\bin\Debug\SocketIoClientDotNet.dll.config
 C:\Users\User\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKUnitTest\bin\Debug\ru\Microsoft.VisualStudio.QualityTools.UnitTestFramework.resources.dll
-C:\Users\User\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKUnitTest\obj\Debug\Route4MeSDKUnitTest.csproj.CoreCompileInputs.cache
 C:\Users\User\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKUnitTest\obj\Debug\Route4MeSDKUnitTest.csproj.CopyComplete
 C:\Users\User\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKUnitTest\obj\Debug\Route4MeSDKUnitTest.csprojAssemblyReference.cache
 C:\Users\User\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKUnitTest\bin\Debug\Newtonsoft.Json.xml

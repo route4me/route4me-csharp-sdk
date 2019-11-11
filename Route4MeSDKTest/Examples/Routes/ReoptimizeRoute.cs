@@ -31,7 +31,6 @@ namespace Route4MeSDK.Examples
         Console.WriteLine("ReoptimizeRoute executed successfully");
 
         Console.WriteLine("Route ID: {0}", dataObject.RouteID);
-        Console.WriteLine("State: {0}", dataObject.State);
       }
       else
       {

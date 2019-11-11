@@ -96,7 +96,7 @@ namespace Route4MeSDK.Examples
             AlgorithmType = AlgorithmType.TSP,
             RT = false,
             LockLast = false,
-            MemberId = "1",
+            MemberId = 1,
             VehicleId = "",
             DisableOptimization = false
         };
