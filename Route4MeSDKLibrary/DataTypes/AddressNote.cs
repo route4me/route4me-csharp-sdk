@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace Route4MeSDK.DataTypes
 {
@@ -87,5 +88,10 @@ namespace Route4MeSDK.DataTypes
         [DataMember(Name = "device_type")]
         public string DeviceType { get; set; }
 
+        /// <summary>
+        /// Array of the custom type notes 
+        /// </summary>
+        [DataMember(Name = "custom_types")]
+        public AddressCustomNote[] CustomTypes { get; set; }
     }
 }

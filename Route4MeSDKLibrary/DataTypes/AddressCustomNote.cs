@@ -12,7 +12,7 @@ namespace Route4MeSDK.DataTypes
         /// A unique ID (40 chars) of a custom note entry.
         /// </summary>
         [DataMember(Name = "note_custom_entry_id", EmitDefaultValue = false)]
-        public int NoteCustomEntryID { get; set; }
+        public string NoteCustomEntryID { get; set; }
 
         /// <summary>
         /// The custom note ID.
@@ -24,7 +24,7 @@ namespace Route4MeSDK.DataTypes
         /// The custom note type ID.
         /// </summary>
         [DataMember(Name = "note_custom_type_id", EmitDefaultValue = false)]
-        public int NoteCustomTypeID { get; set; }
+        public string NoteCustomTypeID { get; set; }
 
         /// <summary>
         /// The custom note value.

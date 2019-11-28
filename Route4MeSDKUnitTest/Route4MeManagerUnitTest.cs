@@ -4166,13 +4166,13 @@ namespace Route4MeSDKUnitTest
                                 Time          = 0 },
 
                 new Address() { AddressString = "717 5th Ave New York, NY 10022",
-                                Alias         = "Giorgio Armani",
+                                //Alias         = "Giorgio Armani",
                                 Latitude      = 40.7669692,
                                 Longitude     = -73.9693864,
                                 Time          = 0 },
 
                 new Address() { AddressString = "888 Madison Ave New York, NY 10014",
-                                Alias         = "Ralph Lauren Women's and Home",
+                                //Alias         = "Ralph Lauren Women's and Home",
                                 Latitude      = 40.7715154,
                                 Longitude     = -73.9669241,
                                 Time          = 0 },
