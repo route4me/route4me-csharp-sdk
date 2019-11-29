@@ -70,7 +70,7 @@ namespace Route4MeSDK.DataTypes
         /// Timeframe violation time
         /// </summary>
         [DataMember(Name = "timeframe_violation_time", EmitDefaultValue = false)]
-        public int? TimeframeViolationTime { get; set; }
+        public long? TimeframeViolationTime { get; set; }
 
         /// <summary>
         /// Timeframe violation rate
@@ -163,13 +163,13 @@ namespace Route4MeSDK.DataTypes
         /// The last known visited timestamp of this address.
         /// </summary>
         [DataMember(Name = "timestamp_last_visited", EmitDefaultValue = false)]
-        public uint? TimestampLastVisited { get; set; }
+        public long? TimestampLastVisited { get; set; }
 
         /// <summary>
         /// The last known departed timestamp of this address.
         /// </summary>
         [DataMember(Name = "timestamp_last_departed", EmitDefaultValue = false)]
-        public uint? TimestampLastDeparted { get; set; }
+        public long? TimestampLastDeparted { get; set; }
 
         /// <summary>
         /// Visited address latitude
@@ -233,7 +233,7 @@ namespace Route4MeSDK.DataTypes
         /// The address order ID
         /// </summary>
         [DataMember(Name = "order_id", EmitDefaultValue = false)]
-        public System.Nullable<int> OrderId { get; set; }
+        public int? OrderId { get; set; }
 
         /// <summary>
         /// The address cargo weight
@@ -292,25 +292,25 @@ namespace Route4MeSDK.DataTypes
         /// Server-side generated amount of km/miles that it will take to get to the next location on the route.
         /// </summary>
         [DataMember(Name = "drive_time_to_next_destination", EmitDefaultValue = false)]
-        public int? DriveTimeToNextDestination { get; set; }
+        public long? DriveTimeToNextDestination { get; set; }
 
         /// <summary>
         /// Abnormal traffic time to next destination.
         /// </summary>
         [DataMember(Name = "abnormal_traffic_time_to_next_destination", EmitDefaultValue = false)]
-        public int? AbnormalTrafficTimeToNextDestination { get; set; }
+        public long? AbnormalTrafficTimeToNextDestination { get; set; }
 
         /// <summary>
         /// Uncongested time to next destination.
         /// </summary>
         [DataMember(Name = "uncongested_time_to_next_destination", EmitDefaultValue = false)]
-        public int? UncongestedTimeToNextDestination { get; set; }
+        public long? UncongestedTimeToNextDestination { get; set; }
 
         /// <summary>
         /// Traffic time to next destination.
         /// </summary>
         [DataMember(Name = "traffic_time_to_next_destination", EmitDefaultValue = false)]
-        public int? TrafficTimeToNextDestination { get; set; }
+        public long? TrafficTimeToNextDestination { get; set; }
 
         /// <summary>
         /// Server-side generated amount of seconds that it will take to get to the next location.
@@ -325,13 +325,13 @@ namespace Route4MeSDK.DataTypes
         /// Generated time window start.
         /// </summary>
         [DataMember(Name = "generated_time_window_start", EmitDefaultValue = false)]
-        public int? GeneratedTimeWindowStart { get; set; }
+        public long? GeneratedTimeWindowStart { get; set; }
 
         /// <summary>
         /// Estimated time window end based on the optimization engine, after all the sequencing has been completed.
         /// </summary>
         [DataMember(Name = "generated_time_window_end", EmitDefaultValue = false)]
-        public int? GeneratedTimeWindowEnd { get; set; }
+        public long? GeneratedTimeWindowEnd { get; set; }
 
         /// <summary>
         /// The unique socket channel name which should be used to get real time alerts.
@@ -343,43 +343,43 @@ namespace Route4MeSDK.DataTypes
         /// The address time window start.
         /// </summary>
         [DataMember(Name = "time_window_start", EmitDefaultValue = false)]
-        public int? TimeWindowStart { get; set; }
+        public long? TimeWindowStart { get; set; }
 
         /// <summary>
         /// The address time window end.
         /// </summary>
         [DataMember(Name = "time_window_end", EmitDefaultValue = false)]
-        public int? TimeWindowEnd { get; set; }
+        public long? TimeWindowEnd { get; set; }
 
         /// <summary>
         /// The address time window start 2.
         /// </summary>
         [DataMember(Name = "time_window_start_2", EmitDefaultValue = false)]
-        public int? TimeWindowStart2 { get; set; }
+        public long? TimeWindowStart2 { get; set; }
 
         /// <summary>
         /// The address time window end 2.
         /// </summary>
         [DataMember(Name = "time_window_end_2", EmitDefaultValue = false)]
-        public int? TimeWindowEnd2 { get; set; }
+        public long? TimeWindowEnd2 { get; set; }
 
         /// <summary>
         /// Geofence detected visited timestamp
         /// </summary>
         [DataMember(Name = "geofence_detected_visited_timestamp", EmitDefaultValue = false)]
-        public int? geofence_detected_visited_timestamp { get; set; }
+        public long? geofence_detected_visited_timestamp { get; set; }
 
         /// <summary>
         /// Geofence detected departed timestamp
         /// </summary>
         [DataMember(Name = "geofence_detected_departed_timestamp", EmitDefaultValue = false)]
-        public int? geofence_detected_departed_timestamp { get; set; }
+        public long? geofence_detected_departed_timestamp { get; set; }
 
         /// <summary>
         /// Geofence detected service time
         /// </summary>
         [DataMember(Name = "geofence_detected_service_time", EmitDefaultValue = false)]
-        public int? geofence_detected_service_time { get; set; }
+        public long? geofence_detected_service_time { get; set; }
 
         /// <summary>
         /// Geofence detected visited latitude
@@ -409,7 +409,7 @@ namespace Route4MeSDK.DataTypes
         /// The expected amount of time that will be spent at this address by the driver/user.
         /// </summary>
         [DataMember(Name = "time", EmitDefaultValue = false)]
-        public int? Time { get; set; }
+        public long? Time { get; set; }
 
         /// <summary>
         /// The address notes
@@ -473,7 +473,7 @@ namespace Route4MeSDK.DataTypes
         /// Wait time to next destination.
         /// </summary>
         [DataMember(Name = "wait_time_to_next_destination", EmitDefaultValue = false)]
-        public int? WaitTimeToNextDestination { get; set; }
+        public long? WaitTimeToNextDestination { get; set; }
 
         /// <summary>
         /// Manifest of a route address.

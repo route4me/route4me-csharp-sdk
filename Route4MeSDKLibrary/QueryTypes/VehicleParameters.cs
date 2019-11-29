@@ -15,14 +15,14 @@ namespace Route4MeSDK.QueryTypes
         /// Current page number in the vehicles collection
         /// </summary>
         [HttpQueryMemberAttribute(Name = "page", EmitDefaultValue = false)]
-        public System.Nullable<uint> Page { get; set; }
+        public uint? Page { get; set; }
 
 
         /// <summary>
         /// Returned vehicles number per page
         /// </summary>
         [HttpQueryMemberAttribute(Name = "perPage", EmitDefaultValue = false)]
-        public System.Nullable<uint> PerPage { get; set; }
+        public uint? PerPage { get; set; }
 
         /// <summary>
         /// Vehicle ID

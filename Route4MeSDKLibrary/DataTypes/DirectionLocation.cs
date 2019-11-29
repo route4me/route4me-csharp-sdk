@@ -18,7 +18,7 @@ namespace Route4MeSDK.DataTypes
         /// Required time for passing the segment (seconds)
         ///</summary>
         [DataMember(Name = "time")]
-        public int Time { get; set; }
+        public long Time { get; set; }
 
         ///<summary>
         /// Segment distance

@@ -12,7 +12,7 @@ namespace Route4MeSDK.DataTypes
         /// Process status
         /// </summary>
         [DataMember(Name = "status")]
-        public System.Nullable<bool> Status { get; set; }
+        public bool? Status { get; set; }
 
         /// <summary>
         /// Geocoding service
@@ -24,7 +24,7 @@ namespace Route4MeSDK.DataTypes
         /// Session ID
         /// </summary>
         [DataMember(Name = "session_id")]
-        public System.Nullable<int> SessionId { get; set; }
+        public int? SessionId { get; set; }
 
         /// <summary>
         /// Session GUID
@@ -36,7 +36,7 @@ namespace Route4MeSDK.DataTypes
         /// Member ID
         /// </summary>
         [DataMember(Name = "member_id")]
-        public System.Nullable<int> MemberId { get; set; }
+        public int? MemberId { get; set; }
 
         /// <summary>
         /// User's API key
@@ -48,7 +48,7 @@ namespace Route4MeSDK.DataTypes
         /// Tracking TTL
         /// </summary>
         [DataMember(Name = "tracking_ttl")]
-        public System.Nullable<int> TrackingTtl { get; set; }
+        public int? TrackingTtl { get; set; }
 
         /// <summary>
         /// Geofence polygon shape. Available values: circle, poly, rect.
@@ -60,25 +60,25 @@ namespace Route4MeSDK.DataTypes
         /// Geofence polygon size
         /// </summary>
         [DataMember(Name = "geofence_polygon_size")]
-        public System.Nullable<int> GeofencePolygonSize { get; set; }
+        public int? GeofencePolygonSize { get; set; }
 
         /// <summary>
         /// Geofence onsite trigger time (seconds)
         /// </summary>
         [DataMember(Name = "geofence_time_onsite_trigger_secs")]
-        public System.Nullable<int> GeofenceTimeOnsiteTriggerSecs { get; set; }
+        public int? GeofenceTimeOnsiteTriggerSecs { get; set; }
 
         /// <summary>
         /// Geofence's minimum trigger speed
         /// </summary>
         [DataMember(Name = "geofence_minimum_trigger_speed")]
-        public System.Nullable<int> GeofenceMinimumTriggerSpeed { get; set; }
+        public int? GeofenceMinimumTriggerSpeed { get; set; }
 
         /// <summary>
         /// True if the subscription is past due
         /// </summary>
         [DataMember(Name = "is_subscription_past_due")]
-        public System.Nullable<bool> IsSubscriptionPastDue { get; set; }
+        public bool? IsSubscriptionPastDue { get; set; }
 
         /// <summary>
         /// If true, triggering of the visited and departed activities is enabled.
@@ -96,7 +96,7 @@ namespace Route4MeSDK.DataTypes
         /// The account type ID
         /// </summary>
         [DataMember(Name = "account_type_id")]
-        public System.Nullable<int> AccountTypeId { get; set; }
+        public int? AccountTypeId { get; set; }
 
         /// <summary>
         /// Account type alias
@@ -117,19 +117,19 @@ namespace Route4MeSDK.DataTypes
         /// Maximum allowed number of the stops per route.
         /// </summary>
         [DataMember(Name = "max_stops_per_route")]
-        public System.Nullable<int> MaxStopsPerRoute { get; set; }
+        public int? MaxStopsPerRoute { get; set; }
 
         /// <summary>
         /// Maximum allowed number of the generated routes
         /// </summary>
         [DataMember(Name = "max_routes")]
-        public System.Nullable<int> MaxRoutes { get; set; }
+        public int? MaxRoutes { get; set; }
 
         /// <summary>
         /// Number of the planned routes by the user
         /// </summary>
         [DataMember(Name = "routes_planned")]
-        public System.Nullable<int> RoutesPlanned { get; set; }
+        public int? RoutesPlanned { get; set; }
 
         /// <summary>
         /// Preferred units (mi, km)
@@ -165,7 +165,7 @@ namespace Route4MeSDK.DataTypes
         /// Time in seconds. A user will be logged out after been inactive during specified by this parameter seconds.
         /// </summary>
         [DataMember(Name = "auto_logout_ts")]
-        public System.Nullable<int> AutoLogoutTs { get; set; }
+        public int? AutoLogoutTs { get; set; }
 
     }
 }

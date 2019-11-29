@@ -148,19 +148,19 @@ namespace Route4MeSDK.DataTypes
         /// Total route duration (seconds)
         /// </summary>
         [DataMember(Name = "route_duration_sec", EmitDefaultValue = false)]
-        public int? RouteDurationSec { get; set; }
+        public long? RouteDurationSec { get; set; }
 
         /// <summary>
         /// Planned total route duration (seconds).
         /// </summary>
         [DataMember(Name = "planned_total_route_duration", EmitDefaultValue = false)]
-        public int? PlannedTotalRouteDuration { get; set; }
+        public long? PlannedTotalRouteDuration { get; set; }
 
         /// <summary>
         /// Total wait time (seconds).
         /// </summary>
         [DataMember(Name = "total_wait_time", EmitDefaultValue = false)]
-        public int? TotalWaitTime { get; set; }
+        public long? TotalWaitTime { get; set; }
 
         /// <summary>
         /// UDU Actual travel distance.
@@ -178,7 +178,7 @@ namespace Route4MeSDK.DataTypes
         /// Actual travel time (seconds).
         /// </summary>
         [DataMember(Name = "actual_travel_time", EmitDefaultValue = false)]
-        public int? ActualTravelTime { get; set; }
+        public long? ActualTravelTime { get; set; }
 
         /// <summary>
         /// Actual footsteps.
@@ -190,19 +190,19 @@ namespace Route4MeSDK.DataTypes
         /// Working time.
         /// </summary>
         [DataMember(Name = "working_time", EmitDefaultValue = false)]
-        public int? WorkingTime { get; set; }
+        public long? WorkingTime { get; set; }
 
         /// <summary>
         /// Driving time.
         /// </summary>
         [DataMember(Name = "driving_time", EmitDefaultValue = false)]
-        public int? DrivingTime { get; set; }
+        public long? DrivingTime { get; set; }
 
         /// <summary>
         /// Idling time.
         /// </summary>
         [DataMember(Name = "idling_time", EmitDefaultValue = false)]
-        public int? IdlingTime { get; set; }
+        public long? IdlingTime { get; set; }
 
         /// <summary>
         /// Idling time.

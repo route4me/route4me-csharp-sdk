@@ -37,7 +37,7 @@ namespace Route4MeSDK.DataTypes
         /// When the note was added
         /// </summary>
         [DataMember(Name = "ts_added", EmitDefaultValue = false)]
-        public uint? TimestampAdded { get; set; }
+        public long? TimestampAdded { get; set; }
 
         /// <summary>
         /// The position latitude where the address note was added

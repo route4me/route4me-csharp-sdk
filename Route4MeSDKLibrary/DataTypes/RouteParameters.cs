@@ -185,7 +185,7 @@ namespace Route4MeSDK.DataTypes
         /// </summary>
         /// <value>The maximum duration of the route.</value>
         [DataMember(Name = "route_max_duration", EmitDefaultValue = false)]
-        public int? RouteMaxDuration { get; set; }
+        public long? RouteMaxDuration { get; set; }
 
         /// <summary>The email address to notify upon completion of an optimization request</summary>
         /// <value>The route email.</value>
@@ -522,7 +522,7 @@ namespace Route4MeSDK.DataTypes
         /// The service time specified or all the addresses in the route.
         /// </summary>
         [DataMember(Name = "time", EmitDefaultValue = false), CustomValidation(typeof(PropertyValidation), "ValidateEpochTime")]
-        public int? Time { get; set; }
+        public long? Time { get; set; }
     }
 
 
