@@ -22,7 +22,7 @@ namespace Route4MeSDK.DataTypes
         /// Time when the contact was created.
         /// </summary>
         [DataMember(Name = "created_timestamp", EmitDefaultValue = false)]
-        public int created_timestamp { get; set; }
+        public long created_timestamp { get; set; }
 
         /// <summary>
         /// Unique ID of the contact.
@@ -76,25 +76,25 @@ namespace Route4MeSDK.DataTypes
         /// Start of the contact's local time window.
         /// </summary>
         [DataMember(Name = "local_time_window_start", EmitDefaultValue = false)]
-        public int? local_time_window_start { get; set; }
+        public long? local_time_window_start { get; set; }
 
         /// <summary>
         /// End of the contact's local time window.
         /// </summary>
         [DataMember(Name = "local_time_window_end", EmitDefaultValue = false)]
-        public int? local_time_window_end { get; set; }
+        public long? local_time_window_end { get; set; }
 
         /// <summary>
         /// Start of the contact's second local time window.
         /// </summary>
         [DataMember(Name = "local_time_window_start_2", EmitDefaultValue = false)]
-        public int? local_time_window_start_2 { get; set; }
+        public long? local_time_window_start_2 { get; set; }
 
         /// <summary>
         /// End of the contact's second local time window.
         /// </summary>
         [DataMember(Name = "local_time_window_end_2", EmitDefaultValue = false)]
-        public int? local_time_window_end_2 { get; set; }
+        public long? local_time_window_end_2 { get; set; }
 
         /// <summary>
         /// The contact's email.
@@ -237,19 +237,19 @@ namespace Route4MeSDK.DataTypes
         /// When the contact was last visited.
         /// </summary>
         [DataMember(Name = "last_visited_timestamp", EmitDefaultValue = false)]
-        public int? last_visited_timestamp { get; set; }
+        public long? last_visited_timestamp { get; set; }
 
         /// <summary>
         /// When the contact was last routed.
         /// </summary>
         [DataMember(Name = "last_routed_timestamp", EmitDefaultValue = false)]
-        public int? last_routed_timestamp { get; set; }
+        public long? last_routed_timestamp { get; set; }
 
         /// <summary>
         /// The service time at the contact's address.
         /// </summary>
         [DataMember(Name = "service_time", EmitDefaultValue = false)]
-        public int? service_time { get; set; }
+        public long? service_time { get; set; }
 
         /// <summary>
         /// The contact's local timezone.

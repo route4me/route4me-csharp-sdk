@@ -611,7 +611,7 @@ namespace Route4MeSDK
 
             /// <value>A route destination ID to be updated</value>
 			[HttpQueryMemberAttribute(Name = "route_destination_id", EmitDefaultValue = false)]
-			public System.Nullable<int> RouteDestinationId { get; set; }
+			public int? RouteDestinationId { get; set; }
 
             /// <value>The changed/new custom fields of a route destination</value>
 			[DataMember(Name = "custom_fields", EmitDefaultValue = false)]
@@ -652,7 +652,7 @@ namespace Route4MeSDK
 
             /// <value>A route destination ID to be updated</value>
 			[HttpQueryMemberAttribute(Name = "route_destination_id", EmitDefaultValue = false)]
-			public System.Nullable<int> RouteDestinationId { get; set; }
+			public int? RouteDestinationId { get; set; }
 
             /// <value>The route destination alias</value>
 			[DataMember(Name = "alias", EmitDefaultValue = false)]
@@ -771,15 +771,15 @@ namespace Route4MeSDK
 
             /// <value>The time window start</value>
 			[DataMember(Name = "time_window_start", EmitDefaultValue = false)]
-			public int? TimeWindowStart { get; set; }
+			public long? TimeWindowStart { get; set; }
 
             /// <value>The time window end</value>
 			[DataMember(Name = "time_window_end", EmitDefaultValue = false)]
-			public int? TimeWindowEnd { get; set; }
+			public long? TimeWindowEnd { get; set; }
 
             // <value>The expected amount of time that will be spent at this address by the driver/user</value>
             [DataMember(Name = "time", EmitDefaultValue = false)]
-			public int? Time { get; set; }
+			public long? Time { get; set; }
 
             //if present, the priority will sequence addresses in all the optimal routes so that
             //higher priority addresses are general at the beginning of the route sequence
@@ -800,11 +800,11 @@ namespace Route4MeSDK
 
             /// <value>The time window start 2</value>
 			[DataMember(Name = "time_window_start_2", EmitDefaultValue = false)]
-			public int? TimeWindowStart2 { get; set; }
+			public long? TimeWindowStart2 { get; set; }
 
             /// <value>The time window end 2</value>
 			[DataMember(Name = "time_window_end_2", EmitDefaultValue = false)]
-			public int? TimeWindowEnd2 { get; set; }
+			public long? TimeWindowEnd2 { get; set; }
 
             /// <value>The custom fields of an address</value>
 			[DataMember(Name = "custom_fields", EmitDefaultValue = false)]
@@ -1140,7 +1140,7 @@ namespace Route4MeSDK
 
             /// <value>The member ID</value>
 			[HttpQueryMemberAttribute(Name = "member_id", EmitDefaultValue = false)]
-			public System.Nullable<int> MemberId { get; set; }
+			public int? MemberId { get; set; }
 
             /// <value>The response format (json, xml)</value>
 			[HttpQueryMemberAttribute(Name = "format", EmitDefaultValue = false)]
@@ -1809,7 +1809,7 @@ namespace Route4MeSDK
 
             /// <value>The member ID</value>
 			[HttpQueryMemberAttribute(Name = "member_id", EmitDefaultValue = false)]
-			public System.Nullable<int> MemberId { get; set; }
+			public int? MemberId { get; set; }
 		}
 
         /// <summary>
@@ -1883,7 +1883,7 @@ namespace Route4MeSDK
 
             /// <value>The route destination ID</value>
 			[HttpQueryMemberAttribute(Name = "route_destination_id", EmitDefaultValue = false)]
-			public System.Nullable<int> RouteDestinationId { get; set; }
+			public int? RouteDestinationId { get; set; }
 
             /// <value>If true an address will be marked as marked as departed</value>
 			[IgnoreDataMember()]
@@ -2011,11 +2011,11 @@ namespace Route4MeSDK
 
             /// <value>Search starting position</value>
 			[HttpQueryMemberAttribute(Name = "offset", EmitDefaultValue = false)]
-			public System.Nullable<int> Offset { get; set; }
+			public int? Offset { get; set; }
 
             /// <value>The number of records to return</value>
 			[HttpQueryMemberAttribute(Name = "limit", EmitDefaultValue = false)]
-			public System.Nullable<int> Limit { get; set; }
+			public int? Limit { get; set; }
 		}
 
         /// <summary>
@@ -2437,7 +2437,7 @@ namespace Route4MeSDK
 
             /// <value>If equal to 1, it will be redirected</value>
             [HttpQueryMemberAttribute(Name = "redirect", EmitDefaultValue = false)]
-			public System.Nullable<int> Redirect { get; set; }
+			public int? Redirect { get; set; }
 
             /// <value>The array of the addresses</value>
             [DataMember(Name = "addresses", EmitDefaultValue = false)]
@@ -2481,7 +2481,7 @@ namespace Route4MeSDK
 
             /// <value>If equal to 1, it will be redirected</value>
 			[HttpQueryMemberAttribute(Name = "redirect", EmitDefaultValue = false)]
-			public System.Nullable<int> Redirect { get; set; }
+			public int? Redirect { get; set; }
 
             /// <value>The array of the addresses</value>
 			[DataMember(Name = "addresses", EmitDefaultValue = false)]

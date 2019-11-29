@@ -42,7 +42,7 @@ namespace Route4MeSDK.DataTypes
         /// The user's IP
         /// </summary>
         [DataMember(Name = "intUserIP", EmitDefaultValue = false)]
-        public uint intUserIP { get; set; }
+        public long intUserIP { get; set; }
 
         /// <summary>
         /// The geocoding method

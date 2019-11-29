@@ -90,21 +90,11 @@ namespace Route4MeSDK.QueryTypes
 
         [IgnoreDataMember()]
         [HttpQueryMemberAttribute(Name = "disable_optimization", EmitDefaultValue = false)]
-        public System.Nullable<bool> DisableOptimization
-        {
-            get { return m_DisableOptimization; }
-            set { m_DisableOptimization = value; }
-        }
-        private System.Nullable<bool> m_DisableOptimization;
+        public bool? DisableOptimization { get; set; }
 
         [IgnoreDataMember()]
         [HttpQueryMemberAttribute(Name = "optimize", EmitDefaultValue = false)]
-        public string Optimize
-        {
-            get { return m_Optimize; }
-            set { m_Optimize = value; }
-        }
-        private string m_Optimize;
+        public string Optimize { get; set; }
 
         /// <summary>
         /// By sending recompute_directions=1 we request that the route directions be recomputed (note that this does happen automatically if certain properties of the route are updated, such as stop sequence_no changes or round-tripness)
@@ -115,33 +105,18 @@ namespace Route4MeSDK.QueryTypes
 
         [IgnoreDataMember()]
         [HttpQueryMemberAttribute(Name = "response_format", EmitDefaultValue = false)]
-        public string ResponseFormat
-        {
-            get { return m_ResponseFormat; }
-            set { m_ResponseFormat = value; }
-        }
-        private string m_ResponseFormat;
+        public string ResponseFormat { get; set; }
 
         [IgnoreDataMember()]
         [HttpQueryMemberAttribute(Name = "route_destination_id", EmitDefaultValue = false)]
-        public System.Nullable<int> RouteDestinationId
-        {
-            get { return m_RouteDestinationId; }
-            set { m_RouteDestinationId = value; }
-        }
-        private System.Nullable<int> m_RouteDestinationId;
+        public int? RouteDestinationId { get; set; }
 
         /// <summary>
         /// If true will be redirected
         /// </summary>
         [IgnoreDataMember()]
         [HttpQueryMemberAttribute(Name = "redirect", EmitDefaultValue = false)]
-        public System.Nullable<bool> Redirect
-        {
-            get { return m_Redirect; }
-            set { m_Redirect = value; }
-        }
-        private System.Nullable<bool> m_Redirect;
+        public bool? Redirect { get; set; }
 
         /// <summary>
         /// Route Parameters to update.

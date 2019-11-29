@@ -6,12 +6,7 @@ namespace Route4MeSDK.QueryTypes
     public sealed class MemberParametersV4 : GenericParameters
     {
         [HttpQueryMemberAttribute(Name = "member_id", EmitDefaultValue = false)]
-        public System.Nullable<int> member_id
-        {
-            get { return m_member_id; }
-            set { m_member_id = value; }
-        }
-        private System.Nullable<int> m_member_id;
+        public int? member_id { get; set; }
 
         [HttpQueryMemberAttribute(Name = "device_id", EmitDefaultValue = false)]
         public string device_id { get; set; }
@@ -35,20 +30,10 @@ namespace Route4MeSDK.QueryTypes
         public string SHOW_ALL_DRIVERS { get; set; }
 
         [DataMember(Name = "member_phone", EmitDefaultValue = false)]
-        public string member_phone
-        {
-            get { return m_member_phone; }
-            set { m_member_phone = value; }
-        }
-        private string m_member_phone;
+        public string member_phone { get; set; }
 
         [DataMember(Name = "member_zipcode", EmitDefaultValue = false)]
-        public string member_zipcode
-        {
-            get { return m_member_zipcode; }
-            set { m_member_zipcode = value; }
-        }
-        private string m_member_zipcode;
+        public string member_zipcode { get; set; }
 
         [DataMember(Name = "user_reg_country_id", EmitDefaultValue = false)]
         public int? user_reg_country_id { get; set; }
@@ -116,63 +101,27 @@ namespace Route4MeSDK.QueryTypes
         private Dictionary<string, string> _custom_data;
 
         [HttpQueryMemberAttribute(Name = "route_count", EmitDefaultValue = false)]
-        public System.Nullable<int> route_count
-        {
-            get { return m_route_count; }
-            set { m_route_count = value; }
-        }
-        private System.Nullable<int> m_route_count;
+        public int? route_count { get; set; }
 
         [DataMember(Name = "member_email", EmitDefaultValue = false)]
-        public string member_email
-        {
-            get { return m_member_email; }
-            set { m_member_email = value; }
-        }
-        private string m_member_email;
+        public string member_email { get; set; }
 
         [DataMember(Name = "member_type", EmitDefaultValue = false)]
-        public string member_type
-        {
-            get { return m_member_type; }
-            set { m_member_type = value; }
-        }
-        private string m_member_type;
+        public string member_type { get; set; }
 
         [DataMember(Name = "date_of_birth", EmitDefaultValue = false)]
-        public string date_of_birth
-        {
-            get { return m_date_of_birth; }
-            set { m_date_of_birth = value; }
-        }
-        private string m_date_of_birth;
+        public string date_of_birth { get; set; }
 
         [DataMember(Name = "member_first_name", EmitDefaultValue = false)]
-        public string member_first_name
-        {
-            get { return m_member_first_name; }
-            set { m_member_first_name = value; }
-        }
-        private string m_member_first_name;
+        public string member_first_name { get; set; }
 
         [DataMember(Name = "member_password", EmitDefaultValue = false)]
-        public string member_password
-        {
-            get { return m_member_password; }
-            set { m_member_password = value; }
-        }
-        private string m_member_password;
+        public string member_password { get; set; }
 
         [DataMember(Name = "OWNER_MEMBER_ID", EmitDefaultValue = false)]
         public int? OWNER_MEMBER_ID { get; set; }
 
         [DataMember(Name = "member_last_name", EmitDefaultValue = false)]
-        public string member_last_name
-        {
-            get { return m_member_last_name; }
-            set { m_member_last_name = value; }
-        }
-        private string m_member_last_name;
-
+        public string member_last_name { get; set; }
     }
 }

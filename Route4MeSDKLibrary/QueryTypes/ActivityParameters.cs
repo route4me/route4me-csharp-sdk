@@ -53,14 +53,14 @@
         /// <remarks><para>Query parameter.</para></remarks>
         /// </summary>
         [HttpQueryMemberAttribute(Name = "start", EmitDefaultValue = false)]
-        public uint? Start { get; set; }
+        public long? Start { get; set; }
 
         /// <summary>
         /// End of the time filter.
         /// <remarks><para>Query parameter.</para></remarks>
         /// </summary>
         [HttpQueryMemberAttribute(Name = "end", EmitDefaultValue = false)]
-        public uint? End { get; set; }
+        public long? End { get; set; }
 
         /// <summary>
         /// If specified, the response will include only activities of the specified type.

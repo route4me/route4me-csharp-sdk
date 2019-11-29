@@ -27,13 +27,13 @@ namespace Route4MeSDK.DataTypes
         /// Route rating by user [0 - 5].
         /// </summary>
         [DataMember(Name = "user_route_rating")]
-        public Nullable<int> UserRouteRating { get; set; }
+        public int? UserRouteRating { get; set; }
 
         /// <summary>
         /// Route owner's member ID.
         /// </summary>
         [DataMember(Name = "member_id")]
-        public Nullable<int> MemberId { get; set; }
+        public int? MemberId { get; set; }
 
         /// <summary>
         /// Route owner's email.
@@ -99,7 +99,7 @@ namespace Route4MeSDK.DataTypes
         /// The total distance of the route trip.
         /// </summary>
         [DataMember(Name = "trip_distance")]
-        public Nullable<double> TripDistance { get; set; }
+        public double? TripDistance { get; set; }
 
         /// <summary>
         /// The UDU distance measurement unit for the route.
@@ -125,37 +125,37 @@ namespace Route4MeSDK.DataTypes
         /// Total cost of a route.
         /// </summary>
         [DataMember(Name = "route_cost")]
-        public Nullable<double> RouteCost { get; set; }
+        public double? RouteCost { get; set; }
 
         /// <summary>
         /// Total revenue of a route.
         /// </summary>
         [DataMember(Name = "route_revenue")]
-        public Nullable<double> RouteRevenue { get; set; }
+        public double? RouteRevenue { get; set; }
 
         /// <summary>
         /// Net revenue per distance unit.
         /// </summary>
         [DataMember(Name = "net_revenue_per_distance_unit")]
-        public Nullable<double> NetRevenuePerDistanceUnit { get; set; }
+        public double? NetRevenuePerDistanceUnit { get; set; }
 
         /// <summary>
         /// When the route was created.
         /// </summary>
         [DataMember(Name = "created_timestamp")]
-        public Nullable<int> CreatedTimestamp { get; set; }
+        public long? CreatedTimestamp { get; set; }
 
         /// <summary>
         /// Miles per gallon.
         /// </summary>
         [DataMember(Name = "mpg")]
-        public Nullable<double> mpg { get; set; }
+        public double? mpg { get; set; }
 
         /// <summary>
         /// Gas price.
         /// </summary>
         [DataMember(Name = "gas_price")]
-        public Nullable<double> GasPrice { get; set; }
+        public double? GasPrice { get; set; }
 
         /// <summary>
         /// Total route duration (seconds).
@@ -164,7 +164,7 @@ namespace Route4MeSDK.DataTypes
         /// </para></remarks>
         /// </summary>
         [DataMember(Name = "route_duration_sec")]
-        public Nullable<int> RouteDurationSec { get; set; }
+        public long? RouteDurationSec { get; set; }
 
         /// <summary>
         /// Planned total route duration.
@@ -173,7 +173,7 @@ namespace Route4MeSDK.DataTypes
         /// </para></remarks>
         /// </summary>
         [DataMember(Name = "planned_total_route_duration")]
-        public Nullable<int> PlannedTotalRouteDuration { get; set; }
+        public int? PlannedTotalRouteDuration { get; set; }
 
         /// <summary>
         /// Total wait time (seconds).
@@ -191,43 +191,43 @@ namespace Route4MeSDK.DataTypes
         /// Actual travel distance.
         /// </summary>
         [DataMember(Name = "actual_travel_distance")]
-        public Nullable<double> ActualTravelDistance { get; set; }
+        public double? ActualTravelDistance { get; set; }
 
         /// <summary>
         /// Actual travel time.
         /// </summary>
         [DataMember(Name = "actual_travel_time")]
-        public Nullable<int> ActualTravelTime { get; set; }
+        public int? ActualTravelTime { get; set; }
 
         /// <summary>
         /// Actual footsteps.
         /// </summary>
         [DataMember(Name = "actual_footsteps")]
-        public Nullable<int> ActualFootSteps { get; set; }
+        public int? ActualFootSteps { get; set; }
 
         /// <summary>
         /// Working time
         /// </summary>
         [DataMember(Name = "working_time")]
-        public Nullable<int> WorkingTime { get; set; }
+        public int? WorkingTime { get; set; }
 
         /// <summary>
         /// Driving time
         /// </summary>
         [DataMember(Name = "driving_time")]
-        public Nullable<int> DrivingTime { get; set; }
+        public int? DrivingTime { get; set; }
 
         /// <summary>
         /// Idling time
         /// </summary>
         [DataMember(Name = "idling_time")]
-        public Nullable<int> IdlingTime { get; set; }
+        public int? IdlingTime { get; set; }
 
         /// <summary>
         /// Paying miles
         /// </summary>
         [DataMember(Name = "paying_miles")]
-        public Nullable<double> PayingMiles { get; set; }
+        public double? PayingMiles { get; set; }
 
         /// <summary>
         /// Geofence polygon type.
@@ -239,7 +239,7 @@ namespace Route4MeSDK.DataTypes
         /// Geofence polygon size.
         /// </summary>
         [DataMember(Name = "geofence_polygon_size")]
-        public Nullable<int> GeofencePolygonSize { get; set; }
+        public int? GeofencePolygonSize { get; set; }
 
         /// <summary>
         /// Destination count.

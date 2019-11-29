@@ -91,7 +91,7 @@
         /// <remarks><para>Query parameter.</para></remarks>
         /// </summary>
         [HttpQueryMemberAttribute(Name = "start_date")]
-        public int StartDate { get; set; }
+        public long StartDate { get; set; }
 
         /// <summary>
         /// End of a time filter.
@@ -99,7 +99,7 @@
         /// <remarks><para>Query parameter.</para></remarks>
         /// </summary>
         [HttpQueryMemberAttribute(Name = "end_date")]
-        public int EndDate { get; set; }
+        public long EndDate { get; set; }
 
         /// <summary>
         /// Altitude of a device position.

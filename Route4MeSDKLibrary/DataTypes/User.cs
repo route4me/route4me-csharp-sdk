@@ -36,7 +36,7 @@ namespace Route4MeSDK.DataTypes
         /// Last name of the user.
         /// </summary>
         [DataMember(Name = "member_last_name")]
-        public string MemberLasttName { get; set; }
+        public string MemberLastName { get; set; }
 
         /// <summary>
         ///User email.

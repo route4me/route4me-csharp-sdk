@@ -25,7 +25,7 @@ namespace Route4MeSDK.DataTypes
         /// Activity timestamp - The time when the activity occurred.
         /// </summary>
         [DataMember(Name = "activity_timestamp", EmitDefaultValue = false)]
-        public uint? ActivityTimestamp { get; set; }
+        public long? ActivityTimestamp { get; set; }
 
         /// <summary>
         /// Activity message

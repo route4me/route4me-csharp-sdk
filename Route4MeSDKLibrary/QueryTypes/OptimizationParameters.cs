@@ -20,12 +20,7 @@ namespace Route4MeSDK.QueryTypes
         /// </summary>
         [IgnoreDataMember()]
         [HttpQueryMemberAttribute(Name = "redirect", EmitDefaultValue = false)]
-        public System.Nullable<bool> Redirect
-        {
-            get { return m_Redirect; }
-            set { m_Redirect = value; }
-        }
-        private System.Nullable<bool> m_Redirect;
+        public bool? Redirect { get; set; }
 
         [IgnoreDataMember] // Don't serialize as JSON
         [HttpQueryMemberAttribute(Name = "show_directions", EmitDefaultValue = false)]
