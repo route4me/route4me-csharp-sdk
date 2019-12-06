@@ -363,6 +363,33 @@ namespace Route4MeSDK
 		}
 
         /// <summary>
+        /// Update route by changed DataObjectRoute object directly.
+        /// </summary>
+        /// <param name="route">A route of the DataObjectRoute type as input parameters.</param>
+        /// <param name="errorString">Returned error string in case of the processs failing</param>
+        /// <returns>Updated route</returns>
+        public DataObjectRoute UpdateRoute(DataObjectRoute route, out string errorString)
+        {
+            
+            var routeParameters = new RouteParametersQuery()
+            {
+                RouteId = route.RouteID,
+                ApprovedForExecution = route.ApprovedForExecution,
+                Parameters = route.Parameters,
+                Addresses = route.Addresses
+            };
+
+            routeParameters.PrepareForSerialization();
+
+            var result = GetJsonObjectFromAPI<DataObjectRoute>(routeParameters,
+                                                          R4MEInfrastructureSettings.RouteHost,
+                                                          HttpMethodType.Put,
+                                                          out errorString);
+
+            return result;
+        }
+
+        /// <summary>
         /// The response from a route duplicating process
         /// </summary>
 		[DataContract]

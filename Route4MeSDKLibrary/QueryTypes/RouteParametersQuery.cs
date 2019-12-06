@@ -124,5 +124,17 @@ namespace Route4MeSDK.QueryTypes
         /// </summary>
         [DataMember(Name = "parameters", EmitDefaultValue = false)]
         public RouteParameters Parameters { get; set; }
+
+        /// <summary>
+        /// Array of the route addresses
+        /// </summary>
+        [DataMember(Name = "addresses", EmitDefaultValue = false)]
+        public Address[] Addresses { get; set; }
+
+        /// <summary>
+        /// If true, the route is approved for execution.
+        /// </summary>
+        [DataMember(Name = "approved_for_execution", EmitDefaultValue = false)]
+        public bool ApprovedForExecution { get; set; }
     }
 }

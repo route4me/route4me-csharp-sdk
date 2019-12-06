@@ -19,7 +19,7 @@ namespace Route4MeSDKUnitTest
 {
     public class ApiKeys
     {
-        public const string actualApiKey = "11111111111111111111111111111111";
+        public const string actualApiKey = "51d0c0701ce83855c9f62d0440096e7c";
         public const string demoApiKey = "11111111111111111111111111111111";
     }
     
@@ -222,6 +222,25 @@ namespace Route4MeSDKUnitTest
             var dataObject = route4Me.UpdateRoute(routeParameters, out errorString);
 
             Assert.IsNotNull(dataObject, "UpdateRouteTest failed... " + errorString);
+        }
+
+        [TestMethod, Ignore]
+        public void UpdateWholeRouteTest()
+        {
+            var route4Me = new Route4MeManager(c_ApiKey);
+
+            string routeId = tdr.SD10Stops_route_id;
+            Assert.IsNotNull(routeId, "routeId_SingleDriverRoute10Stops is null...");
+
+            tdr.SD10Stops_route.ApprovedForExecution = true;
+            tdr.SD10Stops_route.Parameters.RouteName += " Edited";
+            tdr.SD10Stops_route.Addresses[1].AddressString += " Edited";
+
+            var dataObject = route4Me.UpdateRoute(tdr.SD10Stops_route, out string  errorString);
+
+            Assert.IsNotNull(dataObject, "UpdateRouteTest failed. " + errorString);
+            Assert.IsTrue(dataObject.Parameters.RouteName.Contains("Edited"), "UpdateRouteTest failed, the route name not changed.");
+            Assert.IsTrue(dataObject.Addresses[1].AddressString.Contains("Edited"), "UpdateRouteTest failed, second address name not changed.");
         }
 
         [TestMethod]

@@ -370,10 +370,10 @@ namespace Route4MeSDK.DataTypes
         public double? TruckLengthMeters { get; set; }
 
         /// <summary>
-        /// Array of the truck hazardous goods.
+        /// Comma-delimited list of the truck hazardous goods.
         /// </summary>
         [DataMember(Name = "truck_hazardous_goods", EmitDefaultValue = false)]
-        public string[] TruckHazardousGoods { get; set; }
+        public string TruckHazardousGoods { get; set; }
 
         /// <summary>
         /// Truck axles number.
