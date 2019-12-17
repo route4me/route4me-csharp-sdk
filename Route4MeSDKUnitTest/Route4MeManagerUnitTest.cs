@@ -104,6 +104,35 @@ namespace Route4MeSDKUnitTest
         }
 
         [TestMethod]
+        public void GetRoutesByIDsTest()
+        {
+            var route4Me = new Route4MeManager(c_ApiKey);
+
+            #region // Retrieve first 3 routes
+            RouteParametersQuery routesParameters = new RouteParametersQuery()
+            {
+                Offset = 0,
+                Limit = 3
+            };
+
+            DataObjectRoute[] threeRoutes = route4Me.GetRoutes(routesParameters, out string errorString);
+            #endregion
+
+            #region // Retrieve 2 route by their IDs
+            var routeParameters = new RouteParametersQuery()
+            {
+                RouteId = threeRoutes[0].RouteID + ","+ threeRoutes[1].RouteID
+            };
+
+            var twoRoutes = route4Me.GetRoutes(routeParameters, out errorString);
+            #endregion
+
+            Assert.IsInstanceOfType(twoRoutes, typeof(DataObjectRoute[]), "GetRoutesByIDsTest failed");
+
+            Assert.IsTrue(twoRoutes.Length == 2, "GetRoutesByIDsTest failed");
+        }
+
+        [TestMethod]
         public void GetRouteDirectionsTest()
         {
             Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
