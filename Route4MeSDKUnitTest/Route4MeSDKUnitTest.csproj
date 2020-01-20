@@ -51,6 +51,10 @@
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.3.6.0\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="Route4MeSDKLibrary, Version=1.0.0.3, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Route4MeSDKLibrary\bin\Debug\Route4MeSDKLibrary.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
@@ -76,12 +80,6 @@
     </Compile>
     <Compile Include="Route4MeManagerUnitTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Route4MeSDKLibrary\Route4MeSDKLibrary.csproj">
-      <Project>{37e5d3fc-bbf7-4bd8-98e6-a58dc9138d98}</Project>
-      <Name>Route4MeSDKLibrary</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

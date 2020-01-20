@@ -36,16 +36,7 @@ namespace Route4MeSDK.DataTypes
         Driving,
 
         [Description("Walking")]
-        Walking,
-
-        [Description("Trucking")]
-        Trucking,
-
-        [Description("Cycling")]
-        Cycling,
-
-        [Description("Transit")]
-        Transit
+        Walking
     }
 
     /// <summary>
@@ -65,11 +56,8 @@ namespace Route4MeSDK.DataTypes
     /// </summary>
     public enum Avoid
     {
-        [Description("Highways")]
-        Highways,
-
-        [Description("Tolls")]
-        Tolls,
+        [Description("")]
+        None,
 
         [Description("minimizeHighways")]
         MinimizeHighways,
@@ -77,8 +65,14 @@ namespace Route4MeSDK.DataTypes
         [Description("minimizeTolls")]
         MinimizeTolls,
 
-        [Description("")]
-        None
+        [Description("Highways")]
+        Highways,
+
+        [Description("Tolls")]
+        Tolls,
+
+        [Description("highways,tolls")]
+        HighwaysTolls
     }
 
     /// <summary>

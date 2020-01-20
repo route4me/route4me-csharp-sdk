@@ -671,16 +671,20 @@ namespace Route4MeSDK
         /// The request parameters for the updating process of a route destination
         /// </summary>
 		[DataContract()]
-		private sealed class UpdateRouteDestinationRequest : GenericParameters
+		private sealed class UpdateRouteDestinationRequest : Address
 		{
             /// <value>A route ID to be updated</value>
 			[HttpQueryMemberAttribute(Name = "route_id", EmitDefaultValue = false)]
 			public string RouteId { get; set; }
 
+            /// <value>A optimization ID to be updated</value>
+			[HttpQueryMemberAttribute(Name = "optimization_problem_id", EmitDefaultValue = false)]
+            public string OptimizationProblemId { get; set; }
+
             /// <value>A route destination ID to be updated</value>
 			[HttpQueryMemberAttribute(Name = "route_destination_id", EmitDefaultValue = false)]
 			public int? RouteDestinationId { get; set; }
-
+            /*
             /// <value>The route destination alias</value>
 			[DataMember(Name = "alias", EmitDefaultValue = false)]
 			public string Alias { get; set; }
@@ -840,7 +844,9 @@ namespace Route4MeSDK
             /// <value>The person's contact ID at an address</value>
 			[DataMember(Name = "contact_id", EmitDefaultValue = false)]
 			public int? ContactId { get; set; }
+            */
 		}
+
 
         /// <summary>
         /// Updated a route destination
@@ -850,24 +856,27 @@ namespace Route4MeSDK
         /// <returns>The updated address</returns>
 		public Address UpdateRouteDestination(Address addressParameters, out string errorString)
 		{
-            string[] addressProperties = new string[]
-                {"Alias","FirstName","LastName","AddressString","AddressStopType","IsDepot","Latitude",
-                    "Longitude","SequenceNo","IsVisited","IsDeparted","TimestampLastVisited",
-                    "TimestampLastDeparted","Group","CustomerPo","InvoiceNo","ReferenceNo","OrderNo",
-                    "OrderId","Weight","Cost","Revenue","Cube","Pieces","Phone","TimeWindowStart",
-                    "TimeWindowEnd","Priority","CurbsideLatitude","CurbsideLongitude","TimeWindowStart2",
-                    "TimeWindowEnd2","CustomFields","ContactId" };
+            
+            //string[] addressProperties = new string[]
+            //    {"Alias","FirstName","LastName","AddressString","AddressStopType","IsDepot","Latitude",
+            //        "Longitude","SequenceNo","IsVisited","IsDeparted","TimestampLastVisited",
+            //        "TimestampLastDeparted","Group","CustomerPo","InvoiceNo","ReferenceNo","OrderNo",
+            //        "OrderId","Weight","Cost","Revenue","Cube","Pieces","Phone","TimeWindowStart",
+            //        "TimeWindowEnd","Priority","CurbsideLatitude","CurbsideLongitude","TimeWindowStart2",
+            //        "TimeWindowEnd2","CustomFields","ContactId" };
 
-			UpdateRouteDestinationRequest request = new UpdateRouteDestinationRequest
+			var request = new UpdateRouteDestinationRequest
 			{
 				RouteId = addressParameters.RouteId,
 				RouteDestinationId = addressParameters.RouteDestinationId,
 			};
 
-            foreach (PropertyInfo propInfo in typeof(Address).GetProperties())
+            foreach (var propInfo in typeof(Address).GetProperties())
             {
-                String propName = propInfo.Name;
+                //var propName = propInfo.Name;
 
+                propInfo.SetValue(request, propInfo.GetValue(addressParameters));
+                /*
                 if (Array.Exists(addressProperties, element => element ==  propName))
                 {
                     Object proprValue = propInfo.GetValue(addressParameters);
@@ -879,10 +888,37 @@ namespace Route4MeSDK
                     }
                         
                 }
+                */
+            }
+            
+            //addressParameters.PrepareForSerialization();
+
+            return GetJsonObjectFromAPI<Address>(request, R4MEInfrastructureSettings.GetAddress, HttpMethodType.Put, out errorString);
+		}
+
+        /// <summary>
+        /// Updates an optimization destination
+        /// </summary>
+        /// <param name="addressParameters">Contains an address object</param>
+        /// <param name="errorString">Returned error string in case of the processs failing</param>
+        /// <returns>The updated address</returns>
+        public Address UpdateOptimizationDestination(Address addressParameters, out string errorString)
+        {
+            var request = new UpdateRouteDestinationRequest
+            {
+                OptimizationProblemId = addressParameters.OptimizationProblemId
+            };
+
+            foreach (var propInfo in typeof(Address).GetProperties())
+            {
+                propInfo.SetValue(request, propInfo.GetValue(addressParameters));
+
             }
 
-			return GetJsonObjectFromAPI<Address>(request, R4MEInfrastructureSettings.GetAddress, HttpMethodType.Put, out errorString);
-		}
+            var dataObject = GetJsonObjectFromAPI<DataObject>(request, R4MEInfrastructureSettings.ApiHost, HttpMethodType.Put, out errorString);
+
+            return dataObject?.Addresses?.Where(x => x.RouteDestinationId == addressParameters.RouteDestinationId).FirstOrDefault() ?? null;
+        }
 
         #endregion
 
@@ -1650,6 +1686,10 @@ namespace Route4MeSDK
 			[HttpQueryMemberAttribute(Name = "route_id", EmitDefaultValue = false)]
 			public string RouteId { get; set; }
 
+            /// <value>The optimization ID</value>
+			[HttpQueryMemberAttribute(Name = "optimization_problem_id", EmitDefaultValue = false)]
+            public string OptimizationProblemId { get; set; }
+
             /// <value>The array of the Address type objects</value>
 			[DataMember(Name = "addresses", EmitDefaultValue = false)]
 			public Address[] Addresses { get; set; }
@@ -1712,6 +1752,22 @@ namespace Route4MeSDK
 		{
 			return this.AddRouteDestinations(routeId, addresses, true, out errorString);
 		}
+
+        public int?[] AddOptimizationDestinations (string optimizationId, Address[] addresses, out string errorString)
+        {
+            var request = new AddRouteDestinationRequest()
+            {
+                OptimizationProblemId = optimizationId,
+                Addresses = addresses,
+            };
+
+            var addressesList = addresses.Select(x => x.AddressString).ToList();
+
+            var dataObject = GetJsonObjectFromAPI<DataObject>(request, R4MEInfrastructureSettings.ApiHost, HttpMethodType.Put, out errorString);
+
+            return dataObject?.Addresses?.Where(x => addressesList.Contains(x.AddressString))
+                ?.Select(y => y.RouteDestinationId).ToArray() ?? null;
+        }
 
         /// <summary>
         /// The request parameters for a route destination removing process.
@@ -2008,6 +2064,11 @@ namespace Route4MeSDK
         /// <returns>The array of the address book contacts</returns>
 		public AddressBookContact[] GetAddressBookLocation(AddressBookParameters addressBookParameters, out uint total, out string errorString)
 		{
+            if (addressBookParameters.AddressId!=null && !addressBookParameters.AddressId.Contains(","))
+            {
+                addressBookParameters.AddressId += "," + addressBookParameters.AddressId;
+            }
+
 			var response = GetJsonObjectFromAPI<GetAddressBookContactsResponse>(addressBookParameters, 
                                                                 R4MEInfrastructureSettings.AddressBook, 
                                                                 HttpMethodType.Get, 
@@ -2911,9 +2972,9 @@ namespace Route4MeSDK
         /// <param name="vehicle">The VehicleV4Parameters type object as the request payload </param>
         /// <param name="errorString"> out: Error as string </param>
         /// <returns>The created vehicle </returns>
-        public VehicleV4Response CreateVehicle(VehicleV4Parameters vehicle, out string errorString)
+        public VehicleV4CreateResponse CreateVehicle(VehicleV4Parameters vehicle, out string errorString)
 		{
-            return GetJsonObjectFromAPI<VehicleV4Response>(vehicle, R4MEInfrastructureSettings.Vehicle_V4_API, HttpMethodType.Post, out errorString);
+            return GetJsonObjectFromAPI<VehicleV4CreateResponse>(vehicle, R4MEInfrastructureSettings.Vehicle_V4_API, HttpMethodType.Post, out errorString);
 		}
 
         /// <summary>
