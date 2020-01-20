@@ -49,7 +49,7 @@ namespace Route4MeSDK.DataTypes
         /// Offset in seconds relative to the route start date (i.e. 9AM would be 60 * 60 * 9)
         /// </summary>
         [DataMember(Name = "route_time", EmitDefaultValue = false)]
-        public object RouteTime { get; set; }
+        public int? RouteTime { get; set; }
 
         /// <summary>
         /// Specify if the route can be viewed by unauthenticated users.
@@ -124,9 +124,6 @@ namespace Route4MeSDK.DataTypes
         /// <para>Available values:
         /// <value>Driving</value>, 
         /// <value>Walking</value>, 
-        /// <value>Trucking</value>, 
-        /// <value>Cycling</value>, 
-        /// <value>Transit</value>.
         /// </para>
         /// </summary>
         [DataMember(Name = "travel_mode", EmitDefaultValue = false)]
@@ -247,6 +244,7 @@ namespace Route4MeSDK.DataTypes
         /// <para><value>6 = TRUCKING</value></para>
         /// </summary>
         [DataMember(Name = "dm", EmitDefaultValue = false)]
+        [Range(1,12)]
         public int? DM { get; set; }
 
         /// <summary>
@@ -258,6 +256,7 @@ namespace Route4MeSDK.DataTypes
         /// <para><value>4 = DEPRECATED</value></para>
         /// </summary>
         [DataMember(Name = "dirm", EmitDefaultValue = false)]
+        [Range(1,10)]
         public int? Dirm { get; set; }
 
         /// <summary>
@@ -497,7 +496,7 @@ namespace Route4MeSDK.DataTypes
         /// Route service time slowdown (e.g. 10 (means 10% slowdown))
         /// </summary>
         [DataMember(Name = "route_service_time_multiplier", EmitDefaultValue = false)]
-        public decimal? RoutServiceTimeMultiplier { get; set; }
+        public decimal? RouteServiceTimeMultiplier { get; set; }
 
         /// <summary>
         /// Optimization engine (e.g. '1','2' etc)

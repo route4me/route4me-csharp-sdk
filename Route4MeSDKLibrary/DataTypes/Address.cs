@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
+using Route4MeSDK.QueryTypes;
 
 namespace Route4MeSDK.DataTypes
 {
@@ -8,7 +9,7 @@ namespace Route4MeSDK.DataTypes
     /// <para>See the JSON schema at <see cref="https://github.com/route4me/route4me-json-schemas/blob/master/Address.dtd"/> </para>
     /// </summary>
     [DataContract]
-    public sealed class Address
+    public class Address : GenericParameters
     {
         /// <summary>
         /// Route destination ID
@@ -206,28 +207,28 @@ namespace Route4MeSDK.DataTypes
         /// The data will be visible on the manifest, website, and mobile apps.
         /// </summary>
         [DataMember(Name = "customer_po", EmitDefaultValue = false)]
-        public object CustomerPo { get; set; }
+        public string CustomerPo { get; set; }
 
         /// <summary>
         /// Pass-through data about this route destination.
         /// The data will be visible on the manifest, website, and mobile apps.
         /// </summary>
         [DataMember(Name = "invoice_no", EmitDefaultValue = false)]
-        public object InvoiceNo { get; set; }
+        public string InvoiceNo { get; set; }
 
         /// <summary>
         /// Pass-through data about this route destination.
         /// The data will be visible on the manifest, website, and mobile apps.
         /// </summary>
         [DataMember(Name = "reference_no", EmitDefaultValue = false)]
-        public object ReferenceNo { get; set; }
+        public string ReferenceNo { get; set; }
 
         /// <summary>
         /// Pass-through data about this route destination.
         /// The data will be visible on the manifest, website, and mobile apps.
         /// </summary>
         [DataMember(Name = "order_no", EmitDefaultValue = false)]
-        public object OrderNo { get; set; }
+        public string OrderNo { get; set; }
 
         /// <summary>
         /// The address order ID
@@ -239,32 +240,32 @@ namespace Route4MeSDK.DataTypes
         /// The address cargo weight
         /// </summary>
         [DataMember(Name = "weight", EmitDefaultValue = false)]
-        public object Weight { get; set; }
+        public double? Weight { get; set; }
 
         /// <summary>
         /// The address cost
         /// </summary>
         [DataMember(Name = "cost", EmitDefaultValue = false)]
-        public object Cost { get; set; }
+        public double? Cost { get; set; }
 
         /// <summary>
         /// The address revenue
         /// </summary>
         [DataMember(Name = "revenue", EmitDefaultValue = false)]
-        public object Revenue { get; set; }
+        public double? Revenue { get; set; }
 
         /// <summary>
         /// The cubic volume that this destination/order/line-item consumes/contains.
         /// This is how much space it will take up on a vehicle.
         /// </summary>
         [DataMember(Name = "cube", EmitDefaultValue = false)]
-        public object Cube { get; set; }
+        public double? Cube { get; set; }
 
         /// <summary>
         /// The number of pieces/palllets that this destination/order/line-item consumes/contains on a vehicle.
         /// </summary>
         [DataMember(Name = "pieces", EmitDefaultValue = false)]
-        public object Pieces { get; set; }
+        public int? Pieces { get; set; }
 
         /// <summary>
         /// Pass-through data about this route destination.
@@ -272,7 +273,7 @@ namespace Route4MeSDK.DataTypes
         /// Also used to email clients when vehicles are approaching (future capability).
         /// </summary>
         [DataMember(Name = "email", EmitDefaultValue = false)]
-        public object Email { get; set; }
+        public string Email { get; set; }
 
         /// <summary>
         /// Pass-through data about this route destination.
@@ -280,7 +281,7 @@ namespace Route4MeSDK.DataTypes
         /// Also used to send SMS messages to clients when vehicles are approaching (future capability).
         /// </summary>
         [DataMember(Name = "phone", EmitDefaultValue = false)]
-        public object Phone { get; set; }
+        public string Phone { get; set; }
 
         /// <summary>
         /// The number of notes that are already associated with this address on the route.
