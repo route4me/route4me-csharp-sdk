@@ -156,7 +156,7 @@ namespace Route4MeSDK.Examples
       // Set parameters
       RouteParameters parameters = new RouteParameters()
       {
-        AlgorithmType = AlgorithmType.CVRP_TW_MD,
+        AlgorithmType = AlgorithmType.CVRP_TW_SD,
         StoreRoute = false,
         RouteName = "Single Driver Multiple TimeWindows 12 Stops",
 
