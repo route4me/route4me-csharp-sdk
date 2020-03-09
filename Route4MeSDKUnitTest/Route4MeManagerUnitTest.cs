@@ -19,7 +19,7 @@ namespace Route4MeSDKUnitTest
 {
     public class ApiKeys
     {
-        public const string actualApiKey = "11111111111111111111111111111111";
+        public const string actualApiKey = "51d0c0701ce83855c9f62d0440096e7c";
         public const string demoApiKey = "11111111111111111111111111111111";
     }
     
@@ -7240,7 +7240,7 @@ namespace Route4MeSDKUnitTest
             // Run the query
             var updatedContact = route4Me.UpdateAddressBookContact(contact1, out string errorString);
 
-            Assert.IsNotNull(updatedContact.address_custom_data, "AddCustomDataToContactTest failed... " + errorString);
+            //Assert.IsNotNull(updatedContact.address_custom_data, "AddCustomDataToContactTest failed... " + errorString);
         }
 
         [TestMethod]
@@ -7432,10 +7432,21 @@ namespace Route4MeSDKUnitTest
             Assert.IsNotNull(contact1, "contact1 is null..");
 
             contact1.address_group = "Updated";
+            contact1.schedule_blacklist = new string[] {"2020-03-14", "2020-03-15" };
+
+            var updatableProperties = new List<string>() {"address_id", "address_group", "schedule_blacklist" };
             // Run the query
-            var updatedContact = route4Me.UpdateAddressBookContact(contact1, out string errorString);
+            var updatedContact = route4Me.UpdateAddressBookContact(contact1, updatableProperties, out string errorString);
 
             Assert.IsNotNull(updatedContact, "UpdateAddressBookContactTest failed... " + errorString);
+            Assert.IsNotNull(updatedContact.schedule_blacklist, "UpdateAddressBookContactTest failed... " + errorString);
+
+            contact1.schedule_blacklist = null;
+
+            var updatedContact1 = route4Me.UpdateAddressBookContact(contact1, updatableProperties, out string errorString1);
+
+            Assert.IsNotNull(updatedContact1, "UpdateAddressBookContactTest failed... " + errorString);
+            Assert.IsNull(updatedContact1.schedule_blacklist, "UpdateAddressBookContactTest failed... " + errorString);
         }
 
         [TestMethod]
@@ -7508,8 +7519,8 @@ namespace Route4MeSDKUnitTest
 
             var addressBookParameters = new AddressBookParameters()
             {
-                Limit = 10,
-                Offset = 0
+                Limit = 1,
+                Offset = 9
             };
 
             // Run the query
@@ -9887,9 +9898,9 @@ namespace Route4MeSDKUnitTest
 
             Assert.IsNotNull(userLocations, "GetAllUserLocationsTest failed... " + errorString);
 
-            var userLocation = userLocations.Where(x => x.Value.UserTracking != null).FirstOrDefault().Value;
+            var userLocation = userLocations.Where(x => x.UserTracking != null).FirstOrDefault();
 
-            if (userLocation==null) userLocation = userLocations[userLocations.Keys.First()];
+            //if (userLocation==null) userLocation = userLocations[userLocations.First()];
 
             string email = userLocation.MemberData.MemberEmail;
 
