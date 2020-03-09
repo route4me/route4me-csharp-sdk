@@ -80,6 +80,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataContractResolver.cs" />
     <Compile Include="DataTypes\AddressBookGroupFilter.cs" />
     <Compile Include="Consts.cs" />
     <Compile Include="DataTypes\Activity.cs" />
@@ -127,6 +128,7 @@
     <Compile Include="DataTypes\OrderCustomFieldCreateResponse.cs" />
     <Compile Include="DataTypes\OrdersResponse.cs" />
     <Compile Include="DataTypes\Route.cs" />
+    <Compile Include="DataTypes\Route4MeDynamicClass.cs" />
     <Compile Include="DataTypes\RouteParameters.cs" />
     <Compile Include="DataTypes\RouteResponse.cs" />
     <Compile Include="DataTypes\Schedule.cs" />

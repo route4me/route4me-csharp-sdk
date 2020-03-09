@@ -175,7 +175,7 @@ namespace Route4MeSDK.DataTypes
                     Dictionary<string, string> v2 = new Dictionary<string, string>();
                     foreach (KeyValuePair<string, string> kv1 in v1)
                     {
-                        if (kv1.Key != null)
+                        if (kv1.Key != null && kv1.Key!="")
                         {
                             if (kv1.Value != null) v2.Add(kv1.Key, kv1.Value.ToString()); else v2.Add(kv1.Key, "");
                         }
@@ -197,7 +197,7 @@ namespace Route4MeSDK.DataTypes
                     Dictionary<string, string> v2 = new Dictionary<string, string>();
                     foreach (KeyValuePair<string, string> kv1 in v1)
                     {
-                        if (kv1.Key != null)
+                        if (kv1.Key != null && kv1.Key!="")
                         {
                             if (kv1.Value != null) v2.Add(kv1.Key, kv1.Value.ToString()); else v2.Add(kv1.Key, "");
                         }
@@ -207,6 +207,7 @@ namespace Route4MeSDK.DataTypes
                 }
             }
         }
+
         private Dictionary<string, string> _address_custom_data;
 
         /// <summary>
@@ -279,31 +280,31 @@ namespace Route4MeSDK.DataTypes
         /// The cubic volume of the contact's cargo.
         /// </summary>
         [DataMember(Name = "address_cube", EmitDefaultValue = false)]
-        public object AddressCube { get; set; }
+        public double? AddressCube { get; set; }
 
         /// <summary>
         /// The number of pieces/palllets that this destination/order/line-item consumes/contains on a vehicle.
         /// </summary>
         [DataMember(Name = "address_pieces", EmitDefaultValue = false)]
-        public object AddressPieces { get; set; }
+        public int? AddressPieces { get; set; }
 
         /// <summary>
         /// The reference number of the address.
         /// </summary>
         [DataMember(Name = "address_reference_no", EmitDefaultValue = false)]
-        public object AddressReferenceNo { get; set; }
+        public string AddressReferenceNo { get; set; }
 
         /// <summary>
         /// The revenue from the contact.
         /// </summary>
         [DataMember(Name = "address_revenue", EmitDefaultValue = false)]
-        public object AddressRevenue { get; set; }
+        public double? AddressRevenue { get; set; }
 
         /// <summary>
         /// The weight of the contact's cargo.
         /// </summary>
         [DataMember(Name = "address_weight", EmitDefaultValue = false)]
-        public object AddressWeight { get; set; }
+        public double? AddressWeight { get; set; }
 
         /// <summary>
         /// If present, the priority will sequence addresses in all the optimal routes so that
@@ -317,6 +318,6 @@ namespace Route4MeSDK.DataTypes
         /// The customer purchase order of the contact.
         /// </summary>
         [DataMember(Name = "address_customer_po", EmitDefaultValue = false)]
-        public object AddressCustomerPo { get; set; }
+        public string AddressCustomerPo { get; set; }
     }
 }

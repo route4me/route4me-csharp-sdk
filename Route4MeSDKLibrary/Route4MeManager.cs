@@ -13,6 +13,8 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Dynamic;
+using Newtonsoft.Json.Linq;
 
 namespace Route4MeSDK
 {
@@ -418,11 +420,19 @@ namespace Route4MeSDK
 																   HttpMethodType.Get,
 																   out errorString);
 
-            return (response != null && response.Success) 
-                ? (response.OptimizationProblemId != null 
-                  ? this.GetRouteId(response.OptimizationProblemId, out errorString) : null)
+            //return (response != null && response.Success) 
+            //    ? (response.OptimizationProblemId != null 
+            //      ? this.GetRouteId(response.OptimizationProblemId, out errorString) : null)
+            //    : null;
+
+            // TO DO: response.OptimizationProblemId in fact is route ID - it's bug. Inform Igor, after fixing restore above code.
+            var routeId = (response != null && response.Success)
+                ? (response.OptimizationProblemId != null
+                  ? response.OptimizationProblemId : null)
                 : null;
-		}
+
+            return routeId;
+        }
 
         /// <summary>
         /// The response from the route deleting process
@@ -1028,9 +1038,9 @@ namespace Route4MeSDK
         /// <param name="parameters"></param>
         /// <param name="errorString"></param>
         /// <returns></returns>
-        public Dictionary<string,UserLocation> GetUserLocations(GenericParameters parameters, out string errorString)
+        public UserLocation[] GetUserLocations(GenericParameters parameters, out string errorString)
         {
-            var userLocations = GetJsonObjectFromAPI<Dictionary<string, UserLocation>>(parameters, 
+            var userLocations = GetJsonObjectFromAPI<UserLocation[]>(parameters, 
                 R4MEInfrastructureSettings.UserLocation, 
                 HttpMethodType.Get, 
                 false,out errorString);
@@ -2168,6 +2178,7 @@ namespace Route4MeSDK
 
         /// <summary>
         /// Updates an address book contact.
+        /// Note: this method ignores properties with null values.
         /// </summary>
         /// <param name="contact">The AddressBookContact type object as input parameters</param>
         /// <param name="errorString">out: Error as string</param>
@@ -2180,6 +2191,33 @@ namespace Route4MeSDK
 											HttpMethodType.Put,
 											out errorString);
 		}
+
+        /// <summary>
+        /// Updates an address book contact.
+        /// Used in case fo sending specified, limited number of the Contact parameters.
+        /// </summary>
+        /// <param name="contact">Address Book Contact</param>
+        /// <param name="updatableProperties">List of the properties which should be updated - 
+        /// despite are they null or not</param>
+        /// <param name="errorString"></param>
+        /// <returns></returns>
+        public AddressBookContact UpdateAddressBookContact(AddressBookContact contact, List<string> updatableProperties, out string errorString)
+        {
+            var myDynamicClass = new Route4MeDynamicClass();
+            myDynamicClass.CopyPropertiesFromClass(contact, updatableProperties, out string errorString0);
+
+            var jsonString = fastJSON.JSON.ToJSON(myDynamicClass.DynamicProperties);
+
+            var genParams = new GenericParameters();
+
+            var content = new StringContent(jsonString, System.Text.Encoding.UTF8, "application/json");
+
+            var response = GetJsonObjectFromAPI<AddressBookContact>
+                (genParams, R4MEInfrastructureSettings.AddressBook,
+                HttpMethodType.Put, content, out errorString);
+
+            return response;
+        }
 
         /// <summary>
         /// The request parameter for the address book contacts removing process.
@@ -3421,8 +3459,14 @@ namespace Route4MeSDK
 								}
 								else
 								{
-									string jsonString = R4MeUtils.SerializeObjectToJson(optimizationParameters);
-									content = new StringContent(jsonString);
+                                    //bool ignoreNullValues = httpMethod == HttpMethodType.Put ? false : true;
+
+                                    //string jsonString = httpMethod == HttpMethodType.Put 
+                                    //    ? R4MeUtils.SerializeObjectToJson(optimizationParameters, false) 
+                                    //    : R4MeUtils.SerializeObjectToJson(optimizationParameters);
+                                    string jsonString = R4MeUtils.SerializeObjectToJson(optimizationParameters);
+
+                                    content = new StringContent(jsonString);
 									content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 								}
 
