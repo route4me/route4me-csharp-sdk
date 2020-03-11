@@ -35,7 +35,8 @@ namespace Route4MeSDK
 		private readonly TimeSpan m_DefaultTimeOut = new TimeSpan(TimeSpan.TicksPerMinute * 30); // Default timeout - 30 minutes
 																								 //private bool m_isTestMode = false;
 
-		#endregion
+		private bool parseWithNewtonJson;
+        #endregion
 
 		#region Methods
 
@@ -44,7 +45,9 @@ namespace Route4MeSDK
 		public Route4MeManager(string apiKey)
 		{
 			m_ApiKey = apiKey;
-		}
+            parseWithNewtonJson = false;
+
+        }
 
         #endregion
 
@@ -2042,7 +2045,7 @@ namespace Route4MeSDK
             /// <value>Number of the returned address book contacts</value>
 			[DataMember(Name = "total", IsRequired = false)]
 			public uint total { get; set; }
-		}
+        }
 
         /// <summary>
         /// Returns address book contacts
@@ -2074,6 +2077,8 @@ namespace Route4MeSDK
         /// <returns>The array of the address book contacts</returns>
 		public AddressBookContact[] GetAddressBookLocation(AddressBookParameters addressBookParameters, out uint total, out string errorString)
 		{
+            parseWithNewtonJson = true;
+
             if (addressBookParameters.AddressId!=null && !addressBookParameters.AddressId.Contains(","))
             {
                 addressBookParameters.AddressId += "," + addressBookParameters.AddressId;
@@ -2169,6 +2174,8 @@ namespace Route4MeSDK
         /// <returns>The AddressBookContact type object</returns>
 		public AddressBookContact AddAddressBookContact(AddressBookContact contact, out string errorString)
 		{
+            parseWithNewtonJson = true;
+
 			contact.PrepareForSerialization();
             return GetJsonObjectFromAPI<AddressBookContact>(contact,
 											R4MEInfrastructureSettings.AddressBook,
@@ -3440,9 +3447,22 @@ namespace Route4MeSDK
 
 								if (response.IsCompleted)
 								{
-									result = isString ? response.Result.ReadString() as T :
-														response.Result.ReadObject<T>();
-								}
+                                    //result = isString ? response.Result.ReadString() as T :
+                                    //					response.Result.ReadObject<T>();
+
+                                    if (isString)
+                                    {
+                                        result = response.Result.ReadString() as T;
+                                    }
+                                    else
+                                    {
+                                        result = parseWithNewtonJson
+                                            ? response.Result.ReadObjectNew<T>()
+                                            : response.Result.ReadObject<T>();
+
+                                        parseWithNewtonJson = false;
+                                    }
+                                }
 
 								break;
 							}
@@ -3464,6 +3484,7 @@ namespace Route4MeSDK
                                     //string jsonString = httpMethod == HttpMethodType.Put 
                                     //    ? R4MeUtils.SerializeObjectToJson(optimizationParameters, false) 
                                     //    : R4MeUtils.SerializeObjectToJson(optimizationParameters);
+                                    //string jsonString = R4MeUtils.SerializeObjectToJson(optimizationParameters);
                                     string jsonString = R4MeUtils.SerializeObjectToJson(optimizationParameters);
 
                                     content = new StringContent(jsonString);
@@ -3507,8 +3528,18 @@ namespace Route4MeSDK
 
 									if (streamTask.IsCompleted)
 									{
-										result = isString ? streamTask.Result.ReadString() as T :
-															streamTask.Result.ReadObject<T>();
+                                        if (isString)
+                                        {
+                                            result = streamTask.Result.ReadString() as T;
+                                        }
+                                        else
+                                        {
+                                            result = parseWithNewtonJson  
+                                                ? streamTask.Result.ReadObjectNew<T>() 
+                                                : streamTask.Result.ReadObject<T>();
+
+                                            parseWithNewtonJson = false;
+                                        }
 									}
 								}
 								else

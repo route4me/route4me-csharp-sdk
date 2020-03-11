@@ -30,6 +30,22 @@ namespace Route4MeSDK
             return (T)parser.ReadObject(stream);
         }
 
+        public static T ReadObjectNew<T>(this Stream stream)
+        {
+            var jsonSettings = new JsonSerializerSettings()
+            {
+                //NullValueHandling = ignoreNullValues ? NullValueHandling.Ignore : NullValueHandling.Include,
+                //DefaultValueHandling = DefaultValueHandling.Include,
+                ContractResolver = new DataContractResolver()
+            };
+
+
+            StreamReader reader = new StreamReader(stream);
+            string text = reader.ReadToEnd();
+
+            return JsonConvert.DeserializeObject<T>(text, jsonSettings);
+        }
+
         /// <summary>
         /// Reads a stream to a string
         /// </summary>
@@ -60,7 +76,16 @@ namespace Route4MeSDK
             using (var memoryStream = new MemoryStream())
             {
                 if (obj == null) return result;
-                writer.WriteObject(memoryStream, obj);
+                try
+                {
+                    writer.WriteObject(memoryStream, obj);
+                }
+                catch (Exception ex)
+                {
+                    result = SerializeObjectToJson(obj, true);
+                    return result;
+                }
+                
 
                 result = Encoding.UTF8.GetString(memoryStream.ToArray());
             }
@@ -68,6 +93,12 @@ namespace Route4MeSDK
             return result;
         }
 
+        /// <summary>
+        /// Serializes an object with/without null values.
+        /// </summary>
+        /// <param name="obj">An object</param>
+        /// <param name="ignoreNullValues">If true, the null values will be ignored</param>
+        /// <returns>Serialized JSON string</returns>
         public static string SerializeObjectToJson(object obj, bool ignoreNullValues)
         {
             var jsonSettings = new JsonSerializerSettings()
