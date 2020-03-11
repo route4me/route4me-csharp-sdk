@@ -1,4 +1,6 @@
-﻿using Route4MeSDK.QueryTypes;
+﻿using Newtonsoft.Json.Linq;
+using Route4MeSDK.QueryTypes;
+using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
@@ -160,55 +162,41 @@ namespace Route4MeSDK.DataTypes
         /// An array of the contact's custom field-value pairs.
         /// </summary>
         [DataMember(Name = "address_custom_data", EmitDefaultValue = false)]
-        public Dictionary<string, string> address_custom_data
+        public object address_custom_data
         {
             get
             {
-                if (_address_custom_data == null)
-                {
-                    return null;
-                }
-                else
-                {
-                    var v1 = (Dictionary<string, string>)_address_custom_data;
-
-                    Dictionary<string, string> v2 = new Dictionary<string, string>();
-                    foreach (KeyValuePair<string, string> kv1 in v1)
-                    {
-                        if (kv1.Key != null && kv1.Key!="")
-                        {
-                            if (kv1.Value != null) v2.Add(kv1.Key, kv1.Value.ToString()); else v2.Add(kv1.Key, "");
-                        }
-                        else continue;
-                    }
-
-                    return v2;
-                }
+                return _address_custom_data;
             }
             set
             {
-                if (value == null)
+                try
                 {
-                    _address_custom_data = null;
-                }
-                else
-                {
-                    var v1 = (Dictionary<string, string>)value;
-                    Dictionary<string, string> v2 = new Dictionary<string, string>();
-                    foreach (KeyValuePair<string, string> kv1 in v1)
+                    if (value == null || ((object)value).GetType() == typeof(Array))
                     {
-                        if (kv1.Key != null && kv1.Key!="")
-                        {
-                            if (kv1.Value != null) v2.Add(kv1.Key, kv1.Value.ToString()); else v2.Add(kv1.Key, "");
-                        }
-                        else continue;
+                        _address_custom_data = null;
                     }
-                    _address_custom_data = v2;
+                    else
+                    {
+                        if (((object)value).GetType() == typeof(JObject))
+                        {
+                            _address_custom_data = ((JObject)value).ToObject<Dictionary<string, string>>();
+                        }
+                        else if (((object)value).GetType() == typeof(Dictionary<string, string>))
+                        {
+                            if (value == null || ((object)value).GetType() != typeof(Array))
+                                _address_custom_data = value;
+                        }
+                    }
+                }
+                catch (System.Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
                 }
             }
         }
 
-        private Dictionary<string, string> _address_custom_data;
+        private object _address_custom_data;
 
         /// <summary>
         /// An array of the contact's schedules.
@@ -319,5 +307,40 @@ namespace Route4MeSDK.DataTypes
         /// </summary>
         [DataMember(Name = "address_customer_po", EmitDefaultValue = false)]
         public string AddressCustomerPo { get; set; }
+
+        [OnSerializing()]
+        internal void OnSerializingMethod(StreamingContext context)
+        {
+            if (_address_custom_data == null) return;
+
+            if (_address_custom_data.GetType() != typeof(Dictionary<string, string>))
+            {
+                _address_custom_data = null;
+            }
+        }
+
+        [OnDeserializingAttribute]
+        internal void OnDeserializingMethod(StreamingContext context)
+        {
+            System.Diagnostics.Trace.WriteLine("OnDeserializingMethod: " + this.GetType().ToString());
+
+            //if (_address_custom_data == null) return;
+
+            //if (_address_custom_data.GetType() != typeof(Dictionary<string, string>))
+            //{
+            //    _address_custom_data = null;
+            //}
+        }
+
+        [OnDeserializedAttribute]
+        internal void OnDeserializedMethod(StreamingContext context)
+        {
+            //if (_address_custom_data == null) return;
+
+            //if (_address_custom_data.GetType() != typeof(Dictionary<string, string>))
+            //{
+            //    _address_custom_data = null;
+            //}
+        }
     }
 }

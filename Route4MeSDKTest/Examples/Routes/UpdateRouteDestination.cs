@@ -45,7 +45,7 @@ namespace Route4MeSDK.Examples
                     };
                     oAddress.Alias = "Steele's - MONTICELLO";
                     oAddress.Cost = 5;
-                    oAddress.InvoiceNo = 945825;
+                    oAddress.InvoiceNo = "945825";
                     // etc fill the necessary address parameters
                     oAddress.CustomFields = new Dictionary<string,string>{{"Test Custom Fields","Test custom Data"}};
 
