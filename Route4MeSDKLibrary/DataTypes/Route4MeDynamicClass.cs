@@ -70,7 +70,8 @@ namespace Route4MeSDK.DataTypes
 
             foreach (var propertyName in propertyNames)
             {
-                _dynamicProperties.Add(propertyName, r4mObject.GetType().GetProperty(propertyName).GetValue(r4mObject));
+                if (!_dynamicProperties.ContainsKey(propertyName)) 
+                    _dynamicProperties.Add(propertyName, r4mObject.GetType().GetProperty(propertyName).GetValue(r4mObject));
             }
         }
     }

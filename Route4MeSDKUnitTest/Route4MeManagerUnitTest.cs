@@ -7433,8 +7433,15 @@ namespace Route4MeSDKUnitTest
 
             contact1.address_group = "Updated";
             contact1.schedule_blacklist = new string[] {"2020-03-14", "2020-03-15" };
+            contact1.address_custom_data = new Dictionary<string, string>
+            {
+                {"key1", "value1" }, {"key2", "value2" }
+            };
 
-            var updatableProperties = new List<string>() {"address_id", "address_group", "schedule_blacklist" };
+            var updatableProperties = new List<string>() 
+            {
+                "address_id", "address_group", "schedule_blacklist", "address_custom_data"
+            };
             // Run the query
             var updatedContact = route4Me.UpdateAddressBookContact(contact1, updatableProperties, out string errorString);
 
@@ -7442,6 +7449,7 @@ namespace Route4MeSDKUnitTest
             Assert.IsNotNull(updatedContact.schedule_blacklist, "UpdateAddressBookContactTest failed... " + errorString);
 
             contact1.schedule_blacklist = null;
+            contact1.address_custom_data = null;
 
             var updatedContact1 = route4Me.UpdateAddressBookContact(contact1, updatableProperties, out string errorString1);
 
@@ -7519,8 +7527,8 @@ namespace Route4MeSDKUnitTest
 
             var addressBookParameters = new AddressBookParameters()
             {
-                Limit = 1,
-                Offset = 9
+                Limit = 5,
+                Offset = 7
             };
 
             // Run the query

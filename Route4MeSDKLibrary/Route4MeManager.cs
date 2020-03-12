@@ -2210,6 +2210,8 @@ namespace Route4MeSDK
         /// <returns></returns>
         public AddressBookContact UpdateAddressBookContact(AddressBookContact contact, List<string> updatableProperties, out string errorString)
         {
+            parseWithNewtonJson = true;
+
             var myDynamicClass = new Route4MeDynamicClass();
             myDynamicClass.CopyPropertiesFromClass(contact, updatableProperties, out string errorString0);
 
