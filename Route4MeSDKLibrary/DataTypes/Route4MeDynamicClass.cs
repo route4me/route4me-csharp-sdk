@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Dynamic;
 using System.Text;
+using System.Reflection;
+using System.Linq;
 
 namespace Route4MeSDK.DataTypes
 {
@@ -70,8 +72,19 @@ namespace Route4MeSDK.DataTypes
 
             foreach (var propertyName in propertyNames)
             {
-                if (!_dynamicProperties.ContainsKey(propertyName)) 
-                    _dynamicProperties.Add(propertyName, r4mObject.GetType().GetProperty(propertyName).GetValue(r4mObject));
+                var propInfo = r4mObject?.GetType()?.GetProperty(propertyName) ?? null;
+                if (propInfo == null) continue;
+
+                var customAttribute = propInfo?.CustomAttributes?.First() ?? null;
+                if (customAttribute == null) continue;
+
+                var typedValue = customAttribute?.NamedArguments?.FirstOrDefault().TypedValue.Value?.ToString() ?? null;
+                if (typedValue == null) continue;
+
+                if (typedValue == "IgnoreDataMemberAttribute") continue;
+
+                if (!_dynamicProperties.ContainsKey(typedValue)) 
+                    _dynamicProperties.Add(typedValue, r4mObject.GetType().GetProperty(propertyName).GetValue(r4mObject));
             }
         }
     }

@@ -71,12 +71,14 @@ namespace Route4MeSDK.DataTypes
         /// Timeframe violation time
         /// </summary>
         [DataMember(Name = "timeframe_violation_time", EmitDefaultValue = false)]
+        [ReadOnly(true)]
         public long? TimeframeViolationTime { get; set; }
 
         /// <summary>
         /// Timeframe violation rate
         /// </summary>
         [DataMember(Name = "timeframe_violation_rate", EmitDefaultValue = false)]
+        [ReadOnly(true)]
         public double? TimeframeViolationRate { get; set; }
 
         /// <summary>
@@ -119,24 +121,28 @@ namespace Route4MeSDK.DataTypes
         /// True if the address is geocoded.
         /// </summary>
         [DataMember(Name = "geocoded", EmitDefaultValue = false)]
+        [ReadOnly(true)]
         public bool? Geocoded { get; set; }
 
         /// <summary>
         /// The preferred geocoding number.
         /// </summary>
         [DataMember(Name = "preferred_geocoding", EmitDefaultValue = false)]
+        [ReadOnly(true)]
         public int? PreferredGeocoding { get; set; }
 
         /// <summary>
         /// True if geocoding failed.
         /// </summary>
         [DataMember(Name = "failed_geocoding", EmitDefaultValue = false)]
+        [ReadOnly(true)]
         public bool? FailedGeocoding { get; set; }
 
         /// <summary>
         /// An array containing Geocoding objects.
         /// </summary>
         [DataMember(Name = "geocodings", EmitDefaultValue = false)]
+        [ReadOnly(true)]
         public Geocoding[] Geocodings { get; set; }
 
         /// <summary>
@@ -293,51 +299,60 @@ namespace Route4MeSDK.DataTypes
         /// Server-side generated amount of km/miles that it will take to get to the next location on the route.
         /// </summary>
         [DataMember(Name = "drive_time_to_next_destination", EmitDefaultValue = false)]
+        [ReadOnly(true)]
         public long? DriveTimeToNextDestination { get; set; }
 
         /// <summary>
         /// Abnormal traffic time to next destination.
         /// </summary>
         [DataMember(Name = "abnormal_traffic_time_to_next_destination", EmitDefaultValue = false)]
+        [ReadOnly(true)]
         public long? AbnormalTrafficTimeToNextDestination { get; set; }
 
         /// <summary>
         /// Uncongested time to next destination.
         /// </summary>
         [DataMember(Name = "uncongested_time_to_next_destination", EmitDefaultValue = false)]
+        [ReadOnly(true)]
         public long? UncongestedTimeToNextDestination { get; set; }
 
         /// <summary>
         /// Traffic time to next destination.
         /// </summary>
         [DataMember(Name = "traffic_time_to_next_destination", EmitDefaultValue = false)]
+        [ReadOnly(true)]
         public long? TrafficTimeToNextDestination { get; set; }
 
         /// <summary>
         /// Server-side generated amount of seconds that it will take to get to the next location.
         /// </summary>
         [DataMember(Name = "distance_to_next_destination", EmitDefaultValue = false)]
+        [ReadOnly(true)]
         public double? DistanceToNextDestination { get; set; }
 
         [DataMember(Name = "udu_distance_to_next_destination", EmitDefaultValue = false)]
+        [ReadOnly(true)]
         public double? UduDistanceToNextDestination { get; set; }
 
         /// <summary>
         /// Generated time window start.
         /// </summary>
         [DataMember(Name = "generated_time_window_start", EmitDefaultValue = false)]
+        [ReadOnly(true)]
         public long? GeneratedTimeWindowStart { get; set; }
 
         /// <summary>
         /// Estimated time window end based on the optimization engine, after all the sequencing has been completed.
         /// </summary>
         [DataMember(Name = "generated_time_window_end", EmitDefaultValue = false)]
+        [ReadOnly(true)]
         public long? GeneratedTimeWindowEnd { get; set; }
 
         /// <summary>
         /// The unique socket channel name which should be used to get real time alerts.
         /// </summary>
         [DataMember(Name = "channel_name", EmitDefaultValue = false)]
+        [ReadOnly(true)]
         public string ChannelName { get; set; }
 
         /// <summary>
@@ -368,42 +383,49 @@ namespace Route4MeSDK.DataTypes
         /// Geofence detected visited timestamp
         /// </summary>
         [DataMember(Name = "geofence_detected_visited_timestamp", EmitDefaultValue = false)]
+        [ReadOnly(true)]
         public long? geofence_detected_visited_timestamp { get; set; }
 
         /// <summary>
         /// Geofence detected departed timestamp
         /// </summary>
         [DataMember(Name = "geofence_detected_departed_timestamp", EmitDefaultValue = false)]
+        [ReadOnly(true)]
         public long? geofence_detected_departed_timestamp { get; set; }
 
         /// <summary>
         /// Geofence detected service time
         /// </summary>
         [DataMember(Name = "geofence_detected_service_time", EmitDefaultValue = false)]
+        [ReadOnly(true)]
         public long? geofence_detected_service_time { get; set; }
 
         /// <summary>
         /// Geofence detected visited latitude
         /// </summary>
         [DataMember(Name = "geofence_detected_visited_lat", EmitDefaultValue = false)]
+        [ReadOnly(true)]
         public double? geofence_detected_visited_lat { get; set; }
 
         /// <summary>
         /// Geofence detected visited longitude
         /// </summary>
         [DataMember(Name = "geofence_detected_visited_lng", EmitDefaultValue = false)]
+        [ReadOnly(true)]
         public double? geofence_detected_visited_lng { get; set; }
 
         /// <summary>
         /// Geofence detected departed latitude
         /// </summary>
         [DataMember(Name = "geofence_detected_departed_lat", EmitDefaultValue = false)]
+        [ReadOnly(true)]
         public double? geofence_detected_departed_lat { get; set; }
 
         /// <summary>
         /// Geofence detected departed longitude
         /// </summary>
         [DataMember(Name = "geofence_detected_departed_lng", EmitDefaultValue = false)]
+        [ReadOnly(true)]
         public double? geofence_detected_departed_lng { get; set; }
 
         /// <summary>
@@ -450,6 +472,7 @@ namespace Route4MeSDK.DataTypes
         /// The address custom fields in JSON format.
         /// </summary>
         [DataMember(Name = "custom_fields_str_json", EmitDefaultValue = false)]
+        [ReadOnly(true)]
         public string CustomFieldsStrJson { get; set; }
 
         /// <summary>
@@ -462,24 +485,28 @@ namespace Route4MeSDK.DataTypes
         /// The custom fields configuration in JSON format.
         /// </summary>
         [DataMember(Name = "custom_fields_config_str_json", EmitDefaultValue = false)]
+        [ReadOnly(true)]
         public string CustomFieldsConfigStrJson { get; set; }
 
         /// <summary>
         /// System-wide unique code, which permits end-users (recipients) to track the status of their order.
         /// </summary>
         [DataMember(Name = "tracking_number", EmitDefaultValue = false)]
+        [ReadOnly(true)]
         public string tracking_number { get; set; }
 
         /// <summary>
         /// Wait time to next destination.
         /// </summary>
         [DataMember(Name = "wait_time_to_next_destination", EmitDefaultValue = false)]
+        [ReadOnly(true)]
         public long? WaitTimeToNextDestination { get; set; }
 
         /// <summary>
         /// Manifest of a route address.
         /// </summary>
         [DataMember(Name = "manifest", EmitDefaultValue = false)]
+        [ReadOnly(true)]
         public AddressManifest Manifest { get; set; }
     }
 }

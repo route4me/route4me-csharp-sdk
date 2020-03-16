@@ -371,27 +371,110 @@ namespace Route4MeSDK
         /// Update route by changed DataObjectRoute object directly.
         /// </summary>
         /// <param name="route">A route of the DataObjectRoute type as input parameters.</param>
+        /// <param name="initialRoute">An initial route before update.</param>
         /// <param name="errorString">Returned error string in case of the processs failing</param>
         /// <returns>Updated route</returns>
-        public DataObjectRoute UpdateRoute(DataObjectRoute route, out string errorString)
+        public DataObjectRoute UpdateRoute(DataObjectRoute route, DataObjectRoute initialRoute, out string errorString)
         {
-            
-            var routeParameters = new RouteParametersQuery()
+            errorString = "";
+            parseWithNewtonJson = true;
+
+            if (initialRoute==null)
             {
-                RouteId = route.RouteID,
-                ApprovedForExecution = route.ApprovedForExecution,
-                Parameters = route.Parameters,
-                Addresses = route.Addresses
+                errorString = "An initial route should be specified";
+                return null;
+            }
+
+            var jsonParameters = new fastJSON.JSONParameters
+            {
+                AllowNonQuotedKeys = false,
+                EnableAnonymousTypes = true,
+                UseValuesOfEnums = true
             };
 
-            routeParameters.PrepareForSerialization();
+            #region // Update Route Parameters
 
-            var result = GetJsonObjectFromAPI<DataObjectRoute>(routeParameters,
-                                                          R4MEInfrastructureSettings.RouteHost,
-                                                          HttpMethodType.Put,
-                                                          out errorString);
+            if ((route?.Parameters ?? null) != null)
+            {
+                var updatableRouteParametersProperties = R4MeUtils
+                    .GetPropertiesWithDifferentValues(route.Parameters, initialRoute.Parameters, out errorString);
 
-            return result;
+                if (updatableRouteParametersProperties!=null)
+                {
+                    var dynamicRouteProperties = new Route4MeDynamicClass();
+
+                    dynamicRouteProperties.CopyPropertiesFromClass(route.Parameters, updatableRouteParametersProperties, out string errorString0);
+
+                    var routeParamsJsonString = fastJSON.JSON.ToJSON(dynamicRouteProperties.DynamicProperties, jsonParameters);
+
+                    routeParamsJsonString = String.Concat("{\"parameters\":", routeParamsJsonString, "}");
+
+                    var genParams = new RouteParametersQuery()
+                    {
+                        RouteId = initialRoute.RouteID
+                    };
+
+                    var content = new StringContent(routeParamsJsonString, System.Text.Encoding.UTF8, "application/json");
+
+                    initialRoute = GetJsonObjectFromAPI<DataObjectRoute>
+                        (genParams, R4MEInfrastructureSettings.RouteHost,
+                        HttpMethodType.Put, content, out errorString);
+                }
+            }
+
+            #endregion
+
+            if (initialRoute == null) return null;
+
+            #region // Update Route Addresses
+
+            var  lsUpdatedAddresses = new List<Address>();
+
+            if ((route?.Addresses ?? null) != null && route.Addresses.Length>0)
+            {
+                foreach (var address in route.Addresses)
+                {
+                    var initialAddress = initialRoute.Addresses
+                        .Where(x => x.RouteDestinationId == address.RouteDestinationId)
+                        .FirstOrDefault();
+                    
+                    if (initialAddress == null) continue;
+                    
+                    var updatableAddressProperties = R4MeUtils
+                    .GetPropertiesWithDifferentValues(address, initialAddress, out errorString);
+
+                    if (updatableAddressProperties != null && updatableAddressProperties.Count>0)
+                    {
+                        var dynamicAddressProperties = new Route4MeDynamicClass();
+
+                        dynamicAddressProperties.CopyPropertiesFromClass(address, updatableAddressProperties, out string errorString0);
+
+                        var addressParamsJsonString = fastJSON.JSON.ToJSON(dynamicAddressProperties.DynamicProperties, jsonParameters);
+
+                        var genParams = new RouteParametersQuery()
+                        {
+                            RouteId = initialRoute.RouteID,
+                            RouteDestinationId = address.RouteDestinationId
+                        };
+
+                        var content = new StringContent(addressParamsJsonString, System.Text.Encoding.UTF8, "application/json");
+
+                        var updatedAddress = GetJsonObjectFromAPI<Address>
+                            (genParams, R4MEInfrastructureSettings.GetAddress,
+                            HttpMethodType.Put, content, out errorString);
+
+                        if (updatedAddress != null && updatedAddress.GetType() == typeof(Address))
+                        {
+                            int addressIndex = Array.IndexOf(initialRoute.Addresses, initialAddress);
+                            if (addressIndex>-1) initialRoute.Addresses[addressIndex] = updatedAddress;
+                        }
+                    }
+                }
+            }
+
+            #endregion
+
+            return initialRoute;
         }
 
         /// <summary>
@@ -2226,6 +2309,59 @@ namespace Route4MeSDK
                 HttpMethodType.Put, content, out errorString);
 
             return response;
+        }
+
+        /// <summary>
+        /// Updates a contact by comparing initial and modified contact objects and
+        /// by updating only modified proeprties of a contact.
+        /// </summary>
+        /// <param name="contact">A address book contact object as input (modified or created virtual contact)</param>
+        /// <param name="initialContact">An initial address book contact</param>
+        /// <param name="errorString">Error string</param>
+        /// <returns>Updated address book contact</returns>
+        public AddressBookContact UpdateAddressBookContact(AddressBookContact contact, AddressBookContact initialContact, out string errorString)
+        {
+            errorString = "";
+            parseWithNewtonJson = true;
+
+            if (initialContact == null || initialContact == contact)
+            {
+                errorString = "The initial and modified contacts should not be null";
+                return null;
+            }
+
+            var jsonParameters = new fastJSON.JSONParameters
+            {
+                AllowNonQuotedKeys = false,
+                EnableAnonymousTypes = true,
+                UseValuesOfEnums = true
+            };
+
+            var updatableContactProperties = R4MeUtils
+            .GetPropertiesWithDifferentValues(contact, initialContact, out errorString);
+
+            updatableContactProperties.Add("address_id");
+
+            if (updatableContactProperties != null && updatableContactProperties.Count > 0)
+            {
+                var dynamicContactProperties = new Route4MeDynamicClass();
+
+                dynamicContactProperties.CopyPropertiesFromClass(contact, updatableContactProperties, out string errorString0);
+
+                var contactParamsJsonString = fastJSON.JSON.ToJSON(dynamicContactProperties.DynamicProperties, jsonParameters);
+
+                var genParams = new GenericParameters();
+
+                var content = new StringContent(contactParamsJsonString, System.Text.Encoding.UTF8, "application/json");
+
+                var response = GetJsonObjectFromAPI<AddressBookContact>
+                    (genParams, R4MEInfrastructureSettings.AddressBook,
+                    HttpMethodType.Put, content, out errorString);
+
+                return response;
+            }
+
+            return null;
         }
 
         /// <summary>
