@@ -246,7 +246,7 @@ namespace Route4MeSDKUnitTest
             Assert.IsNotNull(dataObject, "UpdateRouteTest failed... " + errorString);
         }
 
-        [TestMethod, Ignore]
+        [TestMethod]
         public void UpdateWholeRouteTest()
         {
             var route4Me = new Route4MeManager(c_ApiKey);
@@ -254,12 +254,15 @@ namespace Route4MeSDKUnitTest
             string routeId = tdr.SD10Stops_route_id;
             Assert.IsNotNull(routeId, "routeId_SingleDriverRoute10Stops is null...");
 
+            var initialRoute = R4MeUtils.ObjectDeepClone<DataObjectRoute>(tdr.SD10Stops_route);
+
             tdr.SD10Stops_route.ApprovedForExecution = true;
             tdr.SD10Stops_route.Parameters.RouteName += " Edited";
+            //tdr.SD10Stops_route.Parameters.VehicleId = "01A266C80EACC60705EA2F8B03A31106";
             tdr.SD10Stops_route.Addresses[1].AddressString += " Edited";
             tdr.SD10Stops_route.Parameters.Metric = Metric.Manhattan;
 
-            var dataObject = route4Me.UpdateRoute(tdr.SD10Stops_route, out string  errorString);
+            var dataObject = route4Me.UpdateRoute(tdr.SD10Stops_route, initialRoute, out string  errorString);
 
             Assert.IsNotNull(dataObject, "UpdateRouteTest failed. " + errorString);
             Assert.IsTrue(dataObject.Parameters.RouteName.Contains("Edited"), "UpdateRouteTest failed, the route name not changed.");
@@ -289,9 +292,7 @@ namespace Route4MeSDKUnitTest
                 }
             };
 
-            route4Me.UpdateRoute(routeParameters, out string errorString);
-
-            var route = route4Me.GetRoute(new RouteParametersQuery() { RouteId = routeId }, out errorString);
+            var route = route4Me.UpdateRoute(routeParameters, out string errorString);
 
             Assert.IsInstanceOfType(route.Vehilce,typeof(VehicleV4Response), "AssignVehicleToRouteTest failed... " + errorString);
         }
@@ -7437,24 +7438,92 @@ namespace Route4MeSDKUnitTest
             {
                 {"key1", "value1" }, {"key2", "value2" }
             };
+            contact1.local_time_window_start = 25400;
+            contact1.local_time_window_end = 26000;
+            contact1.AddressCube = 5;
+            contact1.AddressPieces = 6;
+            contact1.AddressRevenue = 700;
+            contact1.AddressWeight = 80;
+            contact1.AddressPriority = 9;
 
             var updatableProperties = new List<string>() 
             {
-                "address_id", "address_group", "schedule_blacklist", "address_custom_data"
+                "address_id", "address_group", "schedule_blacklist", 
+                "address_custom_data", "local_time_window_start", "local_time_window_end",
+                "AddressCube","AddressPieces","AddressRevenue","AddressWeight","AddressPriority","ConvertBooleansToInteger"
             };
             // Run the query
             var updatedContact = route4Me.UpdateAddressBookContact(contact1, updatableProperties, out string errorString);
 
             Assert.IsNotNull(updatedContact, "UpdateAddressBookContactTest failed... " + errorString);
             Assert.IsNotNull(updatedContact.schedule_blacklist, "UpdateAddressBookContactTest failed... " + errorString);
+            Assert.IsNotNull(updatedContact.local_time_window_start, "UpdateAddressBookContactTest failed... " + errorString);
+            Assert.IsNotNull(updatedContact.local_time_window_end, "UpdateAddressBookContactTest failed... " + errorString);
+            Assert.IsTrue(updatedContact.AddressCube==5, "UpdateAddressBookContactTest failed... " + errorString);
+            Assert.IsTrue(updatedContact.AddressPieces == 6, "UpdateAddressBookContactTest failed... " + errorString);
+            Assert.IsTrue(updatedContact.AddressRevenue == 700, "UpdateAddressBookContactTest failed... " + errorString);
+            Assert.IsTrue(updatedContact.AddressWeight == 80, "UpdateAddressBookContactTest failed... " + errorString);
+            Assert.IsTrue(updatedContact.AddressPriority == 9, "UpdateAddressBookContactTest failed... " + errorString);
 
             contact1.schedule_blacklist = null;
             contact1.address_custom_data = null;
+            contact1.local_time_window_start = null;
+            contact1.local_time_window_end = null;
+            contact1.AddressCube = null;
+            contact1.AddressPieces = null;
+            contact1.AddressRevenue = null;
+            contact1.AddressWeight = null;
+            contact1.AddressPriority = null;
 
             var updatedContact1 = route4Me.UpdateAddressBookContact(contact1, updatableProperties, out string errorString1);
 
             Assert.IsNotNull(updatedContact1, "UpdateAddressBookContactTest failed... " + errorString);
             Assert.IsNull(updatedContact1.schedule_blacklist, "UpdateAddressBookContactTest failed... " + errorString);
+            Assert.IsNull(updatedContact1.local_time_window_start, "UpdateAddressBookContactTest failed... " + errorString);
+            Assert.IsNull(updatedContact1.local_time_window_end, "UpdateAddressBookContactTest failed... " + errorString);
+            Assert.IsNull(updatedContact1.AddressCube, "UpdateAddressBookContactTest failed... " + errorString);
+            Assert.IsNull(updatedContact1.AddressPieces, "UpdateAddressBookContactTest failed... " + errorString);
+            Assert.IsNull(updatedContact1.AddressRevenue, "UpdateAddressBookContactTest failed... " + errorString);
+            Assert.IsNull(updatedContact1.AddressWeight, "UpdateAddressBookContactTest failed... " + errorString);
+            Assert.IsNull(updatedContact1.AddressPriority, "UpdateAddressBookContactTest failed... " + errorString);
+        }
+
+        [TestMethod]
+        public void UpdateWholeAddressBookContactTest()
+        {
+            var route4Me = new Route4MeManager(c_ApiKey);
+
+            Assert.IsNotNull(contact1, "contact1 is null..");
+
+            // Create contact clone in the memory
+            var contactClone = R4MeUtils.ObjectDeepClone<AddressBookContact>(contact1);
+
+            // Modify the parameters of the contactClone
+            contactClone.address_group = "Updated";
+            contactClone.schedule_blacklist = new string[] { "2020-03-14", "2020-03-15" };
+            contactClone.address_custom_data = new Dictionary<string, string>
+            {
+                {"key1", "value1" }, {"key2", "value2" }
+            };
+            contactClone.local_time_window_start = 25400;
+            contactClone.local_time_window_end = 26000;
+            contactClone.AddressCube = 5;
+            contactClone.AddressPieces = 6;
+            contactClone.AddressRevenue = 700;
+            contactClone.AddressWeight = 80;
+            contactClone.AddressPriority = 9;
+
+            var updatedContact = route4Me.UpdateAddressBookContact(contactClone, contact1, out string errorString);
+
+            Assert.IsNotNull(updatedContact, "UpdateAddressBookContactTest failed... " + errorString);
+            Assert.IsNotNull(updatedContact.schedule_blacklist, "UpdateAddressBookContactTest failed... " + errorString);
+            Assert.IsNotNull(updatedContact.local_time_window_start, "UpdateAddressBookContactTest failed... " + errorString);
+            Assert.IsNotNull(updatedContact.local_time_window_end, "UpdateAddressBookContactTest failed... " + errorString);
+            Assert.IsTrue(updatedContact.AddressCube == 5, "UpdateAddressBookContactTest failed... " + errorString);
+            Assert.IsTrue(updatedContact.AddressPieces == 6, "UpdateAddressBookContactTest failed... " + errorString);
+            Assert.IsTrue(updatedContact.AddressRevenue == 700, "UpdateAddressBookContactTest failed... " + errorString);
+            Assert.IsTrue(updatedContact.AddressWeight == 80, "UpdateAddressBookContactTest failed... " + errorString);
+            Assert.IsTrue(updatedContact.AddressPriority == 9, "UpdateAddressBookContactTest failed... " + errorString);
         }
 
         [TestMethod]

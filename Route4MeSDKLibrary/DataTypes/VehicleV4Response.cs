@@ -24,12 +24,6 @@ namespace Route4MeSDK.DataTypes
         public string MemberId { get; set; }
 
         /// <summary>
-        /// <c>true</c> if the vehicle is deleted.
-        /// </summary>
-        [DataMember(Name = "is_deleted", EmitDefaultValue = false)]
-        public bool? IsDeleted { get; set; }
-
-        /// <summary>
         /// Vehicle alias.
         /// </summary>
         [DataMember(Name = "vehicle_alias", EmitDefaultValue = false)]
@@ -42,12 +36,6 @@ namespace Route4MeSDK.DataTypes
         public string VehicleVin { get; set; }
 
         /// <summary>
-        /// When the vehicle was created.
-        /// </summary>
-        [DataMember(Name = "created_time", EmitDefaultValue = false)]
-        public string CreatedTime { get; set; }
-
-        /// <summary>
         /// Vehicle registration state ID.
         /// </summary>
         [DataMember(Name = "vehicle_reg_state_id", EmitDefaultValue = false)]
@@ -57,7 +45,7 @@ namespace Route4MeSDK.DataTypes
         /// Vehicle registration country ID.
         /// </summary>
         [DataMember(Name = "vehicle_reg_country_id", EmitDefaultValue = false)]
-        public int? VehicleRegCountryId { get; set; }
+        public string VehicleRegCountryId { get; set; }
 
         /// <summary>
         /// A license plate of the vehicle.
@@ -100,7 +88,7 @@ namespace Route4MeSDK.DataTypes
         /// Vehicle model year.
         /// </summary>
         [DataMember(Name = "vehicle_model_year", EmitDefaultValue = false)]
-        public int? VehicleModelYear { get; set; }
+        public string VehicleModelYear { get; set; }
 
         /// <summary>
         /// Vehicle model.
@@ -112,13 +100,13 @@ namespace Route4MeSDK.DataTypes
         /// The year, vehicle was acquired.
         /// </summary>
         [DataMember(Name = "vehicle_year_acquired", EmitDefaultValue = false)]
-        public int? VehicleYearAcquired { get; set; }
+        public string VehicleYearAcquired { get; set; }
 
         /// <summary>
         /// A cost of the new vehicle.
         /// </summary>
         [DataMember(Name = "vehicle_cost_new", EmitDefaultValue = false)]
-        public decimal? VehicleCostNew { get; set; }
+        public string VehicleCostNew { get; set; }
 
         /// <summary>
         /// If true, the vehicle was purchased new.
@@ -144,19 +132,25 @@ namespace Route4MeSDK.DataTypes
         /// A number of the vecile's axles.
         /// </summary>
         [DataMember(Name = "vehicle_axle_count", EmitDefaultValue = false)]
-        public int? VehicleAxleCount { get; set; }
+        public string VehicleAxleCount { get; set; }
+
+        /// <summary>
+        /// If true, the vehicle is operational.
+        /// </summary>
+        [DataMember(Name = "is_operational", EmitDefaultValue = false)]
+        public string IsOperational { get; set; }
 
         /// <summary>
         /// Miles per gallon in the city area.
         /// </summary>
         [DataMember(Name = "mpg_city", EmitDefaultValue = false)]
-        public int? MpgCity { get; set; }
+        public string MpgCity { get; set; }
 
         /// <summary>
         /// Miles per gallon in the highway area.
         /// </summary>
         [DataMember(Name = "mpg_highway", EmitDefaultValue = false)]
-        public int? MpgHighway { get; set; }
+        public string MpgHighway { get; set; }
 
         /// <summary>
         /// A type of the fuel.
@@ -170,13 +164,13 @@ namespace Route4MeSDK.DataTypes
         /// Height of the vehicle in the inches.
         /// </summary>
         [DataMember(Name = "height_inches", EmitDefaultValue = false)]
-        public int? HeightInches { get; set; }
+        public string HeightInches { get; set; }
 
         /// <summary>
         /// Weight of the vehicle in the pounds.
         /// </summary>
         [DataMember(Name = "weight_lb", EmitDefaultValue = false)]
-        public int? WeightLb { get; set; }
+        public string WeightLb { get; set; }
 
         /// <summary>
         /// Gets or sets the route4me telematics internal API key.
@@ -186,12 +180,6 @@ namespace Route4MeSDK.DataTypes
         /// </value>
         [DataMember(Name = "route4me_telematics_internal_api_key", EmitDefaultValue = false)]
         public string Route4meTelematicsInternalApiKey { get; set; }
-
-        /// <summary>
-        /// If true, the vehicle is operational.
-        /// </summary>
-        [DataMember(Name = "is_operational", EmitDefaultValue = false)]
-        public bool? IsOperational { get; set; }
 
         /// <summary>
         /// External telematics vehicle ID.
@@ -221,7 +209,7 @@ namespace Route4MeSDK.DataTypes
         /// If true, the vehicle has trailer.
         /// </summary>
         [DataMember(Name = "has_trailer", EmitDefaultValue = false)]
-        public bool HasTrailer { get; set; }
+        public string HasTrailer { get; set; }
 
         /// <summary>
         /// Vehicle height in inches.
@@ -233,31 +221,31 @@ namespace Route4MeSDK.DataTypes
         /// Vehicle length in inches.
         /// </summary>
         [DataMember(Name = "lengthInInches", EmitDefaultValue = false)]
-        public int? LengthInInches { get; set; }
+        public string LengthInInches { get; set; }
 
         /// <summary>
         /// Vehicle width in inches.
         /// </summary>
         [DataMember(Name = "widthInInches", EmitDefaultValue = false)]
-        public int? WidthInInches { get; set; }
+        public string WidthInInches { get; set; }
 
         /// <summary>
         /// Maximum weight per axle group in pounds.
         /// </summary>
         [DataMember(Name = "maxWeightPerAxleGroupInPounds", EmitDefaultValue = false)]
-        public int? MaxWeightPerAxleGroupInPounds { get; set; }
+        public string MaxWeightPerAxleGroupInPounds { get; set; }
 
         /// <summary>
         /// Number of the axles.
         /// </summary>
         [DataMember(Name = "numAxles", EmitDefaultValue = false)]
-        public int? NumAxles { get; set; }
+        public string NumAxles { get; set; }
 
         /// <summary>
         /// Weight in pounds.
         /// </summary>
         [DataMember(Name = "weightInPounds", EmitDefaultValue = false)]
-        public int? WeightInPounds { get; set; }
+        public string WeightInPounds { get; set; }
 
         /// <summary>
         /// Hazardous materials type.
@@ -387,30 +375,24 @@ namespace Route4MeSDK.DataTypes
         /// Vehicle length in metric unit.
         /// </summary>
         [DataMember(Name = "length_metric", EmitDefaultValue = false)]
-        public decimal? LengthMetric { get; set; }
+        public string LengthMetric { get; set; }
 
         /// <summary>
         /// Vehicle width in metric unit.
         /// </summary>
         [DataMember(Name = "width_metric", EmitDefaultValue = false)]
-        public decimal? WidthMetric { get; set; }
-
-        /// <summary>
-        /// Vehicle weight in metric unit.
-        /// </summary>
-        [DataMember(Name = "weight_metric", EmitDefaultValue = false)]
-        public decimal? WeightMetric { get; set; }
+        public string WidthMetric { get; set; }
 
         /// <summary>
         /// Maximum weight per axle group in metric unit.
         /// </summary>
         [DataMember(Name = "max_weight_per_axle_group_metric", EmitDefaultValue = false)]
-        public decimal? MaxWeightPerAxleGroupMetric { get; set; }
+        public string MaxWeightPerAxleGroupMetric { get; set; }
 
         /// <summary>
-        /// When the vehicle was removed.
+        /// Vehicle weight in metric unit.
         /// </summary>
-        [DataMember(Name = "timestamp_removed", EmitDefaultValue = false)]
-        public string TimestampRemoved { get; set; }
+        [DataMember(Name = "weight_metric", EmitDefaultValue = false)]
+        public string WeightMetric { get; set; }
     }
 }

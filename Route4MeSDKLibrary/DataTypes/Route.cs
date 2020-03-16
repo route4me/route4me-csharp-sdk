@@ -50,6 +50,7 @@ namespace Route4MeSDK.DataTypes
         /// Channel name.
         /// </summary>
         [DataMember(Name = "channel_name", EmitDefaultValue = false)]
+        [ReadOnly(true)]
         public string ChannelName { get; set; }
 
         /// <summary>
@@ -74,6 +75,7 @@ namespace Route4MeSDK.DataTypes
         /// Counter of the approved revisions
         /// </summary>
         [DataMember(Name = "approved_revisions_counter", EmitDefaultValue = false)]
+        [ReadOnly(true)]
         public int? ApprovedRevisionsCounter { get; set; }
 
         /// <summary>
@@ -92,18 +94,21 @@ namespace Route4MeSDK.DataTypes
         /// Cost of the route
         /// </summary>
         [DataMember(Name = "route_cost", EmitDefaultValue = false)]
+        [ReadOnly(true)]
         public double? RouteCost { get; set; }
 
         /// <summary>
         /// Total route revenue
         /// </summary>
         [DataMember(Name = "route_revenue", EmitDefaultValue = false)]
+        [ReadOnly(true)]
         public double? RouteRevenue { get; set; }
 
         /// <summary>
         /// Net revenue per distance unit
         /// </summary>
         [DataMember(Name = "net_revenue_per_distance_unit", EmitDefaultValue = false)]
+        [ReadOnly(true)]
         public double? NetRevenuePerDistanceUnit { get; set; }
 
         /// <summary>
@@ -148,66 +153,77 @@ namespace Route4MeSDK.DataTypes
         /// Total route duration (seconds)
         /// </summary>
         [DataMember(Name = "route_duration_sec", EmitDefaultValue = false)]
+        [ReadOnly(true)]
         public long? RouteDurationSec { get; set; }
 
         /// <summary>
         /// Planned total route duration (seconds).
         /// </summary>
         [DataMember(Name = "planned_total_route_duration", EmitDefaultValue = false)]
+        [ReadOnly(true)]
         public long? PlannedTotalRouteDuration { get; set; }
 
         /// <summary>
         /// Total wait time (seconds).
         /// </summary>
         [DataMember(Name = "total_wait_time", EmitDefaultValue = false)]
+        [ReadOnly(true)]
         public long? TotalWaitTime { get; set; }
 
         /// <summary>
         /// UDU Actual travel distance.
         /// </summary>
         [DataMember(Name = "udu_actual_travel_distance", EmitDefaultValue = false)]
+        [ReadOnly(true)]
         public decimal? UduActualTravelDistance { get; set; }
 
         /// <summary>
         /// Actual travel distance.
         /// </summary>
         [DataMember(Name = "actual_travel_distance", EmitDefaultValue = false)]
+        [ReadOnly(true)]
         public decimal? ActualTravelDistance { get; set; }
 
         /// <summary>
         /// Actual travel time (seconds).
         /// </summary>
         [DataMember(Name = "actual_travel_time", EmitDefaultValue = false)]
+        [ReadOnly(true)]
         public long? ActualTravelTime { get; set; }
 
         /// <summary>
         /// Actual footsteps.
         /// </summary>
         [DataMember(Name = "actual_footsteps", EmitDefaultValue = false)]
+        [ReadOnly(true)]
         public int? ActualFootsteps { get; set; }
 
         /// <summary>
         /// Working time.
         /// </summary>
         [DataMember(Name = "working_time", EmitDefaultValue = false)]
+        [ReadOnly(true)]
         public long? WorkingTime { get; set; }
 
         /// <summary>
         /// Driving time.
         /// </summary>
         [DataMember(Name = "driving_time", EmitDefaultValue = false)]
+        [ReadOnly(true)]
         public long? DrivingTime { get; set; }
 
         /// <summary>
         /// Idling time.
         /// </summary>
         [DataMember(Name = "idling_time", EmitDefaultValue = false)]
+        [ReadOnly(true)]
         public long? IdlingTime { get; set; }
 
         /// <summary>
         /// Idling time.
         /// </summary>
         [DataMember(Name = "paying_miles", EmitDefaultValue = false)]
+        [ReadOnly(true)]
         public decimal? PayingMiles { get; set; }
 
         /// <summary>
@@ -227,12 +243,14 @@ namespace Route4MeSDK.DataTypes
         /// Destination count.
         /// </summary>
         [DataMember(Name = "destination_count", EmitDefaultValue = false)]
+        [ReadOnly(true)]
         public int? DestinationCount { get; set; }
 
         /// <summary>
         /// Notes count in the route.
         /// </summary>
         [DataMember(Name = "notes_count", EmitDefaultValue = false)]
+        [ReadOnly(true)]
         public int? NotesCount { get; set; }
 
         /// <summary>
@@ -245,12 +263,14 @@ namespace Route4MeSDK.DataTypes
         /// Edge by edge turn-by-turn directions. See <see cref="Direction"/>
         /// </summary>
         [DataMember(Name = "directions")]
+        [ReadOnly(true)]
         public Direction[] Directions { get; set; }
 
         /// <summary>
         /// Edge-wise path to be drawn on the map See <see cref="DirectionPathPoint"/>
         /// </summary>
         [DataMember(Name = "path")]
+        [ReadOnly(true)]
         public DirectionPathPoint[] Path { get; set; }
 
         /// <summary>
@@ -258,24 +278,27 @@ namespace Route4MeSDK.DataTypes
         /// <para>See <see cref="TrackingHistory"/></para>
         /// </summary>
         [DataMember(Name = "tracking_history")]
+        [ReadOnly(true)]
         public TrackingHistory[] TrackingHistory { get; set; }
 
         /// <summary>
         /// A vehicle assigned to the route.
         /// </summary>
-        [DataMember(Name = "vehicle", EmitDefaultValue = false)]
+        [DataMember(Name = "vehicle", EmitDefaultValue = false),IgnoreDataMember]
         public VehicleV4Response Vehilce { get; set; }
 
         /// <summary>
         /// Member config key-value pairs.
         /// </summary>
         [DataMember(Name = "member_config_storage", EmitDefaultValue = false)]
+        [ReadOnly(true)]
         public Dictionary<string, string> MemberConfigStorage { get; set; }
 
         /// <summary>
         /// Original route.
         /// </summary>
         [DataMember(Name = "original_route", EmitDefaultValue = false)]
+        [ReadOnly(true)]
         public DataObjectRoute OriginalRoute { get; set; }
     }
 }

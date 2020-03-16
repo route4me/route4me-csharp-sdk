@@ -39,7 +39,7 @@ namespace Route4MeSDK.Examples
 
                 Console.WriteLine("Custom data:");
 
-                foreach (var cdata in resultContact.address_custom_data)
+                foreach (var cdata in (Dictionary<string, string>)resultContact.address_custom_data)
                 {
                     Console.WriteLine(cdata.Key + ": " + cdata.Value);
                 }

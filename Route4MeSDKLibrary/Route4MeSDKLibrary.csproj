@@ -126,6 +126,7 @@
     <Compile Include="DataTypes\OrderCustomField.cs" />
     <Compile Include="DataTypes\OrderCustomFieldCreateResponse.cs" />
     <Compile Include="DataTypes\OrdersResponse.cs" />
+    <Compile Include="DataTypes\ReadOnlyAttribute.cs" />
     <Compile Include="DataTypes\Route.cs" />
     <Compile Include="DataTypes\Route4MeDynamicClass.cs" />
     <Compile Include="DataTypes\RouteParameters.cs" />
