@@ -9,12 +9,25 @@ All notable changes to this project will be documented in this file.
 - The class [Route4MeDynamicClass](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/DataTypes/Route4MeDynamicClass.cs) - for creating a dynamic class from an existing class by copying only specified properties.
 - The method [UpdateAddressBookContact](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/Route4MeManager.cs#L2186) - for updating the Address Book Contact with data with containg null values.
 - The method [SerializeObjectToJson](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/Utils.cs#L71) - for serializing an object with/without null values of the properties.
+- The class [ReadOnlyAttribute](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/DataTypes/ReadOnlyAttribute.cs) - for creating custom attribute ReadOnlyAttribute to distinguish the object properties while updating.
+- The method [UpdateRoute(DataObjectRoute route, DataObjectRoute initialRoute, out string errorString)](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/Route4MeManager.cs#L377) - for updating a route by sending the initial route and cloned-modified route. The algorithm compares the routes, finds modified properties and updates them in the Route4Me database.
+- The class [Utils](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/Utils.cs). Modified the methods:
+    1. The method [ObjectDeepClone<T>(T obj)](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/Utils.cs#L182) - for clonning a Route4Me object.
+	2. The method [GetPropertiesWithDifferentValues(object modifiedObject, object initialObject, out string errorString, bool excludeReadonly = true)](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/Utils.cs#L216) - compares initial and modified Route4Me objects and returns a list of the modified properties.
+	3. The method [IsPropertyDictionary](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/Utils.cs#L334) - checks if a Route4Me object property is a dictionary type.
+	4. The method [IsPropertyObject](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/Utils.cs#L349) - checks if a Route4Me object property is a nested object type.
+	5. The method [IsPropertyArray](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/Utils.cs#L371) - checks if a Route4Me object property is an array type.
+	6. The method [IsDictionariesEqual](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/Utils.cs#L384) - checks if the dictionaries are equal.
+	7. The method [CheckIfPropertyHasIgnoreAttribute](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/Utils.cs#L430) - checks if a Route4Me object property has the attribute IgnoreDataMemberAttribute.
+	8. The method [CheckIfPropertyHasReadOnlyAttribute](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/Utils.cs#L442) - checks if a Route4Me object property has the attribute ReadOnllyAttribute.
 
 ### Changed
 
 - In the Utils.cs changed the method [SerializeObjectToJson](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/Utils.cs#L65) - for asuring to get correct serialization: if serialization with the DataContractJsonSerializer is failing, serialization with the SerializeObjectToJson will be done.
 - In the AddressBookContact.cs changed the property [address_custom_data](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/DataTypes/AddressBookContact.cs#L165) - filters wrong data type for this property.
-- in the Route4MeManager changed the method [GetJsonObjectFromAPI](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/Route4MeManager.cs#L3423) - modified for filtering the wrong data type for the property address_custom_data.
+- in the Route4MeManager changed:
+    1. the method [GetJsonObjectFromAPI](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/Route4MeManager.cs#L3423) - modified for filtering the wrong data type for the property address_custom_data.
+	2. 
 - In the AddressBookContact.cs changed type of the properties from object type to:
 	1. AddressCube -> double?
 	2. AddressPieces -> int?
@@ -25,6 +38,10 @@ All notable changes to this project will be documented in this file.
 	
 - The method [GetUserLocations](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/Route4MeManager.cs#L1041) - changed returning object type from Dictionary<string,UserLocation> to UserLocation[].
 - The method [DuplicateRoute](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/Route4MeManager.cs#L415) - as the returning parameter response.OptimizationProblemId actually is route_id, now the method returns it as route ID.
+- The class [Address](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/DataTypes/Address.cs) - added the custom attribute ReadOnlyAttribute to some properties.
+- The class [Route](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/DataTypes/Route.cs) - added the custom attribute ReadOnlyAttribute to some properties.
+- The class [VehicleV4Response](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/DataTypes/VehicleV4Response.cs) - all the properties type changed to the string.
+
 
 ## [1.0.0.4] - 2020-01-20
 
