@@ -7637,7 +7637,7 @@ namespace Route4MeSDKUnitTest
 
             var addressBookParameters = new AddressBookParameters
             {
-                Query = "Neandetharl",
+                Query = "FirstFieldValue1",
                 Fields = "first_name,address_email,schedule_blacklist,schedule,address_custom_data,address_1",
                 Offset = 0,
                 Limit = 20
@@ -7649,13 +7649,13 @@ namespace Route4MeSDKUnitTest
                 var response = route4Me.SearchAddressBookLocation(addressBookParameters, 
                     out List<AddressBookContact> contactsFromObjects, out string errorString);
 
-                Assert.IsInstanceOfType(response.Total, typeof(uint), "GetSpecifiedFieldsSearchTextTest failed... " + errorString);
-                Assert.IsInstanceOfType(contactsFromObjects, typeof(List<AddressBookContact>), "GetSpecifiedFieldsSearchTextTest failed... " + errorString);
+                Assert.IsInstanceOfType(response.Total, typeof(uint), "GetSpecifiedFieldsSearchTextTest failed. " + errorString);
+                Assert.IsInstanceOfType(contactsFromObjects, typeof(List<AddressBookContact>), "GetSpecifiedFieldsSearchTextTest failed. " + errorString);
             }
             else
             {
                 var response = route4Me.GetAddressBookContacts(addressBookParameters, out uint total, out string errorString);
-                Assert.IsInstanceOfType(response, typeof(AddressBookContact[]), "GetSpecifiedFieldsSearchTextTest failed... " + errorString);
+                Assert.IsInstanceOfType(response, typeof(AddressBookContact[]), "GetSpecifiedFieldsSearchTextTest failed. " + errorString);
             }
         }
 
