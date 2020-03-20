@@ -523,7 +523,11 @@ namespace Route4MeSDK
         /// <returns>An object of TValue type</returns>
         public static TValue ToObject<TValue>(object obj)
         {
+            if (obj == null) return default(TValue);
+
             var json = JsonConvert.SerializeObject(obj);
+            if (json == "[]") return default(TValue);
+
             var objectValue = JsonConvert.DeserializeObject<TValue>(json);
             return objectValue;
         }
