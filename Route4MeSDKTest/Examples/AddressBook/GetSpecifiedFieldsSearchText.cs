@@ -26,7 +26,7 @@ namespace Route4MeSDK.Examples
             // Run the query
             //uint total = 0;
             string errorString = "";
-            var response = route4Me.SearchAddressBookLocation(addressBookParameters, out errorString);
+            var response = route4Me.SearchAddressBookLocation(addressBookParameters, out List<AddressBookContact> contactsFromObjects, out errorString);
 
             Console.WriteLine("");
 
