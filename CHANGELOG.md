@@ -20,14 +20,19 @@ All notable changes to this project will be documented in this file.
 	6. The method [IsDictionariesEqual](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/Utils.cs#L384) - checks if the dictionaries are equal.
 	7. The method [CheckIfPropertyHasIgnoreAttribute](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/Utils.cs#L430) - checks if a Route4Me object property has the attribute IgnoreDataMemberAttribute.
 	8. The method [CheckIfPropertyHasReadOnlyAttribute](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/Utils.cs#L442) - checks if a Route4Me object property has the attribute ReadOnllyAttribute.
+	9. The method [ReadObjectNew<T>](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/Utils.cs) - for reading Route4Me object from a JSON string.
+	10. The method [GetPropertyPositions<T>](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/Utils.cs#L472) - for getting positions of the Route4Me object properties.
+	11. The method [OrderPropertiesByPosition<T>](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/Utils.cs#L491) - for the ordering of a property names list by the positions in the object.
+	12. The method [ToObject<TValue>](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/Utils.cs#L524) - for converting anonymous type object to a specified Route4Me object type.
 
 ### Changed
 
 - In the Utils.cs changed the method [SerializeObjectToJson](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/Utils.cs#L65) - for asuring to get correct serialization: if serialization with the DataContractJsonSerializer is failing, serialization with the SerializeObjectToJson will be done.
-- In the AddressBookContact.cs changed the property [address_custom_data](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/DataTypes/AddressBookContact.cs#L165) - filters wrong data type for this property.
 - in the Route4MeManager changed:
     1. the method [GetJsonObjectFromAPI](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/Route4MeManager.cs#L3423) - modified for filtering the wrong data type for the property address_custom_data.
-	2. 
+	2. the method [SearchAddressBookLocation](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/Route4MeManager.cs#L2235) - fixed problem with the consumption of the response with the anonymous type object arrays.
+- In the class AddressBookContact.cs changed the property [address_custom_data](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/DataTypes/AddressBookContact.cs#L165) - filters wrong data type for this property.
+- In the [Address](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/DataTypes/Address.cs) added property [RouteName](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/DataTypes/Address.cs#L112) - route name for a depot address.
 - In the AddressBookContact.cs changed type of the properties from object type to:
 	1. AddressCube -> double?
 	2. AddressPieces -> int?
