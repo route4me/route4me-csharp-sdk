@@ -56,6 +56,20 @@ namespace Route4MeSDK
             return JsonConvert.DeserializeObject<T>(text, jsonSettings);
         }
 
+        public static T ReadObjectNew<T>(string jsonText)
+        {
+
+            var jsonSettings = new JsonSerializerSettings()
+            {
+                ContractResolver = new DataContractResolver()
+            };
+
+            //StreamReader reader = new StreamReader(stream);
+            //string text = reader.ReadToEnd();
+
+            return JsonConvert.DeserializeObject<T>(jsonText, jsonSettings);
+        }
+
         /// <summary>
         /// Reads a stream to a string
         /// </summary>
@@ -95,7 +109,6 @@ namespace Route4MeSDK
                     result = SerializeObjectToJson(obj, true);
                     return result;
                 }
-                
 
                 result = Encoding.UTF8.GetString(memoryStream.ToArray());
             }
@@ -116,7 +129,6 @@ namespace Route4MeSDK
                 //NullValueHandling = ignoreNullValues ? NullValueHandling.Ignore : NullValueHandling.Include,
                 //DefaultValueHandling = DefaultValueHandling.Include,
                 ContractResolver = new DataContractResolver()
-                
             };
 
             string result = JsonConvert.SerializeObject(obj, Formatting.None, jsonSettings);
@@ -129,7 +141,7 @@ namespace Route4MeSDK
         /// </summary>
         public static string Description(this Enum enumValue)
         {
-            FieldInfo field = enumValue.GetType().GetField(enumValue.ToString());
+            var field = enumValue.GetType().GetField(enumValue.ToString());
 
             var attribute = Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute)) as DescriptionAttribute;
 
@@ -199,7 +211,7 @@ namespace Route4MeSDK
             return clonedObject;
         }
 
-        private static Stream StringToStream(string src)
+        public static Stream StringToStream(string src)
         {
             byte[] byteArray = Encoding.UTF8.GetBytes(src);
             return new MemoryStream(byteArray);
@@ -450,6 +462,70 @@ namespace Route4MeSDK
             var isReadOnlyValue = isReadOnly != null ? ((Route4MeSDK.DataTypes.ReadOnlyAttribute)isReadOnly).IsReadOnly : false;
 
             return isReadOnlyValue;
+        }
+
+        /// <summary>
+        /// Returns numeration of the Route4Me object proeprties.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static Dictionary<string, int> GetPropertyPositions<T>() where T : class
+        {
+            var properties = typeof(T).GetProperties();
+            var propertyPositions = new Dictionary<string, int>();
+
+            for (int i = 0; i < properties.Length; i++)
+            {
+                propertyPositions.Add(properties[i].Name, i);
+            }
+
+            return propertyPositions;
+        }
+
+        /// <summary>
+        /// Returns ordered property names.
+        /// </summary>
+        /// <typeparam name="T">Type of the Route4Me object</typeparam>
+        /// <param name="propertyNames">List of the property names</param>
+        /// <returns>Ordered list of the property names</returns>
+        public static List<string> OrderPropertiesByPosition<T>(List<string> propertyNames, out string errorString) where T : class
+        {
+            errorString = "";
+
+            var propertyPositions = GetPropertyPositions<T>();
+
+            var orderedPropertyNames = new List<string>();
+
+            foreach (var propKey in propertyPositions.Keys)
+            {
+                foreach (var propName in propertyNames)
+                {
+                    if (propKey == propName)
+                    {
+                        orderedPropertyNames.Add(propKey);
+                        break;
+                    }
+                }
+
+                if (orderedPropertyNames.Count== propertyNames.Count) break;
+            }
+
+            if (orderedPropertyNames.Count < propertyNames.Count) errorString = "Some of the properties have the wrong name";
+
+            return orderedPropertyNames;
+        }
+
+        /// <summary>
+        /// Converts an input object to type TValue.
+        /// </summary>
+        /// <typeparam name="TValue">Target type</typeparam>
+        /// <param name="obj">An object to be converted to a TValue type</param>
+        /// <returns>An object of TValue type</returns>
+        public static TValue ToObject<TValue>(object obj)
+        {
+            var json = JsonConvert.SerializeObject(obj);
+            var objectValue = JsonConvert.DeserializeObject<TValue>(json);
+            return objectValue;
         }
     }
 }

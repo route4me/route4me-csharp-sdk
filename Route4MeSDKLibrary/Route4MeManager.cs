@@ -385,12 +385,12 @@ namespace Route4MeSDK
                 return null;
             }
 
-            var jsonParameters = new fastJSON.JSONParameters
-            {
-                AllowNonQuotedKeys = false,
-                EnableAnonymousTypes = true,
-                UseValuesOfEnums = true
-            };
+            //var jsonParameters = new fastJSON.JSONParameters
+            //{
+            //    AllowNonQuotedKeys = false,
+            //    EnableAnonymousTypes = true,
+            //    UseValuesOfEnums = true
+            //};
 
             #region // Update Route Parameters
 
@@ -405,7 +405,9 @@ namespace Route4MeSDK
 
                     dynamicRouteProperties.CopyPropertiesFromClass(route.Parameters, updatableRouteParametersProperties, out string errorString0);
 
-                    var routeParamsJsonString = fastJSON.JSON.ToJSON(dynamicRouteProperties.DynamicProperties, jsonParameters);
+                    //var routeParamsJsonString = fastJSON.JSON.ToJSON(dynamicRouteProperties.DynamicProperties, jsonParameters);
+
+                    var routeParamsJsonString = R4MeUtils.SerializeObjectToJson(dynamicRouteProperties.DynamicProperties, true);
 
                     routeParamsJsonString = String.Concat("{\"parameters\":", routeParamsJsonString, "}");
 
@@ -449,7 +451,9 @@ namespace Route4MeSDK
 
                         dynamicAddressProperties.CopyPropertiesFromClass(address, updatableAddressProperties, out string errorString0);
 
-                        var addressParamsJsonString = fastJSON.JSON.ToJSON(dynamicAddressProperties.DynamicProperties, jsonParameters);
+                        //var addressParamsJsonString = fastJSON.JSON.ToJSON(dynamicAddressProperties.DynamicProperties, jsonParameters);
+
+                        var addressParamsJsonString = R4MeUtils.SerializeObjectToJson(dynamicAddressProperties.DynamicProperties, true);
 
                         var genParams = new RouteParametersQuery()
                         {
@@ -2204,24 +2208,22 @@ namespace Route4MeSDK
 			public int? Limit { get; set; }
 		}
 
-        /// <summary>
-        /// The response from the address book locations searching process.
-        /// </summary>
-		[DataContract()]
-		public sealed class SearchAddressBookLocationResponse
-		{
+
+        [DataContract()]
+        public sealed class SearchAddressBookLocationResponse
+        {
             /// <value>The list of the selected fields values</value>
 			[DataMember(Name = "results")]
-			public List<object[]> Results { get; set; }
+            public IList<object[]> Results { get; set; }
 
             /// <value>Number of the returned address book contacts</value>
 			[DataMember(Name = "total")]
-			public uint Total { get; set; }
+            public uint Total { get; set; }
 
             /// <value>Array of the selected fields</value>
 			[DataMember(Name = "fields")]
-			public string[] Fields { get; set; }
-		}
+            public string[] Fields { get; set; }
+        }
 
         /// <summary>
         /// Searches for the address book locations 
@@ -2230,24 +2232,69 @@ namespace Route4MeSDK
         /// <param name="total">out: Number of the returned contacts</param>
         /// <param name="errorString">out: Error as string</param>
         /// <returns>List of the selected fields values</returns>
-		public SearchAddressBookLocationResponse SearchAddressBookLocation(AddressBookParameters addressBookParameters, out string errorString)
+		public SearchAddressBookLocationResponse SearchAddressBookLocation(AddressBookParameters addressBookParameters, out List<AddressBookContact> contactsFromObjects, out string errorString)
 		{
+            if (addressBookParameters.Fields == null)
+            {
+                errorString = "Fields property should be specified.";
+                contactsFromObjects = null;
+                return null;
+            }
+
             var request = new SearchAddressBookLocationRequest();
+
+            contactsFromObjects = new List<AddressBookContact>();
 
             if (addressBookParameters.AddressId != null) request.AddressId = addressBookParameters.AddressId;
             if (addressBookParameters.Query != null) request.Query = addressBookParameters.Query;
-            if (addressBookParameters.Fields != null) request.Fields = addressBookParameters.Fields;
+            request.Fields = addressBookParameters.Fields;
             if (addressBookParameters.Offset != null) request.Offset = addressBookParameters.Offset >= 0 ? (int)addressBookParameters.Offset : 0;
             if (addressBookParameters.Limit != null) request.Limit = addressBookParameters.Limit >= 0 ? (int)addressBookParameters.Limit : 0;
 
-            request.PrepareForSerialization();
+            parseWithNewtonJson = true;
+            var response = GetJsonObjectFromAPI<SearchAddressBookLocationResponse>(request, R4MEInfrastructureSettings.AddressBook, HttpMethodType.Get, out string errorString0);
 
-            var response = GetJsonObjectFromAPI<SearchAddressBookLocationResponse>(request, R4MEInfrastructureSettings.AddressBook, HttpMethodType.Get, out errorString);
+            var orderedPropertyNames = R4MeUtils.OrderPropertiesByPosition<AddressBookContact>(response.Fields.ToList(), out errorString);
 
-            //total = (response != null) ? response.Total : 0;
+            if (response!=null && response.Total>0)
+            {
+                foreach (object[] contactObjects in response.Results)
+                {
+                    var contactFromObject = new AddressBookContact();
+                    foreach (var propertyName in orderedPropertyNames)
+                    {
+                        var value = contactObjects[orderedPropertyNames.IndexOf(propertyName)];
 
-            return (response != null) ? response : null;
-		}
+                        var valueType = value != null ? value.GetType().Name : "";
+                        Console.WriteLine(valueType);
+                        
+                        switch (propertyName)
+                        {
+                            case "address_custom_data":
+                                //var customData = R4MeUtils.ToDictionary<string>(value);
+                                var customData = R4MeUtils.ToObject<Dictionary<string,string>>(value);
+                                typeof(AddressBookContact).GetProperty(propertyName).SetValue(contactFromObject, customData);
+                                break;
+                            case "schedule":
+                                var schedules = R4MeUtils.ToObject<Schedule[]>(value);
+                                typeof(AddressBookContact).GetProperty(propertyName).SetValue(contactFromObject, schedules);
+                                break;
+                            case "schedule_blacklist":
+                                var scheduleBlackList = R4MeUtils.ToObject<string[]>(value);
+                                typeof(AddressBookContact).GetProperty(propertyName).SetValue(contactFromObject, scheduleBlackList);
+                                break;
+                            default:
+                                typeof(AddressBookContact).GetProperty(propertyName).SetValue(contactFromObject, value);
+                                break;
+                        }
+                    }
+
+                    contactsFromObjects.Add(contactFromObject);
+                }
+            }
+
+            return response;
+        }
 
         /// <summary>
         /// Adds an address book contact to a user's account.
@@ -2330,12 +2377,12 @@ namespace Route4MeSDK
                 return null;
             }
 
-            var jsonParameters = new fastJSON.JSONParameters
-            {
-                AllowNonQuotedKeys = false,
-                EnableAnonymousTypes = true,
-                UseValuesOfEnums = true
-            };
+            //var jsonParameters = new fastJSON.JSONParameters
+            //{
+            //    AllowNonQuotedKeys = false,
+            //    EnableAnonymousTypes = true,
+            //    UseValuesOfEnums = true
+            //};
 
             var updatableContactProperties = R4MeUtils
             .GetPropertiesWithDifferentValues(contact, initialContact, out errorString);
@@ -2348,7 +2395,9 @@ namespace Route4MeSDK
 
                 dynamicContactProperties.CopyPropertiesFromClass(contact, updatableContactProperties, out string errorString0);
 
-                var contactParamsJsonString = fastJSON.JSON.ToJSON(dynamicContactProperties.DynamicProperties, jsonParameters);
+                //var contactParamsJsonString = fastJSON.JSON.ToJSON(dynamicContactProperties.DynamicProperties, jsonParameters);
+
+                var contactParamsJsonString = R4MeUtils.SerializeObjectToJson(dynamicContactProperties.DynamicProperties, true);
 
                 var genParams = new GenericParameters();
 

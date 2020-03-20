@@ -106,6 +106,12 @@ namespace Route4MeSDK.DataTypes
         public string OriginalRouteId { get; set; }
 
         /// <summary>
+        /// Route name of a depot address.
+        /// </summary>
+        [DataMember(Name = "route_name", EmitDefaultValue = false)]
+        public string RouteName { get; set; }
+
+        /// <summary>
         /// The ID of the optimization request that was used to initially instantiate this route.
         /// </summary>
         [DataMember(Name = "optimization_problem_id", EmitDefaultValue = false)]
