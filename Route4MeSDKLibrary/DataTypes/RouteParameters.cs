@@ -58,7 +58,6 @@ namespace Route4MeSDK.DataTypes
         [DataMember(Name = "shared_publicly", EmitDefaultValue = false)]
         public string SharedPublicly { get; set; }
 
-
         /// <summary>Gets or sets the optimize parameter.
         /// <para>Availabale values:</para>
         /// <value>Distance</value>, 

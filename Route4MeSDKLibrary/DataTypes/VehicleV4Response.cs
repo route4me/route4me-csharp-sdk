@@ -114,7 +114,7 @@ namespace Route4MeSDK.DataTypes
         /// wrong value (e.g. \u0001). Until fixing of the bug this property will be object type.
         /// </summary>
         [DataMember(Name = "purchased_new", EmitDefaultValue = false)]
-        public object PurchasedNew { get; set; }
+        public string PurchasedNew { get; set; }
 
         /// <summary>
         /// Start date of the license.
@@ -369,7 +369,7 @@ namespace Route4MeSDK.DataTypes
         /// Vehicle height in metric unit.
         /// </summary>
         [DataMember(Name = "height_metric", EmitDefaultValue = false)]
-        public decimal? HeightMetric { get; set; }
+        public string HeightMetric { get; set; }
 
         /// <summary>
         /// Vehicle length in metric unit.
