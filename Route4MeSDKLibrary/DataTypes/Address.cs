@@ -447,6 +447,13 @@ namespace Route4MeSDK.DataTypes
         public AddressNote[] Notes { get; set; }
 
         /// <summary>
+        /// The route path point.
+        /// </summary>
+        [DataMember(Name = "path_to_next", EmitDefaultValue = false)]
+        [ReadOnly(true)]
+        public GeoPoint[] PathToNext { get; set; }
+
+        /// <summary>
         /// If present, the priority will sequence addresses in all the optimal routes so that
         /// higher priority addresses are general at the beginning of the route sequence.
         /// 1 is the highest priority, 100000 is the lowest.
