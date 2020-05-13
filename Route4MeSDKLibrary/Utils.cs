@@ -9,6 +9,7 @@ using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System.Collections;
+using System.Globalization;
 
 namespace Route4MeSDK
 {
@@ -227,7 +228,21 @@ namespace Route4MeSDK
         /// <returns>List of the property names</returns>
         public static List<string> GetPropertiesWithDifferentValues(object modifiedObject, object initialObject, out string errorString, bool excludeReadonly = true)
         {
+            var propNames = new List<string>();
             errorString = "";
+
+            try
+            {
+                var jsonModifiedObject = JsonConvert.SerializeObject(modifiedObject);
+                var jsonInitialObject = JsonConvert.SerializeObject(initialObject);
+
+                if (jsonModifiedObject.Equals(jsonInitialObject)) return propNames;
+            }
+            catch (Exception ex)
+            {
+                errorString = ex.Message;
+                return propNames;
+            }
 
             if (modifiedObject == null)
             {
@@ -235,7 +250,7 @@ namespace Route4MeSDK
                 return null;
             }
 
-            var propNames = new List<string>();
+            
             var properties = modifiedObject.GetType().GetProperties();
 
             // If an initial object is not specified, a list of all property names will be returned.
@@ -270,6 +285,21 @@ namespace Route4MeSDK
                     continue;
                 }
 
+                try
+                {
+                    var jsonModifiedObjectPropertyValue = JsonConvert.SerializeObject(modifiedObjectPropertyValue);
+                    var jsonInitialObjectPropertyValue = JsonConvert.SerializeObject(initialObjectPropertyValue);
+
+                    if (jsonModifiedObjectPropertyValue.Equals(jsonInitialObjectPropertyValue)) continue;
+                }
+                catch (Exception)
+                {
+                    continue;
+                }
+
+                propNames.Add(propInfo.Name);
+
+                /*
                 if (propInfo.PropertyType.IsArray)
                 {
                     bool equalArrays = false;
@@ -333,6 +363,8 @@ namespace Route4MeSDK
                 {
                     propNames.Add(propInfo.Name);
                 }
+
+                */
             }
 
             return propNames;
@@ -521,15 +553,237 @@ namespace Route4MeSDK
         /// <typeparam name="TValue">Target type</typeparam>
         /// <param name="obj">An object to be converted to a TValue type</param>
         /// <returns>An object of TValue type</returns>
-        public static TValue ToObject<TValue>(object obj)
+        public static TValue ToObject<TValue>(object obj, out string errorString)
         {
+            errorString = "";
+
             if (obj == null) return default(TValue);
 
-            var json = JsonConvert.SerializeObject(obj);
-            if (json == "[]") return default(TValue);
+            try
+            {
+                var json = JsonConvert.SerializeObject(obj);
+                if (json == "[]") return default(TValue);
 
-            var objectValue = JsonConvert.DeserializeObject<TValue>(json);
-            return objectValue;
+                var objectValue = JsonConvert.DeserializeObject<TValue>(json);
+                return objectValue;
+            }
+            catch (Exception ex)
+            {
+                errorString = ex.Message;
+                return default(TValue);
+            }
+            
+        }
+
+        /// <summary>
+        /// Converts one standard type object to other.
+        /// </summary>
+        /// <typeparam name="T">Destincation type for converting to</typeparam>
+        /// <param name="value">INput value of the object type</param>
+        /// <returns>Converted value of the type T</returns>
+        public static T ConvertObjectToType<T>(ref object value)
+            where T : struct
+        {
+            T result = default(T);
+
+            if (value == null) return result;
+
+            Type destinationType = result.GetType();
+
+            if (Nullable.GetUnderlyingType(destinationType) != null) destinationType = Nullable.GetUnderlyingType(destinationType);
+
+            Type convertObjectType = value?.GetType() ?? null;
+
+            if (destinationType == null || convertObjectType == null) return result;
+
+            if (destinationType == typeof(object)) return result;
+
+            if (value is IConvertible)
+            {
+                try
+                {
+                    if (destinationType == typeof(Boolean))
+                    {
+                        result = (T)(object)((IConvertible)value).ToBoolean(CultureInfo.CurrentCulture);
+                    }
+                    else if (destinationType == typeof(Byte))
+                    {
+                        result = (T)(object)((IConvertible)value).ToByte(CultureInfo.CurrentCulture);
+                    }
+                    else if (destinationType == typeof(Char))
+                    {
+                        result = (T)(object)((IConvertible)value).ToChar(CultureInfo.CurrentCulture);
+                    }
+                    else if (destinationType == typeof(DateTime))
+                    {
+                        result = (T)(object)((IConvertible)value).ToDateTime(CultureInfo.CurrentCulture);
+                    }
+                    else if (destinationType == typeof(Decimal))
+                    {
+                        result = (T)(object)((IConvertible)value).ToDecimal(CultureInfo.CurrentCulture);
+                    }
+                    else if (destinationType == typeof(Double))
+                    {
+                        result = (T)(object)((IConvertible)value).ToDouble(CultureInfo.CurrentCulture);
+                    }
+                    else if (destinationType == typeof(Int16))
+                    {
+                        result = (T)(object)((IConvertible)value).ToInt16(CultureInfo.CurrentCulture);
+                        //return true;
+                    }
+                    else if (destinationType == typeof(Int32))
+                    {
+                        result = (T)(object)((IConvertible)value).ToInt32(CultureInfo.CurrentCulture);
+                    }
+                    else if (destinationType == typeof(Int64))
+                    {
+                        result = (T)(object)((IConvertible)value).ToInt64(CultureInfo.CurrentCulture);
+                    }
+                    else if (destinationType == typeof(SByte))
+                    {
+                        result = (T)(object)((IConvertible)value).ToSByte(CultureInfo.CurrentCulture);
+                    }
+                    else if (destinationType == typeof(Single))
+                    {
+                        result = (T)(object)((IConvertible)value).ToSingle(CultureInfo.CurrentCulture);
+                    }
+                    else if (destinationType == typeof(UInt16))
+                    {
+                        result = (T)(object)((IConvertible)value).ToUInt16(CultureInfo.CurrentCulture);
+                    }
+                    else if (destinationType == typeof(UInt32))
+                    {
+                        result = (T)(object)((IConvertible)value).ToUInt32(CultureInfo.CurrentCulture);
+                    }
+                    else if (destinationType == typeof(UInt64))
+                    {
+                        result = (T)(object)((IConvertible)value).ToUInt64(CultureInfo.CurrentCulture);
+                    }
+                    else if (destinationType == typeof(String))
+                    {
+                        result = (T)(object)((IConvertible)value).ToString(CultureInfo.CurrentCulture);
+                    }
+                }
+                catch
+                {
+                    return result;
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Converts a standard type object to standard property type 
+        /// (e.g. if first is Long type, second: Int32, converts to Int32)
+        /// </summary>
+        /// <param name="convertObject">An object to be converted to the target object type</param>
+        /// <param name="targetProperty">A property with the standard type</param>
+        /// <returns>Converted object to the target standard type</returns>
+        public static object ConvertObjectToPropertyType(object value, PropertyInfo targetProperty)
+        {
+            Type destinationType = targetProperty?.PropertyType ?? null;
+
+            if (Nullable.GetUnderlyingType(targetProperty.PropertyType) != null) destinationType = Nullable.GetUnderlyingType(targetProperty.PropertyType);
+
+            Type convertObjectType = value?.GetType() ?? null;
+
+            if (destinationType == null || convertObjectType == null) return null;
+
+            if (targetProperty.PropertyType.Name.ToLower().Contains("dictionary")) return value;
+            // Non-standard object isn't converted
+
+            if (destinationType == typeof(object))
+            {
+                if (IsPropertyDictionary(value))
+                {
+                    value = (Dictionary<string, string>)((object)value);
+                    return value;
+
+                }
+                else return null;
+            }
+
+            object result = null;
+
+            if (destinationType.BaseType.Name == "Enum" || destinationType.BaseType.Name == "Array")
+            {
+                return value;
+            }
+
+            if (value is IConvertible)
+            {
+                try
+                {
+                    if (destinationType == typeof(Boolean))
+                    {
+                        result = ((IConvertible)value).ToBoolean(CultureInfo.CurrentCulture);
+                    }
+                    else if (destinationType == typeof(Byte))
+                    {
+                        result = ((IConvertible)value).ToByte(CultureInfo.CurrentCulture);
+                    }
+                    else if (destinationType == typeof(Char))
+                    {
+                        result = ((IConvertible)value).ToChar(CultureInfo.CurrentCulture);
+                    }
+                    else if (destinationType == typeof(DateTime))
+                    {
+                        result = ((IConvertible)value).ToDateTime(CultureInfo.CurrentCulture);
+                    }
+                    else if (destinationType == typeof(Decimal))
+                    {
+                        result = ((IConvertible)value).ToDecimal(CultureInfo.CurrentCulture);
+                    }
+                    else if (destinationType == typeof(Double))
+                    {
+                        result = ((IConvertible)value).ToDouble(CultureInfo.CurrentCulture);
+                    }
+                    else if (destinationType == typeof(Int16))
+                    {
+                        result = ((IConvertible)value).ToInt16(CultureInfo.CurrentCulture);
+                        return true;
+                    }
+                    else if (destinationType == typeof(Int32))
+                    {
+                        result = ((IConvertible)value).ToInt32(CultureInfo.CurrentCulture);
+                    }
+                    else if (destinationType == typeof(Int64))
+                    {
+                        result = ((IConvertible)value).ToInt64(CultureInfo.CurrentCulture);
+                    }
+                    else if (destinationType == typeof(SByte))
+                    {
+                        result = ((IConvertible)value).ToSByte(CultureInfo.CurrentCulture);
+                    }
+                    else if (destinationType == typeof(Single))
+                    {
+                        result = ((IConvertible)value).ToSingle(CultureInfo.CurrentCulture);
+                    }
+                    else if (destinationType == typeof(UInt16))
+                    {
+                        result = ((IConvertible)value).ToUInt16(CultureInfo.CurrentCulture);
+                    }
+                    else if (destinationType == typeof(UInt32))
+                    {
+                        result = ((IConvertible)value).ToUInt32(CultureInfo.CurrentCulture);
+                    }
+                    else if (destinationType == typeof(UInt64))
+                    {
+                        result = ((IConvertible)value).ToUInt64(CultureInfo.CurrentCulture);
+                    }
+                    else if (destinationType == typeof(String))
+                    {
+                        result = ((IConvertible)value).ToString(CultureInfo.CurrentCulture);
+                    }
+                }
+                catch
+                {
+                    return result;
+                }
+            }
+
+            return result;
         }
     }
 }
