@@ -29,6 +29,7 @@ namespace Route4MeSDKUnitTest
         static string c_ApiKey = ApiKeys.actualApiKey;
 
         static TestDataRepository tdr;
+        static TestDataRepository tdr2;
         static List<string> lsOptimizationIDs;
 
         [ClassInitialize()]
@@ -37,14 +38,21 @@ namespace Route4MeSDKUnitTest
             lsOptimizationIDs = new List<string>();
 
             tdr = new TestDataRepository(c_ApiKey);
+            tdr2 = new TestDataRepository(c_ApiKey);
 
             bool result = tdr.RunOptimizationSingleDriverRoute10Stops();
+            bool result2 = tdr2.RunOptimizationSingleDriverRoute10Stops();
+            bool result3 = tdr2.RunSingleDriverRoundTrip();
 
             Assert.IsTrue(result, "Single Driver 10 Stops generation failed...");
+            Assert.IsTrue(result2, "Single Driver 10 Stops generation failed...");
 
             Assert.IsTrue(tdr.SD10Stops_route.Addresses.Length > 0, "The route has no addresses...");
+            Assert.IsTrue(tdr2.SD10Stops_route.Addresses.Length > 0, "The route has no addresses...");
 
             lsOptimizationIDs.Add(tdr.SD10Stops_optimization_problem_id);
+            lsOptimizationIDs.Add(tdr2.SD10Stops_optimization_problem_id);
+            lsOptimizationIDs.Add(tdr2.SDRT_optimization_problem_id);
         }
 
         [TestMethod]
@@ -250,24 +258,94 @@ namespace Route4MeSDKUnitTest
         {
             var route4Me = new Route4MeManager(c_ApiKey);
 
-            string routeId = tdr.SD10Stops_route_id;
+            string routeId = tdr2.SD10Stops_route_id;
             Assert.IsNotNull(routeId, "routeId_SingleDriverRoute10Stops is null...");
 
-            var initialRoute = R4MeUtils.ObjectDeepClone<DataObjectRoute>(tdr.SD10Stops_route);
+            var initialRoute = R4MeUtils.ObjectDeepClone<DataObjectRoute>(tdr2.SD10Stops_route);
 
-            tdr.SD10Stops_route.ApprovedForExecution = true;
-            tdr.SD10Stops_route.Parameters.RouteName += " Edited";
-            tdr.SD10Stops_route.Parameters.Metric = Metric.Manhattan;
+            #region // Notes, Custom Type Notes, Note File Uploading
+            var customNotesResponse = route4Me.getAllCustomNoteTypes(out string errorString5);
 
-            tdr.SD10Stops_route.Addresses[1].AddressString += " Edited";
-            tdr.SD10Stops_route.Addresses[1].Group = "Example Group";
-            tdr.SD10Stops_route.Addresses[1].CustomerPo = "CPO 456789";
-            tdr.SD10Stops_route.Addresses[1].InvoiceNo = "INO 789654";
-            tdr.SD10Stops_route.Addresses[1].ReferenceNo = "RNO 313264";
-            tdr.SD10Stops_route.Addresses[1].OrderNo = "ONO 654878";
+            var allCustomNotes = customNotesResponse != null && customNotesResponse.GetType() == typeof(CustomNoteType[]) 
+                ? (CustomNoteType[])customNotesResponse : null;
 
-            var dataObject = route4Me.UpdateRoute(tdr.SD10Stops_route, initialRoute, out string  errorString);
+            string tempFilePath = null;
 
+            using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Route4MeSDKUnitTest.Resources.test.png"))
+            {
+                var tempFiles = new TempFileCollection();
+                {
+                    tempFilePath = tempFiles.AddExtension("png");
+
+                    Console.WriteLine(tempFilePath);
+
+                    using (Stream fileStream = File.OpenWrite(tempFilePath))
+                    {
+                        stream.CopyTo(fileStream);
+                    }
+                }
+            }
+
+            tdr2.SD10Stops_route.Addresses[1].Notes = new AddressNote[] {
+                new AddressNote()
+                {
+                    NoteId = -1,
+                    RouteId = tdr2.SD10Stops_route.RouteID,
+                    Latitude = tdr2.SD10Stops_route.Addresses[1].Latitude,
+                    Longitude = tdr2.SD10Stops_route.Addresses[1].Longitude,
+                    ActivityType = "dropoff",
+                    Contents = "C# SDK Test Content",
+                    CustomTypes = new AddressCustomNote[]
+                    {
+                        new AddressCustomNote()
+                        {
+                            NoteCustomTypeID = allCustomNotes[0].NoteCustomTypeID.ToString(),
+                            NoteCustomValue = allCustomNotes[0].NoteCustomTypeValues[0]
+                        }
+                    },
+                    UploadUrl = tempFilePath
+                }
+             };
+
+            var updatedRoute0 = route4Me.UpdateRoute(tdr2.SD10Stops_route, initialRoute, out string errorString0);
+
+            Assert.IsTrue(updatedRoute0.Addresses[1].Notes.Length==1, "UpdateRouteTest failed: cannot create a note");
+            Assert.IsTrue(updatedRoute0.Addresses[1].Notes[0].CustomTypes.Length == 1, "UpdateRouteTest failed: cannot create a custom type note");
+            Assert.IsTrue(updatedRoute0.Addresses[1].Notes[0].UploadId.Length==32, "UpdateRouteTest failed: cannot create a custom type note");
+
+            #endregion
+
+            tdr2.SD10Stops_route.ApprovedForExecution = true;
+            tdr2.SD10Stops_route.Parameters.RouteName += " Edited";
+            tdr2.SD10Stops_route.Parameters.Metric = Metric.Manhattan;
+
+            tdr2.SD10Stops_route.Addresses[1].AddressString += " Edited";
+            tdr2.SD10Stops_route.Addresses[1].Group = "Example Group";
+            tdr2.SD10Stops_route.Addresses[1].CustomerPo = "CPO 456789";
+            tdr2.SD10Stops_route.Addresses[1].InvoiceNo = "INO 789654";
+            tdr2.SD10Stops_route.Addresses[1].ReferenceNo = "RNO 313264";
+            tdr2.SD10Stops_route.Addresses[1].OrderNo = "ONO 654878";
+            tdr2.SD10Stops_route.Addresses[1].Notes = new AddressNote[] {
+                new AddressNote()
+                {
+                    RouteDestinationId = -1,
+                    RouteId = tdr.SD10Stops_route.RouteID,
+                    Latitude = tdr.SD10Stops_route.Addresses[1].Latitude,
+                    Longitude = tdr.SD10Stops_route.Addresses[1].Longitude,
+                    ActivityType = "dropoff",
+                    Contents = "C# SDK Test Content"
+                }
+             };
+
+            tdr2.SD10Stops_route.Addresses[2].SequenceNo = 5;
+            var addressID = tdr2.SD10Stops_route.Addresses[2].RouteDestinationId;
+
+            var dataObject = route4Me.UpdateRoute(tdr2.SD10Stops_route, initialRoute, out string  errorString);
+
+            Assert.IsTrue(dataObject.Addresses.Where(x => x.RouteDestinationId == addressID)
+                .FirstOrDefault().SequenceNo ==5, "UpdateWholeRouteTest failed  Cannot resequence addresses");
+
+            Assert.IsTrue(tdr2.SD10Stops_route.ApprovedForExecution, "UpdateRouteTest failed, ApprovedForExecution cannot set to true");
             Assert.IsNotNull(dataObject, "UpdateRouteTest failed. " + errorString);
             Assert.IsTrue(dataObject.Parameters.RouteName.Contains("Edited"), "UpdateRouteTest failed, the route name not changed.");
             Assert.IsTrue(dataObject.Addresses[1].AddressString.Contains("Edited"), "UpdateRouteTest failed, second address name not changed.");
@@ -278,21 +356,59 @@ namespace Route4MeSDKUnitTest
             Assert.IsTrue(dataObject.Addresses[1].ReferenceNo == "RNO 313264", "UpdateWholeRouteTest failed.");
             Assert.IsTrue(dataObject.Addresses[1].OrderNo == "ONO 654878", "UpdateWholeRouteTest failed.");
 
-            initialRoute = R4MeUtils.ObjectDeepClone<DataObjectRoute>(tdr.SD10Stops_route);
+            initialRoute = R4MeUtils.ObjectDeepClone<DataObjectRoute>(tdr2.SD10Stops_route);
 
-            tdr.SD10Stops_route.Addresses[1].Group = null;
-            tdr.SD10Stops_route.Addresses[1].CustomerPo = null;
-            tdr.SD10Stops_route.Addresses[1].InvoiceNo = null;
-            tdr.SD10Stops_route.Addresses[1].ReferenceNo = null;
-            tdr.SD10Stops_route.Addresses[1].OrderNo = null;
+            tdr2.SD10Stops_route.ApprovedForExecution = false;
+            tdr2.SD10Stops_route.Addresses[1].Group = null;
+            tdr2.SD10Stops_route.Addresses[1].CustomerPo = null;
+            tdr2.SD10Stops_route.Addresses[1].InvoiceNo = null;
+            tdr2.SD10Stops_route.Addresses[1].ReferenceNo = null;
+            tdr2.SD10Stops_route.Addresses[1].OrderNo = null;
 
-            dataObject = route4Me.UpdateRoute(tdr.SD10Stops_route, initialRoute, out errorString);
+            dataObject = route4Me.UpdateRoute(tdr2.SD10Stops_route, initialRoute, out errorString);
 
+            Assert.IsFalse(tdr2.SD10Stops_route.ApprovedForExecution, "UpdateRouteTest failed, ApprovedForExecution cannot set to false");
             Assert.IsNull(dataObject.Addresses[1].Group, "UpdateWholeRouteTest failed.");
             Assert.IsNull(dataObject.Addresses[1].CustomerPo, "UpdateWholeRouteTest failed.");
             Assert.IsNull(dataObject.Addresses[1].InvoiceNo, "UpdateWholeRouteTest failed.");
             Assert.IsNull(dataObject.Addresses[1].ReferenceNo, "UpdateWholeRouteTest failed.");
             Assert.IsNull(dataObject.Addresses[1].OrderNo, "UpdateWholeRouteTest failed.");
+        }
+
+        [TestMethod]
+        public void ChangeRouteDepoteTest()
+        {
+            var route4Me = new Route4MeManager(c_ApiKey);
+
+            string routeId = tdr2.SDRT_route_id;
+            Assert.IsNotNull(routeId, "routeId_SingleDriverRoute10Stops is null...");
+
+            var initialRoute = R4MeUtils.ObjectDeepClone<DataObjectRoute>(tdr2.SDRT_route);
+
+            Assert.IsTrue(tdr2.SDRT_route.Addresses[0].IsDepot == true, "First address is not depot");
+            Assert.IsTrue(tdr2.SDRT_route.Addresses[1].IsDepot == false, "Second address is depot");
+
+            tdr2.SDRT_route.Addresses[0].IsDepot = false;
+            int? addressId0 = tdr2.SDRT_route.Addresses[0].RouteDestinationId;
+            tdr2.SDRT_route.Addresses[0].Alias = addressId0.ToString();
+            initialRoute.Addresses[0].Alias = addressId0.ToString();
+            tdr2.SDRT_route.Addresses[1].IsDepot = true;
+            int? addressId1 = tdr2.SDRT_route.Addresses[1].RouteDestinationId;
+            tdr2.SDRT_route.Addresses[1].Alias = addressId1.ToString();
+            initialRoute.Addresses[1].Alias = addressId1.ToString();
+
+            var dataObject = route4Me.UpdateRoute(tdr2.SDRT_route, initialRoute, out string errorString);
+
+            var address0 = dataObject.Addresses
+                .Where(x => x.Alias == addressId0.ToString())
+                .FirstOrDefault();
+
+            var address1 = dataObject.Addresses
+                .Where(x => x.Alias == addressId1.ToString())
+                .FirstOrDefault();
+
+            Assert.IsTrue(address0.IsDepot == false, "First address is depot");
+            Assert.IsTrue(address1.IsDepot == true, "Second address is not depot");
         }
 
         [TestMethod]
@@ -496,7 +612,7 @@ namespace Route4MeSDKUnitTest
         {
             var routeIdsToDelete = new List<string>();
 
-            bool result = tdr.SingleDriverRoundTripTest();
+            bool result = tdr.RunSingleDriverRoundTrip();
 
             Assert.IsTrue(result, "Single Driver Round Trip generation failed...");
 
@@ -537,7 +653,7 @@ namespace Route4MeSDKUnitTest
             lsOptimizationIDs = new List<string>();
 
             tdr = new TestDataRepository(c_ApiKey);
-            bool result = tdr.SingleDriverRoundTripTest();
+            bool result = tdr.RunSingleDriverRoundTrip();
 
             Assert.IsTrue(result, "Single Driver Round Trip generation failed...");
 
@@ -589,6 +705,73 @@ namespace Route4MeSDKUnitTest
             lastCustomNoteTypeID = ((CustomNoteType[])response)[((CustomNoteType[])response).Length - 1].NoteCustomTypeID;
 
             firstCustomNoteTypeID = ((CustomNoteType[])response)[0].NoteCustomTypeID;
+        }
+
+        [TestMethod]
+        public void AddComplexAddressNoteTest()
+        {
+            var route4Me = new Route4MeManager(c_ApiKey);
+
+            string routeIdToMoveTo = tdr.SDRT_route_id;
+            Assert.IsNotNull(routeIdToMoveTo, "routeId_SingleDriverRoundTrip is null...");
+
+            int addressId = (tdr.dataObjectSDRT != null && tdr.SDRT_route != null && tdr.SDRT_route.Addresses.Length > 1 && tdr.SDRT_route.Addresses[1].RouteDestinationId != null) ? tdr.SDRT_route.Addresses[1].RouteDestinationId.Value : 0;
+
+            double lat = tdr.SDRT_route.Addresses.Length > 1 ? tdr.SDRT_route.Addresses[1].Latitude : 33.132675170898;
+            double lng = tdr.SDRT_route.Addresses.Length > 1 ? tdr.SDRT_route.Addresses[1].Longitude : -83.244743347168;
+
+            var customNotesResponse = route4Me.getAllCustomNoteTypes(out string errorString0);
+
+            Dictionary<string, string> customNotes = null;
+
+            if (customNotesResponse != null && customNotesResponse.GetType()==typeof(CustomNoteType[]))
+            {
+                var allCustomNotes = (CustomNoteType[])customNotesResponse;
+
+                if (allCustomNotes.Length>0)
+                {
+                    customNotes = new Dictionary<string, string>()
+                    {
+                        {"custom_note_type["+allCustomNotes[0].NoteCustomTypeID+"]", allCustomNotes[0].NoteCustomTypeValues[0] }
+                    };
+                }
+            }
+
+            var noteParameters = new NoteParameters()
+            {
+                RouteId = routeIdToMoveTo,
+                AddressId = addressId,
+                Latitude = lat,
+                Longitude = lng,
+                DeviceType = DeviceType.Web.Description(),
+                ActivityType = StatusUpdateType.DropOff.Description(),
+                StrNoteContents = "Test Note Contents " + DateTime.Now.ToString()
+            };
+
+            if (customNotes != null) noteParameters.CustomNoteTypes = customNotes;
+
+            string tempFilePath = null;
+
+            using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Route4MeSDKUnitTest.Resources.test.png"))
+            {
+                var tempFiles = new TempFileCollection();
+                {
+                    tempFilePath = tempFiles.AddExtension("png");
+
+                    Console.WriteLine(tempFilePath);
+
+                    using (Stream fileStream = File.OpenWrite(tempFilePath))
+                    {
+                        stream.CopyTo(fileStream);
+                    }
+                }
+            }
+
+            noteParameters.StrFileName = tempFilePath;
+
+            var note = route4Me.AddAddressNote(noteParameters, out string errorString);
+
+            Assert.IsNotNull(note, "AddAddressNoteTest failed... " + errorString);
         }
 
         [TestMethod]
@@ -4209,7 +4392,7 @@ namespace Route4MeSDKUnitTest
         }
 
         [TestMethod]
-        public void SingleDriverRoundTripTest()
+        public void RunSingleDriverRoundTrip()
         {
             var route4Me = new Route4MeManager(c_ApiKey);
 
@@ -4303,7 +4486,7 @@ namespace Route4MeSDKUnitTest
             // Run the query
             dataObject = route4Me.RunOptimization(optimizationParameters, out string errorString);
 
-            Assert.IsNotNull(dataObject, "SingleDriverRoundTripTest failed... " + errorString);
+            Assert.IsNotNull(dataObject, "RunSingleDriverRoundTripfailed... " + errorString);
 
             tdr.RemoveOptimization(new string[] { dataObject.OptimizationProblemId });
         }
@@ -7614,6 +7797,7 @@ namespace Route4MeSDKUnitTest
             var addressBookParameters = new AddressBookParameters
             {
                 AddressId = addresses
+                //AddressId = "55208221,55673905"
             };
 
             // Run the query
@@ -7631,10 +7815,12 @@ namespace Route4MeSDKUnitTest
 
             var addressBookParameters = new AddressBookParameters
             {
-                Query = "FirstFieldValue1",
-                Fields = "first_name,address_email,schedule_blacklist,schedule,address_custom_data,address_1",
-                Offset = 0,
-                Limit = 20
+                Query = "55522938",
+                //Query = "FirstFieldValue1",
+                //Fields = "first_name,address_email,schedule,schedule_blacklist, address_custom_data,address_1",
+                Fields = "address_id,address_1,schedule,schedule_blacklist,address_custom_data",
+                Offset = 50,
+                Limit = 50
             };
 
             // Run the query
@@ -8398,7 +8584,7 @@ namespace Route4MeSDKUnitTest
             context.Properties.Add("Categ", "Ignorable");
             tdr = new TestDataRepository(c_ApiKey);
 
-            bool result = tdr.SingleDriverRoundTripTest();
+            bool result = tdr.RunSingleDriverRoundTrip();
 
             Assert.IsTrue(result, "Single Driver Round Trip generation failed...");
 
@@ -9631,7 +9817,7 @@ namespace Route4MeSDKUnitTest
 
             tdr = new TestDataRepository(c_ApiKey);
 
-            bool result = tdr.SingleDriverRoundTripTest();
+            bool result = tdr.RunSingleDriverRoundTrip();
 
             Assert.IsTrue(result, "Single Driver Round Trip generation failed...");
 
@@ -9709,9 +9895,12 @@ namespace Route4MeSDKUnitTest
         [TestMethod]
         public void RemoveDestinationFromOptimizationTest()
         {
-            int delta = removedAddressId == tdr.SDRT_route.Addresses[tdr.SDRT_route.Addresses.Length - 1].RouteDestinationId ? 2 : 1;
+            int delta = removedAddressId == tdr.SDRT_route
+                .Addresses[tdr.SDRT_route.Addresses.Length - 1]
+                .RouteDestinationId ? 3 : 2;
 
-            var destinationToRemove = (tdr.SDRT_route != null && tdr.SDRT_route.Addresses.Length > 0) ? tdr.SDRT_route.Addresses[tdr.SDRT_route.Addresses.Length - delta] : null;
+            var destinationToRemove = (tdr.SDRT_route != null && tdr.SDRT_route.Addresses.Length > 0) 
+                ? tdr.SDRT_route.Addresses[tdr.SDRT_route.Addresses.Length - delta] : null;
 
             var route4Me = new Route4MeManager(c_ApiKey);
 
@@ -9720,6 +9909,7 @@ namespace Route4MeSDKUnitTest
 
             int destinationId = destinationToRemove.RouteDestinationId != null ? Convert.ToInt32(destinationToRemove.RouteDestinationId) : -1;
             Assert.AreNotEqual(-1, "destinationId is null...");
+
             // Run the query
             string errorString;
             bool removed = route4Me.RemoveDestinationFromOptimization(OptimizationProblemId, destinationId, out errorString);
@@ -9799,7 +9989,9 @@ namespace Route4MeSDKUnitTest
             string route_id = tdr.SDRT_route_id; ;
             Assert.IsNotNull(route_id, "rote_id is null...");
 
-            int delta = removedAddressId == tdr.SDRT_route.Addresses[tdr.SDRT_route.Addresses.Length - 1].RouteDestinationId ? 2 : 1;
+            int delta = removedAddressId == tdr.SDRT_route
+                .Addresses[tdr.SDRT_route.Addresses.Length - 2]
+                .RouteDestinationId ? 4 : 3;
 
             object oDestinationId = tdr.SDRT_route.Addresses[tdr.SDRT_route.Addresses.Length - delta].RouteDestinationId;
 
@@ -9918,7 +10110,7 @@ namespace Route4MeSDKUnitTest
 
             tdr = new TestDataRepository(c_ApiKey);
 
-            bool result = tdr.SingleDriverRoundTripTest();
+            bool result = tdr.RunSingleDriverRoundTrip();
 
             Assert.IsTrue(result, "Single Driver Round Trip generation failed...");
 
@@ -11015,7 +11207,7 @@ namespace Route4MeSDKUnitTest
             var route4Me = new Route4MeManager(c_ApiKey);
 
             var geoParams = new GeocodingParameters { Addresses = "41.00367151,-81.59846105" };
-            geoParams.ExportFormat = "xml";
+            geoParams.ExportFormat = "json";
             // Run the query
             string errorString = "";
             string result = route4Me.Geocoding(geoParams, out errorString);
@@ -11522,7 +11714,7 @@ namespace Route4MeSDKUnitTest
         {
             var route4Me = new Route4MeManager(c_ApiKey);
 
-            bool result = tdr.SingleDriverRoundTripTest();
+            bool result = tdr.RunSingleDriverRoundTrip();
 
             Assert.IsTrue(result, "Generation of the route Single Driver Round Trip failed...");
 
@@ -12285,7 +12477,7 @@ namespace Route4MeSDKUnitTest
             }
         }
 
-        public bool SingleDriverRoundTripTest()
+        public bool RunSingleDriverRoundTrip()
         {
             var route4Me = new Route4MeManager(c_ApiKey);
 
@@ -12364,6 +12556,7 @@ namespace Route4MeSDKUnitTest
                 RouteMaxDuration = 86400,
                 VehicleCapacity = 1,
                 VehicleMaxDistanceMI = 10000,
+                RT = true,
 
                 Optimize = Optimize.Distance.Description(),
                 DistanceUnit = DistanceUnit.MI.Description(),

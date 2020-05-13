@@ -62,3 +62,4 @@ C:\Users\Odin62\Documents\GitHub\Route4Me\route4me-csharp-sdk\Route4MeSDKUnitTes
 C:\Users\Odin62\Documents\GitHub\Route4Me\route4me-csharp-sdk\Route4MeSDKUnitTest\obj\Debug\Route4MeSDKUnitTest.csproj.CopyComplete
 C:\Users\Odin62\Documents\GitHub\Route4Me\route4me-csharp-sdk\Route4MeSDKUnitTest\obj\Debug\Route4MeSDKUnitTest.dll
 C:\Users\Odin62\Documents\GitHub\Route4Me\route4me-csharp-sdk\Route4MeSDKUnitTest\obj\Debug\Route4MeSDKUnitTest.pdb
+C:\Users\User\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKUnitTest\obj\Debug\Route4MeSDKUnitTest.csproj.CoreCompileInputs.cache
