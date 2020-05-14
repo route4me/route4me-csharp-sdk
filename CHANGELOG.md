@@ -19,8 +19,8 @@ All notable changes to this project will be documented in this file.
 	4. Added the method [AddAddressNote(NoteParameters noteParameters, out string errorString)](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/Route4MeManager.cs#L1593) - for adding complex address note (send text content, custom note, file at once) to a route address.
 	
 - The class [Utils](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/Utils.cs). Modified the methods:
-    1. The method [TValue ToObject<TValue>(object obj, out string errorString)](***) - remade using try-catch.
-- The class [NoteParameters](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/Utils.cs#L556)- added properties for form data.
+    1. The method [TValue ToObject<TValue>(object obj, out string errorString)](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/Utils.cs#L556) - remade using try-catch.
+- The class [NoteParameters](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/QueryTypes/NoteParameters.cs)- added properties for form data.
 
 
 
