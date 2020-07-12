@@ -183,6 +183,21 @@ namespace Route4MeSDK.DataTypes
         [DataMember(Name = "route_max_duration", EmitDefaultValue = false)]
         public long? RouteMaxDuration { get; set; }
 
+        /// <summary>
+        /// Target duration of the generated route
+        /// </summary>
+        public double? TargetDuration { get; set; }
+
+        /// <summary>
+        /// Target distance of the generated route
+        /// </summary>
+        public double? TargetDistance { get; set; }
+
+        /// <summary>
+        /// Target wait time by tail size
+        /// </summary>
+        public double? target_wait_by_tail_size { get; set; }
+
         /// <summary>The email address to notify upon completion of an optimization request</summary>
         /// <value>The route email.</value>
         [DataMember(Name = "route_email", EmitDefaultValue = false)]

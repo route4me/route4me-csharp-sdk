@@ -52,6 +52,10 @@ namespace Route4MeSDK.QueryTypes
         [HttpQueryMemberAttribute(Name = "end_date", EmitDefaultValue = false)]
         public string EndDate { get; set; }
 
+        [IgnoreDataMember]
+        [HttpQueryMemberAttribute(Name = "query", EmitDefaultValue = false)]
+        public string Query { get; set; }
+
         /// <summary>
         /// The optimization state: (Initial = 1, MatrixProcessing = 2, Optimizing = 3, Optimized = 4, Error = 5, ComputingDirections = 6)
         /// </summary>

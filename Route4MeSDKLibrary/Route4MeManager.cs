@@ -1137,7 +1137,6 @@ namespace Route4MeSDK
             foreach (var propInfo in typeof(Address).GetProperties())
             {
                 propInfo.SetValue(request, propInfo.GetValue(addressParameters));
-
             }
 
             var dataObject = GetJsonObjectFromAPI<DataObject>(request, R4MEInfrastructureSettings.ApiHost, HttpMethodType.Put, out errorString);
@@ -3841,7 +3840,32 @@ namespace Route4MeSDK
 									result = isString ? streamTask.ReadString() as T :
 															streamTask.ReadObject<T>();
 								}
-								else
+                                else if (response.Content
+                                    .GetType().ToString().ToLower()
+                                    .Contains("httpconnectionresponsecontent"))
+                                {
+                                    var streamTask2 = response.Content.ReadAsStreamAsync();
+                                    streamTask2.Wait();
+
+                                    if (streamTask2.IsCompleted)
+                                    {
+                                        HttpContent content2 = response.Content;
+
+                                        if (isString)
+                                        {
+                                            result = content2.ReadAsStreamAsync().Result.ReadString() as T;
+                                        }
+                                        else
+                                        {
+                                            result = parseWithNewtonJson
+                                                ? content2.ReadAsStreamAsync().Result.ReadObjectNew<T>()
+                                                : content2.ReadAsStreamAsync().Result.ReadObject<T>();
+
+                                            parseWithNewtonJson = false;
+                                        }
+                                    }
+                                }
+                                else
 								{
 									var streamTask = await ((StreamContent)response.Content).ReadAsStreamAsync();
 									ErrorResponse errorResponse = null;
@@ -4005,11 +4029,50 @@ namespace Route4MeSDK
                                         }
 									}
 								}
+                                else if (response.IsCompleted &&
+                                    response.Result.IsSuccessStatusCode &&
+                                    response.Result.Content
+                                    .GetType().ToString().ToLower()
+                                    .Contains("httpconnectionresponsecontent"))
+                                {
+                                    var streamTask2 = response.Result.Content.ReadAsStreamAsync();
+                                    streamTask2.Wait();
+
+                                    if (streamTask2.IsCompleted)
+                                    {
+                                        HttpContent content2 = response.Result.Content;
+
+                                        if (isString)
+                                        {
+                                            result = content2.ReadAsStreamAsync().Result.ReadString() as T;
+                                        }
+                                        else
+                                        {
+                                            result = parseWithNewtonJson 
+                                                ? content2.ReadAsStreamAsync().Result.ReadObjectNew<T>() 
+                                                : content2.ReadAsStreamAsync().Result.ReadObject<T>();
+
+                                            parseWithNewtonJson = false;
+                                        }
+                                    }
+                                }
 								else
 								{
-									var streamTask = ((StreamContent)response.Result.Content).ReadAsStreamAsync();
-									streamTask.Wait();
-									ErrorResponse errorResponse = null;
+                                    Task<Stream> streamTask = null;
+                                    Task<string> errorMessageContent = null;
+
+                                    if (response.Result.Content.GetType() == typeof(StreamContent))
+                                        streamTask = ((StreamContent)response.Result.Content).ReadAsStreamAsync();
+                                    else 
+                                        errorMessageContent = response.Result.Content.ReadAsStringAsync();
+                                    //var streamTask = response.Result.Content.GetType() ==typeof(StreamContent) 
+                                    //    ? ((StreamContent)response.Result.Content).ReadAsStreamAsync() 
+                                    //    : response.Result.Content.ReadAsStringAsync();
+
+                                    streamTask?.Wait();
+                                    errorMessageContent?.Wait();
+
+                                    ErrorResponse errorResponse = null;
 									try
 									{
 										errorResponse = streamTask.Result.ReadObject<ErrorResponse>();
@@ -4027,6 +4090,10 @@ namespace Route4MeSDK
 											errorMessage += error;
 										}
 									}
+                                    else if (errorMessageContent!=null)
+                                    {
+                                        errorMessage += errorMessageContent.Result;
+                                    }
 									else
 									{
 										var responseStream = response.Result.Content.ReadAsStringAsync();
@@ -4208,8 +4275,8 @@ namespace Route4MeSDK
 
 		private HttpClient CreateHttpClient(string url)
 		{
-			// Uncomment code lines below when is tested broono (no signed cert)
-			/*
+            // Uncomment code lines below when is tested broono (no signed cert)
+            /*
 			ServicePointManager.ServerCertificateValidationCallback +=
 		(sender, cert, chain, sslPolicyErrors) => true;
 
@@ -4225,9 +4292,10 @@ namespace Route4MeSDK
 			Console.WriteLine("Supports redirection -> " + supportsAutoRdirect);
 			*/
 
-			ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | (SecurityProtocolType)768 | (SecurityProtocolType)3072;
+            //ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | (SecurityProtocolType)768 | (SecurityProtocolType)3072;
+            ServicePointManager.SecurityProtocol = (SecurityProtocolType)768 | (SecurityProtocolType)3072 | (SecurityProtocolType)12288;
 
-			HttpClient result = new HttpClient() { BaseAddress = new Uri(url) };
+            HttpClient result = new HttpClient() { BaseAddress = new Uri(url) };
 
 			result.Timeout = m_DefaultTimeOut;
 			result.DefaultRequestHeaders.Accept.Clear();
@@ -4245,8 +4313,9 @@ namespace Route4MeSDK
 
 			var supprotsAutoRdirect = handler.SupportsAutomaticDecompression;
 
-			ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | (SecurityProtocolType)768 | (SecurityProtocolType)3072;
-			HttpClient result = new HttpClient(handler) { BaseAddress = new Uri(url) };
+            //ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | (SecurityProtocolType)768 | (SecurityProtocolType)3072;
+            ServicePointManager.SecurityProtocol = (SecurityProtocolType)768 | (SecurityProtocolType)3072 | (SecurityProtocolType)12288;
+            HttpClient result = new HttpClient(handler) { BaseAddress = new Uri(url) };
 
 			result.Timeout = m_DefaultTimeOut;
 			result.DefaultRequestHeaders.Accept.Clear();
