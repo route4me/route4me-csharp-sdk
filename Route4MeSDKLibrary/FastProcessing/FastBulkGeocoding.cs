@@ -207,7 +207,7 @@ namespace Route4MeSDK.FastProcessing
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls
             | SecurityProtocolType.Tls11
             | SecurityProtocolType.Tls12
-            | SecurityProtocolType.Ssl3;
+            | (SecurityProtocolType)12288;
 
             geocodedAddressesDownloadingIsDone = false;
 

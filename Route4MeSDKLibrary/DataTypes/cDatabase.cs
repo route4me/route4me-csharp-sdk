@@ -65,27 +65,37 @@ namespace Route4MeSDK.DataTypes
         /// The class constructor.
         /// </summary>
         /// <param name="db_type">See <see cref="DB_Type"/></param>
-        public cDatabase(DB_Type db_type)
+        public cDatabase(DB_Type db_type, ConnectionStringSettingsCollection connections=null)
         {
             switch (db_type)
             {
                 case DB_Type.MySQL:
-                    _conStngInstitute = ConfigurationManager.ConnectionStrings["conMySQL"];
+                    _conStngInstitute = connections!=null 
+                        ? connections["conMySQL"]
+                        : ConfigurationManager.ConnectionStrings["conMySQL"];
                     break;
                 case DB_Type.MSSQL:
-                    _conStngInstitute = ConfigurationManager.ConnectionStrings["conMSSQL"];
+                    _conStngInstitute = connections != null
+                        ? connections["conMSSQL"]
+                        : ConfigurationManager.ConnectionStrings["conMSSQL"];
                     break;
                 case DB_Type.SQLCE:
-                    _conStngInstitute = ConfigurationManager.ConnectionStrings["conSQLCE"];
+                    _conStngInstitute = connections != null
+                        ? connections["conSQLCE"]
+                        : ConfigurationManager.ConnectionStrings["conSQLCE"];
                     break;
                 case DB_Type.PostgreSQL:
-                    _conStngInstitute = ConfigurationManager.ConnectionStrings["conPostgreSQL"];
+                    _conStngInstitute = connections != null
+                        ? connections["conPostgreSQL"]
+                        : ConfigurationManager.ConnectionStrings["conPostgreSQL"];
                     break;
                 case DB_Type.SQLite:
                     //_conStngInstitute = ConfigurationManager.ConnectionStrings["conInstitute"];
                     break;
                 case DB_Type.MS_Access:
-                    _conStngInstitute = ConfigurationManager.ConnectionStrings["conOLEDB"];
+                    _conStngInstitute = connections != null
+                        ? connections["conOLEDB"]
+                        : ConfigurationManager.ConnectionStrings["conOLEDB"];
                     break;
             }
 
