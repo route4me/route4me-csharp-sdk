@@ -22,7 +22,7 @@ namespace Route4MeSDKUnitTest
 {
     public class ApiKeys
     {
-        public const string actualApiKey = "42A3F818AE2E60C28A4423277B2EE08E";
+        public const string actualApiKey = "11111111111111111111111111111111";
         public const string demoApiKey = "11111111111111111111111111111111";
     }
 
@@ -11223,7 +11223,7 @@ namespace Route4MeSDKUnitTest
     }
 
     // TO DO: The cDatabase is obsolete
-    [TestClass, Ignore]
+    [TestClass,Ignore]
     public class DatabasesGroup
     {
         static string c_ApiKey = ApiKeys.actualApiKey;
