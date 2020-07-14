@@ -1,6 +1,38 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.0.0.7] - 2020-07-13
+
+### Added
+
+- The class [RouteParameters](https://github.com/Olman62/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/DataTypes/RouteParameters.cs). Added:
+	1. The property [TargetDuration](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/DataTypes/RouteParameters.cs#L191) - the parameter specifies fine-tuning of an optimization process by route duration.
+	2. The property [TargetDistance](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/DataTypes/RouteParameters.cs#L198) - the parameter specifies fine-tuning of an optimization process by route distance.
+	3. The property [WaitingTime](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/DataTypes/RouteParameters.cs#L205) - the parameter specifies fine-tuning of an optimization process by waiting rime.
+- The class [OptimizationParameters](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/QueryTypes/OptimizationParameters.cs). Added:
+	1. The property [Query](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/QueryTypes/OptimizationParameters.cs#L57) - for searching the optimizations by text.
+
+### Changed
+
+- in the The class [FastBulkGeocoding](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/FastProcessing/FastBulkGeocoding.cs) changed:
+	1. The HTTP security protocol changed from:
+		ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls
+            | SecurityProtocolType.Tls11
+            | SecurityProtocolType.Tls12
+            | SecurityProtocolType.Ssl3; (this is prohobited now by server)
+		to:
+		ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls
+            | SecurityProtocolType.Tls11
+            | SecurityProtocolType.Tls12
+            | (SecurityProtocolType)12288; (This is Tls13)
+in the The class [Route4MeManager](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/Route4MeManager.cs) changed:
+	1. In the method [CreateHttpClient(string url)](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/Route4MeManager.cs#L4276) changed http protocol handling.
+	2. In the method [CreateAsyncHttpClient(string url)](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/Route4MeManager.cs#L4307) changed http protocol handling.
+	3. In the method [GetJsonObjectFromAPI<T>](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/Route4MeManager.cs#L3920) - added handling of the response type HttpConnectionResponseContent.
+	4. In the method [GetJsonObjectFromAPIAsync<T>](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/Route4MeManager.cs#L3766) - added handling of the response type HttpConnectionResponseContent.
+
+
+
 ## [1.0.0.6] - 2020-05-14
 
 ### Added
