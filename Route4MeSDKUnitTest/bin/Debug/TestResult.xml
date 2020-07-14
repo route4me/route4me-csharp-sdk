@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<test-run id="2" testcasecount="0" result="Failed" label="Invalid" total="0" passed="0" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.8.0.0" clr-version="4.0.30319.42000" start-time="2018-08-15 12:21:56Z" end-time="2018-08-15 12:21:58Z" duration="2.279956">
+  <command-line><![CDATA[nunit3-console.exe  Route4MeSDKUnitTest.dll]]></command-line>
+  <test-suite type="Assembly" id="0-1" name="Route4MeSDKUnitTest.dll" fullname="C:\Oleg_Route4Me\route4me-csharp-sdk\Route4MeSDKUnitTest\bin\Debug\Route4MeSDKUnitTest.dll" testcasecount="0" runstate="NotRunnable" result="Failed" label="Invalid">
+    <properties>
+      <property name="_SKIPREASON" value="No suitable tests found in 'C:\Oleg_Route4Me\route4me-csharp-sdk\Route4MeSDKUnitTest\bin\Debug\Route4MeSDKUnitTest.dll'.&#xA;Either assembly contains no tests or proper test driver has not been found." />
+    </properties>
+    <reason>
+      <message>No suitable tests found in 'C:\Oleg_Route4Me\route4me-csharp-sdk\Route4MeSDKUnitTest\bin\Debug\Route4MeSDKUnitTest.dll'.
+Either assembly contains no tests or proper test driver has not been found.</message>
+    </reason>
+  </test-suite>
+</test-run>
