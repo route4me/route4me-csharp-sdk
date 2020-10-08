@@ -16,7 +16,10 @@ namespace Route4MeSDK.QueryTypes
         [HttpQueryMemberAttribute(Name = "addresses", EmitDefaultValue = false)]
         public string Addresses { get; set; }
 
-        [Obsolete("This parameter doesn't work in the geocoding request")]
+        /// <summary>
+        /// Response format (xml, json).
+        /// Note: used in the forward and reverse geocodings as a url parameter.
+        /// </summary>
         [HttpQueryMemberAttribute(Name = "format", EmitDefaultValue = false)]
         public string Format { get; set; }
 
