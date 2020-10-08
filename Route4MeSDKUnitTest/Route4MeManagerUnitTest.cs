@@ -19,7 +19,7 @@ namespace Route4MeSDKUnitTest
 {
     public class ApiKeys
     {
-        public const string actualApiKey = "42A3F818AE2E60C28A4423277B2EE08E";
+        public const string actualApiKey = "11111111111111111111111111111111";
         public const string demoApiKey = "11111111111111111111111111111111";
     }
 
@@ -43,9 +43,11 @@ namespace Route4MeSDKUnitTest
             bool result = tdr.RunOptimizationSingleDriverRoute10Stops();
             bool result2 = tdr2.RunOptimizationSingleDriverRoute10Stops();
             bool result3 = tdr2.RunSingleDriverRoundTrip();
+            bool result4 = tdr2.MultipleDepotMultipleDriverWith24StopsTimeWindowTest();
 
             Assert.IsTrue(result, "Single Driver 10 Stops generation failed...");
             Assert.IsTrue(result2, "Single Driver 10 Stops generation failed...");
+            Assert.IsTrue(result4, "Multi-Depot Multi-Driver 24 Stops generation failed...");
 
             Assert.IsTrue(tdr.SD10Stops_route.Addresses.Length > 0, "The route has no addresses...");
             Assert.IsTrue(tdr2.SD10Stops_route.Addresses.Length > 0, "The route has no addresses...");
@@ -53,6 +55,7 @@ namespace Route4MeSDKUnitTest
             lsOptimizationIDs.Add(tdr.SD10Stops_optimization_problem_id);
             lsOptimizationIDs.Add(tdr2.SD10Stops_optimization_problem_id);
             lsOptimizationIDs.Add(tdr2.SDRT_optimization_problem_id);
+            lsOptimizationIDs.Add(tdr2.MDMD24_optimization_problem_id);
         }
 
         [TestMethod]
@@ -3872,6 +3875,233 @@ namespace Route4MeSDKUnitTest
             MergeRoutesTest();
         }
 
+        [TestMethod]
+        public void MultipleDepotMultipleDriverFineTuningTest()
+        {
+            if (skip == "yes") return;
+
+            var route4Me = new Route4MeManager(c_ApiKey);
+
+            // Prepare the addresses
+            Address[] addresses = new Address[]
+              {
+                #region Addresses
+
+                new Address() { AddressString   = "3634 W Market St, Fairlawn, OH 44333",
+                                IsDepot         = true,
+                                Latitude        = 41.135762259364,
+                                Longitude       = -81.629313826561,
+                                Time            = 300,
+                                TimeWindowStart = 28800,
+                                TimeWindowEnd   = 29465 },
+
+                new Address() { AddressString   = "1218 Ruth Ave, Cuyahoga Falls, OH 44221",
+                                Latitude        = 41.143505096435,
+                                Longitude       = -81.46549987793,
+                                Time            = 300,
+                                TimeWindowStart = 29465,
+                                TimeWindowEnd   = 30529 },
+
+                new Address() { AddressString   = "512 Florida Pl, Barberton, OH 44203",
+                                Latitude        = 41.003671512008,
+                                Longitude       = -81.598461046815,
+                                Time            = 300,
+                                TimeWindowStart = 30529,
+                                TimeWindowEnd   = 33479 },
+
+                new Address() { AddressString   = "512 Florida Pl, Barberton, OH 44203",
+                                Latitude        = 41.003671512008,
+                                Longitude       = -81.598461046815,
+                                Time            = 300,
+                                TimeWindowStart = 33479,
+                                TimeWindowEnd   = 33944 },
+
+                new Address() { AddressString   = "3495 Purdue St, Cuyahoga Falls, OH 44221",
+                                Latitude        = 41.162971496582,
+                                Longitude       = -81.479049682617,
+                                Time            = 300,
+                                TimeWindowStart = 33944,
+                                TimeWindowEnd   = 34801 },
+
+                new Address() { AddressString   = "1659 Hibbard Dr, Stow, OH 44224",
+                                Latitude        = 41.194505989552,
+                                Longitude       = -81.443351581693,
+                                Time            = 300,
+                                TimeWindowStart = 34801,
+                                TimeWindowEnd   = 36366 },
+
+                new Address() { AddressString   = "2705 N River Rd, Stow, OH 44224",
+                                Latitude        = 41.145240783691,
+                                Longitude       = -81.410247802734,
+                                Time            = 300,
+                                TimeWindowStart = 36366,
+                                TimeWindowEnd   = 39173 },
+
+                new Address() { AddressString   = "10159 Bissell Dr, Twinsburg, OH 44087",
+                                Latitude        = 41.340042114258,
+                                Longitude       = -81.421226501465,
+                                Time            = 300,
+                                TimeWindowStart = 39173,
+                                TimeWindowEnd   = 41617 },
+
+                new Address() { AddressString   = "367 Cathy Dr, Munroe Falls, OH 44262",
+                                Latitude        = 41.148578643799,
+                                Longitude       = -81.429229736328,
+                                Time            = 300,
+                                TimeWindowStart = 41617,
+                                TimeWindowEnd   = 43660 },
+
+                new Address() { AddressString   = "367 Cathy Dr, Munroe Falls, OH 44262",
+                                Latitude        = 41.148579,
+                                Longitude       = -81.42923,
+                                Time            = 300,
+                                TimeWindowStart = 43660,
+                                TimeWindowEnd   = 46392 },
+
+                new Address() { AddressString   = "512 Florida Pl, Barberton, OH 44203",
+                                Latitude        = 41.003671512008,
+                                Longitude       = -81.598461046815,
+                                Time            = 300,
+                                TimeWindowStart = 46392,
+                                TimeWindowEnd   = 48089 },
+
+                new Address() { AddressString   = "559 W Aurora Rd, Northfield, OH 44067",
+                                Latitude        = 41.315116882324,
+                                Longitude       = -81.558746337891,
+                                Time            = 300,
+                                TimeWindowStart = 48089,
+                                TimeWindowEnd   = 48449 },
+
+                new Address() { AddressString   = "3933 Klein Ave, Stow, OH 44224",
+                                Latitude        = 41.169467926025,
+                                Longitude       = -81.429420471191,
+                                Time            = 300,
+                                TimeWindowStart = 48449,
+                                TimeWindowEnd   = 50152 },
+
+                new Address() { AddressString   = "2148 8th St, Cuyahoga Falls, OH 44221",
+                                Latitude        = 41.136692047119,
+                                Longitude       = -81.493492126465,
+                                Time            = 300,
+                                TimeWindowStart = 50152,
+                                TimeWindowEnd   = 51682 },
+
+                new Address() { AddressString   = "3731 Osage St, Stow, OH 44224",
+                                Latitude        = 41.161357879639,
+                                Longitude       = -81.42293548584,
+                                Time            = 300,
+                                TimeWindowStart = 51682,
+                                TimeWindowEnd   = 54379 },
+
+                new Address() { AddressString   = "3862 Klein Ave, Stow, OH 44224",
+                                Latitude        = 41.167895123363,
+                                Longitude       = -81.429973393679,
+                                Time            = 300,
+                                TimeWindowStart = 54379,
+                                TimeWindowEnd   = 54879 },
+
+                new Address() { AddressString   = "138 Northwood Ln, Tallmadge, OH 44278",
+                                Latitude        = 41.085464134812,
+                                Longitude       = -81.447411775589,
+                                Time            = 300,
+                                TimeWindowStart = 54879,
+                                TimeWindowEnd   = 56613 },
+
+                new Address() { AddressString   = "3401 Saratoga Blvd, Stow, OH 44224",
+                                Latitude        = 41.148849487305,
+                                Longitude       = -81.407363891602,
+                                Time            = 300,
+                                TimeWindowStart = 56613,
+                                TimeWindowEnd   = 57052 },
+
+                new Address() { AddressString   = "5169 Brockton Dr, Stow, OH 44224",
+                                Latitude        = 41.195003509521,
+                                Longitude       = -81.392700195312,
+                                Time            = 300,
+                                TimeWindowStart = 57052,
+                                TimeWindowEnd   = 59004 },
+
+                new Address() { AddressString   = "5169 Brockton Dr, Stow, OH 44224",
+                                Latitude        = 41.195003509521,
+                                Longitude       = -81.392700195312,
+                                Time            = 300,
+                                TimeWindowStart = 59004,
+                                TimeWindowEnd   = 60027 },
+
+                new Address() { AddressString   = "458 Aintree Dr, Munroe Falls, OH 44262",
+                                Latitude        = 41.1266746521,
+                                Longitude       = -81.445808410645,
+                                Time            = 300,
+                                TimeWindowStart = 60027,
+                                TimeWindowEnd   = 60375 },
+
+                new Address() { AddressString   = "512 Florida Pl, Barberton, OH 44203",
+                                Latitude        = 41.003671512008,
+                                Longitude       = -81.598461046815,
+                                Time            = 300,
+                                TimeWindowStart = 60375,
+                                TimeWindowEnd   = 63891 },
+
+                new Address() { AddressString   = "2299 Tyre Dr, Hudson, OH 44236",
+                                Latitude        = 41.250511169434,
+                                Longitude       = -81.420433044434,
+                                Time            = 300,
+                                TimeWindowStart = 63891,
+                                TimeWindowEnd   = 65277 },
+
+                new Address() { AddressString   = "2148 8th St, Cuyahoga Falls, OH 44221",
+                                Latitude        = 41.136692047119,
+                                Longitude       = -81.493492126465,
+                                Time            = 300,
+                                TimeWindowStart = 65277,
+                                TimeWindowEnd   = 68545 }
+
+                #endregion
+              };
+
+            // Set parameters
+            var parameters = new RouteParameters()
+            {
+                AlgorithmType = AlgorithmType.CVRP_TW_MD,
+                RouteName = "Multiple Depot, Multiple Driver Fine Tuning, Time Window",
+                //StoreRoute = false,
+
+                RouteDate = R4MeUtils.ConvertToUnixTimestamp(DateTime.UtcNow.Date.AddDays(1)),
+                RouteTime = 60 * 60 * 7,
+                RouteMaxDuration = 86400 * 3,
+                VehicleCapacity = 5,
+                VehicleMaxDistanceMI = 10000,
+
+                Optimize = Optimize.TimeWithTraffic.Description(),
+                DistanceUnit = DistanceUnit.MI.Description(),
+                DeviceType = DeviceType.Web.Description(),
+                TravelMode = TravelMode.Driving.Description(),
+                Metric = Metric.Matrix,
+
+                TargetDistance = 100,
+                TargetDuration = 1,
+                WaitingTime = 1
+            };
+
+            var optimizationParameters = new OptimizationParameters()
+            {
+                Addresses = addresses,
+                Parameters = parameters
+            };
+
+            // Run the query
+            var dataObjectFineTuning = route4Me
+                .RunOptimization(optimizationParameters, out string errorString);
+
+            Assert.IsNotNull(dataObjectFineTuning, "MultipleDepotMultipleDriverFineTuningTest failed... " + errorString);
+            Assert.AreEqual(100, dataObjectFineTuning.Parameters.TargetDistance, "Cannot set TargetDistance");
+            Assert.AreEqual(1, dataObjectFineTuning.Parameters.TargetDuration, "Cannot set TargetDuration");
+            Assert.AreEqual(1, dataObjectFineTuning.Parameters.WaitingTime, "Cannot set WaitingTime");
+
+            tdr.RemoveOptimization(new string[] { dataObjectFineTuning.OptimizationProblemId });
+        }
+
+
         public void MoveDestinationToRouteTest()
         {
             var route4Me = new Route4MeManager(c_ApiKey);
@@ -7358,9 +7588,12 @@ namespace Route4MeSDKUnitTest
         [ClassCleanup()]
         public static void RouteTypesGroupCleanup()
         {
-            bool result = tdr.RemoveOptimization(new string[] { dataObjectMDMD24.OptimizationProblemId });
+            if (dataObjectMDMD24!=null)
+            {
+                bool result = tdr.RemoveOptimization(new string[] { dataObjectMDMD24.OptimizationProblemId });
 
-            Assert.IsTrue(result, "Removing of the optimization with 24 stops failed...");
+                Assert.IsTrue(result, "Removing of the optimization with 24 stops failed...");
+            }
         }
     }
 
@@ -8656,20 +8889,15 @@ namespace Route4MeSDKUnitTest
 
             var route4Me = new Route4MeManager(c_ApiKey);
 
-            string orderIds = "";
-
-            foreach (string ord1 in lsOrderIds) orderIds += ord1 + ",";
-            orderIds = orderIds.TrimEnd(',');
-
             var orderParameters = new OrderParameters()
             {
-                order_id = orderIds
+                order_id = lsOrderIds[0]
             };
 
             string errorString;
-            Order[] orders = route4Me.GetOrderByID(orderParameters, out errorString);
+            Order order = route4Me.GetOrderByID(orderParameters, out errorString);
 
-            Assert.IsInstanceOfType(orders, typeof(Order[]), "GetOrderByIDTest failed... " + errorString);
+            Assert.IsInstanceOfType(order, typeof(Order), "GetOrderByIDTest failed... " + errorString);
         }
 
         [TestMethod]
@@ -8782,7 +9010,7 @@ namespace Route4MeSDKUnitTest
 
             var route4Me = new Route4MeManager(c_ApiKey);
 
-            Order order = null;
+            //Order order = null;
             string orderId = lsOrderIds.Count > 0 ? lsOrderIds[0] : "";
 
             Assert.IsFalse(orderId == "", "There is no order for updating...");
@@ -8793,11 +9021,11 @@ namespace Route4MeSDKUnitTest
             };
 
             string errorString;
-            Order[] orders = route4Me.GetOrderByID(orderParameters, out errorString);
+            Order order = route4Me.GetOrderByID(orderParameters, out errorString);
 
-            Assert.IsTrue(orders.Length > 0, "There is no order for updating... " + errorString);
+            Assert.IsTrue(order!=null, "There is no order for updating... " + errorString);
 
-            if (orders.Length > 0) order = orders[0];
+            //if (orders.Length > 0) order = orders[0];
 
             order.EXT_FIELD_last_name = "Updated " + (new Random()).Next().ToString();
 
@@ -11206,7 +11434,7 @@ namespace Route4MeSDKUnitTest
             var route4Me = new Route4MeManager(c_ApiKey);
 
             var geoParams = new GeocodingParameters { Addresses = "41.00367151,-81.59846105" };
-            geoParams.ExportFormat = "json";
+            geoParams.Format = "json";
             // Run the query
             string errorString = "";
             string result = route4Me.Geocoding(geoParams, out errorString);

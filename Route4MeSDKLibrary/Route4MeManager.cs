@@ -2896,15 +2896,15 @@ namespace Route4MeSDK
         /// <param name="orderQuery">The OrderParameters type object as the input parameters containing coma-delimited list of the order IDs.</param>
         /// <param name="errorString"> out: Error as string </param>
         /// <returns>List of the Order type objects</returns>
-		public Order[] GetOrderByID(OrderParameters orderQuery, out string errorString)
+		public Order GetOrderByID(OrderParameters orderQuery, out string errorString)
 		{
-			string[] ids = orderQuery.order_id.Split(',');
-			if (ids.Length == 1) orderQuery.order_id = orderQuery.order_id + "," + orderQuery.order_id;
+			//string[] ids = orderQuery.order_id.Split(',');
+			//if (ids.Length == 1) orderQuery.order_id = orderQuery.order_id + "," + orderQuery.order_id;
 
-			var response = GetJsonObjectFromAPI<GetOrdersResponse>(orderQuery, 
+			var response = GetJsonObjectFromAPI<Order>(orderQuery, 
                 R4MEInfrastructureSettings.Order, HttpMethodType.Get, out errorString);
 
-			return response.Results;
+			return response;
 		}
 
         /// <summary>
@@ -3194,13 +3194,16 @@ namespace Route4MeSDK
 			var request = new GeocodingRequest
 			{
 				Addresses = geoParams.Addresses,
-				Format = geoParams.ExportFormat
+				Format = geoParams.Format
 			};
 
-			var response = GetXmlObjectFromAPI<string>(request, R4MEInfrastructureSettings.Geocoder, 
+            var response = request.Format == "xml"
+                ? GetXmlObjectFromAPI<string>(request, R4MEInfrastructureSettings.Geocoder,
+                HttpMethodType.Post, (HttpContent)null, true, out errorString)
+                : GetJsonObjectFromAPI<string>(request, R4MEInfrastructureSettings.Geocoder,
                 HttpMethodType.Post, (HttpContent)null, true, out errorString);
 
-			if (response == null) return errorString; else return response.ToString();
+            if (response == null) return errorString; else return response.ToString();
 		}
 
         /// <summary>
