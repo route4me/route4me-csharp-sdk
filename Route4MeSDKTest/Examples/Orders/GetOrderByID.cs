@@ -20,13 +20,13 @@ namespace Route4MeSDK.Examples
             };
 
             string errorString;
-            Order[] orders = route4Me.GetOrderByID(orderParameters, out errorString);
+            Order order = route4Me.GetOrderByID(orderParameters, out errorString);
 
             Console.WriteLine("");
 
-            if (orders != null)
+            if (order != null)
             {
-                Console.WriteLine("GetOrderByID executed successfully, orders total = {0}", orders.Length);
+                Console.WriteLine("GetOrderByID executed successfully");
             }
             else
             {

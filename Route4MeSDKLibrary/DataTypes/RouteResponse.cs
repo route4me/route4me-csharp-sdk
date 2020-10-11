@@ -185,7 +185,7 @@ namespace Route4MeSDK.DataTypes
         /// UDU Actual travel distance.
         /// </summary>
         [DataMember(Name = "udu_actual_travel_distance", EmitDefaultValue = false)]
-        public decimal? UduActualTravelDistance { get; set; }
+        public double? UduActualTravelDistance { get; set; }
 
         /// <summary>
         /// Actual travel distance.

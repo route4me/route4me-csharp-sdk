@@ -11,11 +11,11 @@ namespace Route4MeSDK.DataTypes
     public sealed class RouteParameters
     {
         /// <summary>
-        /// Let the R4M API know if this SDK request is coming 
+        /// Let the R4M API know if this SDK request is comming 
         /// from a file upload within your environment (for analytics).
         /// </summary>
         [DataMember(Name = "is_upload", EmitDefaultValue = false)]
-        public string IsUpload { get; set; }
+        public bool? IsUpload { get; set; }
 
         /// <summary>
         /// The tour type of this route. rt is short for round trip, 
@@ -184,7 +184,7 @@ namespace Route4MeSDK.DataTypes
         public long? RouteMaxDuration { get; set; }
 
         /// <summary>
-        /// c 
+        /// The parameter specifies fine-tuning of an optimization process
         /// by route duration.
         /// </summary>
         [DataMember(Name = "target_duration", EmitDefaultValue = false)]
@@ -510,13 +510,13 @@ namespace Route4MeSDK.DataTypes
         /// Route travel time slowdown (e.g. 25 (means 25% slowdown))
         /// </summary>
         [DataMember(Name = "route_time_multiplier", EmitDefaultValue = false)]
-        public decimal? RouteTimeMultiplier { get; set; }
+        public double? RouteTimeMultiplier { get; set; }
 
         /// <summary>
         /// Route service time slowdown (e.g. 10 (means 10% slowdown))
         /// </summary>
         [DataMember(Name = "route_service_time_multiplier", EmitDefaultValue = false)]
-        public decimal? RouteServiceTimeMultiplier { get; set; }
+        public double? RouteServiceTimeMultiplier { get; set; }
 
         /// <summary>
         /// Optimization engine (e.g. '1','2' etc)

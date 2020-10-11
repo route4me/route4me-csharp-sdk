@@ -12,15 +12,15 @@ namespace Route4MeSDK.DataTypes
         public object[] Steps { get; set; }
 
         [DataMember(Name = "distance")]
-        public decimal? Distance { get; set; }
+        public double? Distance { get; set; }
 
         [DataMember(Name = "duration")]
-        public decimal? Duration { get; set; }
+        public double? Duration { get; set; }
 
         [DataMember(Name = "summary")]
         public string Summary { get; set; }
 
         [DataMember(Name = "weight")]
-        public decimal? Weight { get; set; }
+        public double? Weight { get; set; }
     }
 }

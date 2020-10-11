@@ -19,8 +19,8 @@ namespace Route4MeSDKUnitTest
 {
     public class ApiKeys
     {
-        public const string actualApiKey = "11111111111111111111111111111111";
-        public const string demoApiKey = "11111111111111111111111111111111";
+        public static string actualApiKey = R4MeUtils.ReadSetting("actualApiKey");
+        public static string demoApiKey = R4MeUtils.ReadSetting("demoApiKey");
     }
 
     [TestClass]
@@ -37,8 +37,8 @@ namespace Route4MeSDKUnitTest
         {
             lsOptimizationIDs = new List<string>();
 
-            tdr = new TestDataRepository(c_ApiKey);
-            tdr2 = new TestDataRepository(c_ApiKey);
+            tdr = new TestDataRepository();
+            tdr2 = new TestDataRepository();
 
             bool result = tdr.RunOptimizationSingleDriverRoute10Stops();
             bool result2 = tdr2.RunOptimizationSingleDriverRoute10Stops();
@@ -655,7 +655,7 @@ namespace Route4MeSDKUnitTest
 
             lsOptimizationIDs = new List<string>();
 
-            tdr = new TestDataRepository(c_ApiKey);
+            tdr = new TestDataRepository();
             bool result = tdr.RunSingleDriverRoundTrip();
 
             Assert.IsTrue(result, "Single Driver Round Trip generation failed...");
@@ -967,7 +967,7 @@ namespace Route4MeSDKUnitTest
         static string c_ApiKey = ApiKeys.actualApiKey; // The optimizations with the Trucking, Multiple Depots, Multiple Drivers allowed only for business and higher account types --- put in the parameter an appropriate API key
         static string c_ApiKey_1 = ApiKeys.demoApiKey;
 
-        static TestDataRepository tdr = new TestDataRepository(c_ApiKey);
+        static TestDataRepository tdr = new TestDataRepository();
 
         static DataObject dataObject, dataObjectMDMD24;
 
@@ -4518,7 +4518,7 @@ namespace Route4MeSDKUnitTest
         public void SingleDriverRoundTripGenericTest()
         {
             const string uri = R4MEInfrastructureSettings.MainHost + "/api.v4/optimization_problem.php";
-            const string myApiKey = ApiKeys.actualApiKey;
+            string myApiKey = ApiKeys.actualApiKey;
 
             // Create the manager with the api key
             var route4Me = new Route4MeManager(myApiKey);
@@ -8098,7 +8098,7 @@ namespace Route4MeSDKUnitTest
             string ApiKey = ApiKeys.actualApiKey;
 
             var route4Me = new Route4MeManager(ApiKey);
-            var tdr = new TestDataRepository(c_ApiKey);
+            var tdr = new TestDataRepository();
 
             bool blContinue = true;
 
@@ -8816,7 +8816,7 @@ namespace Route4MeSDKUnitTest
 
             lsOptimizationIDs = new List<string>();
             context.Properties.Add("Categ", "Ignorable");
-            tdr = new TestDataRepository(c_ApiKey);
+            tdr = new TestDataRepository();
 
             bool result = tdr.RunSingleDriverRoundTrip();
 
@@ -9516,7 +9516,7 @@ namespace Route4MeSDKUnitTest
         {
             lsOptimizationIDs = new List<string>();
 
-            tdr = new TestDataRepository(c_ApiKey);
+            tdr = new TestDataRepository();
 
             bool result = tdr.RunOptimizationSingleDriverRoute10Stops();
 
@@ -10044,7 +10044,7 @@ namespace Route4MeSDKUnitTest
         {
             lsOptimizationIDs = new List<string>();
 
-            tdr = new TestDataRepository(c_ApiKey);
+            tdr = new TestDataRepository();
 
             bool result = tdr.RunSingleDriverRoundTrip();
 
@@ -10337,7 +10337,7 @@ namespace Route4MeSDKUnitTest
         {
             lsOptimizationIDs = new List<string>();
 
-            tdr = new TestDataRepository(c_ApiKey);
+            tdr = new TestDataRepository();
 
             bool result = tdr.RunSingleDriverRoundTrip();
 
@@ -11465,7 +11465,7 @@ namespace Route4MeSDKUnitTest
 
             db_type = DB_Type.SQLCE; // you can choose other types of the database engine.
 
-            tdr = new TestDataRepository(c_ApiKey);
+            tdr = new TestDataRepository();
 
             bool result = tdr.GenerateSQLCEDatabaseTest();
 
@@ -11836,7 +11836,7 @@ namespace Route4MeSDKUnitTest
             lsAddressbookContacts = new List<string>();
             lsOrders = new List<string>();
 
-            tdr = new TestDataRepository(c_ApiKey);
+            tdr = new TestDataRepository();
 
             bool result = tdr.RunOptimizationSingleDriverRoute10Stops();
 
@@ -12594,9 +12594,9 @@ namespace Route4MeSDKUnitTest
     {
         private string c_ApiKey = ApiKeys.actualApiKey;
 
-        public TestDataRepository(String apiKey = ApiKeys.actualApiKey)
+        public TestDataRepository()
         {
-            c_ApiKey = apiKey;
+            c_ApiKey = ApiKeys.actualApiKey;
         }
 
         public DataObject dataObjectSD10Stops { get; set; }
