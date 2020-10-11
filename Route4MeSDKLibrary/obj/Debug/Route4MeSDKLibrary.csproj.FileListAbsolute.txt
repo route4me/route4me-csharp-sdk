@@ -41,3 +41,5 @@ C:\Users\User\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKLibrary\bin\Debug\
 C:\Users\User\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKLibrary\bin\Debug\System.Security.AccessControl.xml
 C:\Users\User\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKLibrary\bin\Debug\System.Security.Permissions.xml
 C:\Users\User\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKLibrary\bin\Debug\System.Security.Principal.Windows.xml
+C:\Users\User\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKLibrary\bin\Debug\App.config
+C:\Users\User\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKLibrary\obj\Debug\Route4MeSDKLibrary.csprojAssemblyReference.cache
