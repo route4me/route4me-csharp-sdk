@@ -6,10 +6,10 @@ namespace Route4MeSDK.DataTypes
     public sealed class DeviceLocationGap
     {
         [DataMember(Name = "distance")]
-        public decimal? Distance { get; set; }
+        public double? Distance { get; set; }
 
         [DataMember(Name = "duration")]
-        public decimal? Duration { get; set; }
+        public double? Duration { get; set; }
 
         [DataMember(Name = "geometry")]
         public string Geometry { get; set; }

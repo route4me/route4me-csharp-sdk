@@ -18,7 +18,7 @@ namespace Route4MeSDK.DataTypes
         public string Name { get; set; }
 
         [DataMember(Name = "distance")]
-        public decimal? Distance { get; set; }
+        public double? Distance { get; set; }
 
         [DataMember(Name = "matchings_index")]
         public int? MatchingsIndex { get; set; }

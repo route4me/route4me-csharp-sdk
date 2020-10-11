@@ -175,14 +175,14 @@ namespace Route4MeSDK.DataTypes
         /// </summary>
         [DataMember(Name = "udu_actual_travel_distance", EmitDefaultValue = false)]
         [ReadOnly(true)]
-        public decimal? UduActualTravelDistance { get; set; }
+        public double? UduActualTravelDistance { get; set; }
 
         /// <summary>
         /// Actual travel distance.
         /// </summary>
         [DataMember(Name = "actual_travel_distance", EmitDefaultValue = false)]
         [ReadOnly(true)]
-        public decimal? ActualTravelDistance { get; set; }
+        public double? ActualTravelDistance { get; set; }
 
         /// <summary>
         /// Actual travel time (seconds).
@@ -224,7 +224,7 @@ namespace Route4MeSDK.DataTypes
         /// </summary>
         [DataMember(Name = "paying_miles", EmitDefaultValue = false)]
         [ReadOnly(true)]
-        public decimal? PayingMiles { get; set; }
+        public double? PayingMiles { get; set; }
 
         /// <summary>
         /// Geofence polygon type.

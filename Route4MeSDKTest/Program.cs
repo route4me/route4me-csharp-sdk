@@ -36,7 +36,7 @@ namespace Route4MeSDKTest
       }
       else
       {
-        System.Console.WriteLine("MoveDestinationToRoute not called. routeDestinationId = {0}, afterDestinationId = {1}.", routeDestinationIdToMove, afterDestinationIdToMoveAfter);
+        Console.WriteLine("MoveDestinationToRoute not called. routeDestinationId = {0}, afterDestinationId = {1}.", routeDestinationIdToMove, afterDestinationIdToMoveAfter);
       }
 
       string optimizationProblemID = examples.SingleDriverRoundTripGeneric();
@@ -59,19 +59,19 @@ namespace Route4MeSDKTest
       if (optimizationProblemID != null)
         examples.GetOptimization(optimizationProblemID);
       else
-        System.Console.WriteLine("GetOptimization not called. optimizationProblemID == null.");
+        Console.WriteLine("GetOptimization not called. optimizationProblemID == null.");
       
       examples.GetOptimizations();
 
       if (optimizationProblemID != null)
         examples.AddDestinationToOptimization(optimizationProblemID, true);
       else
-        System.Console.WriteLine("AddDestinationToOptimization not called. optimizationProblemID == null.");
+        Console.WriteLine("AddDestinationToOptimization not called. optimizationProblemID == null.");
 
       if (optimizationProblemID != null)
         examples.ReOptimization(optimizationProblemID);
       else
-        System.Console.WriteLine("ReOptimization not called. optimizationProblemID == null.");
+        Console.WriteLine("ReOptimization not called. optimizationProblemID == null.");
 
       if (routeId_SingleDriverRoute10Stops != null)
       {
@@ -81,7 +81,7 @@ namespace Route4MeSDKTest
       }
       else
       {
-        System.Console.WriteLine("UpdateRoute, ReoptimizeRoute, GetRoute not called. routeId_SingleDriverRoute10Stops == null.");
+        Console.WriteLine("UpdateRoute, ReoptimizeRoute, GetRoute not called. routeId_SingleDriverRoute10Stops == null.");
       }
 
       examples.GetRoutes();
@@ -90,7 +90,7 @@ namespace Route4MeSDKTest
       if (routeId_SingleDriverRoute10Stops != null)
         examples.GetActivities(routeId_SingleDriverRoute10Stops);
       else
-        System.Console.WriteLine("GetActivities not called. routeId_SingleDriverRoute10Stops == null.");
+        Console.WriteLine("GetActivities not called. routeId_SingleDriverRoute10Stops == null.");
 
       if (routeIdToMoveTo != null && routeDestinationIdToMove != 0)
       {
@@ -101,14 +101,15 @@ namespace Route4MeSDKTest
       }
       else
       {
-        System.Console.WriteLine("AddAddressNote, GetAddress, GetAddressNotes not called. routeIdToMoveTo == null || routeDestinationIdToMove == 0.");
+        Console.WriteLine("AddAddressNote, GetAddress, GetAddressNotes not called. routeIdToMoveTo == null || routeDestinationIdToMove == 0.");
       }
 
       string routeId_DuplicateRoute = null;
+
       if (routeId_SingleDriverRoute10Stops != null)
         routeId_DuplicateRoute = examples.DuplicateRoute(routeId_SingleDriverRoute10Stops);
       else
-        System.Console.WriteLine("DuplicateRoute not called. routeId_SingleDriverRoute10Stops == null.");
+        Console.WriteLine("DuplicateRoute not called. routeId_SingleDriverRoute10Stops == null.");
 
       //disabled by default, not necessary for optimization tests
       //not all accounts are capable of storing gps data
@@ -123,6 +124,7 @@ namespace Route4MeSDKTest
       }*/
 
       List<string> routeIdsToDelete = new List<string>();
+
       if (routeId_SingleDriverRoute10Stops != null)
         routeIdsToDelete.Add(routeId_SingleDriverRoute10Stops);
       if (routeId_SingleDriverRoundTrip != null)
@@ -143,11 +145,13 @@ namespace Route4MeSDKTest
       if (routeIdsToDelete.Count > 0)
         examples.DeleteRoutes(routeIdsToDelete.ToArray());
       else
-        System.Console.WriteLine("routeIdsToDelete.Count == 0. DeleteRoutes not called.");
+        Console.WriteLine("routeIdsToDelete.Count == 0. DeleteRoutes not called.");
 
       AddressBookContact contact1 = examples.AddAddressBookContact();
       AddressBookContact contact2 = examples.AddAddressBookContact();
+
       examples.GetAddressBookContacts();
+
       if (contact1 != null)
       {
         contact1.last_name = "Updated " + (new Random()).Next().ToString();
@@ -155,9 +159,11 @@ namespace Route4MeSDKTest
       }
       else
       {
-        System.Console.WriteLine("contact1 == null. UpdateAddressBookContact not called.");
+        Console.WriteLine("contact1 == null. UpdateAddressBookContact not called.");
       }
+
       List<string> addressIdsToRemove = new List<string>();
+
       if (contact1 != null)
         addressIdsToRemove.Add(contact1.address_id.ToString());
       if (contact2 != null)
@@ -170,22 +176,22 @@ namespace Route4MeSDKTest
       if (territoryId != null)
         examples.GetAvoidanceZone(territoryId);
       else
-        System.Console.WriteLine("GetAvoidanceZone not called. territoryId == null.");
+        Console.WriteLine("GetAvoidanceZone not called. territoryId == null.");
       if (territoryId != null)
         examples.UpdateAvoidanceZone(territoryId);
       else
-        System.Console.WriteLine("UpdateAvoidanceZone not called. territoryId == null.");
+        Console.WriteLine("UpdateAvoidanceZone not called. territoryId == null.");
       if (territoryId != null)
         examples.DeleteAvoidanceZone(territoryId);
       else
-        System.Console.WriteLine("DeleteAvoidanceZone not called. territoryId == null.");
+        Console.WriteLine("DeleteAvoidanceZone not called. territoryId == null.");
 
       examples.GenericExample();
       examples.GenericExampleShortcut();
 
-      System.Console.WriteLine("");
-      System.Console.WriteLine("Press any key");
-      System.Console.ReadKey();
+      Console.WriteLine("");
+      Console.WriteLine("Press any key");
+      Console.ReadKey();
     }
   }
 }

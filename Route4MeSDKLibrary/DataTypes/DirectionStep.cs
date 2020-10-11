@@ -54,7 +54,7 @@ namespace Route4MeSDK.DataTypes
         /// UDU Distance (UDU: User Distance Unit).
         ///</summary>
         [DataMember(Name = "udu_distance")]
-        public decimal? UduDistance { get; set; }
+        public double? UduDistance { get; set; }
 
         ///<summary>
         /// Direction step duration(seconds)

@@ -7,9 +7,9 @@ using System.Reflection;
 using System.Runtime.Serialization.Json;
 using System.Text;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using System.Collections;
 using System.Globalization;
+using System.Configuration;
 
 namespace Route4MeSDK
 {
@@ -50,7 +50,6 @@ namespace Route4MeSDK
                 ContractResolver = new DataContractResolver()
             };
 
-
             StreamReader reader = new StreamReader(stream);
             string text = reader.ReadToEnd();
 
@@ -59,14 +58,10 @@ namespace Route4MeSDK
 
         public static T ReadObjectNew<T>(string jsonText)
         {
-
             var jsonSettings = new JsonSerializerSettings()
             {
                 ContractResolver = new DataContractResolver()
             };
-
-            //StreamReader reader = new StreamReader(stream);
-            //string text = reader.ReadToEnd();
 
             return JsonConvert.DeserializeObject<T>(jsonText, jsonSettings);
         }
@@ -249,7 +244,6 @@ namespace Route4MeSDK
                 errorString = "The modified object should not be null";
                 return null;
             }
-
             
             var properties = modifiedObject.GetType().GetProperties();
 
@@ -298,73 +292,6 @@ namespace Route4MeSDK
                 }
 
                 propNames.Add(propInfo.Name);
-
-                /*
-                if (propInfo.PropertyType.IsArray)
-                {
-                    bool equalArrays = false;
-
-                    try
-                    {
-                        var modifiedArray = (Array)modifiedObjectPropertyValue;
-                        var initialArray = (Array)initialObjectPropertyValue;
-
-                        if (modifiedArray.Length < 1 || initialArray.Length < 1) continue;
-
-                        if (modifiedArray.Length != initialArray.Length)
-                        {
-                            propNames.Add(propInfo.Name);
-                            continue;
-                        }
-
-                        for (int i=0; i< initialArray.Length; i++)
-                        {
-                            object objectItemInitial = (object)(initialArray.GetValue(i));
-                            object objectItemModified = (object)(modifiedArray.GetValue(i));
-
-                            if (objectItemInitial.Equals(objectItemModified))
-                            {
-                                equalArrays = true;
-                            }
-                            else
-                            {
-                                equalArrays = false;
-                                break;
-                            }
-                        }
-                    }
-                    catch (Exception)
-                    {
-                        continue;
-                    }
-
-                    if (!equalArrays) propNames.Add(propInfo.Name);
-                }
-
-                if (IsPropertyDictionary(initialObjectPropertyValue))
-                {
-                    var modifiedDict = (Dictionary<string, string>)modifiedObjectPropertyValue;
-                    var initialDict = (Dictionary<string, string>)initialObjectPropertyValue;
-
-                    if (!IsDictionariesEqual(initialDict, modifiedDict))
-                    {
-                        propNames.Add(propInfo.Name);
-                    }
-
-                    continue;
-                }
-
-                if (IsPropertyObject(initialObjectPropertyValue))
-                {
-                    Console.WriteLine("Object");
-                }
-
-                if (!modifiedObjectPropertyValue.Equals(initialObjectPropertyValue))
-                {
-                    propNames.Add(propInfo.Name);
-                }
-
-                */
             }
 
             return propNames;
@@ -499,8 +426,8 @@ namespace Route4MeSDK
         /// <summary>
         /// Returns numeration of the Route4Me object proeprties.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
+        /// <typeparam name="T">Class type</typeparam>
+        /// <returns>Property postions in the class</returns>
         public static Dictionary<string, int> GetPropertyPositions<T>() where T : class
         {
             var properties = typeof(T).GetProperties();
@@ -572,7 +499,6 @@ namespace Route4MeSDK
                 errorString = ex.Message;
                 return default(TValue);
             }
-            
         }
 
         /// <summary>
@@ -784,6 +710,28 @@ namespace Route4MeSDK
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Read a setting parameter from App.config by specified key
+        /// </summary>
+        /// <param name="key">A setting key</param>
+        /// <returns>A seeting value</returns>
+        public static string ReadSetting(string key)
+        {
+            try
+            {
+                var appSettings = ConfigurationManager.AppSettings;
+                string result = appSettings[key];
+
+                if (result==null) return "Not found";
+
+                return result;
+            }
+            catch (ConfigurationErrorsException ex)
+            {
+                return "Error reading app settings."+Environment.NewLine+ex.Message;
+            }
         }
     }
 }

@@ -79,7 +79,7 @@ namespace Route4MeSDK.DataTypes
         /// Vehicle movement speed.
         /// </summary>
         [DataMember(Name = "speed")]
-        public decimal? Speed { get; set; }
+        public double? Speed { get; set; }
 
         /// <summary>
         /// Vehicle movement speed.

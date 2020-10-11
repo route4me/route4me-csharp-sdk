@@ -15,15 +15,15 @@ namespace Route4MeSDK.DataTypes
         public DeviceLocationLeg[] Legs { get; set; }
 
         [DataMember(Name = "distance")]
-        public decimal? Distance { get; set; }
+        public double? Distance { get; set; }
 
         [DataMember(Name = "duration")]
-        public decimal? Duration { get; set; }
+        public double? Duration { get; set; }
 
         [DataMember(Name = "weight_name")]
         public string WeightName { get; set; }
 
         [DataMember(Name = "weight")]
-        public decimal? Weight { get; set; }
+        public double? Weight { get; set; }
     }
 }
