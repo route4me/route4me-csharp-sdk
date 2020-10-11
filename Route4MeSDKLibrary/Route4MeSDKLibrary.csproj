@@ -212,9 +212,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
-    <None Include="App.config">
+    <Content Include="App.config">
       <SubType>Designer</SubType>
-    </None>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="packages.config" />
     <None Include="r4m_csharp_sdk.snk" />
     <None Include="Route4MeExcelAddIn_1_TemporaryKey.pfx" />
