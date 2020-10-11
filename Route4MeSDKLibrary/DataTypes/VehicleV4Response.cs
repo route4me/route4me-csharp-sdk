@@ -135,7 +135,7 @@ namespace Route4MeSDK.DataTypes
         public string VehicleAxleCount { get; set; }
 
         /// <summary>
-        /// If true, the vehicle is operational.
+        /// If equal to '1', the vehicle is operational.
         /// </summary>
         [DataMember(Name = "is_operational", EmitDefaultValue = false)]
         public string IsOperational { get; set; }

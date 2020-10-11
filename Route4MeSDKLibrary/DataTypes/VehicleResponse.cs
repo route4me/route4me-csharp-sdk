@@ -160,9 +160,9 @@ namespace Route4MeSDK.DataTypes
         public double? WeightLb { get; set; }
 
         /// <summary>
-        /// If true, the vehicle is operational.
+        /// If "1", the vehicle is operational.
         /// </summary>
         [DataMember(Name = "is_operational")]
-        public bool? IsOperational { get; set; }
+        public string IsOperational { get; set; }
     }
 }
