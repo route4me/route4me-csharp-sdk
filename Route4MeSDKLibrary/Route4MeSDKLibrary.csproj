@@ -212,9 +212,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
-    <Content Include="App.config">
+    <Content Include="app.config">
       <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="packages.config" />
     <None Include="r4m_csharp_sdk.snk" />
