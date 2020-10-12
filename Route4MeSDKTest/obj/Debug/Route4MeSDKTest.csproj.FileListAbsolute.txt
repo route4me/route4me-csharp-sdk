@@ -24,7 +24,6 @@ C:\Users\User\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKTest\bin\Debug\Soc
 C:\Users\User\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKTest\bin\Debug\SocketIoClientDotNet.dll.config
 C:\Users\User\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKTest\bin\Debug\Newtonsoft.Json.xml
 C:\Users\User\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKTest\bin\Debug\System.Collections.Immutable.xml
-C:\Users\Odin62\Documents\GitHub\Route4Me\route4me-csharp-sdk\Route4MeSDKTest\bin\Debug\Resources\test.png
 C:\Users\Odin62\Documents\GitHub\Route4Me\route4me-csharp-sdk\Route4MeSDKTest\bin\Debug\Route4MeSDKTest.exe.config
 C:\Users\Odin62\Documents\GitHub\Route4Me\route4me-csharp-sdk\Route4MeSDKTest\bin\Debug\Route4MeSDKTest.exe
 C:\Users\Odin62\Documents\GitHub\Route4Me\route4me-csharp-sdk\Route4MeSDKTest\bin\Debug\Route4MeSDKTest.pdb
@@ -51,3 +50,11 @@ C:\Users\Odin62\Documents\GitHub\Route4Me\route4me-csharp-sdk\Route4MeSDKTest\ob
 C:\Users\Odin62\Documents\GitHub\Route4Me\route4me-csharp-sdk\Route4MeSDKTest\obj\Debug\Route4MeSDKTest.exe
 C:\Users\Odin62\Documents\GitHub\Route4Me\route4me-csharp-sdk\Route4MeSDKTest\obj\Debug\Route4MeSDKTest.pdb
 C:\Users\User\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKTest\obj\Debug\Route4MeSDKTest.csproj.CoreCompileInputs.cache
+C:\Users\Odin62\Documents\GitHub\Route4Me\route4me-csharp-sdk\Route4MeSDKTest\bin\Debug\App.config
+C:\Users\Odin62\Documents\GitHub\Route4Me\route4me-csharp-sdk\Route4MeSDKTest\bin\Debug\System.Security.AccessControl.dll
+C:\Users\Odin62\Documents\GitHub\Route4Me\route4me-csharp-sdk\Route4MeSDKTest\bin\Debug\System.Security.Permissions.dll
+C:\Users\Odin62\Documents\GitHub\Route4Me\route4me-csharp-sdk\Route4MeSDKTest\bin\Debug\System.Security.Principal.Windows.dll
+C:\Users\Odin62\Documents\GitHub\Route4Me\route4me-csharp-sdk\Route4MeSDKTest\bin\Debug\WebSocket4Net.dll
+C:\Users\Odin62\Documents\GitHub\Route4Me\route4me-csharp-sdk\Route4MeSDKTest\bin\Debug\System.Security.AccessControl.xml
+C:\Users\Odin62\Documents\GitHub\Route4Me\route4me-csharp-sdk\Route4MeSDKTest\bin\Debug\System.Security.Permissions.xml
+C:\Users\Odin62\Documents\GitHub\Route4Me\route4me-csharp-sdk\Route4MeSDKTest\bin\Debug\System.Security.Principal.Windows.xml
