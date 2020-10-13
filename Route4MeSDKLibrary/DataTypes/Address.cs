@@ -28,7 +28,7 @@ namespace Route4MeSDK.DataTypes
         /// </summary>
         // The ID of the member inside the Route4Me system.
         [DataMember(Name = "member_id", EmitDefaultValue = false)]
-        public string MemberId { get; set; }
+        public int? MemberId { get; set; }
 
         /// <summary>
         /// First name
