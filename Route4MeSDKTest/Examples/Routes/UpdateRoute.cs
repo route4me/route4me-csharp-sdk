@@ -14,20 +14,19 @@ namespace Route4MeSDK.Examples
       // Create the manager with the api key
       Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
 
-      RouteParameters parametersNew = new RouteParameters()
+      var parametersNew = new RouteParameters()
       {
         RouteName = "New name of the route"
       };
 
-      RouteParametersQuery routeParameters = new RouteParametersQuery()
+      var routeParameters = new RouteParametersQuery()
       {
         RouteId = routeId,
         Parameters = parametersNew
       };
 
       // Run the query
-      string errorString;
-      DataObjectRoute dataObject = route4Me.UpdateRoute(routeParameters, out errorString);
+      DataObjectRoute dataObject = route4Me.UpdateRoute(routeParameters, out string errorString);
 
       Console.WriteLine("");
 
