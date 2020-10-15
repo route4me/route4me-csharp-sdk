@@ -1,6 +1,7 @@
 ﻿using System.Runtime.Serialization;
 using System.ComponentModel.DataAnnotations;
 using System;
+using Route4MeSDK.QueryTypes;
 
 namespace Route4MeSDK.DataTypes
 {
@@ -8,7 +9,7 @@ namespace Route4MeSDK.DataTypes
     /// Route parameters
     /// </summary>
     [DataContract]
-    public sealed class RouteParameters
+    public class RouteParameters
     {
         /// <summary>
         /// Let the R4M API know if this SDK request is comming 
@@ -131,13 +132,13 @@ namespace Route4MeSDK.DataTypes
         /// <summary>
         /// Options which let the user choose which road obstacles to avoid. 
         /// This has no impact on route sequencing.
-        /// <para>Available values:
-        /// <value>Highways</value>, 
-        /// <value>Tolls</value>, 
-        /// <value>minimizeHighways</value>, 
-        /// <value>minimizeTolls</value>, 
-        /// <value>""</value>.
-        /// </para>
+        /// <para>Available values:</para>
+        /// <para>- Highways</para>
+        /// <para>- Tolls</para>
+        /// <para>- minimizeHighways</para>
+        /// <para>- minimizeTolls</para>
+        /// <para>- highways,tolls</para>
+        /// <para>- ""</para>.
         /// </summary>
         [DataMember(Name = "avoid", EmitDefaultValue = false)]
         public string Avoid { get; set; }
@@ -507,13 +508,17 @@ namespace Route4MeSDK.DataTypes
         public int? RightTurn { get; set; }
 
         /// <summary>
-        /// Route travel time slowdown (e.g. 25 (means 25% slowdown))
+        /// Route travel time slowdown (e.g. 25 (means 25% slowdown)).
+        /// Note: the parameter is read-only and it can be set 
+        /// with the parameter Slowdowns.TravelTime.
         /// </summary>
         [DataMember(Name = "route_time_multiplier", EmitDefaultValue = false)]
         public double? RouteTimeMultiplier { get; set; }
 
         /// <summary>
-        /// Route service time slowdown (e.g. 10 (means 10% slowdown))
+        /// Route service time slowdown (e.g. 10 (means 10% slowdown)).
+        /// Note: the parameter is read-only and it can be set 
+        /// with the parameter Slowdowns.ServiceTime.
         /// </summary>
         [DataMember(Name = "route_service_time_multiplier", EmitDefaultValue = false)]
         public double? RouteServiceTimeMultiplier { get; set; }
@@ -525,11 +530,14 @@ namespace Route4MeSDK.DataTypes
         public string OptimizationEngine { get; set; }
 
         /// <summary>
-        /// If the service time is specified, all the route addresses wil have same service time. 
-        /// See <see cref="OverrideAddresses"/>
+        /// Slowdonw of the optimization parameters.
         /// </summary>
-        [DataMember(Name = "override_addresses", EmitDefaultValue = false)]
-        public OverrideAddresses overrideAddresses { get; set; }
+        /// <remarks>
+        /// <para>This is only query parameter.</para>
+        /// <para>This parameter is used in the optimization creation/generation process. </para>
+        /// </remarks>
+        [DataMember(Name = "slowdowns", EmitDefaultValue = false)]
+        public SlowdownParams Slowdowns { get; set; }
     }
 
     /// <summary>
@@ -544,5 +552,41 @@ namespace Route4MeSDK.DataTypes
         public long? Time { get; set; }
     }
 
+    /// <summary>
+    /// Slowdown parameters for the optimization creating process.
+    /// </summary>
+    [DataContract]
+    public class SlowdownParams : GenericParameters
+    {
+        /// <summary>
+        /// Class constructor
+        /// </summary>
+        /// <param name="serviceTime">Service time slowdown (percent)</param>
+        /// <param name="travelTime">Travel time slowdown (percent)</param>
+        public SlowdownParams(int? serviceTime, int? travelTime)
+        {
+            ServiceTime = serviceTime;
+            TravelTime = travelTime;
+        }
 
+        /// <summary>
+        /// Class constructor
+        /// </summary>
+        public SlowdownParams()
+        {
+
+        }
+
+        /// <summary>
+        /// Service time slowdowon (percent)
+        /// </summary>
+        [DataMember(Name = "service_time", EmitDefaultValue = false)]
+        public int? ServiceTime { get; set; }
+
+        /// <summary>
+        /// Travel time slowdowon (percent)
+        /// </summary>
+        [DataMember(Name = "travel_time", EmitDefaultValue = false)]
+        public int? TravelTime { get; set; }
+    }
 }

@@ -359,7 +359,10 @@ namespace Route4MeSDK
         /// <returns>A route</returns>
 		public DataObjectRoute UpdateRoute(RouteParametersQuery routeParameters, out string errorString)
 		{
-			var result = GetJsonObjectFromAPI<DataObjectRoute>(routeParameters,
+            if ((routeParameters.Parameters?.Metric ?? null) == 0) routeParameters.Parameters.Metric = Metric.Matrix;
+
+
+            var result = GetJsonObjectFromAPI<DataObjectRoute>(routeParameters,
 														  R4MEInfrastructureSettings.RouteHost,
 														  HttpMethodType.Put,
 														  out errorString);
@@ -934,170 +937,7 @@ namespace Route4MeSDK
             /// <value>A route destination ID to be updated</value>
 			[HttpQueryMemberAttribute(Name = "route_destination_id", EmitDefaultValue = false)]
 			public int? RouteDestinationId { get; set; }
-
-            /*
-            /// <value>The route destination alias</value>
-			[DataMember(Name = "alias", EmitDefaultValue = false)]
-			public string Alias { get; set; }
-
-            /// <value>The first name of a person at the destination</value>
-			[DataMember(Name = "first_name", EmitDefaultValue = false)]
-			public string FirstName { get; set; }
-
-            /// <value>The first name of a person at the destination</value>
-			[DataMember(Name = "last_name", EmitDefaultValue = false)]
-			public string LastName { get; set; }
-
-            /// <value>The destination's address</value>
-			[DataMember(Name = "address", EmitDefaultValue = false)]
-			public string AddressString { get; set; }
-
-            /// <value>The address stop type</value>
-			[DataMember(Name = "address_stop_type", EmitDefaultValue = false)]
-			public string AddressStopType { get; set; }
-
-            /// <value>If true the destination is a depot</value>
-			[DataMember(Name = "is_depot", EmitDefaultValue = false)]
-			public bool? IsDepot { get; set; }
-
-            /// <value>the latitude of the address</value>
-            [DataMember(Name = "lat", EmitDefaultValue = false)]
-			public double Latitude { get; set; }
-
-            /// <value>the longitude of the address</value>
-            [DataMember(Name = "lng", EmitDefaultValue = false)]
-			public double Longitude { get; set; }
-
-            /// <value>the sequence number of the address</value>
-			[DataMember(Name = "sequence_no", EmitDefaultValue = false)]
-			public int? SequenceNo { get; set; }
-
-            /// <value>status flag to mark an address as visited (aka check in)</value>
-            [DataMember(Name = "is_visited", EmitDefaultValue = false)]
-			public bool? IsVisited { get; set; }
-
-            /// <value>status flag to mark an address as departed (aka check out)</value>
-            [DataMember(Name = "is_departed", EmitDefaultValue = false)]
-			public bool? IsDeparted { get; set; }
-
-            /// <value>the last known visited timestamp of this address</value>
-            [DataMember(Name = "timestamp_last_visited", EmitDefaultValue = false)]
-			public uint? TimestampLastVisited { get; set; }
-
-            /// <value>The last known departed timestamp of this address</value>
-            [DataMember(Name = "timestamp_last_departed", EmitDefaultValue = false)]
-			public uint? TimestampLastDeparted { get; set; }
-
-            /// <value>the address group</value>
-			[DataMember(Name = "group", EmitDefaultValue = false)]
-			public object Group { get; set; }
-
-            //pass-through data about this route destination
-            //the data will be visible on the manifest, website, and mobile apps
-            /// <value>The customer PO of the address</value>
-            [DataMember(Name = "customer_po", EmitDefaultValue = false)]
-			public object CustomerPo { get; set; }
-
-            //pass-through data about this route destination
-            //the data will be visible on the manifest, website, and mobile apps
-            /// <value>The invoice NO of the address</value>
-            [DataMember(Name = "invoice_no", EmitDefaultValue = false)]
-			public object InvoiceNo { get; set; }
-
-            //pass-through data about this route destination
-            //the data will be visible on the manifest, website, and mobile apps
-            /// <value>The reference NO of the address</value>
-            [DataMember(Name = "reference_no", EmitDefaultValue = false)]
-			public object ReferenceNo { get; set; }
-
-            //pass-through data about this route destination
-            //the data will be visible on the manifest, website, and mobile apps
-            /// <value>The order NO of the address</value>
-            [DataMember(Name = "order_no", EmitDefaultValue = false)]
-			public object OrderNo { get; set; }
-
-            /// <value>The order ID of the address</value>
-			[DataMember(Name = "order_id", EmitDefaultValue = false)]
-			public int? OrderId { get; set; }
-
-            /// <value>The weight of the cargo</value>
-			[DataMember(Name = "weight", EmitDefaultValue = false)]
-			public object Weight { get; set; }
-
-            /// <value>The cost of the address</value>
-			[DataMember(Name = "cost", EmitDefaultValue = false)]
-			public object Cost { get; set; }
-
-            /// <value>The revenue from the address</value>
-			[DataMember(Name = "revenue", EmitDefaultValue = false)]
-			public object Revenue { get; set; }
-
-            //the cubic volume that this destination/order/line-item consumes/contains
-            //this is how much space it will take up on a vehicle
-            /// <value>The cubic volume of the cargo</value>
-            [DataMember(Name = "cube", EmitDefaultValue = false)]
-			public object Cube { get; set; }
-
-            //the number of pieces/palllets that this destination/order/line-item consumes/contains on a vehicle
-            /// <value>Number of pieces for an address</value>
-            [DataMember(Name = "pieces", EmitDefaultValue = false)]
-			public object Pieces { get; set; }
-
-            /// <value>The address email</value>
-			[DataMember(Name = "email", EmitDefaultValue = false)]
-			public string Email { get; set; }
-
-            /// <value>The address phone</value>
-			[DataMember(Name = "phone", EmitDefaultValue = false)]
-			public string Phone { get; set; }
-
-            /// <value>The time window start</value>
-			[DataMember(Name = "time_window_start", EmitDefaultValue = false)]
-			public long? TimeWindowStart { get; set; }
-
-            /// <value>The time window end</value>
-			[DataMember(Name = "time_window_end", EmitDefaultValue = false)]
-			public long? TimeWindowEnd { get; set; }
-
-            // <value>The expected amount of time that will be spent at this address by the driver/user</value>
-            [DataMember(Name = "time", EmitDefaultValue = false)]
-			public long? Time { get; set; }
-
-            //if present, the priority will sequence addresses in all the optimal routes so that
-            //higher priority addresses are general at the beginning of the route sequence
-            //1 is the highest priority, 100000 is the lowest
-            /// <value>The priority level of an address</value>
-            [DataMember(Name = "priority", EmitDefaultValue = false)]
-			public int? Priority { get; set; }
-
-            //generate optimal routes and driving directions to this curbside lat
-            /// <value>The curbside latitude</value>
-            [DataMember(Name = "curbside_lat", EmitDefaultValue = false)]
-			public double? CurbsideLatitude { get; set; }
-
-            //generate optimal routes and driving directions to the curbside lang
-            /// <value>The curbside longitude</value>
-            [DataMember(Name = "curbside_lng", EmitDefaultValue = false)]
-			public double? CurbsideLongitude { get; set; }
-
-            /// <value>The time window start 2</value>
-			[DataMember(Name = "time_window_start_2", EmitDefaultValue = false)]
-			public long? TimeWindowStart2 { get; set; }
-
-            /// <value>The time window end 2</value>
-			[DataMember(Name = "time_window_end_2", EmitDefaultValue = false)]
-			public long? TimeWindowEnd2 { get; set; }
-
-            /// <value>The custom fields of an address</value>
-			[DataMember(Name = "custom_fields", EmitDefaultValue = false)]
-			public Dictionary<string, string> CustomFields { get; set; }
-
-            /// <value>The person's contact ID at an address</value>
-			[DataMember(Name = "contact_id", EmitDefaultValue = false)]
-			public int? ContactId { get; set; }
-            */
 		}
-
 
         /// <summary>
         /// Updated a route destination
