@@ -212,8 +212,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
-    <Content Include="App.config">
-      <SubType>Designer</SubType>
+    <Content Include="app.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="packages.config" />
