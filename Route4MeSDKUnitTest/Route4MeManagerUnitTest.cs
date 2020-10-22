@@ -298,14 +298,16 @@ namespace Route4MeSDKUnitTest
                     Longitude = tdr2.SD10Stops_route.Addresses[1].Longitude,
                     ActivityType = "dropoff",
                     Contents = "C# SDK Test Content",
-                    CustomTypes = new AddressCustomNote[]
+                    CustomTypes = allCustomNotes.Length>0 
+                    ? new AddressCustomNote[]
                     {
                         new AddressCustomNote()
                         {
                             NoteCustomTypeID = allCustomNotes[0].NoteCustomTypeID.ToString(),
                             NoteCustomValue = allCustomNotes[0].NoteCustomTypeValues[0]
                         }
-                    },
+                    } 
+                    : null,
                     UploadUrl = tempFilePath
                 }
              };
@@ -313,7 +315,10 @@ namespace Route4MeSDKUnitTest
             var updatedRoute0 = route4Me.UpdateRoute(tdr2.SD10Stops_route, initialRoute, out string errorString0);
 
             Assert.IsTrue(updatedRoute0.Addresses[1].Notes.Length==1, "UpdateRouteTest failed: cannot create a note");
-            Assert.IsTrue(updatedRoute0.Addresses[1].Notes[0].CustomTypes.Length == 1, "UpdateRouteTest failed: cannot create a custom type note");
+            
+            if (allCustomNotes.Length > 0) 
+                Assert.IsTrue(updatedRoute0.Addresses[1].Notes[0].CustomTypes.Length == 1, "UpdateRouteTest failed: cannot create a custom type note");
+            
             Assert.IsTrue(updatedRoute0.Addresses[1].Notes[0].UploadId.Length==32, "UpdateRouteTest failed: cannot create a custom type note");
 
             #endregion
@@ -945,7 +950,6 @@ namespace Route4MeSDKUnitTest
             var response = route4Me.addCustomNoteToRoute(noteParameters, customNotes, out string errorString);
 
             Assert.IsTrue(response.GetType() != typeof(String), errorString);
-
             Assert.IsTrue(response.GetType() == typeof(AddressNote));
         }
 
@@ -4508,6 +4512,226 @@ namespace Route4MeSDKUnitTest
             dataObject = route4Me.RunOptimization(optimizationParameters, out string errorString);
 
             Assert.IsNotNull(dataObject, "SingleDriverMultipleTimeWindowsTest failed... " + errorString);
+
+            tdr.RemoveOptimization(new string[] { dataObject.OptimizationProblemId });
+        }
+
+        [TestMethod]
+        public void BundledAddressesTest()
+        {
+            var route4Me = new Route4MeManager(c_ApiKey);
+
+            var memberCapabilities = route4Me.GetMemberCapabilities(out string errorString0);
+
+            if (c_ApiKey==ApiKeys.demoApiKey || memberCapabilities==null)
+            {
+                Console.WriteLine("This test requires enterprise commercial subscription");
+                return;
+            }
+
+            var commercialSubscription = memberCapabilities
+                .GetType()
+                .GetProperties()
+                .Where(x => x.Name == "Commercial")
+                .FirstOrDefault();
+
+            if (commercialSubscription == null)
+            {
+                Console.WriteLine("This test requires enterprise commercial subscription");
+                return;
+            }
+
+            // Prepare the addresses
+            Address[] addresses = new Address[]
+              {
+                #region Addresses
+
+                new Address() { AddressString   = "3634 W Market St, Fairlawn, OH 44333",
+                                //all possible originating locations are depots, should be marked as true
+                                //stylistically we recommend all depots should be at the top of the destinations list
+                                IsDepot          = true,
+                                Latitude         = 41.135762259364,
+                                Longitude        = -81.629313826561,
+
+                                TimeWindowStart  = null,
+                                TimeWindowEnd    = null,
+                                TimeWindowStart2 = null,
+                                TimeWindowEnd2   = null,
+                                Time             = null
+                },
+
+                new Address() { AddressString   = "1218 Ruth Ave, Cuyahoga Falls, OH 44221",
+                                Latitude        = 41.135762259364,
+                                Longitude       = -81.629313826561,
+
+                                //together these two specify the time window of a destination
+                                //seconds offset relative to the route start time for the open availability of a destination
+                                TimeWindowStart  = 6 * 3600 + 00 * 60,
+                                //seconds offset relative to the route end time for the open availability of a destination
+                                TimeWindowEnd    = 6 * 3600 + 30 * 60,
+
+                                // Second 'TimeWindowStart'
+                                TimeWindowStart2 = 7 * 3600 + 00 * 60,
+                                // Second 'TimeWindowEnd'
+                                TimeWindowEnd2   = 7 * 3600 + 20 * 60,
+
+                                //the number of seconds at destination
+                                Time             = 300
+                },
+
+                new Address() { AddressString    = "512 Florida Pl, Barberton, OH 44203",
+                                Latitude         = 41.003671512008,
+                                Longitude        = -81.598461046815,
+                                TimeWindowStart  = 7 * 3600 + 30 * 60,
+                                TimeWindowEnd    = 7 * 3600 + 40 * 60,
+                                TimeWindowStart2 = 8 * 3600 + 00 * 60,
+                                TimeWindowEnd2   = 8 * 3600 + 10 * 60,
+                                Time             = 300
+                },
+
+                new Address() { AddressString    = "512 Florida Pl, Barberton, OH 44203",
+                                Latitude         = 41.003671512008,
+                                Longitude        = -81.598461046815,
+                                TimeWindowStart  = 8 * 3600 + 30 * 60,
+                                TimeWindowEnd    = 8 * 3600 + 40 * 60,
+                                TimeWindowStart2 = 8 * 3600 + 50 * 60,
+                                TimeWindowEnd2   = 9 * 3600 + 00 * 60,
+                                Time             = 100
+                },
+
+                new Address() { AddressString    = "3495 Purdue St, Cuyahoga Falls, OH 44221",
+                                Latitude         = 41.162971496582,
+                                Longitude        = -81.479049682617,
+                                TimeWindowStart  = 9 * 3600 + 00 * 60,
+                                TimeWindowEnd    = 9 * 3600 + 15 * 60,
+                                TimeWindowStart2 = 9 * 3600 + 30 * 60,
+                                TimeWindowEnd2   = 9 * 3600 + 45 * 60,
+                                Time             = 300
+                },
+
+                new Address() { AddressString    = "1659 Hibbard Dr, Stow, OH 44224",
+                                Latitude         = 41.194505989552,
+                                Longitude        = -81.443351581693,
+                                TimeWindowStart  = 10 * 3600 + 00 * 60,
+                                TimeWindowEnd    = 10 * 3600 + 15 * 60,
+                                TimeWindowStart2 = 10 * 3600 + 30 * 60,
+                                TimeWindowEnd2   = 10 * 3600 + 45 * 60,
+                                Time             = 300
+                },
+
+                new Address() { AddressString    = "2705 N River Rd, Stow, OH 44224",
+                                Latitude         = 41.145240783691,
+                                Longitude        = -81.410247802734,
+                                TimeWindowStart  = 11 * 3600 + 00 * 60,
+                                TimeWindowEnd    = 11 * 3600 + 15 * 60,
+                                TimeWindowStart2 = 11 * 3600 + 30 * 60,
+                                TimeWindowEnd2   = 11 * 3600 + 45 * 60,
+                                Time             = 300
+                },
+
+                new Address() { AddressString    = "10159 Bissell Dr, Twinsburg, OH 44087",
+                                Latitude         = 41.340042114258,
+                                Longitude        = -81.421226501465,
+                                TimeWindowStart  = 12 * 3600 + 00 * 60,
+                                TimeWindowEnd    = 12 * 3600 + 15 * 60,
+                                TimeWindowStart2 = 12 * 3600 + 30 * 60,
+                                TimeWindowEnd2   = 12 * 3600 + 45 * 60,
+                                Time             = 300
+                },
+
+                new Address() { AddressString    = "367 Cathy Dr, Munroe Falls, OH 44262",
+                                Latitude         = 41.148578643799,
+                                Longitude        = -81.429229736328,
+                                TimeWindowStart  = 13 * 3600 + 00 * 60,
+                                TimeWindowEnd    = 13 * 3600 + 15 * 60,
+                                TimeWindowStart2 = 13 * 3600 + 30 * 60,
+                                TimeWindowEnd2   = 13 * 3600 + 45 * 60,
+                                Time             = 300,
+                                Cube             = 3
+                },
+
+                new Address() { AddressString    = "367 Cathy Dr, Munroe Falls, OH 44262",
+                                Latitude         = 41.148578643799,
+                                Longitude        = -81.429229736328,
+                                TimeWindowStart  = 14 * 3600 + 00 * 60,
+                                TimeWindowEnd    = 14 * 3600 + 15 * 60,
+                                TimeWindowStart2 = 14 * 3600 + 30 * 60,
+                                TimeWindowEnd2   = 14 * 3600 + 45 * 60,
+                                Time             = 300,
+                                Cube             = 2
+                },
+
+                new Address() { AddressString    = "512 Florida Pl, Barberton, OH 44203",
+                                Latitude         = 41.003671512008,
+                                Longitude        = -81.598461046815,
+                                TimeWindowStart  = 15 * 3600 + 00 * 60,
+                                TimeWindowEnd    = 15 * 3600 + 15 * 60,
+                                TimeWindowStart2 = 15 * 3600 + 30 * 60,
+                                TimeWindowEnd2   = 15 * 3600 + 45 * 60,
+                                Time             = 300
+                },
+
+                new Address() { AddressString    = "559 W Aurora Rd, Northfield, OH 44067",
+                                Latitude         = 41.315116882324,
+                                Longitude        = -81.558746337891,
+                                TimeWindowStart  = 16 * 3600 + 00 * 60,
+                                TimeWindowEnd    = 16 * 3600 + 15 * 60,
+                                TimeWindowStart2 = 16 * 3600 + 30 * 60,
+                                TimeWindowEnd2   = 17 * 3600 + 00 * 60,
+                                Time             = 50
+                }
+
+                #endregion
+              };
+
+            // Set parameters
+            var parameters = new RouteParameters()
+            {
+                AlgorithmType = AlgorithmType.TSP,
+                RouteName = "SD Multiple TW Address Bundling " + DateTime.Now.ToString("yyyy-MM-dd"),
+
+                RouteDate = R4MeUtils.ConvertToUnixTimestamp(DateTime.UtcNow.Date.AddDays(1)),
+                RouteTime = 5 * 3600 + 30 * 60,
+                Optimize = Optimize.Distance.Description(),
+                DistanceUnit = DistanceUnit.MI.Description(),
+                DeviceType = DeviceType.Web.Description(),
+                Bundling = new AddressBundling()
+                {
+                    Mode = AddressBundlingMode.Address,
+                    MergeMode = AddressBundlingMergeMode.KeepAsSeparateDestinations,
+                    ServiceTimeRules = new ServiceTimeRulesClass()
+                    {
+                        FirstItemMode = AddressBundlingFirstItemMode.KeepOriginal,
+                        AdditionalItemsMode = AddressBundlingAdditionalItemsMode.KeepOriginal
+                    }
+                }
+            };
+
+            var optimizationParameters = new OptimizationParameters()
+            {
+                Addresses = addresses,
+                Parameters = parameters
+            };
+
+            // Run the query
+            dataObject = route4Me.RunOptimization(optimizationParameters, out string errorString);
+
+            Assert.IsNotNull(dataObject, "SingleDriverMultipleTimeWindowsTest failed... " + errorString);
+            Assert.IsTrue(dataObject.Routes.Length > 0, "The optimization doesn't contain route");
+            var routeId = dataObject.Routes[0].RouteID;
+
+            Assert.IsTrue(routeId!=null && routeId.Length==32, "The route ID is not valid");
+
+            var routeQueryParameters = new RouteParametersQuery()
+            {
+                RouteId = routeId,
+                BundlingItems = true
+            };
+
+            var routeBundled = route4Me.GetRoute(routeQueryParameters, out errorString);
+
+            Assert.IsNotNull(routeBundled, "Cannot retrieve the route. " + errorString);
+            Assert.IsNotNull(routeBundled.BundleItems, "Cannot retrieve bundled items in the route response.");
 
             tdr.RemoveOptimization(new string[] { dataObject.OptimizationProblemId });
         }
@@ -8183,8 +8407,8 @@ namespace Route4MeSDKUnitTest
 
             var addressBookParameters = new AddressBookParameters()
             {
-                Limit = 5,
-                Offset = 7
+                Limit = 1,
+                Offset = 16
             };
 
             // Run the query
@@ -8338,6 +8562,7 @@ namespace Route4MeSDKUnitTest
             var addressBookGroupParameters = new AddressBookGroupParameters()
             {
                 groupID = group2.groupID
+                //groupID = "59EB1E8AB954AA880A3B3D9D581065B4"
             };
 
             // Run the query

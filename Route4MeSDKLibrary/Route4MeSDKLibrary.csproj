@@ -111,12 +111,14 @@
     <Compile Include="DataTypes\AddressBookContactsResponse.cs" />
     <Compile Include="DataTypes\AddressBookGroup.cs" />
     <Compile Include="DataTypes\AddressBookGroupRule.cs" />
+    <Compile Include="DataTypes\AddressBundling.cs" />
     <Compile Include="DataTypes\AddressCustomNote.cs" />
     <Compile Include="DataTypes\AddressGeocoded.cs" />
     <Compile Include="DataTypes\AddressManifest.cs" />
     <Compile Include="DataTypes\AddressNote.cs" />
     <Compile Include="DataTypes\AddressForGeocoding.cs" />
     <Compile Include="DataTypes\AvoidanceZone.cs" />
+    <Compile Include="DataTypes\BundledItemResponse.cs" />
     <Compile Include="DataTypes\cDatabase.cs" />
     <Compile Include="DataTypes\Country.cs" />
     <Compile Include="DataTypes\CustomNoteType.cs" />
@@ -140,6 +142,7 @@
     <Compile Include="DataTypes\GeocodingResponse.cs" />
     <Compile Include="DataTypes\GeoPoint.cs" />
     <Compile Include="DataTypes\Links.cs" />
+    <Compile Include="DataTypes\MemberCapabilities.cs" />
     <Compile Include="DataTypes\MemberConfigurationData.cs" />
     <Compile Include="DataTypes\MemberConfigurationDataRersponse.cs" />
     <Compile Include="DataTypes\MemberConfigurationResponse.cs" />

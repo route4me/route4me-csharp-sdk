@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System;
 using Route4MeSDK.QueryTypes;
+using System.ComponentModel;
 
 namespace Route4MeSDK.DataTypes
 {
@@ -513,7 +514,7 @@ namespace Route4MeSDK.DataTypes
         /// with the parameter Slowdowns.TravelTime.
         /// </summary>
         [DataMember(Name = "route_time_multiplier", EmitDefaultValue = false)]
-        public double? RouteTimeMultiplier { get; set; }
+        public int? RouteTimeMultiplier { get; set; }
 
         /// <summary>
         /// Route service time slowdown (e.g. 10 (means 10% slowdown)).
@@ -521,7 +522,7 @@ namespace Route4MeSDK.DataTypes
         /// with the parameter Slowdowns.ServiceTime.
         /// </summary>
         [DataMember(Name = "route_service_time_multiplier", EmitDefaultValue = false)]
-        public double? RouteServiceTimeMultiplier { get; set; }
+        public int? RouteServiceTimeMultiplier { get; set; }
 
         /// <summary>
         /// Optimization engine (e.g. '1','2' etc)
@@ -530,7 +531,13 @@ namespace Route4MeSDK.DataTypes
         public string OptimizationEngine { get; set; }
 
         /// <summary>
-        /// Slowdonw of the optimization parameters.
+        /// If true, the time windows ignored.
+        /// </summary>
+        [DataMember(Name = "ignore_tw", EmitDefaultValue = false)]
+        public bool? IgnoreTw { get; set; }
+
+        /// <summary>
+        /// Slowdown of the optimization parameters.
         /// </summary>
         /// <remarks>
         /// <para>This is only query parameter.</para>
@@ -538,6 +545,20 @@ namespace Route4MeSDK.DataTypes
         /// </remarks>
         [DataMember(Name = "slowdowns", EmitDefaultValue = false)]
         public SlowdownParams Slowdowns { get; set; }
+
+        /// <summary>
+        /// TO DO: adjust description
+        /// </summary>
+        [DataMember(Name = "is_dynamic_start_time", EmitDefaultValue = false)]
+        [DefaultValue(false)]
+        public bool is_dynamic_start_time { get; set; }
+
+        /// <summary>
+        /// Address bundling rules
+        /// </summary>
+        [DataMember(Name = "bundling", EmitDefaultValue = false)]
+        [DefaultValue(false)]
+        public AddressBundling Bundling { get; set; }
     }
 
     /// <summary>
@@ -588,5 +609,7 @@ namespace Route4MeSDK.DataTypes
         /// </summary>
         [DataMember(Name = "travel_time", EmitDefaultValue = false)]
         public int? TravelTime { get; set; }
+
+        
     }
 }

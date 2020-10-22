@@ -1371,6 +1371,18 @@ namespace Route4MeSDK
             return GetJsonObjectFromAPI<MemberConfigurationResponse>(confParams, R4MEInfrastructureSettings.UserConfiguration, HttpMethodType.Put, out errorString);
 		}
 
+
+        public MemberCapabilities GetMemberCapabilities(out string errorString)
+        {
+            var parameters = new GenericParameters();
+
+            var result = GetJsonObjectFromAPI<MemberCapabilities>(parameters,
+                                R4MEInfrastructureSettings.MemberCapabilities,
+                                HttpMethodType.Get,
+                                out errorString);
+
+            return result;
+        }
         #endregion
 
         #region Address Notes
@@ -2157,7 +2169,7 @@ namespace Route4MeSDK
         /// The response from the getting process of the address book contacts
         /// </summary>
 		[DataContract]
-		private sealed class GetAddressBookContactsResponse : GenericParameters
+		public sealed class GetAddressBookContactsResponse : GenericParameters
 		{
             /// <value>Array of the AddressBookContact type objects</value>
 			[DataMember(Name = "results", IsRequired = false)]

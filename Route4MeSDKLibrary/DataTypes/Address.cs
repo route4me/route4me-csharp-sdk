@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Runtime.Serialization;
 using Route4MeSDK.QueryTypes;
 
@@ -521,5 +522,14 @@ namespace Route4MeSDK.DataTypes
         [DataMember(Name = "manifest", EmitDefaultValue = false)]
         [ReadOnly(true)]
         public AddressManifest Manifest { get; set; }
+
+        [DataMember(Name = "bundle_count", EmitDefaultValue = true)]
+        [DefaultValue(0)]
+        [ReadOnly(true)]
+        public int BundleCount { get; set; }
+
+        [DataMember(Name = "bundle_items", EmitDefaultValue = true)]
+        [ReadOnly(true)]
+        public BundledItemResponse[] BundleItems { get; set; }
     }
 }

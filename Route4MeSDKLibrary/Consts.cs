@@ -69,6 +69,8 @@ namespace Route4MeSDK
 
         public const string TeleamticsVendorsHost = "https://telematics.route4me.com/api/vendors.php";
 
+        public const string MemberCapabilities = MainHost + "/api/member/capabilities.php";
+
         #endregion
     }
 }

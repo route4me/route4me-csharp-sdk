@@ -42,10 +42,11 @@ namespace Route4MeSDK.DataTypes
         public string Operator { get; set; }
 
         /// <summary>
-        /// The value for the operator
+        /// The value for the operator.
+        /// Possible value types: string, string[]
         /// </summary>
         [DataMember(Name = "value", EmitDefaultValue = false)]
-        public string Value { get; set; }
+        public object Value { get; set; }
 
         /// <summary>
         /// The class constructor
