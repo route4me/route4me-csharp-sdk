@@ -112,11 +112,18 @@ namespace Route4MeSDK.QueryTypes
         public int? RouteDestinationId { get; set; }
 
         /// <summary>
-        /// If true will be redirected
+        /// If true, will be redirected
         /// </summary>
         [IgnoreDataMember()]
         [HttpQueryMemberAttribute(Name = "redirect", EmitDefaultValue = false)]
         public bool? Redirect { get; set; }
+
+        /// <summary>
+        /// If true, the address bundling info is included into route response.
+        /// </summary>
+        [IgnoreDataMember()]
+        [HttpQueryMemberAttribute(Name = "bundling_items", EmitDefaultValue = false)]
+        public bool? BundlingItems { get; set; }
 
         /// <summary>
         /// Route Parameters to update.

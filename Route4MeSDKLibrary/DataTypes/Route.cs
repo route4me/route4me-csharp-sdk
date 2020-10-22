@@ -300,5 +300,9 @@ namespace Route4MeSDK.DataTypes
         [DataMember(Name = "original_route", EmitDefaultValue = false)]
         [ReadOnly(true)]
         public DataObjectRoute OriginalRoute { get; set; }
+
+        [DataMember(Name = "bundle_items", EmitDefaultValue = true)]
+        [ReadOnly(true)]
+        public BundledItemResponse[] BundleItems { get; set; }
     }
 }

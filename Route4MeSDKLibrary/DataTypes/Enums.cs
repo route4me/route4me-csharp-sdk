@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Web.UI.WebControls;
 
 namespace Route4MeSDK.DataTypes
 {
@@ -260,4 +261,58 @@ namespace Route4MeSDK.DataTypes
         [Description("rect")]
         Rect
     }
+
+    #region Address Bundling
+
+    /// <summary>
+    /// Enumeration of the address bundling mode:
+    /// <para>Address = 1, group locations by address</para>
+    /// <para>Coordinates = 2, group locations by coordinates</para>
+    /// <para>AddressId = 3, group locations by list of the address IDs</para>
+    /// <para>Address = 4, group locations by address custom fields</para>
+    /// </summary>
+    public enum AddressBundlingMode : uint
+    {
+        Address = 1,
+        Coordinates = 2,
+        AddressId = 3,
+        AddressCustomField = 4
+    }
+
+    /// <summary>
+    /// Enumeration of the desstinations merge mode:
+    /// <para>KeepAsSeparateDestinations = 1, keep separate destinations in output</para>
+    /// <para>MergeIntoSingleDestination = 2, merge the bundled destinations in one destination in output</para>
+    /// </summary>
+    public enum AddressBundlingMergeMode : uint
+    {
+        KeepAsSeparateDestinations = 1,
+        MergeIntoSingleDestination = 2
+    }
+
+    /// <summary>
+    /// Enumeration of the service time first item mode:
+    /// <para>KeepOriginal = 1, keep original service time</para>
+    /// <para>CustomTime = 2, set custom time to service time</para>
+    /// </summary>
+    public enum AddressBundlingFirstItemMode : uint
+    {
+        KeepOriginal = 1,
+        CustomTime = 2
+    }
+
+    /// <summary>
+    /// Enumeration of the service time additional items mode:
+    /// <para>KeepOriginal = 1, preserve original address service time</para>
+    /// <para>CustomTime = 2, set custom times</para>
+    /// <para>InheritFromPrimary = 3, don't add service times</para>
+    /// </summary>
+    public enum AddressBundlingAdditionalItemsMode : uint
+    {
+        KeepOriginal = 1,
+        CustomTime = 2,
+        InheritFromPrimary = 3
+    }
+
+    #endregion
 }

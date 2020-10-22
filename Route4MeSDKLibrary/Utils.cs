@@ -6,10 +6,14 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.Serialization.Json;
 using System.Text;
+using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using System.Collections;
 using System.Globalization;
 using System.Configuration;
+using Route4MeSDK.DataTypes;
+using Microsoft.CSharp;
+using static Route4MeSDK.Route4MeManager;
 
 namespace Route4MeSDK
 {
@@ -43,6 +47,8 @@ namespace Route4MeSDK
 
         public static T ReadObjectNew<T>(this Stream stream)
         {
+            var errors = new List<string>();
+
             var jsonSettings = new JsonSerializerSettings()
             {
                 //NullValueHandling = ignoreNullValues ? NullValueHandling.Ignore : NullValueHandling.Include,
@@ -52,7 +58,22 @@ namespace Route4MeSDK
 
             StreamReader reader = new StreamReader(stream);
             string text = reader.ReadToEnd();
+            
+            if (typeof(T)==typeof(GetAddressBookContactsResponse))
+            {
+                string pattern = String.Concat(
+                    "\\\"schedule\\\"",
+                    @":({[\s\S\n\d\w]*}),",
+                    "\"");
+                Regex rgx = new Regex(pattern);
+                Match rslt = rgx.Match(text);
 
+                if (rslt.Success)
+                {
+                    text = text.Replace(rslt.Groups[1].ToString(), "[" + rslt.Groups[1] + "]");
+                }
+            }
+            
             return JsonConvert.DeserializeObject<T>(text, jsonSettings);
         }
 
