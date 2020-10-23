@@ -143,5 +143,11 @@ namespace Route4MeSDK.QueryTypes
         /// </summary>
         [DataMember(Name = "approved_for_execution", EmitDefaultValue = false)]
         public bool ApprovedForExecution { get; set; }
+
+        /// <summary>
+        /// If true, the route will be unlinked from the master optimization.
+        /// </summary>
+        [DataMember(Name = "unlink_from_master_optimization", EmitDefaultValue = false)]
+        public bool UnlinkFromMasterOptimization { get; set; }
     }
 }

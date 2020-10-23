@@ -573,6 +573,51 @@ namespace Route4MeSDKUnitTest
         }
 
         [TestMethod]
+        public void UnlinkRouteFromOptimizationTest()
+        {
+            var route4Me = new Route4MeManager(c_ApiKey);
+
+            string routeId = tdr.SD10Stops_route_id;
+            Assert.IsNotNull(routeId, "routeId_SingleDriverRoute10Stops is null.");
+
+            var routeDuplicateParameters = new RouteParametersQuery()
+            {
+                RouteId = routeId
+            };
+
+            // Run the query
+            var duplicatedRouteId = route4Me.DuplicateRoute(routeDuplicateParameters, out string errorString);
+
+            Assert.IsNotNull(duplicatedRouteId, "Cannot duplicate a route. "+ errorString);
+            Assert.IsTrue(duplicatedRouteId.Length==32, "Cannot duplicate a route.");
+
+            var duplicatedRoute = route4Me.GetRoute(
+                new RouteParametersQuery() { RouteId = duplicatedRouteId }, 
+                out errorString);
+
+            Assert.IsNotNull(duplicatedRoute, "Cannot retrieve the duplicated route.");
+            Assert.IsInstanceOfType(
+                duplicatedRoute, 
+                typeof(DataObjectRoute), 
+                "Cannot retrieve the duplicated route.");
+            Assert.IsNotNull(duplicatedRoute.OptimizationProblemId, "Optimization problem ID of the duplicated route is null.");
+
+            var routeParameters = new RouteParametersQuery()
+            {
+                RouteId = duplicatedRouteId,
+                UnlinkFromMasterOptimization = true
+            };
+
+            lsOptimizationIDs.Add(duplicatedRoute.OptimizationProblemId);
+
+            // Run the query
+            var unlinkedRoute = route4Me.UpdateRoute(routeParameters, out errorString);
+
+            Assert.IsNotNull(unlinkedRoute, "UnlinkRouteFromOptimizationTest failed. " + errorString);
+            Assert.IsNull(unlinkedRoute.OptimizationProblemId, "Optimization problem ID of the unlinked route is not null.");
+        }
+
+        [TestMethod]
         public void DuplicateRouteTest()
         {
             var route4Me = new Route4MeManager(c_ApiKey);
@@ -588,7 +633,7 @@ namespace Route4MeSDKUnitTest
             // Run the query
             string routeId_DuplicateRoute = route4Me.DuplicateRoute(routeParameters, out string errorString);
 
-            Assert.IsNotNull(routeId_DuplicateRoute, "DuplicateRouteTest failed... " + errorString);
+            Assert.IsNotNull(routeId_DuplicateRoute, "DuplicateRouteTest failed. " + errorString);
         }
 
         [TestMethod]
