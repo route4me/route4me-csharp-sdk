@@ -23,7 +23,7 @@ namespace Route4MeSDK.DataTypes
         /// <summary>
         /// Address bundling mode parameters:
         /// <para>If Mode=3, contains an array of the field names of the Address object</para>
-        /// para>If Mode=4, contains an array of the custom fields of the Address object</para>
+        /// <para>If Mode=4, contains an array of the custom fields of the Address object</para>
         /// </summary>
         [DataMember(Name = "mode_params", EmitDefaultValue = false)]
         public string[] ModeParams { get; set; }
