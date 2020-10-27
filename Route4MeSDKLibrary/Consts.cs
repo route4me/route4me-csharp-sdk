@@ -71,6 +71,8 @@ namespace Route4MeSDK
 
         public const string MemberCapabilities = MainHost + "/api/member/capabilities.php";
 
+        public const string ScheduleCalendar = MainHost + "/api/schedule_calendar_data.php";
+
         #endregion
     }
 }
