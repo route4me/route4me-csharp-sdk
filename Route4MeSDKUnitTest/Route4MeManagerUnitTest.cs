@@ -4745,25 +4745,7 @@ namespace Route4MeSDKUnitTest
         {
             var route4Me = new Route4MeManager(c_ApiKey);
 
-            var memberCapabilities = route4Me.GetMemberCapabilities(out string errorString0);
-
-            if (c_ApiKey==ApiKeys.demoApiKey || memberCapabilities==null)
-            {
-                Console.WriteLine("This test requires enterprise commercial subscription");
-                return;
-            }
-
-            var commercialSubscription = memberCapabilities
-                .GetType()
-                .GetProperties()
-                .Where(x => x.Name == "Commercial")
-                .FirstOrDefault();
-
-            if (commercialSubscription == null)
-            {
-                Console.WriteLine("This test requires enterprise commercial subscription");
-                return;
-            }
+            if (!route4Me.MemberHasCommercialCapability(c_ApiKey, ApiKeys.demoApiKey, out string errorString0)) return;
 
             // Prepare the addresses
             Address[] addresses = new Address[]
@@ -4958,6 +4940,34 @@ namespace Route4MeSDKUnitTest
             Assert.IsNotNull(routeBundled.BundleItems, "Cannot retrieve bundled items in the route response.");
 
             tdr.RemoveOptimization(new string[] { dataObject.OptimizationProblemId });
+        }
+
+        [TestMethod]
+        public void GetScheduleCalendarTest()
+        {
+            var route4Me = new Route4MeManager(c_ApiKey);
+
+            if (!route4Me.MemberHasCommercialCapability(c_ApiKey, ApiKeys.demoApiKey, out string errorString0)) return;
+
+            TimeSpan days5 = new TimeSpan(5, 0, 0, 0);
+
+            var calendarQuery = new ScheduleCalendarQuery()
+            {
+                DateFromString = (DateTime.Now - days5).ToString("yyyy-MM-dd"),
+                DateToString = (DateTime.Now + days5).ToString("yyyy-MM-dd"),
+                TimezoneOffsetMinutes = 4*60,
+                ShowOrders = true,
+                ShowContacts = true,
+                RoutesCount = true
+            };
+
+            var scheduleCalendar = route4Me.GetScheduleCalendar(calendarQuery, out string errorString);
+
+            Assert.IsNotNull(scheduleCalendar, "The test GetScheduleCalendarTest failed");
+
+            Assert.IsNotNull(scheduleCalendar.AddressBook, "The test GetScheduleCalendarTest failed");
+            Assert.IsNotNull(scheduleCalendar.Orders, "The test GetScheduleCalendarTest failed");
+            Assert.IsNotNull(scheduleCalendar.RoutesCount, "The test GetScheduleCalendarTest failed");
         }
 
         [TestMethod]
