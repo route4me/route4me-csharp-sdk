@@ -6,16 +6,16 @@ namespace Route4MeSDK.Examples
     public sealed partial class Route4MeExamples
     {
         /// <summary>
-        /// Search Routed Locations
+        /// Search for the address book Locations by query text.
         /// </summary>
-        public void SearchRoutedLocations()
+        public void SearchLocationsByText()
         {
             // Create the manager with the api key
             var route4Me = new Route4MeManager(ActualApiKey);
 
             var addressBookParameters = new AddressBookParameters
             {
-                Display = "routed",
+                Query = "david",
                 Offset = 0,
                 Limit = 20
             };

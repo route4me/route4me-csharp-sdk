@@ -8173,6 +8173,8 @@ namespace Route4MeSDKUnitTest
 
         static List<int> lsRemoveContacts = new List<int>();
 
+        static AddressBookContact contactToRemove;
+
         [ClassInitialize()]
         public static void AddAddressBookContactsTest(TestContext context)
         {
@@ -8217,6 +8219,16 @@ namespace Route4MeSDKUnitTest
             int location2 = contact2.address_id != null ? Convert.ToInt32(contact2.address_id) : -1;
 
             if (location2 > 0) lsRemoveContacts.Add(location2);
+
+            var contactParams = new AddressBookContact()
+            {
+                first_name = "Test FirstName Rem" + (new Random()).Next().ToString(),
+                address_1 = "Test Address1 Rem " + (new Random()).Next().ToString(),
+                cached_lat = 38.02466,
+                cached_lng = -77.33882
+            };
+
+            contactToRemove = route4Me.AddAddressBookContact(contactParams, out errorString);
         }
 
         [TestMethod]
@@ -8653,44 +8665,17 @@ namespace Route4MeSDKUnitTest
             Assert.IsInstanceOfType(contacts, typeof(AddressBookContact[]), "GetAddressBookContactsTest failed... " + errorString);
         }
 
-        //[TestMethod]
-        public void RemoveAllAddressbookContactsTest()
+        [TestMethod]
+        public void RemoveAddressbookContactsTest()
         {
-            string ApiKey = ApiKeys.actualApiKey;
+            var route4Me = new Route4MeManager(ApiKeys.actualApiKey);
 
-            var route4Me = new Route4MeManager(ApiKey);
-            var tdr = new TestDataRepository();
+            bool removed = route4Me.RemoveAddressBookContacts(
+                new string[] { contactToRemove.address_id.ToString() }, 
+                out string errorString);
 
-            bool blContinue = true;
-
-            int iCurOffset = 0;
-            var lsAddresses = new List<string>();
-
-            while (blContinue)
-            {
-                var addressBookParameters = new AddressBookParameters()
-                {
-                    Limit = 40,
-                    Offset = (uint)iCurOffset
-                };
-
-                uint total;
-
-                AddressBookContact[] contacts = route4Me.GetAddressBookLocation(addressBookParameters, out total, out string errorString);
-                if (contacts == null) blContinue = false;
-                else
-                {
-                    if (contacts.Length == 0) blContinue = false;
-                }
-
-                Assert.IsInstanceOfType(contacts, typeof(AddressBookContact[]), "Getting of the contacts failed..." + errorString);
-
-                foreach (var contact in contacts) lsAddresses.Add(contact.address_id.ToString());
-
-                tdr.RemoveAddressBookContacts(lsAddresses, ApiKey);
-
-                iCurOffset += 40;
-            }
+            Assert.IsTrue(removed, 
+                "Cannot remove the address book contact."+Environment.NewLine+ errorString);
         }
 
         [TestMethod]

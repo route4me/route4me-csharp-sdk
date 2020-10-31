@@ -47,8 +47,6 @@ namespace Route4MeSDK
 
         public static T ReadObjectNew<T>(this Stream stream)
         {
-            var errors = new List<string>();
-
             var jsonSettings = new JsonSerializerSettings()
             {
                 //NullValueHandling = ignoreNullValues ? NullValueHandling.Ignore : NullValueHandling.Include,
@@ -191,6 +189,41 @@ namespace Route4MeSDK
             if (date < origin) date = new DateTime(1970, 1, 1, date.Hour, date.Minute, date.Second);
             TimeSpan diff = date - origin;
             return (long)Math.Floor(diff.TotalSeconds);
+        }
+
+        /// <summary>
+        /// Convert the dd:HH:mm format string to the seconts (int)
+        /// </summary>
+        /// <param name="ddhhmm">The dd:HH:mm format string</param>
+        /// <param name="errorString">Error string</param>
+        /// <returns>Seconds</returns>
+        public static int? DDHHMM2Seconds(string ddhhmm, out string errorString)
+        {
+            errorString = "";
+
+            if (ddhhmm == null)
+            {
+                errorString = "Wrong time.Specify the time in the format HH: mm: ss";
+                return null;
+            }
+            string regexPattern = @"\d{2}\:[0-2][0-9]\:[0-6][0-9]";
+            Regex regex = new Regex(regexPattern);
+            Match match = regex.Match(ddhhmm);
+
+            if (match.Success)
+            {
+                string[] parts = ddhhmm.Split(':');
+                int days = Convert.ToInt32(parts[0]);
+                int hours = Convert.ToInt32(parts[1]);
+                int minutes = Convert.ToInt32(parts[2]);
+
+                return days * 24 * 3600 + hours * 3600 + minutes * 60;
+            }
+            else
+            {
+                errorString = "Wrong time.Specify the time in the format HH: mm: ss";
+                return null;
+            }
         }
 
         /// <summary>

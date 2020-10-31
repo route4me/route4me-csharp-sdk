@@ -10,7 +10,7 @@ namespace Route4MeSDK.Examples
     public DataObject SingleDriverMultipleTimeWindows()
     {
       // Create the manager with the api key
-      var route4Me = new Route4MeManager(c_ApiKey);
+      Route4MeManager route4Me = new Route4MeManager(ActualApiKey);
 
       // Prepare the addresses
       Address[] addresses = new Address[]
@@ -154,9 +154,10 @@ namespace Route4MeSDK.Examples
       };
 
       // Set parameters
-      var parameters = new RouteParameters()
+      RouteParameters parameters = new RouteParameters()
       {
-        AlgorithmType = AlgorithmType.CVRP_TW_SD,
+        AlgorithmType = AlgorithmType.TSP,
+        StoreRoute = false,
         RouteName = "Single Driver Multiple TimeWindows 12 Stops",
 
         RouteDate = R4MeUtils.ConvertToUnixTimestamp(DateTime.UtcNow.Date.AddDays(1)),
@@ -166,7 +167,7 @@ namespace Route4MeSDK.Examples
         DeviceType = DeviceType.Web.Description()
       };
 
-      var optimizationParameters = new OptimizationParameters()
+      OptimizationParameters optimizationParameters = new OptimizationParameters()
       {
         Addresses = addresses,
         Parameters = parameters
@@ -174,7 +175,7 @@ namespace Route4MeSDK.Examples
 
       // Run the query
       string errorString;
-      var dataObject = route4Me.RunOptimization(optimizationParameters, out errorString);
+      DataObject dataObject = route4Me.RunOptimization(optimizationParameters, out errorString);
 
       // Output the result
       PrintExampleOptimizationResult("SingleDriverMultipleTimeWindows", dataObject, errorString);

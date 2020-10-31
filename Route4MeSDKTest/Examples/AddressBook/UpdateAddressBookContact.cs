@@ -1,30 +1,53 @@
 ﻿using Route4MeSDK.DataTypes;
-using Route4MeSDK.QueryTypes;
-using System;
+using System.Collections.Generic;
 
 namespace Route4MeSDK.Examples
 {
-  public sealed partial class Route4MeExamples
-  {
-    public void UpdateAddressBookContact(AddressBookContact contact)
+    public sealed partial class Route4MeExamples
     {
-      // Create the manager with the api key
-      Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+        /// <summary>
+        /// Update a contact by modifying the specified parameters.
+        /// </summary>
+        /// <param name="contact">Initial address book contact</param>
+        public void UpdateAddressBookContact(AddressBookContact contact = null)
+        {
+            // Create the manager with the api key
+            var route4Me = new Route4MeManager(ActualApiKey);
 
-      // Run the query
-      string errorString;
-      AddressBookContact updatedContact = route4Me.UpdateAddressBookContact(contact, out errorString);
+            CreateTestContacts();
 
-      Console.WriteLine("");
+            if (contact != null) contact1 = contact;
 
-      if (updatedContact != null)
-      {
-        Console.WriteLine("UpdateAddressBookContact executed successfully");
-      }
-      else
-      {
-        Console.WriteLine("UpdateAddressBookContact error: {0}", errorString);
-      }
+            contact1.address_group = "Updated";
+            contact1.schedule_blacklist = new string[] { "2020-03-14", "2020-03-15" };
+            contact1.address_custom_data = new Dictionary<string, string>
+            {
+                {"key1", "value1" }, {"key2", "value2" }
+            };
+            contact1.local_time_window_start = 25400;
+            contact1.local_time_window_end = 26000;
+            contact1.AddressCube = 5;
+            contact1.AddressPieces = 6;
+            contact1.AddressRevenue = 700;
+            contact1.AddressWeight = 80;
+            contact1.AddressPriority = 9;
+
+            var updatableProperties = new List<string>()
+            {
+                "address_id", "address_group", "schedule_blacklist",
+                "address_custom_data", "local_time_window_start", "local_time_window_end",
+                "AddressCube","AddressPieces","AddressRevenue","AddressWeight","AddressPriority","ConvertBooleansToInteger"
+            };
+
+            // Run the query
+            var updatedContact = route4Me.UpdateAddressBookContact(
+                contact1, 
+                updatableProperties, 
+                out string errorString);
+
+            PrintExampleContact(updatedContact, 0, errorString);
+
+            RemoveTestContacts();
+        }
     }
-  }
 }

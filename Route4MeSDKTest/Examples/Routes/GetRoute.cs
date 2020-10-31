@@ -6,10 +6,10 @@ namespace Route4MeSDK.Examples
 {
   public sealed partial class Route4MeExamples
   {
-    public void GetRoute(string routeId, bool getRouteDirections=false, bool getRoutePathPoints=false)
+    public void GetRoute(string routeId, bool getRouteDirections, bool getRoutePathPoints)
     {
       // Create the manager with the api key
-      Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+      Route4MeManager route4Me = new Route4MeManager(ActualApiKey);
 
       RouteParametersQuery routeParameters = new RouteParametersQuery()
       {

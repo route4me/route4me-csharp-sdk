@@ -9,7 +9,7 @@ namespace Route4MeSDK.Examples
         public void SearchRoutesForText(string query)
         {
             // Create the manager with the api key
-            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+            Route4MeManager route4Me = new Route4MeManager(ActualApiKey);
 
             // Example refers to the process of searching for the specified text throughout all routes belonging to the user's account.
 

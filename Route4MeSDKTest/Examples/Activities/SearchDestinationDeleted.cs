@@ -1,48 +1,51 @@
 ﻿using Route4MeSDK.DataTypes;
 using Route4MeSDK.QueryTypes;
 using System;
+using System.Collections.Generic;
 
 namespace Route4MeSDK.Examples
 {
     public sealed partial class Route4MeExamples
     {
         /// <summary>
-        /// Get Activities Destination Deleted
+        /// Get activities with the event Destination Deleted
         /// </summary>
         public void SearchDestinationDeleted()
         {
             // Create the manager with the api key
-            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+            var route4Me = new Route4MeManager(ActualApiKey);
 
-            ActivityParameters activityParameters = new ActivityParameters
+            RunOptimizationSingleDriverRoute10Stops();
+
+            string routeId = SD10Stops_route_id;
+
+            OptimizationsToRemove = new List<string>() { SD10Stops_optimization_problem_id };
+
+            int addressId = (int)SD10Stops_route.Addresses[2].RouteDestinationId;
+
+            bool removed = route4Me.RemoveRouteDestination(routeId, addressId, out string errorString);
+
+            if (!removed)
+            {
+                Console.WriteLine(
+                    "Cannot remove the test destination." + 
+                    Environment.NewLine + 
+                    errorString);
+                return;
+            }
+
+            var activityParameters = new ActivityParameters
             {
                 ActivityType = "delete-destination",
-                RouteId = "5C15E83A4BE005BCD1537955D28D51D7"
+                RouteId = routeId
             };
 
             // Run the query
-            string errorString = "";
             Activity[] activities = route4Me.GetActivityFeed(activityParameters, out errorString);
 
-            Console.WriteLine("");
+            PrintExampleActivities(activities, errorString);
 
-            if (activities != null)
-            {
-                Console.WriteLine("SearchDestinationDeleted executed successfully, {0} activities returned", activities.Length);
-                Console.WriteLine("");
-
-                foreach (Activity Activity in activities)
-                {
-                    Console.WriteLine("Activity ID: {0}", Activity.ActivityId);
-                }
-
-                Console.WriteLine("");
-            }
-            else
-            {
-                Console.WriteLine("SearchDestinationDeleted error: {0}", errorString);
-            }
-
+            RemoveTestOptimizations();
         }
     }
 }

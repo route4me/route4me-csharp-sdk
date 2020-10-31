@@ -1,46 +1,47 @@
 ﻿using Route4MeSDK.DataTypes;
-using Route4MeSDK.QueryTypes;
 using System;
+using System.Collections.Generic;
 
 namespace Route4MeSDK.Examples
 {
-  public sealed partial class Route4MeExamples
-  {
-    /// <summary>
-    /// Create User Activity
-    /// </summary>
-    /// <param name="message"> Activity message </param>
-    /// <param name="routeId"> Route identifier </param>
-    /// <returns> True/False </returns>
-    public bool LogCustomActivity(string message, string routeId)
+    public sealed partial class Route4MeExamples
     {
-      // Create the manager with the api key
-      Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+        /// <summary>
+        /// Create User Activity
+        /// </summary>
+        public void LogCustomActivity()
+        {
+            // Create the manager with the api key
+            var route4Me = new Route4MeManager(ActualApiKey);
 
-      Activity activity = new Activity()
-      {
-        ActivityType = "user_message",
-        ActivityMessage = message,
-        RouteId = routeId
-      };
+            RunOptimizationSingleDriverRoute10Stops();
+            OptimizationsToRemove = new List<string>() { SD10Stops_optimization_problem_id };
 
-      // Run the query
-      string errorString;
-      bool added = route4Me.LogCustomActivity(activity, out errorString);
+            string routeId = SD10Stops_route_id;
 
-      Console.WriteLine("");
+            var activity = new Activity()
+            {
+                ActivityType = "user_message",
+                ActivityMessage = "Test User Activity " + DateTime.Now.ToString(),
+                RouteId = routeId
+            };
 
-      if (added)
-      {
-        Console.WriteLine("LogCustomActivity executed successfully");
-        return added;
-      }
-      else
-      {
-        Console.WriteLine("LogCustomActivity error: {0}", errorString);
-        return added;
-      }
+            // Run the query
+            bool added = route4Me.LogCustomActivity(activity, out string errorString);
+
+            Console.WriteLine("");
+
+            if (added)
+            {
+                Console.WriteLine("LogCustomActivity executed successfully");
+            }
+            else
+            {
+                Console.WriteLine("LogCustomActivity error: {0}", errorString);
+            }
+
+            RemoveTestOptimizations();
+        }
     }
-  }
 }
 

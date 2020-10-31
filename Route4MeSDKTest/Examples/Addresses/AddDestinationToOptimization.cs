@@ -9,7 +9,7 @@ namespace Route4MeSDK.Examples
     public DataObject AddDestinationToOptimization(string optimizationProblemID, bool andReOptimize)
     {
       // Create the manager with the api key
-      Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+      Route4MeManager route4Me = new Route4MeManager(ActualApiKey);
 
       // Prepare the address that we are going to add to an existing route optimization
       Address[] addresses = new Address[]

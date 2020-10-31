@@ -280,7 +280,7 @@ namespace Route4MeSDK.DataTypes
     }
 
     /// <summary>
-    /// Enumeration of the desstinations merge mode:
+    /// Enumeration of the destinations merge mode:
     /// <para>KeepAsSeparateDestinations = 1, keep separate destinations in output</para>
     /// <para>MergeIntoSingleDestination = 2, merge the bundled destinations in one destination in output</para>
     /// </summary>

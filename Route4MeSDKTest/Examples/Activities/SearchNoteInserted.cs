@@ -1,47 +1,62 @@
 ﻿using Route4MeSDK.DataTypes;
 using Route4MeSDK.QueryTypes;
 using System;
+using System.Collections.Generic;
 
 namespace Route4MeSDK.Examples
 {
     public sealed partial class Route4MeExamples
     {
         /// <summary>
-        /// Get Activities Note Inserted
+        /// Get activities with the event Note Inserted
         /// </summary>
         public void SearchNoteInserted()
         {
             // Create the manager with the api key
-            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+            var route4Me = new Route4MeManager(ActualApiKey);
 
-            ActivityParameters activityParameters = new ActivityParameters
+            RunOptimizationSingleDriverRoute10Stops();
+
+            string routeId = SD10Stops_route_id;
+
+            OptimizationsToRemove = new List<string>() { SD10Stops_optimization_problem_id };
+
+            int addressId = (int)SD10Stops_route.Addresses[2].RouteDestinationId;
+
+            var noteParams = new NoteParameters()
+            {
+                AddressId = addressId,
+                RouteId = routeId,
+                Latitude = SD10Stops_route.Addresses[2].Latitude,
+                Longitude = SD10Stops_route.Addresses[2].Longitude,
+                DeviceType = "web",
+                StrNoteContents = "Note example for Destination",
+                ActivityType = "dropoff"
+            };
+
+            var addrssNote = route4Me.AddAddressNote(noteParams, out string errorString0);
+
+            if (addrssNote==null || addrssNote.GetType()!=typeof(AddressNote))
+            {
+                Console.WriteLine(
+                    "Cannot add a note to the address." + 
+                    Environment.NewLine + 
+                    errorString0);
+
+                RemoveTestOptimizations();
+                return;
+            }
+
+            var activityParameters = new ActivityParameters
             {
                 ActivityType = "note-insert",
-                RouteId = "C3E7FD2F8775526674AE5FD83E25B88A"
+                RouteId = routeId
             };
 
             // Run the query
-            string errorString = "";
-            Activity[] activities = route4Me.GetActivityFeed(activityParameters, out errorString);
+            Activity[] activities = route4Me.GetActivityFeed(activityParameters, out string errorString);
 
-            Console.WriteLine("");
-
-            if (activities != null)
-            {
-                Console.WriteLine("SearchNoteInserted executed successfully, {0} activities returned", activities.Length);
-                Console.WriteLine("");
-
-                foreach (Activity Activity in activities)
-                {
-                    Console.WriteLine("Activity ID: {0}", Activity.ActivityId);
-                }
-                Console.WriteLine("");
-            }
-            else
-            {
-                Console.WriteLine("SearchNoteInserted error: {0}", errorString);
-            }
-
+            PrintExampleActivities(activities, errorString);
         }
     }
 }

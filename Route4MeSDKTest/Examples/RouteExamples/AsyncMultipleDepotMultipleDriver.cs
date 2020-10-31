@@ -10,7 +10,7 @@ namespace Route4MeSDK.Examples
         public async Task<DataObject> AsyncMultipleDepotMultipleDriver()
         {
             // Create the manager with the api key
-            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+            Route4MeManager route4Me = new Route4MeManager(ActualApiKey);
 
             // Prepare the addresses
             Address[] addresses = new Address[]

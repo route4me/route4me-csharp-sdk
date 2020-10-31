@@ -1,31 +1,43 @@
-﻿using Route4MeSDK.DataTypes;
-using Route4MeSDK.QueryTypes;
-using System;
+﻿using System;
 
 namespace Route4MeSDK.Examples
 {
-  public sealed partial class Route4MeExamples
-  {
-    public void RemoveAddressBookContacts(string[] addressIds)
+    public sealed partial class Route4MeExamples
     {
-      // Create the manager with the api key
-      Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+        /// <summary>
+        /// Remove an array of the address book contacts
+        /// </summary>
+        /// <param name="addressIds"></param>
+        public void RemoveAddressBookContacts(string[] addressIds=null)
+        {
+            // Create the manager with the api key
+            var route4Me = new Route4MeManager(ActualApiKey);
 
-      // Run the query
-      string errorString;
-      bool removed = route4Me.RemoveAddressBookContacts(addressIds, out errorString);
+            CreateTestContacts();
 
-      Console.WriteLine("");
+            if (addressIds==null)
+            {
+                addressIds = new string[]
+                {
+                    contact1.address_id.ToString(),
+                    contact2.address_id.ToString()
+                };
+            }
 
-      if (removed)
-      {
-        Console.WriteLine("RemoveAddressBookContacts executed successfully, {0} contacts deleted", addressIds.Length);
-      }
-      else
-      {
-        Console.WriteLine("RemoveAddressBookContacts error: {0}", errorString);
-      }
+            // Run the query
+            bool removed = route4Me.RemoveAddressBookContacts(addressIds, out string errorString);
 
+            Console.WriteLine("");
+
+            Console.WriteLine(removed
+                ? String.Format("RemoveAddressBookContacts executed successfully, {0} contacts deleted", addressIds.Length)
+                : String.Format("RemoveAddressBookContacts error: {0}", errorString)
+                );
+
+            ContactsToRemove.Remove(contact1.address_id.ToString());
+            ContactsToRemove.Remove(contact2.address_id.ToString());
+
+            RemoveTestContacts();
+        }
     }
-  }
 }
