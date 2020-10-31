@@ -1,44 +1,28 @@
 ﻿using Route4MeSDK.DataTypes;
 using Route4MeSDK.QueryTypes;
-using System;
 
 namespace Route4MeSDK.Examples
 {
-  public sealed partial class Route4MeExamples
-  {
-    public void GetActivities(string routeId)
+    public sealed partial class Route4MeExamples
     {
-      // Create the manager with the api key
-      Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
-
-      ActivityParameters activityParameters = new ActivityParameters()
-      {
-        RouteId = routeId,
-        Limit = 10,
-        Offset = 0
-      };
-
-      // Run the query
-      string errorString;
-      Activity[] activities = route4Me.GetActivityFeed(activityParameters, out errorString);
-
-      Console.WriteLine("");
-
-      if (activities != null)
-      {
-        Console.WriteLine("GetActivities executed successfully, {0} activities returned", activities.Length);
-        Console.WriteLine("");
-
-        activities.ForEach(activity =>
+        /// <summary>
+        /// Get activities from a user account.
+        /// </summary>
+        public void GetActivities()
         {
-          Console.WriteLine("Activity ID: {0}", activity.ActivityId);
-        });
-        Console.WriteLine("");
-      }
-      else
-      {
-        Console.WriteLine("GetActivities error: {0}", errorString);
-      }
+            // Create the manager with the api key
+            var route4Me = new Route4MeManager(ActualApiKey);
+
+            var activityParameters = new ActivityParameters()
+            {
+                Limit = 10,
+                Offset = 0
+            };
+
+            // Run the query
+            Activity[] activities = route4Me.GetActivityFeed(activityParameters, out string errorString);
+
+            PrintExampleActivities(activities, errorString);
+        }
     }
-  }
 }

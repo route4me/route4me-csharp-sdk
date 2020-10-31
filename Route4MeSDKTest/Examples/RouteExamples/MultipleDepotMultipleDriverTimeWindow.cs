@@ -9,7 +9,7 @@ namespace Route4MeSDK.Examples
     public DataObject MultipleDepotMultipleDriverTimeWindow()
     {
       // Create the manager with the api key
-      var route4Me = new Route4MeManager(c_ApiKey);
+      var route4Me = new Route4MeManager(ActualApiKey);
    
       // Prepare the addresses
       Address[] addresses = new Address[]

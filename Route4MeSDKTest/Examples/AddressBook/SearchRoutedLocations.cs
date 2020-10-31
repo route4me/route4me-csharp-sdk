@@ -1,7 +1,5 @@
 ﻿using Route4MeSDK.DataTypes;
 using Route4MeSDK.QueryTypes;
-using System;
-using System.Collections.Generic;
 
 namespace Route4MeSDK.Examples
 {
@@ -13,9 +11,9 @@ namespace Route4MeSDK.Examples
         public void SearchRoutedLocations()
         {
             // Create the manager with the api key
-            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+            var route4Me = new Route4MeManager(ActualApiKey);
 
-            AddressBookParameters addressBookParameters = new AddressBookParameters
+            var addressBookParameters = new AddressBookParameters
             {
                 Display = "routed",
                 Offset = 0,
@@ -23,22 +21,12 @@ namespace Route4MeSDK.Examples
             };
 
             // Run the query
-            uint total = 0;
-            string errorString = "";
-            AddressBookContact[] contacts = route4Me.GetAddressBookLocation(addressBookParameters, out total, out errorString);
+            AddressBookContact[] contacts = route4Me.GetAddressBookLocation(
+                addressBookParameters, 
+                out uint total, 
+                out string errorString);
 
-            Console.WriteLine("");
-
-            if (contacts != null)
-            {
-                Console.WriteLine("SearchRoutedLocations executed successfully, {0} contacts returned, total = {1}", contacts.Length, total);
-
-                Console.WriteLine("");
-            }
-            else
-            {
-                Console.WriteLine("SearchRoutedLocations error: {0}", errorString);
-            }
+            PrintExampleContact(contacts, total, errorString);
         }
     }
 }

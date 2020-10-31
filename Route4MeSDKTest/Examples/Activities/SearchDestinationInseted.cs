@@ -1,48 +1,63 @@
 ﻿using Route4MeSDK.DataTypes;
 using Route4MeSDK.QueryTypes;
 using System;
+using System.Collections.Generic;
 
 namespace Route4MeSDK.Examples
 {
     public sealed partial class Route4MeExamples
     {
         /// <summary>
-        /// Get Activities Destination Inserted
+        /// Get activities with the event Destination Inserted
         /// </summary>
         public void SearchDestinationInserted()
         {
             // Create the manager with the api key
-            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+            var route4Me = new Route4MeManager(ActualApiKey);
+
+            RunOptimizationSingleDriverRoute10Stops();
+
+            string routeId = SD10Stops_route_id;
+
+            OptimizationsToRemove = new List<string>() { SD10Stops_optimization_problem_id };
+
+            var newAddress = new Address()
+            {
+                AddressString = "118 Bill Johnson Rd NE Milledgeville GA 31061",
+                Latitude = 33.141784667969,
+                Longitude = -83.237518310547,
+                Time = 0,
+                SequenceNo = 4
+            };
+
+            int[] insertedDestinations = route4Me.AddRouteDestinations(
+                routeId, 
+                new Address[] { newAddress }, 
+                out string errorString);
+
+            if (insertedDestinations==null || insertedDestinations.Length<1)
+            {
+                Console.WriteLine(
+                    "Cannot insert the test destination." + 
+                    Environment.NewLine + 
+                    errorString);
+
+                RemoveTestOptimizations();
+                return;
+            }
 
             ActivityParameters activityParameters = new ActivityParameters
             {
                 ActivityType = "insert-destination",
-                RouteId = "87B8873BAEA4E09942C68E2C92A9C4B7"
+                RouteId = routeId
             };
 
             // Run the query
-            string errorString = "";
             Activity[] activities = route4Me.GetActivityFeed(activityParameters, out errorString);
 
-            Console.WriteLine("");
+            PrintExampleActivities(activities, errorString);
 
-            if (activities != null)
-            {
-                Console.WriteLine("SearchDestinationInserted executed successfully, {0} activities returned", activities.Length);
-                Console.WriteLine("");
-
-                foreach (Activity Activity in activities)
-                {
-                    Console.WriteLine("Activity ID: {0}", Activity.ActivityId);
-                }
-
-                Console.WriteLine("");
-            }
-            else
-            {
-                Console.WriteLine("SearchDestinationInserted error: {0}", errorString);
-            }
-
+            RemoveTestOptimizations();
         }
     }
 }

@@ -56,7 +56,7 @@ namespace Route4MeSDK.Examples
 
     public void GenericExampleShortcut()
     {
-      Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+      Route4MeManager route4Me = new Route4MeManager(ActualApiKey);
 
       RouteParametersQuery routeQueryParameters = new RouteParametersQuery()
       {

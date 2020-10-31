@@ -17,7 +17,7 @@ namespace Route4MeSDK.Examples
       }
 
       // Create the manager with the api key
-      Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+      Route4MeManager route4Me = new Route4MeManager(ActualApiKey);
 
       // Switch 2 addresses after departure address:
 

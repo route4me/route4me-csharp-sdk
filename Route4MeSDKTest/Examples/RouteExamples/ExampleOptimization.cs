@@ -9,7 +9,7 @@ namespace Route4MeSDK.Examples
     {
         public void ExampleOptimization()
         {
-            Route4MeManager Route4Me = new Route4MeManager(c_ApiKey);
+            Route4MeManager Route4Me = new Route4MeManager(ActualApiKey);
 
             var dateWhenTheRouteStart = R4MeUtils.ConvertToUnixTimestamp(DateTime.UtcNow.Date.AddDays(1));
 

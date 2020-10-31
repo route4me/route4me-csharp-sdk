@@ -12,7 +12,7 @@ namespace Route4MeSDK.Examples
         public void GetTerritory()
         {
             // Create the manager with the api key
-            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+            Route4MeManager route4Me = new Route4MeManager(ActualApiKey);
 
             string territoryId = "596A2A44FE9FB19EEB9C3C072BF2D0BE";
 

@@ -12,7 +12,7 @@ namespace Route4MeSDK.Examples
         public void GetOrderByID(string orderIds)
         {
             // Create the manager with the api key
-            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+            Route4MeManager route4Me = new Route4MeManager(ActualApiKey);
 
             OrderParameters orderParameters = new OrderParameters()
             {

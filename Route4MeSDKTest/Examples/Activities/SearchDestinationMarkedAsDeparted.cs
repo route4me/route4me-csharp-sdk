@@ -1,48 +1,80 @@
 ﻿using Route4MeSDK.DataTypes;
 using Route4MeSDK.QueryTypes;
 using System;
+using System.Collections.Generic;
 
 namespace Route4MeSDK.Examples
 {
     public sealed partial class Route4MeExamples
     {
         /// <summary>
-        /// Get Activities Destination Marked as Departed
+        /// Get activities with the event Destination Marked as Departed
         /// </summary>
         public void SearchDestinationMarkedAsDeparted()
         {
             // Create the manager with the api key
-            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+            var route4Me = new Route4MeManager(ActualApiKey);
 
-            ActivityParameters activityParameters = new ActivityParameters
+            RunOptimizationSingleDriverRoute10Stops();
+
+            string routeId = SD10Stops_route_id;
+
+            OptimizationsToRemove = new List<string>() { SD10Stops_optimization_problem_id };
+
+            int addressId = (int)SD10Stops_route.Addresses[2].RouteDestinationId;
+
+            var addressVisitedParams = new AddressParameters()
+            {
+                RouteId = routeId,
+                AddressId = addressId,
+                IsVisited = true
+            };
+
+            int visitedStatus = route4Me.MarkAddressVisited(addressVisitedParams, out string errorString);
+
+            if (visitedStatus != 1)
+            {
+                Console.WriteLine(
+                    "Cannot mark the test destination as visited." + 
+                    Environment.NewLine + 
+                    errorString);
+
+                RemoveTestOptimizations();
+                return;
+            }
+
+            var addressDepartParams = new AddressParameters()
+            {
+                RouteId = routeId,
+                AddressId = addressId,
+                IsDeparted = true
+            };
+
+            int departedStatus = route4Me.MarkAddressDeparted(addressDepartParams, out errorString);
+
+            if (departedStatus!=1)
+            {
+                Console.WriteLine(
+                    "Cannot mark the test destination as departed." + 
+                    Environment.NewLine + 
+                    errorString);
+
+                RemoveTestOptimizations();
+                return;
+            }
+
+            var activityParameters = new ActivityParameters
             {
                 ActivityType = "mark-destination-departed",
-                RouteId = "03CEF546324F727239ABA69EFF3766E1"
+                RouteId = routeId
             };
 
             // Run the query
-            string errorString = "";
             Activity[] activities = route4Me.GetActivityFeed(activityParameters, out errorString);
 
-            Console.WriteLine("");
+            PrintExampleActivities(activities, errorString);
 
-            if (activities != null)
-            {
-                Console.WriteLine("SearchDestinationMarkedAsDeparted executed successfully, {0} activities returned", activities.Length);
-                Console.WriteLine("");
-
-                foreach (Activity Activity in activities)
-                {
-                    Console.WriteLine("Activity ID: {0}", Activity.ActivityId);
-                }
-
-                Console.WriteLine("");
-            }
-            else
-            {
-                Console.WriteLine("SearchDestinationMarkedAsDeparted error: {0}", errorString);
-            }
-
+            RemoveTestOptimizations();
         }
     }
 }

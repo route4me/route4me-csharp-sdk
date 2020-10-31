@@ -1,5 +1,8 @@
-﻿using Route4MeSDK.DataTypes;
+﻿using NUnit.Framework;
+using Route4MeSDK.DataTypes;
+using Route4MeSDK.QueryTypes;
 using System;
+using System.Collections.Generic;
 
 namespace Route4MeSDK.Examples
 {
@@ -9,7 +12,29 @@ namespace Route4MeSDK.Examples
     public sealed partial class Route4MeExamples
     {
         //your api key
-        public string c_ApiKey = R4MeUtils.ReadSetting("demoApiKey");
+        public string ActualApiKey = R4MeUtils.ReadSetting("actualApiKey");
+        public string DemoApiKey = R4MeUtils.ReadSetting("demoApiKey");
+
+        public List<string> ContactsToRemove;
+        public List<string> RoutesToRemove;
+        public List<string> OptimizationsToRemove;
+
+        DataObject dataObjectSD10Stops;
+        string SD10Stops_optimization_problem_id;
+        DataObjectRoute SD10Stops_route;
+        string SD10Stops_route_id;
+
+        public AddressBookContact contact1, contact2;
+
+        AddressBookContact scheduledContact1, scheduledContact1Response;
+        AddressBookContact scheduledContact2, scheduledContact2Response;
+        AddressBookContact scheduledContact3, scheduledContact3Response;
+        AddressBookContact scheduledContact4, scheduledContact4Response;
+        AddressBookContact scheduledContact5, scheduledContact5Response;
+
+        //List<int> lsRemoveContacts = new List<int>();
+
+        AddressBookContact contactToRemove;
 
         private void PrintExampleOptimizationResult(string exampleName, DataObjectRoute dataObjectRoute, string errorString)
         {
@@ -61,6 +86,303 @@ namespace Route4MeSDK.Examples
             else
             {
                 Console.WriteLine("{0} error {1}", exampleName, errorString);
+            }
+        }
+
+        private void PrintExampleActivities(Activity[] activities, string errorString="")
+        {
+            string testName = (new System.Diagnostics.StackTrace()).GetFrame(1).GetMethod().Name;
+            testName = testName != null ? testName : "";
+
+            Console.WriteLine("");
+
+            if (activities != null)
+            {
+                Console.WriteLine(
+                    "The test {0} executed successfully, " +
+                    "{1} activities returned",
+                    testName,
+                    activities.Length);
+                Console.WriteLine("");
+
+                activities.ForEach(activity =>
+                {
+                    Console.WriteLine("Activity ID: {0}", activity.ActivityId);
+                });
+
+                Console.WriteLine("");
+            }
+            else
+            {
+                Console.WriteLine("{0} error: {1}", testName,errorString);
+            }
+        }
+
+        private bool RunOptimizationSingleDriverRoute10Stops()
+        {
+            var r4mm = new Route4MeManager(ActualApiKey);
+
+            // Prepare the addresses
+            Address[] addresses = new Address[]
+            {
+            #region Addresses
+
+            new Address() { AddressString = "151 Arbor Way Milledgeville GA 31061",
+                            //indicate that this is a departure stop
+                            //single depot routes can only have one departure depot 
+                            IsDepot = true, 
+                        
+                            //required coordinates for every departure and stop on the route
+                            Latitude = 33.132675170898,
+                            Longitude = -83.244743347168,
+                        
+                            //the expected time on site, in seconds. this value is incorporated into the optimization engine
+                            //it also adjusts the estimated and dynamic eta's for a route
+                            Time = 0, 
+                        
+                        
+                            //input as many custom fields as needed, custom data is passed through to mobile devices and to the manifest
+                            CustomFields = new Dictionary<string, string>() {{"color", "red"}, {"size", "huge"}}
+            },
+
+            new Address() { AddressString = "230 Arbor Way Milledgeville GA 31061",
+                            Latitude = 33.129695892334,
+                            Longitude = -83.24577331543,
+                            Time = 0 },
+
+            new Address() { AddressString = "148 Bass Rd NE Milledgeville GA 31061",
+                            Latitude = 33.143497,
+                            Longitude = -83.224487,
+                            Time = 0 },
+
+            new Address() { AddressString = "117 Bill Johnson Rd NE Milledgeville GA 31061",
+                            Latitude = 33.141784667969,
+                            Longitude = -83.237518310547,
+                            Time = 0 },
+
+            new Address() { AddressString = "119 Bill Johnson Rd NE Milledgeville GA 31061",
+                            Latitude = 33.141086578369,
+                            Longitude = -83.238258361816,
+                            Time = 0 },
+
+            new Address() { AddressString =  "131 Bill Johnson Rd NE Milledgeville GA 31061",
+                            Latitude = 33.142036437988,
+                            Longitude = -83.238845825195,
+                            Time = 0 },
+
+            new Address() { AddressString =  "138 Bill Johnson Rd NE Milledgeville GA 31061",
+                            Latitude = 33.14307,
+                            Longitude = -83.239334,
+                            Time = 0 },
+
+            new Address() { AddressString =  "139 Bill Johnson Rd NE Milledgeville GA 31061",
+                            Latitude = 33.142734527588,
+                            Longitude = -83.237442016602,
+                            Time = 0 },
+
+            new Address() { AddressString =  "145 Bill Johnson Rd NE Milledgeville GA 31061",
+                            Latitude = 33.143871307373,
+                            Longitude = -83.237342834473,
+                            Time = 0 },
+
+            new Address() { AddressString =  "221 Blake Cir Milledgeville GA 31061",
+                            Latitude = 33.081462860107,
+                            Longitude = -83.208511352539,
+                            Time = 0 }
+
+            #endregion
+            };
+
+            // Set parameters
+            var parameters = new RouteParameters()
+            {
+                AlgorithmType = AlgorithmType.TSP,
+                //StoreRoute = false,
+                RouteName = "SD Route 10 Stops Test "+DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+
+                RouteDate = R4MeUtils.ConvertToUnixTimestamp(DateTime.UtcNow.Date.AddDays(1)),
+                RouteTime = 60 * 60 * 7,
+                Optimize = Optimize.Distance.Description(),
+                DistanceUnit = DistanceUnit.MI.Description(),
+                DeviceType = DeviceType.Web.Description()
+            };
+
+            var optimizationParameters = new OptimizationParameters()
+            {
+                Addresses = addresses,
+                Parameters = parameters
+            };
+
+            // Run the query
+            string errorString;
+
+            try
+            {
+                dataObjectSD10Stops = r4mm.RunOptimization(optimizationParameters, out errorString);
+
+                SD10Stops_optimization_problem_id = dataObjectSD10Stops.OptimizationProblemId;
+                SD10Stops_route = (dataObjectSD10Stops != null && dataObjectSD10Stops.Routes != null && dataObjectSD10Stops.Routes.Length > 0) ? dataObjectSD10Stops.Routes[0] : null;
+                SD10Stops_route_id = (SD10Stops_route != null) ? SD10Stops_route.RouteID : null;
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Single Driver Route 10 Stops generation failed... " + ex.Message);
+                return false;
+            }
+        }
+
+        public void CreateTestContacts()
+        {
+            var route4Me = new Route4MeManager(ActualApiKey);
+
+            var contact = new AddressBookContact()
+            {
+                first_name = "Test FirstName " + (new Random()).Next().ToString(),
+                address_1 = "Test Address1 " + (new Random()).Next().ToString(),
+                cached_lat = 38.024654,
+                cached_lng = -77.338814
+            };
+
+            // Run the query
+            contact1 = route4Me.AddAddressBookContact(contact, out string errorString);
+
+            Assert.IsNotNull(contact1, "AddAddressBookContactsTest failed... " + errorString);
+
+            int location1 = contact1.address_id != null ? Convert.ToInt32(contact1.address_id) : -1;
+
+            ContactsToRemove = new List<string>();
+
+            if (location1 > 0) ContactsToRemove.Add(location1.ToString());
+
+            var dCustom = new Dictionary<string, string>()
+            {
+                {"FirstFieldName1", "FirstFieldValue1"},
+                {"FirstFieldName2", "FirstFieldValue2"}
+            };
+
+            contact = new AddressBookContact()
+            {
+                first_name = "Test FirstName " + (new Random()).Next().ToString(),
+                address_1 = "Test Address1 " + (new Random()).Next().ToString(),
+                cached_lat = 38.024654,
+                cached_lng = -77.338814,
+                address_custom_data = dCustom
+            };
+
+            contact2 = route4Me.AddAddressBookContact(contact, out errorString);
+
+            Assert.IsNotNull(contact2, "AddAddressBookContactsTest failed... " + errorString);
+
+            int location2 = contact2.address_id != null ? Convert.ToInt32(contact2.address_id) : -1;
+
+            if (location2 > 0) ContactsToRemove.Add(location2.ToString());
+
+            var contactParams = new AddressBookContact()
+            {
+                first_name = "Test FirstName Rem" + (new Random()).Next().ToString(),
+                address_1 = "Test Address1 Rem " + (new Random()).Next().ToString(),
+                cached_lat = 38.02466,
+                cached_lng = -77.33882
+            };
+
+            contactToRemove = route4Me.AddAddressBookContact(contactParams, out errorString);
+
+            if (contactToRemove!=null && contactToRemove.GetType()==typeof(AddressBookContact))
+                ContactsToRemove.Add(contactToRemove.address_id.ToString());
+        }
+
+        /// <summary>
+        /// Remove the contacts created in an example.
+        /// </summary>
+        private void RemoveTestContacts()
+        {
+            var route4Me = new Route4MeManager(ActualApiKey);
+
+            if (ContactsToRemove.Count > 0)
+            {
+                try
+                {
+                    if (contactToRemove != null) 
+                        ContactsToRemove.Add(contactToRemove.address_id.ToString());
+                    
+                    bool removed = route4Me.RemoveAddressBookContacts(ContactsToRemove.ToArray(), out string errorString);
+                    ContactsToRemove = new List<string>();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Cannot remove test contacts."+Environment.NewLine+ex.Message);
+                }
+            }
+        }
+
+        private void RemoveTestRoutes()
+        {
+            var route4Me = new Route4MeManager(ActualApiKey);
+
+            if (RoutesToRemove.Count > 0)
+            {
+                try
+                {
+                    string[] deletedRouteIds = route4Me.DeleteRoutes(RoutesToRemove.ToArray(), out string errorString);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Cannot remove test routes." + Environment.NewLine + ex.Message);
+                }
+            }
+        }
+
+        private void RemoveTestOptimizations()
+        {
+            var route4Me = new Route4MeManager(ActualApiKey);
+
+            if (OptimizationsToRemove.Count > 0)
+            {
+                try
+                {
+                    bool result = route4Me.RemoveOptimization(OptimizationsToRemove.ToArray(), out string errorString);
+                    OptimizationsToRemove = new List<string>();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Cannot remove test routes." + Environment.NewLine + ex.Message);
+                }
+            }
+        }
+
+        private void PrintExampleContact(object contacts, uint total, string errorString = "")
+        {
+            if (contacts == null ||
+                (contacts.GetType() != typeof(AddressBookContact) && 
+                contacts.GetType() != typeof(AddressBookContact[])))
+            {
+                Console.WriteLine("Wrong contact(s). Cannot print." + Environment.NewLine + errorString);
+                return;
+            }
+
+            Console.WriteLine("");
+
+            if (contacts.GetType() == typeof(AddressBookContact))
+            {
+                AddressBookContact resultContact = (AddressBookContact)contacts;
+
+                Console.WriteLine("AddAddressBookContact executed successfully");
+
+                Console.WriteLine("AddressId: {0}", resultContact.address_id);
+
+                Console.WriteLine("Custom data:");
+
+                foreach (var cdata in (Dictionary<string, string>)resultContact.address_custom_data)
+                {
+                    Console.WriteLine(cdata.Key + ": " + cdata.Value);
+                }
+            }
+            else
+            {
+                Console.WriteLine("GetAddressBookContacts executed successfully, {0} contacts returned, total = {1}", ((AddressBookContact[])contacts).Length, total);
+                Console.WriteLine("");
             }
         }
     }

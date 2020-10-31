@@ -9,7 +9,7 @@ namespace Route4MeSDK.Examples
         public void RouteSharing(string routeId, string Email)
         {
             // Create the manager with the api key
-            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+            Route4MeManager route4Me = new Route4MeManager(ActualApiKey);
 
             // Example refers to the process of sharing a route by email
 

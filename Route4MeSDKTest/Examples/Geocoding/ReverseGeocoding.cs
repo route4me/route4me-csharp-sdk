@@ -13,7 +13,7 @@ namespace Route4MeSDK.Examples
         public void ReverseGeocoding()
         {
             // Create the manager with the api key
-            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+            Route4MeManager route4Me = new Route4MeManager(ActualApiKey);
 
             GeocodingParameters geoParams = new GeocodingParameters { Addresses = "42.35863,-71.05670" };
             // Run the query

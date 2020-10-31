@@ -83,6 +83,8 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Examples\Activities\GetActivitiesByMember.cs" />
+    <Compile Include="Examples\Activities\GetLastActivities.cs" />
     <Compile Include="Examples\Activities\SearcAreaUpdated.cs" />
     <Compile Include="Examples\Activities\SearchAreaRemoved.cs" />
     <Compile Include="Examples\Activities\SearchDestinationOutSequence.cs" />
@@ -112,10 +114,11 @@
     <Compile Include="Examples\Activities\SearchDestinationDeleted.cs" />
     <Compile Include="Examples\AddressBook\AddAddressBookContact.cs" />
     <Compile Include="Examples\AddressBook\AddScheduledAddressBookContact.cs" />
-    <Compile Include="Examples\AddressBook\GetAddressbookLocation.cs" />
+    <Compile Include="Examples\AddressBook\SearchLocationsByText.cs" />
     <Compile Include="Examples\AddressBook\GetSpecifiedFieldsSearchText.cs" />
     <Compile Include="Examples\AddressBook\SearchLocationsByIDs.cs" />
     <Compile Include="Examples\AddressBook\SearchRoutedLocations.cs" />
+    <Compile Include="Examples\AddressBook\UpdateWholeAddressBookContact.cs" />
     <Compile Include="Examples\Addresses\MarkAddressAsMarkedAsDeparted.cs" />
     <Compile Include="Examples\Addresses\MarkAddressAsMarkedAsVisited.cs" />
     <Compile Include="Examples\Addresses\MarkAddressDeparted.cs" />
@@ -232,6 +235,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="shortTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

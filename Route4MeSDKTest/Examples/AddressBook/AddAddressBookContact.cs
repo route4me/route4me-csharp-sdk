@@ -6,10 +6,13 @@ namespace Route4MeSDK.Examples
 {
     public sealed partial class Route4MeExamples
     {
-        public AddressBookContact AddAddressBookContact()
+        /// <summary>
+        /// Add address book contact
+        /// </summary>
+        public void AddAddressBookContact()
         {
             // Create the manager with the api key
-            var route4Me = new Route4MeManager(c_ApiKey);
+            var route4Me = new Route4MeManager(ActualApiKey);
 
             var contact = new AddressBookContact()
             {
@@ -26,32 +29,24 @@ namespace Route4MeSDK.Examples
             };
 
             // Run the query
-            string errorString;
-            var resultContact = route4Me.AddAddressBookContact(contact, out errorString);
+            var resultContact = route4Me.AddAddressBookContact(contact, out string errorString);
 
-            Console.WriteLine("");
-
-            if (resultContact != null)
+            if (resultContact==null || resultContact.GetType()!=typeof(AddressBookContact))
             {
-                Console.WriteLine("AddAddressBookContact executed successfully");
+                Console.WriteLine(
+                    "Cannot create an address book contact." + 
+                    Environment.NewLine + 
+                    errorString);
 
-                Console.WriteLine("AddressId: {0}", resultContact.address_id);
-
-                Console.WriteLine("Custom data:");
-
-                foreach (var cdata in (Dictionary<string, string>)resultContact.address_custom_data)
-                {
-                    Console.WriteLine(cdata.Key + ": " + cdata.Value);
-                }
-
-                return resultContact;
+                return;
             }
-            else
-            {
-                Console.WriteLine("AddAddressBookContact error: {0}", errorString);
 
-                return null;
-            }
+            ContactsToRemove = new List<string>();
+            ContactsToRemove.Add(resultContact.address_id.ToString());
+
+            PrintExampleContact(resultContact,0, errorString);
+
+            RemoveTestContacts();
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Route4MeSDK.DataTypes;
 using Route4MeSDK.QueryTypes;
-using System;
+using System.Collections.Generic;
 
 namespace Route4MeSDK.Examples
 {
@@ -11,40 +11,28 @@ namespace Route4MeSDK.Examples
         /// </summary>
         public void GetRouteTeamActivities()
         {
-            // Create the manager with the api key
-            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+            var route4Me = new Route4MeManager(ActualApiKey);
 
-            string routeId = "06B655F27E0D6A74BD37F6F9758E4D2E";
+            RunOptimizationSingleDriverRoute10Stops();
 
-            ActivityParameters activityParameters = new ActivityParameters
+            string routeId = SD10Stops_route_id;
+
+            OptimizationsToRemove = new List<string>() { SD10Stops_optimization_problem_id };
+
+            var activityParameters = new ActivityParameters()
             {
                 RouteId = routeId,
-                Team = "true"
+                Team = "true",
+                Limit = 10,
+                Offset = 0
             };
 
             // Run the query
-            string errorString = "";
-            Activity[] activities = route4Me.GetActivityFeed(activityParameters, out errorString);
+            Activity[] activities = route4Me.GetActivityFeed(activityParameters, out string errorString);
 
-            Console.WriteLine("");
+            PrintExampleActivities(activities, errorString);
 
-            if (activities != null)
-            {
-                Console.WriteLine("GetRouteTeamActivities executed successfully, {0} activities returned", activities.Length);
-                Console.WriteLine("");
-
-                foreach (Activity Activity in activities)
-                {
-                    Console.WriteLine("Activity ID: {0}", Activity.ActivityId);
-                }
-
-                Console.WriteLine("");
-            }
-            else
-            {
-                Console.WriteLine("GetRouteTeamActivities error: {0}", errorString);
-            }
-
+            RemoveTestOptimizations();
         }
     }
 }

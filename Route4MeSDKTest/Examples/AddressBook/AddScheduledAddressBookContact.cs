@@ -1,5 +1,4 @@
 ﻿using Route4MeSDK.DataTypes;
-using Route4MeSDK.QueryTypes;
 using System;
 using System.Collections.Generic;
 
@@ -7,12 +6,15 @@ namespace Route4MeSDK.Examples
 {
     public sealed partial class Route4MeExamples
     {
+        /// <summary>
+        /// Add a scheduled address book contact
+        /// </summary>
         public void AddScheduledAddressBookContact()
         {
             // Create the manager with the api key
-            Route4MeManager route4Me = new Route4MeManager(c_ApiKey);
+            var route4Me = new Route4MeManager(ActualApiKey);
 
-            List<string> lsRemoveContacts = new List<string>();
+            var lsRemoveContacts = new List<string>();
 
             #region // Add a location, scheduled daily.
             Schedule sched1 = new Schedule("daily", false)
@@ -203,7 +205,10 @@ namespace Route4MeSDK.Examples
 
             var removed = route4Me.RemoveAddressBookContacts(lsRemoveContacts.ToArray(), out errorString);
 
-            if ((bool)removed) Console.WriteLine("The added testing address book locations were removed successfuly"); else Console.WriteLine("Remvoving of the added testing address book locations failed");
+            if ((bool)removed)
+                Console.WriteLine("The added testing address book locations were removed successfuly"); 
+            else 
+                Console.WriteLine("Removing of the added testing address book locations failed");
         }
     }
 }
