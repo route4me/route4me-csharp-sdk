@@ -235,7 +235,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="shortTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
