@@ -1,32 +1,56 @@
-﻿using Route4MeSDK.DataTypes;
-using Route4MeSDK.QueryTypes;
-using System;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Route4MeSDK.Examples
 {
-  public sealed partial class Route4MeExamples
-  {
-    public void RemoveDestinationFromOptimization(string optimizationId, int destinationId, bool andReOptimize)
+    public sealed partial class Route4MeExamples
     {
-      // Create the manager with the api key
-      Route4MeManager route4Me = new Route4MeManager(ActualApiKey);
+        /// <summary>
+        /// Remove a destination from an optimization.
+        /// </summary>
+        /// <param name="optimizationId">Optimization ID</param>
+        /// <param name="destinationId">Destination ID</param>
+        /// <param name="andReOptimize">If true, re-optimize an optimization </param>
+        public void RemoveDestinationFromOptimization(
+            string optimizationId = null, 
+            int? destinationId = null, 
+            bool? andReOptimize = null)
+        {
+            // Create the manager with the api key
+            var route4Me = new Route4MeManager(ActualApiKey);
 
-      // Run the query
-      string errorString;
-      bool removed = route4Me.RemoveDestinationFromOptimization(optimizationId, destinationId, out errorString);
+            bool isInnerExample = optimizationId == null ? true : false;
 
-      Console.WriteLine("");
+            if (isInnerExample)
+            {
+                RunOptimizationSingleDriverRoute10Stops();
+                OptimizationsToRemove = new List<string>() { SD10Stops_optimization_problem_id };
 
-      if (removed)
-      {
-        Console.WriteLine("RemoveAddressFromOptimization executed successfully");
+                optimizationId = SD10Stops_optimization_problem_id;
+                destinationId = (int)SD10Stops_route.Addresses[2].RouteDestinationId;
+                andReOptimize = true;
+            }
 
-        Console.WriteLine("Optimization Problem ID: {0}, Destination ID: {1}", optimizationId, destinationId);
-      }
-      else
-      {
-        Console.WriteLine("RemoveAddressFromOptimization error: {0}", errorString);
-      }
+            // Run the query
+            bool removed = route4Me.RemoveDestinationFromOptimization(
+                optimizationId, 
+                (int)destinationId, 
+                out string errorString);
+
+            Console.WriteLine("");
+
+            if (removed)
+            {
+                Console.WriteLine("RemoveAddressFromOptimization executed successfully");
+
+                Console.WriteLine("Optimization Problem ID: {0}, Destination ID: {1}", optimizationId, destinationId);
+            }
+            else
+            {
+                Console.WriteLine("RemoveAddressFromOptimization error: {0}", errorString);
+            }
+
+            if (isInnerExample) RemoveTestOptimizations();
+        }
     }
-  }
 }

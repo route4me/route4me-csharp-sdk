@@ -1,5 +1,4 @@
-﻿using Route4MeSDK.DataTypes;
-using Route4MeSDK.QueryTypes;
+﻿using Route4MeSDK.QueryTypes;
 using System;
 using System.Collections.Generic;
 
@@ -10,34 +9,33 @@ namespace Route4MeSDK.Examples
         /// <summary>
         /// Mark Address as Visited
         /// </summary>
-        /// <returns> status </returns>
-        public void MarkAddressVisited(AddressParameters aParams)
+        /// <param name="aParams">Address parameters</param>
+        public void MarkAddressVisited(AddressParameters aParams = null)
         {
             // Create the manager with the api key
-            Route4MeManager route4Me = new Route4MeManager(ActualApiKey);
+            var route4Me = new Route4MeManager(ActualApiKey);
+
+            if (aParams == null)
+            {
+                RunOptimizationSingleDriverRoute10Stops();
+                OptimizationsToRemove = new List<string>() { SD10Stops_optimization_problem_id };
+
+                aParams = new AddressParameters
+                {
+                    RouteId = SD10Stops_route_id,
+                    AddressId = (int)SD10Stops_route.Addresses[2].RouteDestinationId,
+                    IsVisited = true
+                };
+            }
 
             // Run the query
-            string errorString = "";
-            object oResult = route4Me.MarkAddressVisited(aParams, out errorString);
+            object oResult = route4Me.MarkAddressVisited(aParams, out string errorString);
 
-            Console.WriteLine("");
+            bool marked = int.TryParse(oResult.ToString(), out _) 
+                ? (Convert.ToInt32(oResult)>0 ? true : false)  
+                : false;
 
-            if (oResult != null)
-            {
-                int result = Convert.ToInt32(oResult);
-                if (result==1)
-                {
-                    Console.WriteLine("MarkAddressVisited executed successfully");
-                }
-                else
-                {
-                    Console.WriteLine("MarkAddressVisited error: {0}", errorString);
-                }
-            }
-            else
-            {
-                Console.WriteLine("MarkAddressVisited error: {0}", errorString);
-            }
+            PrintExampleDestination(marked, errorString);
         }
     }
 }

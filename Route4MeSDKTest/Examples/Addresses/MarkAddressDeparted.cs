@@ -1,5 +1,4 @@
-﻿using Route4MeSDK.DataTypes;
-using Route4MeSDK.QueryTypes;
+﻿using Route4MeSDK.QueryTypes;
 using System;
 using System.Collections.Generic;
 
@@ -10,34 +9,55 @@ namespace Route4MeSDK.Examples
         /// <summary>
         /// Mark Address as Departed
         /// </summary>
-        /// <returns> status </returns>
-        public void MarkAddressDeparted(AddressParameters aParams)
+        /// <param name="aParams">Address parameters</param>
+        public void MarkAddressDeparted(AddressParameters aParams = null)
         {
             // Create the manager with the api key
-            Route4MeManager route4Me = new Route4MeManager(ActualApiKey);
+            var route4Me = new Route4MeManager(ActualApiKey);
+
+            if (aParams == null)
+            {
+                RunOptimizationSingleDriverRoute10Stops();
+                OptimizationsToRemove = new List<string>() { SD10Stops_optimization_problem_id };
+
+                #region Before marking an address as departed, mark it as visited.
+                var visitedParams = new AddressParameters
+                {
+                    RouteId = SD10Stops_route_id,
+                    AddressId = (int)SD10Stops_route.Addresses[2].RouteDestinationId,
+                    IsVisited = true
+                };
+
+                object oVisited = route4Me.MarkAddressVisited(visitedParams, out string errorString0);
+
+                bool visited = int.TryParse(oVisited.ToString(), out _)
+                    ? (Convert.ToInt32(oVisited) > 0 ? true : false)
+                    : false;
+
+                if (!visited)
+                {
+                    Console.WriteLine("Cannot mark the address as visited");
+                    return;
+                }
+
+                #endregion
+
+                aParams = new AddressParameters
+                {
+                    RouteId = SD10Stops_route_id,
+                    AddressId = (int)SD10Stops_route.Addresses[2].RouteDestinationId,
+                    IsDeparted = true
+                };
+            }
 
             // Run the query
+            int result = route4Me.MarkAddressDeparted(aParams, out string errorString);
 
-            string errorString = "";
-            int result = route4Me.MarkAddressVisited(aParams, out errorString);
+            bool departed = result > 0 ? true : false;
 
-            Console.WriteLine("");
+            PrintExampleDestination(departed, errorString);
 
-            if (result != null)
-            {
-                if (result == 1)
-                {
-                    Console.WriteLine("MarkAddressDeparted executed successfully");
-                }
-                else
-                {
-                    Console.WriteLine("MarkAddressDeparted error: {0}", errorString);
-                }
-            }
-            else
-            {
-                Console.WriteLine("MarkAddressVisited error: {0}", errorString);
-            }
+            if (aParams == null) RemoveTestOptimizations();
         }
     }
 }

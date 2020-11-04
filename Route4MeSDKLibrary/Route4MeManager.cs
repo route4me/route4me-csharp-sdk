@@ -2105,7 +2105,11 @@ namespace Route4MeSDK
 				MemberId = 1
 			};
 
-			string response = GetJsonObjectFromAPI<string>(request, R4MEInfrastructureSettings.MarkAddressVisited, HttpMethodType.Get, out errorString);
+			string response = GetJsonObjectFromAPI<string>
+                (request, 
+                R4MEInfrastructureSettings.MarkAddressVisited, 
+                HttpMethodType.Get, 
+                out errorString);
 
             int iResponse = 0;
             return (int.TryParse(response.ToString(), out iResponse)) ? Convert.ToInt32(response) : 0;
@@ -2326,7 +2330,6 @@ namespace Route4MeSDK
         /// Searches for the address book locations 
         /// </summary>
         /// <param name="addressBookParameters">An AddressParameters type object as the input parameter</param>
-        /// <param name="total">out: Number of the returned contacts</param>
         /// <param name="errorString">out: Error as string</param>
         /// <returns>List of the selected fields values</returns>
 		public SearchAddressBookLocationResponse SearchAddressBookLocation(AddressBookParameters addressBookParameters, out List<AddressBookContact> contactsFromObjects, out string errorString)
