@@ -1,6 +1,5 @@
 ﻿using Route4MeSDK.DataTypes;
 using Route4MeSDK.QueryTypes;
-using System;
 using System.Collections.Generic;
 
 namespace Route4MeSDK.Examples
@@ -10,32 +9,32 @@ namespace Route4MeSDK.Examples
         /// <summary>
         /// Mark Address as Marked as Departed
         /// </summary>
-        /// <returns> status </returns>
-        public void MarkAddressAsMarkedAsDeparted(AddressParameters aParams)
+        /// <param name="aParams">Address parameters</param>
+        public void MarkAddressAsMarkedAsDeparted(AddressParameters aParams = null)
         {
             // Create the manager with the api key
-            Route4MeManager route4Me = new Route4MeManager(ActualApiKey);
+            var route4Me = new Route4MeManager(ActualApiKey);
+
+            if (aParams == null)
+            {
+                RunOptimizationSingleDriverRoute10Stops();
+                OptimizationsToRemove = new List<string>() { SD10Stops_optimization_problem_id };
+
+                aParams = new AddressParameters
+                {
+                    RouteId = SD10Stops_route_id,
+                    RouteDestinationId = (int)SD10Stops_route.Addresses[2].RouteDestinationId,
+                    IsDeparted = true
+                };
+            }
 
             // Run the query
+            Address resultAddress = route4Me
+                .MarkAddressAsMarkedAsDeparted(aParams, out string errorString);
 
-            string errorString = "";
-            Address resultAddress = route4Me.MarkAddressAsMarkedAsDeparted(aParams, out errorString);
+            PrintExampleDestination(resultAddress, errorString);
 
-            Console.WriteLine("");
-
-            if (resultAddress != null)
-            {
-                Console.WriteLine("MarkAddressAsMarkedAsDeparted executed successfully");
-
-                Console.WriteLine("Marked Address ID: {0}", resultAddress.RouteDestinationId);
-
-            }
-            else
-            {
-                Console.WriteLine("MarkAddressAsMarkedAsDeparted error: {0}", errorString);
-
-            }
-
+            if (aParams == null) RemoveTestOptimizations();
         }
     }
 }

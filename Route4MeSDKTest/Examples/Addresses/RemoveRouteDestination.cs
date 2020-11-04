@@ -1,33 +1,39 @@
-﻿using Route4MeSDK.DataTypes;
-using Route4MeSDK.QueryTypes;
-using System;
+﻿using System.Collections.Generic;
 
 namespace Route4MeSDK.Examples
 {
-  public sealed partial class Route4MeExamples
-  {
-    public void RemoveRouteDestination(string routeId, int destinationId)
+    public sealed partial class Route4MeExamples
     {
-      // Create the manager with the api key
-      Route4MeManager route4Me = new Route4MeManager(ActualApiKey);
+        /// <summary>
+        /// Remove a destination from a route.
+        /// </summary>
+        /// <param name="routeId">Route ID</param>
+        /// <param name="destinationId">Destination ID</param>
+        public void RemoveRouteDestination(string routeId = null, int? destinationId = null)
+        {
+            // Create the manager with the api key
+            var route4Me = new Route4MeManager(ActualApiKey);
 
-      // Run the query
-      string errorString;
-      bool deleted = route4Me.RemoveRouteDestination(routeId, destinationId, out errorString);
+            bool isInnerExample = routeId == null ? true : false;
 
-      Console.WriteLine("");
+            if (isInnerExample)
+            {
+                RunOptimizationSingleDriverRoute10Stops();
+                OptimizationsToRemove = new List<string>() { SD10Stops_optimization_problem_id };
 
-      if (deleted)
-      {
-        Console.WriteLine("RemoveRouteDestination executed successfully");
+                routeId = SD10Stops_route_id;
+                destinationId = (int)SD10Stops_route.Addresses[2].RouteDestinationId;
+            }
 
-        Console.WriteLine("Destination ID: {0}", destinationId);
-      }
-      else
-      {
-        Console.WriteLine("RemoveRouteDestination error: {0}", errorString);
-      }
+            // Run the query
+            bool deleted = route4Me.RemoveRouteDestination(
+                routeId, 
+                (int)destinationId, 
+                out string errorString);
 
+            PrintExampleDestination(deleted, errorString);
+
+            if (isInnerExample) RemoveTestOptimizations();
+        }
     }
-  }
 }

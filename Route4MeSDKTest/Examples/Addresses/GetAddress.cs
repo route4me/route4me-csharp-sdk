@@ -1,40 +1,42 @@
 ﻿using Route4MeSDK.DataTypes;
 using Route4MeSDK.QueryTypes;
-using System;
+using System.Collections.Generic;
 
 namespace Route4MeSDK.Examples
 {
-  public sealed partial class Route4MeExamples
-  {
-    public void GetAddress(string routeId, int routeDestinationId)
+    public sealed partial class Route4MeExamples
     {
-      // Create the manager with the api key
-      Route4MeManager route4Me = new Route4MeManager(ActualApiKey);
+        /// <summary>
+        /// Get destination from a route.
+        /// </summary>
+        /// <param name="routeId">Route ID</param>
+        /// <param name="routeDestinationId">A route destination ID</param>
+        public void GetAddress(string routeId=null, int? routeDestinationId=null)
+        {
+            // Create the manager with the api key
+            var route4Me = new Route4MeManager(ActualApiKey);
 
-      AddressParameters addressParameters = new AddressParameters()
-      {
-        RouteId = routeId,
-        RouteDestinationId = routeDestinationId,
-        Notes = true
-      };
+            if (routeId == null)
+            {
+                RunOptimizationSingleDriverRoute10Stops();
+                OptimizationsToRemove = new List<string>() { SD10Stops_optimization_problem_id };
+            }
 
-      // Run the query
-      string errorString;
-      Address dataObject = route4Me.GetAddress(addressParameters, out errorString);
+            var addressParameters = new AddressParameters()
+            {
+                RouteId = (routeId==null) ? SD10Stops_route_id : routeId,
+                RouteDestinationId = (routeDestinationId== null) 
+                                    ? (int)SD10Stops_route.Addresses[2].RouteDestinationId 
+                                    : (int)routeDestinationId,
+                Notes = true
+            };
 
-      Console.WriteLine("");
+            // Run the query
+            Address destination = route4Me.GetAddress(addressParameters, out string errorString);
 
-      if (dataObject != null)
-      {
-        Console.WriteLine("GetAddress executed successfully");
-        Console.WriteLine("RouteId: {0}; RouteDestinationId: {1}", dataObject.RouteId, dataObject.RouteDestinationId);
-        Console.WriteLine("");
-      }
-      else
-      {
-        Console.WriteLine("GetAddress error: {0}", errorString);
-        Console.WriteLine("");
-      }
+            PrintExampleDestination(destination, errorString);
+
+            if (routeId == null) RemoveTestOptimizations();
+        }
     }
-  }
 }
