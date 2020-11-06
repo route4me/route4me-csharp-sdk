@@ -1,41 +1,35 @@
-﻿using Route4MeSDK.DataTypes;
-using Route4MeSDK.QueryTypes;
-using System;
+﻿using Route4MeSDK.QueryTypes;
 
 namespace Route4MeSDK.Examples
 {
-  public sealed partial class Route4MeExamples
-  {
-    /// <summary>
-    /// Delete Avoidance Zone
-    /// </summary>
-    /// <param name="territoryId"> Avoidance Zone Id </param>
-    public void DeleteAvoidanceZone(string territoryId)
+    public sealed partial class Route4MeExamples
     {
-      // Create the manager with the api key
-      Route4MeManager route4Me = new Route4MeManager(ActualApiKey);
+        /// <summary>
+        /// Delete Avoidance Zone
+        /// </summary>
+        /// <param name="territoryId"> Avoidance Zone Id </param>
+        public void DeleteAvoidanceZone(string territoryId = null)
+        {
+            // Create the manager with the api key
+            var route4Me = new Route4MeManager(ActualApiKey);
 
-      AvoidanceZoneQuery avoidanceZoneQuery = new AvoidanceZoneQuery()
-      {
-        TerritoryId = territoryId
-      };
+            bool isInnerExample = territoryId == null ? true : false;
 
-      // Run the query
-      string errorString;
-      route4Me.DeleteAvoidanceZone(avoidanceZoneQuery, out errorString);
+            if (isInnerExample)
+            {
+                CreateAvoidanceZone();
+                territoryId = avoidanceZone.TerritoryId;
+            }
 
-      Console.WriteLine("");
+            var avoidanceZoneQuery = new AvoidanceZoneQuery()
+            {
+                TerritoryId = territoryId
+            };
 
-      if (errorString == "")
-      {
-        Console.WriteLine("DeleteAvoidanceZone executed successfully");
+            // Run the query
+            route4Me.DeleteAvoidanceZone(avoidanceZoneQuery, out string errorString);
 
-        Console.WriteLine("Territory ID: {0}", territoryId);
-      }
-      else
-      {
-        Console.WriteLine("DeleteAvoidanceZone error: {0}", errorString);
-      }
+            PrintExampleAvoidanceZone(territoryId, errorString);
+        }
     }
-  }
 }

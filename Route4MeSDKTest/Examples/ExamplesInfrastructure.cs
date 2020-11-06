@@ -42,6 +42,8 @@ namespace Route4MeSDK.Examples
 
         AddressBookContact contactToRemove;
 
+        AvoidanceZone avoidanceZone;
+
         private void PrintExampleRouteResult(string exampleName, DataObjectRoute dataObjectRoute, string errorString)
         {
             Console.WriteLine("");
@@ -162,6 +164,28 @@ namespace Route4MeSDK.Examples
                 Console.WriteLine((bool)obj
                     ? testName + " executed successfully"
                     : String.Format(testName + " error: {0}", errorString));
+            }
+        }
+
+        private void PrintExampleAvoidanceZone(object avoidanceZone, string errorString = "")
+        {
+            string testName = (new System.Diagnostics.StackTrace()).GetFrame(1).GetMethod().Name;
+
+            Console.WriteLine("");
+
+            if (avoidanceZone != null)
+            {
+                Console.WriteLine(testName+" executed successfully");
+
+                string avoidanceZoneId = avoidanceZone.GetType() == typeof(AvoidanceZone)
+                    ? ((AvoidanceZone)avoidanceZone).TerritoryId
+                    : avoidanceZone.ToString();
+
+                Console.WriteLine("Territory ID: {0}", avoidanceZoneId);
+            }
+            else
+            {
+                Console.WriteLine(testName+" error: {0}", errorString);
             }
         }
 
@@ -552,6 +576,57 @@ namespace Route4MeSDK.Examples
                 Console.WriteLine("Single Driver Round Trip generation failed... " + ex.Message);
                 return false;
             }
+        }
+
+        /// <summary>
+        /// Remove an avoidance zone
+        /// </summary>
+        /// <param name="avoidanceZoneId">Avoidance zone ID (territory ID)</param>
+        /// <returns>If true, an avoidance zone removed successfully</returns>
+        public bool RemoveAvidanceZone(string avoidanceZoneId)
+        {
+            AvoidanceZoneQuery avZoneQuery = new AvoidanceZoneQuery()
+            {
+                TerritoryId = avoidanceZoneId
+            };
+
+            var route4Me = new Route4MeManager(ActualApiKey);
+
+            bool deleted = route4Me.DeleteAvoidanceZone(avZoneQuery, out string errorString);
+
+            Console.WriteLine("");
+
+            Console.WriteLine(
+                deleted
+                ? "The avoidance zone "+ avZoneQuery.TerritoryId+" removed successfully" 
+                : "Cannot remove avoidance zone " + avZoneQuery.TerritoryId
+                );
+
+            return deleted;
+        }
+
+        public void CreateAvoidanceZone()
+        {
+            var route4Me = new Route4MeManager(ActualApiKey);
+
+            var avoidanceZoneParameters = new AvoidanceZoneParameters()
+            {
+                TerritoryName = "Test Territory",
+                TerritoryColor = "ff0000",
+                Territory = new Territory()
+                {
+                    Type = TerritoryType.Circle.Description(),
+                    Data = new string[] { "37.569752822786455,-77.47833251953125",
+                                "5000"}
+                }
+            };
+
+            // Run the query
+            avoidanceZone = route4Me.AddAvoidanceZone(
+                avoidanceZoneParameters,
+                out string errorString);
+
+            PrintExampleAvoidanceZone(avoidanceZone);
         }
     }
 }

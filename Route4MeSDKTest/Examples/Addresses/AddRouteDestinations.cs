@@ -13,12 +13,16 @@ namespace Route4MeSDK.Examples
         public int[] AddRouteDestinations(string routeId = null)
         {
             // Create the manager with the api key
-            Route4MeManager route4Me = new Route4MeManager(ActualApiKey);
+            var route4Me = new Route4MeManager(ActualApiKey);
 
-            if (routeId == null)
+            bool isInnerExample = routeId == null ? true : false;
+
+            if (isInnerExample)
             {
                 RunOptimizationSingleDriverRoute10Stops();
+
                 OptimizationsToRemove = new List<string>() { SD10Stops_optimization_problem_id };
+                routeId = SD10Stops_route_id;
             }
 
             // Prepare the addresses
@@ -50,7 +54,7 @@ namespace Route4MeSDK.Examples
 
             PrintExampleRouteResult("AddRouteDestinations", SD10Stops_route, errorString);
 
-            if (routeId == null)
+            if (isInnerExample)
             {
                 RemoveTestOptimizations();
                 return null;

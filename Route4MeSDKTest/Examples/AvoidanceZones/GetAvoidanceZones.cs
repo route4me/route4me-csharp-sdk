@@ -4,35 +4,31 @@ using System;
 
 namespace Route4MeSDK.Examples
 {
-  public sealed partial class Route4MeExamples
-  {
-    /// <summary>
-    /// Get Avoidance Zone list
-    /// </summary>
-    public void GetAvoidanceZones()
+    public sealed partial class Route4MeExamples
     {
-      // Create the manager with the api key
-      Route4MeManager route4Me = new Route4MeManager(ActualApiKey);
+        /// <summary>
+        /// Get Avoidance Zone list
+        /// </summary>
+        public void GetAvoidanceZones()
+        {
+            // Create the manager with the api key
+            var route4Me = new Route4MeManager(ActualApiKey);
 
-      AvoidanceZoneQuery avoidanceZoneQuery = new AvoidanceZoneQuery()
-      {
-        
-      };
+            var avoidanceZoneQuery = new AvoidanceZoneQuery()
+            { };
 
-      // Run the query
-      string errorString;
-      AvoidanceZone[] avoidanceZones = route4Me.GetAvoidanceZones(avoidanceZoneQuery, out errorString);
+            // Run the query
+            AvoidanceZone[] avoidanceZones = route4Me.GetAvoidanceZones(
+                avoidanceZoneQuery,
+                out string errorString);
 
-      Console.WriteLine("");
+            Console.WriteLine("");
 
-      if (avoidanceZones != null)
-      {
-        Console.WriteLine("GetAvoidanceZones executed successfully, {0} zones returned", avoidanceZones.Length);
-      }
-      else
-      {
-        Console.WriteLine("GetAvoidanceZones error: {0}", errorString);
-      }
+            Console.WriteLine(
+                avoidanceZones != null
+                ? String.Format("GetAvoidanceZones executed successfully, {0} zones returned", avoidanceZones.Length)
+                : String.Format("GetAvoidanceZones error: {0}", errorString)
+                );
+        }
     }
-  }
 }
