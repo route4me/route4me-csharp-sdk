@@ -10835,9 +10835,7 @@ namespace Route4MeSDKUnitTest
             };
 
             // Run the query
-
-            string errorString = "";
-            int result = route4Me.MarkAddressVisited(aParams, out errorString);
+            int result = route4Me.MarkAddressDeparted(aParams, out string errorString);
 
             Assert.IsNotNull(result, "MarkAddressDepartedTest... " + errorString);
         }
@@ -10845,7 +10843,7 @@ namespace Route4MeSDKUnitTest
         [TestMethod]
         public void MarkAddressVisitedTest()
         {
-            var route4Me = new Route4MeManager(c_ApiKey);
+            var route4Me = new Route4MeManager(ApiKeys.actualApiKey);
 
             var aParams = new AddressParameters
             {
@@ -10855,8 +10853,7 @@ namespace Route4MeSDKUnitTest
             };
 
             // Run the query
-            string errorString = "";
-            object oResult = route4Me.MarkAddressVisited(aParams, out errorString);
+            object oResult = route4Me.MarkAddressVisited(aParams, out string errorString);
 
             Assert.IsNotNull(oResult, "MarkAddressVisitedTest... " + errorString);
         }

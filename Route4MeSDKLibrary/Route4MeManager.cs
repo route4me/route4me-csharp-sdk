@@ -2753,7 +2753,7 @@ namespace Route4MeSDK
 										HttpMethodType.Delete,
 										out errorString);
 
-			return result.status;
+			return result?.status ?? false;
 		}
 
 		#endregion
