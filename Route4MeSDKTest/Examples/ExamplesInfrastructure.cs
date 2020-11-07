@@ -159,6 +159,13 @@ namespace Route4MeSDK.Examples
                     Console.WriteLine(testName + " error: {0}", errorString);
                 }
             }
+            else if (obj.GetType().IsArray)
+            {
+                var addresses = (int[])obj;
+
+                Console.WriteLine(testName + " executed successfully");
+                Console.WriteLine("Affected destinations: " + addresses.Length);
+            }
             else
             {
                 Console.WriteLine((bool)obj
@@ -418,7 +425,7 @@ namespace Route4MeSDK.Examples
         {
             var route4Me = new Route4MeManager(ActualApiKey);
 
-            if (OptimizationsToRemove.Count > 0)
+            if ((OptimizationsToRemove?.Count ?? 0) > 0)
             {
                 try
                 {
