@@ -8463,6 +8463,7 @@ namespace Route4MeSDKUnitTest
                 "address_custom_data", "local_time_window_start", "local_time_window_end",
                 "AddressCube","AddressPieces","AddressRevenue","AddressWeight","AddressPriority","ConvertBooleansToInteger"
             };
+
             // Run the query
             var updatedContact = route4Me.UpdateAddressBookContact(contact1, updatableProperties, out string errorString);
 
