@@ -10735,7 +10735,7 @@ namespace Route4MeSDKUnitTest
 
             string route_id = tdr.SDRT_route_id;
 
-            Assert.IsNotNull(route_id, "rote_id is null...");
+            Assert.IsNotNull(route_id, "rote_id is null.");
 
             // Prepare the addresses
             #region Addresses
@@ -10754,7 +10754,7 @@ namespace Route4MeSDKUnitTest
             string errorString;
             int[] destinationIds = route4Me.AddRouteDestinations(route_id, addresses, optimalPosition, out errorString);
 
-            Assert.IsInstanceOfType(destinationIds, typeof(System.Int32[]), "AddRouteDestinationsTest failed...");
+            Assert.IsInstanceOfType(destinationIds, typeof(System.Int32[]), "AddRouteDestinationsTest failed.");
         }
 
         [TestMethod]
@@ -10775,8 +10775,10 @@ namespace Route4MeSDKUnitTest
             Assert.IsNotNull(oDestinationId, "destination_id is null...");
 
             // Run the query
-            string errorString;
-            bool deleted = route4Me.RemoveRouteDestination(route_id, destination_id, out errorString);
+            bool deleted = route4Me.RemoveRouteDestination(
+                route_id, 
+                destination_id, 
+                out string errorString);
 
             Assert.IsTrue(deleted, "RemoveRouteDestinationTest");
 
