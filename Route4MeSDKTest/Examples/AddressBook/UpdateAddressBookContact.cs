@@ -24,8 +24,8 @@ namespace Route4MeSDK.Examples
             {
                 {"key1", "value1" }, {"key2", "value2" }
             };
-            contact1.local_time_window_start = 25400;
-            contact1.local_time_window_end = 26000;
+            contact1.local_time_window_start = R4MeUtils.DDHHMM2Seconds("7:03", out _);
+            contact1.local_time_window_end = R4MeUtils.DDHHMM2Seconds("7:37", out _);
             contact1.AddressCube = 5;
             contact1.AddressPieces = 6;
             contact1.AddressRevenue = 700;

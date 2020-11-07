@@ -26,8 +26,8 @@ namespace Route4MeSDK.Examples
                 {"key1", "value1" }, {"key2", "value2" }
             };
 
-            contactClone.local_time_window_start = R4MeUtils.DDHHMM2Seconds("7:05", out string errorString0);
-            contactClone.local_time_window_end = R4MeUtils.DDHHMM2Seconds("7:22", out errorString0);
+            contactClone.local_time_window_start = R4MeUtils.DDHHMM2Seconds("7:05", out _);
+            contactClone.local_time_window_end = R4MeUtils.DDHHMM2Seconds("7:22", out _);
             contactClone.AddressCube = 5;
             contactClone.AddressPieces = 6;
             contactClone.AddressRevenue = 700;
