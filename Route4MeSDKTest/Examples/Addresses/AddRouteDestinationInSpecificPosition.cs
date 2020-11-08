@@ -8,10 +8,10 @@ namespace Route4MeSDK.Examples
         /// <summary>
         /// Add route destination in specific position
         /// </summary>
-        public void AddRouteDestinationInSpecificPositionTest()
+        public void AddRouteDestinationInSpecificPosition()
         {
             var route4Me = new Route4MeManager(this.ActualApiKey);
-            
+
             RunOptimizationSingleDriverRoute10Stops();
 
             OptimizationsToRemove = new List<string>() { SD10Stops_optimization_problem_id };
@@ -33,15 +33,14 @@ namespace Route4MeSDK.Examples
             // Run the query
             bool optimalPosition = false;
             int[] destinationIds = route4Me.AddRouteDestinations(
-                route_id, 
-                addresses, 
-                optimalPosition, 
+                route_id,
+                addresses,
+                optimalPosition,
                 out string errorString);
 
             PrintExampleDestination(destinationIds, errorString);
 
             RemoveTestOptimizations();
         }
-
-}
+    }
 }
