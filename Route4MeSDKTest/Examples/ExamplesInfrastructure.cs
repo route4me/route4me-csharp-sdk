@@ -2,10 +2,19 @@
 using Route4MeSDK.DataTypes;
 using Route4MeSDK.QueryTypes;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 
 namespace Route4MeSDK.Examples
 {
+    public enum GeocodingPrintOption
+    {
+        Geocodings = 1,
+        StreetData = 2,
+        StreetService = 3,
+        StreetZipCode = 4
+    }
     /// <summary>
     /// Helper functions used by some of the examples.
     /// </summary>
@@ -659,6 +668,52 @@ namespace Route4MeSDK.Examples
                 out string errorString);
 
             PrintExampleAvoidanceZone(avoidanceZone);
+        }
+
+        public void PrintExampleGeocodings(
+            object result, 
+            GeocodingPrintOption printOption,
+            string errorString)
+        {
+            string testName = (new System.Diagnostics.StackTrace()).GetFrame(1).GetMethod().Name;
+            testName = testName != null ? testName : "";
+
+            switch (printOption)
+            {
+                case GeocodingPrintOption.Geocodings:
+                    Console.WriteLine("");
+
+                    if (result != null && result.ToString().Length>0)
+                    {
+                        Console.WriteLine(testName + " executed successfully");
+                    }
+                    else
+                    {
+                        Console.WriteLine(testName+" error: {0}", errorString);
+                    }
+                    break;
+                case GeocodingPrintOption.StreetData:
+                case GeocodingPrintOption.StreetService:
+                case GeocodingPrintOption.StreetZipCode:
+                    Console.WriteLine("");
+
+                    if (result != null && result.GetType()==typeof(ArrayList))
+                    {
+                        Console.WriteLine(testName+" executed successfully");
+                        foreach (Dictionary<string, string> res1 in (ArrayList)result)
+                        {
+
+                            Console.WriteLine("Zipcode: " + res1["zipcode"]);
+                            Console.WriteLine("Street name: " + res1["street_name"]);
+                            Console.WriteLine("---------------------------");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine(testName+" error: {0}", errorString);
+                    }
+                    break;
+            }
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using Route4MeSDK.DataTypes;
-using Route4MeSDK.QueryTypes;
-using System;
+﻿using Route4MeSDK.QueryTypes;
 
 namespace Route4MeSDK.Examples
 {
@@ -9,27 +7,22 @@ namespace Route4MeSDK.Examples
         /// <summary>
         /// Reverse Geocoding
         /// </summary>
-        /// <returns> xml object </returns>
+        /// <returns> json/xml object </returns>
         public void ReverseGeocoding()
         {
             // Create the manager with the api key
-            Route4MeManager route4Me = new Route4MeManager(ActualApiKey);
+            var route4Me = new Route4MeManager(ActualApiKey);
 
-            GeocodingParameters geoParams = new GeocodingParameters { Addresses = "42.35863,-71.05670" };
+            var geoParams = new GeocodingParameters 
+            { 
+                Addresses = "42.35863,-71.05670",
+                Format = "json"
+            };
+
             // Run the query
-            string errorString = "";
-            string result = route4Me.Geocoding(geoParams, out errorString);
+            string result = route4Me.Geocoding(geoParams, out string errorString);
 
-            Console.WriteLine("");
-
-            if (result != null)
-            {
-                Console.WriteLine("ReverseGeocoding executed successfully");
-            }
-            else
-            {
-                Console.WriteLine("ReverseGeocoding error: {0}", errorString);
-            }
+            PrintExampleGeocodings(result, GeocodingPrintOption.Geocodings, errorString);
         }
     }
 }

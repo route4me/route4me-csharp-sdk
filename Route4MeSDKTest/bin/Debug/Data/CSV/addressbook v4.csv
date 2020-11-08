@@ -1,0 +1,14 @@
+"id","Territory Name","created_timestamp","address_id","group","alias","address","address_2","member_id","first_name","last_name","email","phone","city","state","country_id","zipcode","lat","lng","curbside_lat","curbside_lng","schedule","schedule_blacklist","in_route_count","last_visited_timestamp","last_routed_timestamp","time_window_start","time_window_end","time_window_start_2","time_window_end_2","service_time","timezone","color","address_icon","delivered","Costom_field","Second_custom_field"
+1,,,,,,"17205 RICHMOND TNPK, MILFORD, VA, 22514",,,"EditedName","Pimentel",,,,"0","0",,38.024654,-77.338814,38.024654,-77.338814,,,,,,,,,,0
+2,,,,,,"Test Address1 91007",,,"Test FirstName 1865","Updated 84857",,,,"0","0",,38.024654,-77.338814,38.024654,-77.338814,,,,,,,,,,0
+3,,,,,,"10149 ASHDALE LANE	67	67393253			SANTEE	CA	92071		280501691	67393253	IFI	280501691	05-JUN-10	67393253",,,,,,,,,,,40.7143,-74.0067,40.7143,-74.0067
+4,,,,,,"Test Address1 57930",,,"Test FirstName 59460",,,,,"0","0",,38.024654,-77.338814,38.024654,-77.338814,"[{""daily"":{""every"":1},""enabled"":true,""mode"":""daily""}]",,,,,,,,,0,,,,"false"
+5,,,,,,"193 Lakebridge Dr, Kings Paark, NY",,,,,,,,,,,40.714269,-74.005973,40.714269,-74.005973,,"""2017-03-16"",""2017-03-18"",""2017-03-19"""
+6,,,,,,"219 west creek",,,,,,,,,,,40.719856,-74.01211,40.719856,-74.01211
+7,,,,,,"14 North Moore Street
+New York, ny",,,,,,,,,,,40.719697,-74.00661,40.719697,-74.00661
+8,,,,,,"Test Address1 88799",,,"Test FirstName 77545","Updated 17180",,,,"0","0",,38.024654,-77.338814,38.024654,-77.338814,,,,,,,,,,0
+9,,,,,,"14 North Moore StreetnNew York, ny",,,,,,,,,,,40.719697,-74.00661,40.719697,-74.00661
+10,,,,,,"Test Address1 14502",,,"Test FirstName 9768",,,,,"0","0",,38.024654,-77.338814,38.024654,-77.338814,,,,,,,,,,0
+11,,,13905016,,"Dollar General-Alexander City,AL","1538 Mill Sq, Alexander City, AL, 35010-2674",,403634,"Oleg",,,"(256) 215-5511",,,"0",,32.936296,-85.972485,32.936296,-85.972485,"[{""enabled"":true,""mode"":""weekly"",""weekly"":{""every"":1,""weekdays"":[4]}}]","Array",1,,1488293760,32400,34200,39600,42000,4200,"Asia/Tbilisi",,,,"Costom_content","Second_custom_content"
+12,,,13905017,,"Dollar General-Alexander City,AL","6278 Alabama 63, Alexander City, AL, 35771-7175",,403634,,"Guchashvili",,"(256) 414-3086",,,"0",,33.02296,-85.942624,33.02296,-85.942624,"[{""enabled"":true,""mode"":""weekly"",""weekly"":{""every"":1,""weekdays"":[4]}}]","Array",2,,1488293760,,,,,,,"fa573c"

@@ -11779,10 +11779,9 @@ namespace Route4MeSDKUnitTest
             };
 
             //Run the query
-            string errorString = "";
-            string result = route4Me.Geocoding(geoParams, out errorString);
+            string result = route4Me.Geocoding(geoParams, out string errorString);
 
-            Assert.IsNotNull(result, "GeocodingForwardTest failed... " + errorString);
+            Assert.IsNotNull(result, "GeocodingForwardTest failed. " + errorString);
         }
 
         [TestMethod]
@@ -11797,8 +11796,7 @@ namespace Route4MeSDKUnitTest
             };
 
             //Run the query
-            string errorString = "";
-            string result = route4Me.BatchGeocoding(geoParams, out errorString);
+            string result = route4Me.BatchGeocoding(geoParams, out string errorString);
 
             Assert.IsNotNull(result, "GeocodingForwardTest failed... " + errorString);
         }
@@ -11979,11 +11977,15 @@ namespace Route4MeSDKUnitTest
         {
             var route4Me = new Route4MeManager(c_ApiKey);
 
-            var geoParams = new GeocodingParameters { Addresses = "41.00367151,-81.59846105" };
+            var geoParams = new GeocodingParameters 
+            { 
+                Addresses = "41.00367151,-81.59846105" 
+            };
+
             geoParams.Format = "json";
+
             // Run the query
-            string errorString = "";
-            string result = route4Me.Geocoding(geoParams, out errorString);
+            string result = route4Me.Geocoding(geoParams, out string errorString);
 
             Assert.IsNotNull(result, "ReverseGeocodingTest failed... " + errorString);
         }
