@@ -3128,7 +3128,13 @@ namespace Route4MeSDK
 
             using (HttpContent httpContent = new FormUrlEncodedContent(keyValues))
             {
-                return GetJsonObjectFromAPI<string>(request, R4MEInfrastructureSettings.Geocoder, HttpMethodType.Post, httpContent, true, out errorString);
+                return GetJsonObjectFromAPI<string>(
+                    request, 
+                    R4MEInfrastructureSettings.Geocoder, 
+                    HttpMethodType.Post, 
+                    httpContent, 
+                    true, 
+                    out errorString);
             };
         }
 
