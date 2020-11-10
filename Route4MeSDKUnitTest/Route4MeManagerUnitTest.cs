@@ -8781,14 +8781,14 @@ namespace Route4MeSDKUnitTest
 
             var addressBookGroupParameters = new AddressBookGroupParameters()
             {
-                groupID = group2.groupID
-                //groupID = "59EB1E8AB954AA880A3B3D9D581065B4"
+                groupID = group2.groupID,
+                Fields = new string[] { "address_id" }
             };
 
             // Run the query
-            var addressBookGroup = route4Me.GetAddressBookContactsByGroup(addressBookGroupParameters, out string errorString);
+            var response = route4Me.GetAddressBookContactsByGroup(addressBookGroupParameters, out string errorString);
 
-            Assert.IsInstanceOfType(addressBookGroup, typeof(AddressBookContactsResponse), "GetAddressBookContactsByGroupTest failed... " + errorString);
+            Assert.IsInstanceOfType(response, typeof(AddressBookContactsResponse), "GetAddressBookContactsByGroupTest failed. " + errorString);
         }
 
         [TestMethod]
