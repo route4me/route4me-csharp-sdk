@@ -3174,10 +3174,13 @@ namespace Route4MeSDK
 			HttpContent content = new StringContent(jsonAddresses);
 			content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-			Tuple<uploadAddressesToTemporaryStorageResponse, string> result = GetJsonObjectFromAPIAsync<uploadAddressesToTemporaryStorageResponse>(request,
-															   R4MEInfrastructureSettings.FastGeocoder,
-															   HttpMethodType.Post,
-															   content, false).GetAwaiter().GetResult();
+			Tuple<uploadAddressesToTemporaryStorageResponse, string> result = 
+                GetJsonObjectFromAPIAsync<uploadAddressesToTemporaryStorageResponse>(
+                    request,
+					R4MEInfrastructureSettings.FastGeocoder,
+					HttpMethodType.Post,
+					content, 
+                    false).GetAwaiter().GetResult();
 
 			Thread.SpinWait(5000);
 

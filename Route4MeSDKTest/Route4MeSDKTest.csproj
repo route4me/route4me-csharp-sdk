@@ -112,6 +112,13 @@
     <Compile Include="Examples\Activities\LogCustomActivity.cs" />
     <Compile Include="Examples\Activities\SearchAreaAdded.cs" />
     <Compile Include="Examples\Activities\SearchDestinationDeleted.cs" />
+    <Compile Include="Examples\AddressBookGroup\AddAddressBookGroup.cs" />
+    <Compile Include="Examples\AddressBookGroup\GetAddressBookContactsByGroup.cs" />
+    <Compile Include="Examples\AddressBookGroup\GetAddressBookGroup.cs" />
+    <Compile Include="Examples\AddressBookGroup\GetAddressBookGroups.cs" />
+    <Compile Include="Examples\AddressBookGroup\RemoveAddressBookGroup.cs" />
+    <Compile Include="Examples\AddressBookGroup\SearchAddressBookContactsByFilter.cs" />
+    <Compile Include="Examples\AddressBookGroup\UpdateAddressBookGroup.cs" />
     <Compile Include="Examples\AddressBook\AddAddressBookContact.cs" />
     <Compile Include="Examples\AddressBook\AddScheduledAddressBookContact.cs" />
     <Compile Include="Examples\AddressBook\SearchLocationsByText.cs" />
@@ -119,6 +126,7 @@
     <Compile Include="Examples\AddressBook\SearchLocationsByIDs.cs" />
     <Compile Include="Examples\AddressBook\SearchRoutedLocations.cs" />
     <Compile Include="Examples\AddressBook\UpdateWholeAddressBookContact.cs" />
+    <Compile Include="Examples\Addresses\AddRouteDestinationInSpecificPosition.cs" />
     <Compile Include="Examples\Addresses\MarkAddressAsMarkedAsDeparted.cs" />
     <Compile Include="Examples\Addresses\MarkAddressAsMarkedAsVisited.cs" />
     <Compile Include="Examples\Addresses\MarkAddressDeparted.cs" />
@@ -127,6 +135,9 @@
     <Compile Include="Examples\Addresses\ResequenceRouteDestinations.cs" />
     <Compile Include="Examples\AvoidanceZones\AddPolygonAvoidanceZone.cs" />
     <Compile Include="Examples\AvoidanceZones\AddRectAvoidanceZone.cs" />
+    <Compile Include="Examples\Geocoding\BatchGeocodingForward.cs" />
+    <Compile Include="Examples\Geocoding\BatchGeocodingForwardAsync.cs" />
+    <Compile Include="Examples\Geocoding\uploadAndGeocodeLargeJsonFile.cs" />
     <Compile Include="Examples\RouteExamples\AsyncMultipleDepotMultipleDriver.cs" />
     <Compile Include="Examples\RouteExamples\ExampleOptimization.cs" />
     <Compile Include="Examples\Users\CreateUser.cs" />
@@ -235,6 +246,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="shortTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

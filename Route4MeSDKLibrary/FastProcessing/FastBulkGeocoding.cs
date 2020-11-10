@@ -102,7 +102,7 @@ namespace Route4MeSDK.FastProcessing
         /// <param name="fileName">JSON file name</param>
         public void uploadAndGeocodeLargeJsonFile(string fileName)
         {
-            Route4MeManager route4Me = new Route4MeManager(apiKey);
+            var route4Me = new Route4MeManager(apiKey);
 
             largeJsonFileProcessingIsDone = false;
 
