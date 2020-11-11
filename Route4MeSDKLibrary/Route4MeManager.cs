@@ -1346,7 +1346,11 @@ namespace Route4MeSDK
         /// <returns>An object of the type MemberConfigurationResponse</returns>
 		public MemberConfigurationResponse RemoveConfigurationKey(MemberConfigurationParameters confParams, out string errorString)
 		{
-            return GetJsonObjectFromAPI<MemberConfigurationResponse>(confParams, R4MEInfrastructureSettings.UserConfiguration, HttpMethodType.Delete, out errorString);
+            return GetJsonObjectFromAPI<MemberConfigurationResponse>(
+                confParams, 
+                R4MEInfrastructureSettings.UserConfiguration, 
+                HttpMethodType.Delete, 
+                out errorString);
 		}
 
         /// <summary>
@@ -2598,13 +2602,17 @@ namespace Route4MeSDK
         /// <param name="addressBookGroupParameters">Query parameters</param>
         /// <param name="errorString">Error string</param>
         /// <returns>An address book group</returns>
-		public AddressBookContactsResponse GetAddressBookContactsByGroup(AddressBookGroupParameters addressBookGroupParameters, out string errorString)
+		public AddressBookContactsResponse GetAddressBookContactsByGroup(
+            AddressBookGroupParameters addressBookGroupParameters, 
+            out string errorString)
 		{
 			addressBookGroupParameters.PrepareForSerialization();
-			var response = GetJsonObjectFromAPI<AddressBookContactsResponse>(addressBookGroupParameters,
-													R4MEInfrastructureSettings.AddressBookGroupSearch,
-													HttpMethodType.Post,
-													out errorString);
+			
+            var response = GetJsonObjectFromAPI<AddressBookContactsResponse>(
+                addressBookGroupParameters,
+				R4MEInfrastructureSettings.AddressBookGroupSearch,
+				HttpMethodType.Post,
+				out errorString);
 			
             return response;
 		}
@@ -2618,10 +2626,11 @@ namespace Route4MeSDK
 		public AddressBookContactsResponse SearchAddressBookContactsByFilter(AddressBookGroupParameters addressBookGroupParameters, out string errorString)
 		{
 			addressBookGroupParameters.PrepareForSerialization();
-			var response = GetJsonObjectFromAPI<AddressBookContactsResponse>(addressBookGroupParameters,
-																 R4MEInfrastructureSettings.AddressBook,
-																 HttpMethodType.Post,
-																 out errorString);
+			var response = GetJsonObjectFromAPI<AddressBookContactsResponse>(
+                addressBookGroupParameters,
+				R4MEInfrastructureSettings.AddressBook,
+				HttpMethodType.Post,
+				out errorString);
 			
             return response;
 		}

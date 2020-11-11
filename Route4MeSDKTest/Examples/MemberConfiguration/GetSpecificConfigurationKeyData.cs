@@ -1,6 +1,5 @@
 ﻿using Route4MeSDK.DataTypes;
 using Route4MeSDK.QueryTypes;
-using System;
 
 namespace Route4MeSDK.Examples
 {
@@ -12,32 +11,21 @@ namespace Route4MeSDK.Examples
         public void GetSpecificConfigurationKeyData()
         {
             // Create the manager with the api key
-            Route4MeManager route4Me = new Route4MeManager(ActualApiKey);
+            var route4Me = new Route4MeManager(ActualApiKey);
 
-            MemberConfigurationParameters @params = new MemberConfigurationParameters { config_key = "destination_icon_uri" };
+            CreateConfigKey();
+
+            string newConfigKey = configKeysToRemove[configKeysToRemove.Count - 1];
+
+            var @params = new MemberConfigurationParameters { config_key = newConfigKey };
 
             // Run the query
-            string errorString = "";
-            MemberConfigurationDataResponse result = route4Me.GetConfigurationData(@params, out errorString);
+            MemberConfigurationDataResponse result = route4Me
+                .GetConfigurationData(@params, out string errorString);
 
-            Console.WriteLine("");
+            PrintConfigKey(result, errorString);
 
-            if (result != null)
-            {
-                Console.WriteLine("GetSpecificConfigurationKeyData executed successfully");
-                Console.WriteLine("Result: " + result.result);
-                foreach (MemberConfigurationData mc_data in result.data)
-                {
-                    Console.WriteLine("member_id= " + mc_data.member_id);
-                    Console.WriteLine("config_key= " + mc_data.config_key);
-                    Console.WriteLine("config_value= " + mc_data.config_value);
-                    Console.WriteLine("---------------------------");
-                }
-            }
-            else
-            {
-                Console.WriteLine("GetSpecificConfigurationKeyData error: {0}", errorString);
-            }
+            RemoveConfigKeys();
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using Route4MeSDK;
 using Route4MeSDK.DataTypes;
 
 namespace Route4MeSDK.Examples

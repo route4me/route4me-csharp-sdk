@@ -4,7 +4,6 @@ using Route4MeSDK.QueryTypes;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Drawing.Printing;
 
 namespace Route4MeSDK.Examples
 {
@@ -29,6 +28,7 @@ namespace Route4MeSDK.Examples
         public List<string> RoutesToRemove;
         public List<string> OptimizationsToRemove;
         public List<string> addressBookGroupsToRemove;
+        public List<string> configKeysToRemove = new List<string>();
 
         DataObject dataObjectSD10Stops;
         string SD10Stops_optimization_problem_id;
@@ -788,6 +788,93 @@ namespace Route4MeSDK.Examples
                     : "Cannot removed the address book group " + groupId);
 
                 Console.WriteLine("");
+            }
+        }
+
+        public void CreateConfigKey()
+        {
+            var route4Me = new Route4MeManager(ActualApiKey);
+
+            var parametersArray = new MemberConfigurationParameters[]
+            {
+                new MemberConfigurationParameters
+                {
+                    config_key = "Test Config Key",
+                    config_value = "Test Config Value"
+                },
+            };
+
+            // Run the query
+            var result = route4Me.
+                CreateNewConfigurationKey(parametersArray, out string errorString);
+
+            Console.WriteLine(
+                result.result != null
+                    ? "Created config key " + "Test Config Key"
+                    : "Cannot create config key " + "Test Config Key."+Environment.NewLine+errorString 
+                );
+
+            if ((result?.result ?? null) != null) configKeysToRemove.Add("Test Config Key");
+        }
+
+        public void PrintConfigKey(MemberConfigurationResponse configResponse, string errorString = "")
+        {
+            string testName = (new System.Diagnostics.StackTrace()).GetFrame(1).GetMethod().Name;
+            testName = testName != null ? testName : "";
+
+            Console.WriteLine("");
+
+            if (configResponse != null)
+            {
+                Console.WriteLine(testName + " executed successfully");
+                Console.WriteLine("Result: " + configResponse.result);
+                Console.WriteLine("Affected: " + configResponse.affected);
+                Console.WriteLine("---------------------------");
+            }
+            else
+            {
+                Console.WriteLine(testName + " error: {0}", errorString);
+            }
+        }
+
+        public void PrintConfigKey(MemberConfigurationDataResponse configDataResponse, string errorString = "")
+        {
+            string testName = (new System.Diagnostics.StackTrace()).GetFrame(1).GetMethod().Name;
+            testName = testName != null ? testName : "";
+
+            Console.WriteLine("");
+
+            if (configDataResponse != null)
+            {
+                Console.WriteLine(testName+" executed successfully");
+                Console.WriteLine("Result: " + configDataResponse.result);
+
+                foreach (MemberConfigurationData mc_data in configDataResponse.data)
+                {
+                    Console.WriteLine("member_id= " + mc_data.member_id);
+                    Console.WriteLine("config_key= " + mc_data.config_key);
+                    Console.WriteLine("config_value= " + mc_data.config_value);
+                    Console.WriteLine("---------------------------");
+                }
+            }
+            else
+            {
+                Console.WriteLine(testName+" error: {0}", errorString);
+            }
+        }
+
+        public void RemoveConfigKeys()
+        {
+            var route4Me = new Route4MeManager(ActualApiKey);
+
+            foreach (string configKey in configKeysToRemove)
+            {
+                var @params = new MemberConfigurationParameters { config_key = configKey };
+
+                // Run the query
+                var result = route4Me.RemoveConfigurationKey(@params, out string errorString);
+
+                PrintConfigKey(result, errorString);
             }
         }
     }

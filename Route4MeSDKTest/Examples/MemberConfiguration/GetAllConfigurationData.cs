@@ -1,6 +1,5 @@
 ﻿using Route4MeSDK.DataTypes;
 using Route4MeSDK.QueryTypes;
-using System;
 
 namespace Route4MeSDK.Examples
 {
@@ -12,32 +11,15 @@ namespace Route4MeSDK.Examples
         public void GetAllConfigurationData()
         {
             // Create the manager with the api key
-            Route4MeManager route4Me = new Route4MeManager(ActualApiKey);
+            var route4Me = new Route4MeManager(ActualApiKey);
 
-            MemberConfigurationParameters @params = new MemberConfigurationParameters();
+            var @params = new MemberConfigurationParameters();
 
             // Run the query
-            string errorString = "";
-            MemberConfigurationDataResponse result = route4Me.GetConfigurationData(@params, out errorString);
+            MemberConfigurationDataResponse result = route4Me
+                .GetConfigurationData(@params, out string errorString);
 
-            Console.WriteLine("");
-
-            if (result != null)
-            {
-                Console.WriteLine("GetAllConfigurationData executed successfully");
-                Console.WriteLine("Result: " + result.result);
-                foreach (MemberConfigurationData mc_data in result.data)
-                {
-                    Console.WriteLine("member_id= " + mc_data.member_id);
-                    Console.WriteLine("config_key= " + mc_data.config_key);
-                    Console.WriteLine("config_value= " + mc_data.config_value);
-                    Console.WriteLine("---------------------------");
-                }
-            }
-            else
-            {
-                Console.WriteLine("GetAllConfigurationData error: {0}", errorString);
-            }
+            PrintConfigKey(result, errorString);
         }
     }
 }
