@@ -138,6 +138,7 @@
     <Compile Include="Examples\Geocoding\BatchGeocodingForward.cs" />
     <Compile Include="Examples\Geocoding\BatchGeocodingForwardAsync.cs" />
     <Compile Include="Examples\Geocoding\uploadAndGeocodeLargeJsonFile.cs" />
+    <Compile Include="Examples\MemberConfiguration\AddConfigurationKeyArray.cs" />
     <Compile Include="Examples\RouteExamples\AsyncMultipleDepotMultipleDriver.cs" />
     <Compile Include="Examples\RouteExamples\ExampleOptimization.cs" />
     <Compile Include="Examples\Users\CreateUser.cs" />
