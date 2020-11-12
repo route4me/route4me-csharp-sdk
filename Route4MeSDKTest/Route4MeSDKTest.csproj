@@ -139,6 +139,11 @@
     <Compile Include="Examples\Geocoding\BatchGeocodingForwardAsync.cs" />
     <Compile Include="Examples\Geocoding\uploadAndGeocodeLargeJsonFile.cs" />
     <Compile Include="Examples\MemberConfiguration\AddConfigurationKeyArray.cs" />
+    <Compile Include="Examples\Notes\AddComplexAddressNote.cs" />
+    <Compile Include="Examples\Notes\AddCustomNoteToRoute.cs" />
+    <Compile Include="Examples\Notes\AddCustomNoteType.cs" />
+    <Compile Include="Examples\Notes\GetAllCustomNoteTypes.cs" />
+    <Compile Include="Examples\Notes\RemoveCustomNoteType.cs" />
     <Compile Include="Examples\RouteExamples\AsyncMultipleDepotMultipleDriver.cs" />
     <Compile Include="Examples\RouteExamples\ExampleOptimization.cs" />
     <Compile Include="Examples\Users\CreateUser.cs" />
