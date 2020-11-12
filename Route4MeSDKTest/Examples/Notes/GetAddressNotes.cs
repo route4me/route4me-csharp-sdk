@@ -4,35 +4,43 @@ using System;
 
 namespace Route4MeSDK.Examples
 {
-  public sealed partial class Route4MeExamples
-  {
-    public void GetAddressNotes(string routeId, int routeDestinationId)
+    public sealed partial class Route4MeExamples
     {
-      // Create the manager with the api key
-      Route4MeManager route4Me = new Route4MeManager(ActualApiKey);
+        public void GetAddressNotes(string routeId=null, int? routeDestinationId=null)
+        {
+            // Create the manager with the api key
+            var route4Me = new Route4MeManager(ActualApiKey);
 
-      NoteParameters noteParameters = new NoteParameters()
-      {
-        RouteId = routeId,
-        AddressId = routeDestinationId
-      };
+            bool isInnerExample = routeId == null ? true : false;
 
-      // Run the query
-      string errorString;
-      AddressNote[] notes = route4Me.GetAddressNotes(noteParameters, out errorString);
+            if (isInnerExample) CreateAddressNote(out routeId, out routeDestinationId);
 
-      Console.WriteLine("");
+            var noteParameters = new NoteParameters()
+            {
+                RouteId = routeId,
+                AddressId = (int)routeDestinationId
+            };
 
-      if (notes != null)
-      {
-        Console.WriteLine("GetAddressNotes executed successfully, {0} notes returned", notes.Length);
-        Console.WriteLine("");
-      }
-      else
-      {
-        Console.WriteLine("GetAddressNotes error: {0}", errorString);
-        Console.WriteLine("");
-      }
+            // Run the query
+            AddressNote[] notes = route4Me.GetAddressNotes(noteParameters, out string errorString);
+
+            Console.WriteLine("");
+
+            if (notes != null)
+            {
+                Console.WriteLine(
+                    "GetAddressNotes executed successfully, {0} notes returned", 
+                    notes.Length);
+
+                Console.WriteLine("");
+            }
+            else
+            {
+                Console.WriteLine("GetAddressNotes error: {0}", errorString);
+                Console.WriteLine("");
+            }
+
+            if (isInnerExample) RemoveTestOptimizations();
+        }
     }
-  }
 }
