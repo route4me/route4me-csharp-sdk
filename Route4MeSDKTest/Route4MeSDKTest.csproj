@@ -144,6 +144,9 @@
     <Compile Include="Examples\Notes\AddCustomNoteType.cs" />
     <Compile Include="Examples\Notes\GetAllCustomNoteTypes.cs" />
     <Compile Include="Examples\Notes\RemoveCustomNoteType.cs" />
+    <Compile Include="Examples\Optimizations\GetOptimizationsByText.cs" />
+    <Compile Include="Examples\Optimizations\GetOptimizationsFromDateRange.cs" />
+    <Compile Include="Examples\Optimizations\UpdateOptimizationDestination.cs" />
     <Compile Include="Examples\RouteExamples\AsyncMultipleDepotMultipleDriver.cs" />
     <Compile Include="Examples\RouteExamples\ExampleOptimization.cs" />
     <Compile Include="Examples\Users\CreateUser.cs" />

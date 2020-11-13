@@ -85,7 +85,7 @@ namespace Route4MeSDK.Examples
             }
         }
 
-        private void PrintExampleOptimizationResult(DataObject dataObject, string errorString)
+        private void PrintExampleOptimizationResult(object dataObject, string errorString)
         {
             string testName = (new System.Diagnostics.StackTrace()).GetFrame(1).GetMethod().Name;
             testName = testName != null ? testName : "";
@@ -97,18 +97,41 @@ namespace Route4MeSDK.Examples
                 Console.WriteLine("{0} executed successfully", testName);
                 Console.WriteLine("");
 
-                Console.WriteLine("Optimization Problem ID: {0}", dataObject.OptimizationProblemId);
-                Console.WriteLine("State: {0}", dataObject.State);
-
-                dataObject.UserErrors.ForEach(error => Console.WriteLine("UserError : '{0}'", error));
-
-                Console.WriteLine("");
-
-                dataObject.Addresses.ForEach(address =>
+                if (dataObject.GetType()==typeof(DataObject))
                 {
-                    Console.WriteLine("Address: {0}", address.AddressString);
-                    Console.WriteLine("Route ID: {0}", address.RouteId);
-                });
+                    var dataObject1 = (DataObject)dataObject;
+                    Console.WriteLine("Optimization Problem ID: {0}", dataObject1.OptimizationProblemId);
+                    Console.WriteLine("State: {0}", dataObject1.State);
+
+                    dataObject1.UserErrors.ForEach(error => Console.WriteLine("UserError : '{0}'", error));
+
+                    Console.WriteLine("");
+
+                    dataObject1.Addresses.ForEach(address =>
+                    {
+                        Console.WriteLine("Address: {0}", address.AddressString);
+                        Console.WriteLine("Route ID: {0}", address.RouteId);
+                    });
+                }
+                else
+                {
+                    var optimizations = (DataObject[])dataObject;
+
+                    Console.WriteLine(
+                    testName + " executed successfully, {0} optimizations returned",
+                    optimizations.Length);
+
+                    Console.WriteLine("");
+
+                    optimizations.ForEach(optimization =>
+                    {
+                        Console.WriteLine(
+                            "Optimization Problem ID: {0}",
+                            optimization.OptimizationProblemId);
+
+                        Console.WriteLine("");
+                    });
+                }
             }
             else
             {
