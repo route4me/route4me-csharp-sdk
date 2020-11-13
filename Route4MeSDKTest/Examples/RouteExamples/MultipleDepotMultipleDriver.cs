@@ -9,7 +9,7 @@ namespace Route4MeSDK.Examples
     public DataObject MultipleDepotMultipleDriver()
     {
       // Create the manager with the api key
-      Route4MeManager route4Me = new Route4MeManager(ActualApiKey);
+      var route4Me = new Route4MeManager(ActualApiKey);
    
       // Prepare the addresses
       Address[] addresses = new Address[]
@@ -142,7 +142,7 @@ namespace Route4MeSDK.Examples
       };
 
       // Set parameters
-      RouteParameters parameters = new RouteParameters()
+      var parameters = new RouteParameters()
       {
         //specify capacitated vehicle routing with time windows and multiple depots, with multiple drivers
         AlgorithmType = AlgorithmType.CVRP_TW_MD,
@@ -168,18 +168,17 @@ namespace Route4MeSDK.Examples
         Metric       = Metric.Geodesic
       };
 
-      OptimizationParameters optimizationParameters = new OptimizationParameters()
+      var optimizationParameters = new OptimizationParameters()
       {
         Addresses = addresses,
         Parameters = parameters
       };
 
       // Run the query
-      string errorString;
-      DataObject dataObject = route4Me.RunOptimization(optimizationParameters, out errorString);
+      DataObject dataObject = route4Me.RunOptimization(optimizationParameters, out string errorString);
 
       // Output the result
-      PrintExampleOptimizationResult("MultipleDepotMultipleDriver", dataObject, errorString);
+      PrintExampleOptimizationResult(dataObject, errorString);
 
       return dataObject;
     }

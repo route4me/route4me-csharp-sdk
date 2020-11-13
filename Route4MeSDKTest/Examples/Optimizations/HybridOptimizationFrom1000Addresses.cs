@@ -13,7 +13,7 @@ namespace Route4MeSDK.Examples
         public void HybridOptimizationFrom1000Addresses()
         {
             // Create the manager with the api key
-            Route4MeManager route4Me = new Route4MeManager("11111111111111111111111111111111");
+            var route4Me = new Route4MeManager(ActualApiKey);
 
             #region ======= Add scheduled address book locations to an user account ================================
             string sAddressFile = @"Data/addresses_1000.csv";
@@ -76,7 +76,7 @@ namespace Route4MeSDK.Examples
                         if (sched_annually_usenth.ToString().ToLower()=="true") blNth = true;
                     }
 
-                    Schedule schedule = new Schedule(sched_mode.ToString(), blNth);
+                    var schedule = new Schedule(sched_mode.ToString(), blNth);
 
                     DateTime dt = DateTime.Now;
                     //if (schedule.ValidateScheduleMode(sched_mode))
@@ -164,13 +164,12 @@ namespace Route4MeSDK.Examples
                     newLocation.schedule = (new List<Schedule>() { schedule }).ToArray();
                     //}
 
-                    string errorString;
-                    AddressBookContact resultContact = route4Me.AddAddressBookContact(newLocation, out errorString);
+                    AddressBookContact resultContact = route4Me.AddAddressBookContact(
+                        newLocation, out string errorString);
 
                     showResult(resultContact, errorString);
 
                     Thread.Sleep(1000);
-
                 }
             };
             
@@ -182,11 +181,13 @@ namespace Route4MeSDK.Examples
             TimeSpan tsp1day = new TimeSpan(1, 0, 0, 0);
             List<string> lsScheduledDays = new List<string>();
             DateTime curDate = DateTime.Now;
+
             for (int i = 0; i < 5; i++)
             {
                 curDate += tsp1day;
                 lsScheduledDays.Add(curDate.ToString("yyyy-MM-dd"));
             }
+
             //string[] ScheduledDays = new string[] { "2017-03-06", "2017-03-07", "2017-03-08", "2017-03-09", "2017-03-10" };
 
             Address[] Depots = new Address[] {
@@ -238,7 +239,7 @@ namespace Route4MeSDK.Examples
 
             foreach (string ScheduledDay in lsScheduledDays)
             {
-                HybridOptimizationParameters hparams = new HybridOptimizationParameters()
+                var hparams = new HybridOptimizationParameters()
                 {
                     TargetDateString = ScheduledDay,
                     TimezoneOffsetMinutes = -240
@@ -262,7 +263,7 @@ namespace Route4MeSDK.Examples
                 }
 
                 //============== Add Depot To Hybrid Optimization ===============
-                HybridDepotParameters hDepotParams = new HybridDepotParameters()
+                var hDepotParams = new HybridDepotParameters()
                 {
                     OptimizationProblemId = HybridOptimizationId,
                     DeleteOldDepots = true,
@@ -274,13 +275,15 @@ namespace Route4MeSDK.Examples
                 Thread.Sleep(5000);
 
                 //============== Reoptimization =================================
-                OptimizationParameters optimizationParameters = new OptimizationParameters()
+                var optimizationParameters = new OptimizationParameters()
                 {
                     OptimizationProblemID = HybridOptimizationId,
                     ReOptimize = true
                 };
 
-                DataObject finalOptimization = route4Me.UpdateOptimization(optimizationParameters, out errorString2);
+                DataObject finalOptimization = route4Me.UpdateOptimization(
+                    optimizationParameters, 
+                    out errorString2);
 
                 Console.WriteLine("");
 
@@ -288,7 +291,10 @@ namespace Route4MeSDK.Examples
                 {
                     Console.WriteLine("ReOptimization executed successfully");
 
-                    Console.WriteLine("Optimization Problem ID: {0}", finalOptimization.OptimizationProblemId);
+                    Console.WriteLine(
+                        "Optimization Problem ID: {0}", 
+                        finalOptimization.OptimizationProblemId);
+
                     Console.WriteLine("State: {0}", finalOptimization.State);
                 }
                 else
@@ -302,7 +308,5 @@ namespace Route4MeSDK.Examples
 
             #endregion
         }
-
- 
     }
 }

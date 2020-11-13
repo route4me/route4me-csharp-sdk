@@ -13,7 +13,7 @@ namespace Route4MeSDK.Examples
         public void HybridOptimizationFrom1000Orders()
         {
             // Create the manager with the api key
-            Route4MeManager route4Me = new Route4MeManager("11111111111111111111111111111111");
+            var route4Me = new Route4MeManager(ActualApiKey);
 
             #region ======= Add scheduled address book locations to an user account ================================
             string sAddressFile = @"Data/orders_1000.csv";
@@ -80,8 +80,11 @@ namespace Route4MeSDK.Examples
 
             #region ======= Get Hybrid Optimization ================================
             TimeSpan tsp1day = new TimeSpan(1, 0, 0, 0);
-            List<string> lsScheduledDays = new List<string>();
+
+            var lsScheduledDays = new List<string>();
+            
             DateTime curDate = DateTime.Now;
+
             for (int i = 0; i < 5; i++)
             {
                 curDate += tsp1day;
@@ -137,7 +140,7 @@ namespace Route4MeSDK.Examples
 
             foreach (string ScheduledDay in lsScheduledDays)
             {
-                HybridOptimizationParameters hparams = new HybridOptimizationParameters()
+                var hparams = new HybridOptimizationParameters()
                 {
                     TargetDateString = ScheduledDay,
                     TimezoneOffsetMinutes = 480
@@ -161,7 +164,7 @@ namespace Route4MeSDK.Examples
                 }
 
                 //============== Add Depot To Hybrid Optimization ===============
-                HybridDepotParameters hDepotParams = new HybridDepotParameters()
+                var hDepotParams = new HybridDepotParameters()
                 {
                     OptimizationProblemId = HybridOptimizationId,
                     DeleteOldDepots = true,
@@ -173,13 +176,15 @@ namespace Route4MeSDK.Examples
                 Thread.Sleep(5000);
 
                 //============== Reoptimization =================================
-                OptimizationParameters optimizationParameters = new OptimizationParameters()
+                var optimizationParameters = new OptimizationParameters()
                 {
                     OptimizationProblemID = HybridOptimizationId,
                     ReOptimize = true
                 };
 
-                DataObject finalOptimization = route4Me.UpdateOptimization(optimizationParameters, out errorString2);
+                DataObject finalOptimization = route4Me.UpdateOptimization(
+                    optimizationParameters, 
+                    out errorString2);
 
                 Console.WriteLine("");
 
@@ -211,6 +216,7 @@ namespace Route4MeSDK.Examples
 
             string addressId = "";
             string sAddressbookType = "Route4MeSDK.DataTypes.AddressBookContact";
+
             if (result.GetType().ToString() == sAddressbookType)
             {
                 AddressBookContact contact = (AddressBookContact)result;
@@ -221,6 +227,7 @@ namespace Route4MeSDK.Examples
                 Order order = (Order)result;
                 addressId = order.order_id.ToString();
             }
+
             Console.WriteLine("");
 
             if (result != null)

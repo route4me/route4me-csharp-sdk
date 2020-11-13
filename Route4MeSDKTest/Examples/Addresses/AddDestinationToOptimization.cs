@@ -42,7 +42,7 @@ namespace Route4MeSDK.Examples
                 optimizationParameters, 
                 out string errorString);
 
-            PrintExampleOptimizationResult("AddDestinationToOptimization", dataObject, errorString);
+            PrintExampleOptimizationResult(dataObject, errorString);
 
             RemoveTestOptimizations();
         }

@@ -10,7 +10,7 @@ namespace Route4MeSDK.Examples
     public DataObject SingleDriverRoute10Stops()
     {
       // Create the manager with the api key
-      Route4MeManager route4Me = new Route4MeManager(ActualApiKey);
+      var route4Me = new Route4MeManager(ActualApiKey);
 
       // Prepare the addresses
       Address[] addresses = new Address[]
@@ -84,10 +84,9 @@ namespace Route4MeSDK.Examples
       };
 
       // Set parameters
-      RouteParameters parameters = new RouteParameters()
+      var parameters = new RouteParameters()
       {
         AlgorithmType = AlgorithmType.TSP,
-        StoreRoute = false,
         RouteName = "Single Driver Route 10 Stops",
 
         RouteDate    = R4MeUtils.ConvertToUnixTimestamp(DateTime.UtcNow.Date.AddDays(1)),
@@ -97,18 +96,19 @@ namespace Route4MeSDK.Examples
         DeviceType   = DeviceType.Web.Description()
       };
 
-      OptimizationParameters optimizationParameters = new OptimizationParameters()
+      var optimizationParameters = new OptimizationParameters()
       {
         Addresses = addresses,
         Parameters = parameters
       };
 
       // Run the query
-      string errorString;
-      DataObject dataObject = route4Me.RunOptimization(optimizationParameters, out errorString);
+      DataObject dataObject = route4Me.RunOptimization(
+          optimizationParameters, 
+          out string errorString);
 
       // Output the result
-      PrintExampleOptimizationResult("SingleDriverRoute10Stops", dataObject, errorString);
+      PrintExampleOptimizationResult(dataObject, errorString);
 
       return dataObject;
     }

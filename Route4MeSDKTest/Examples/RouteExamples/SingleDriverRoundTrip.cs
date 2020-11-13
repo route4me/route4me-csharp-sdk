@@ -4,16 +4,16 @@ using System;
 
 namespace Route4MeSDK.Examples
 {
-  public sealed partial class Route4MeExamples
-  {
-    public DataObject SingleDriverRoundTrip()
+    public sealed partial class Route4MeExamples
     {
-      // Create the manager with the api key
-      Route4MeManager route4Me = new Route4MeManager(ActualApiKey);
+        public DataObject SingleDriverRoundTrip()
+        {
+            // Create the manager with the api key
+            var route4Me = new Route4MeManager(ActualApiKey);
 
-      // Prepare the addresses
-      Address[] addresses = new Address[]
-      {
+            // Prepare the addresses
+            Address[] addresses = new Address[]
+            {
         #region Addresses
 
         new Address() { AddressString = "754 5th Ave New York, NY 10019",
@@ -57,7 +57,7 @@ namespace Route4MeSDK.Examples
                         Alias         = "Toga Bike Shop",
                         Latitude      = 40.7753077,
                         Longitude     = -73.9861529,
-                        Time          = 0 }, 
+                        Time          = 0 },
 
         new Address() { AddressString = "555 W 57th St New York, NY 10019",
                         Alias         = "BMW of Manhattan",
@@ -71,42 +71,42 @@ namespace Route4MeSDK.Examples
                         Longitude     = -73.9862019,
                         Time          = 0 },
 
-        #endregion
-      };
+                #endregion
+            };
 
-      // Set parameters
-      RouteParameters parameters = new RouteParameters()
-      {
-        AlgorithmType = AlgorithmType.TSP,
-        StoreRoute    = false,
-        RouteName     = "Single Driver Round Trip",
+            // Set parameters
+            var parameters = new RouteParameters()
+            {
+                AlgorithmType = AlgorithmType.TSP,
+                RouteName = "Single Driver Round Trip",
 
-        RouteDate            = R4MeUtils.ConvertToUnixTimestamp(DateTime.UtcNow.Date.AddDays(1)),
-        RouteTime            = 60 * 60 * 7,
-        RouteMaxDuration     = 86400,
-        VehicleCapacity      = 1,
-        VehicleMaxDistanceMI = 10000,
+                RouteDate = R4MeUtils.ConvertToUnixTimestamp(DateTime.UtcNow.Date.AddDays(1)),
+                RouteTime = 60 * 60 * 7,
+                RouteMaxDuration = 86400,
+                VehicleCapacity = 1,
+                VehicleMaxDistanceMI = 10000,
 
-        Optimize     = Optimize.Distance.Description(),
-        DistanceUnit = DistanceUnit.KM.Description(),
-        DeviceType   = DeviceType.Web.Description(),
-        TravelMode   = TravelMode.Driving.Description(),
-      };
+                Optimize = Optimize.Distance.Description(),
+                DistanceUnit = DistanceUnit.KM.Description(),
+                DeviceType = DeviceType.Web.Description(),
+                TravelMode = TravelMode.Driving.Description(),
+            };
 
-      OptimizationParameters optimizationParameters = new OptimizationParameters()
-      {
-        Addresses = addresses,
-        Parameters = parameters
-      };
+            var optimizationParameters = new OptimizationParameters()
+            {
+                Addresses = addresses,
+                Parameters = parameters
+            };
 
-      // Run the query
-      string errorString;
-      DataObject dataObject = route4Me.RunOptimization(optimizationParameters, out errorString);
+            // Run the query
+            DataObject dataObject = route4Me.RunOptimization(
+                optimizationParameters, 
+                out string errorString);
 
-      // Output the result
-      PrintExampleOptimizationResult("SingleDriverRoundTrip", dataObject, errorString);
+            // Output the result
+            PrintExampleOptimizationResult(dataObject, errorString);
 
-      return dataObject;
+            return dataObject;
+        }
     }
-  }
 }

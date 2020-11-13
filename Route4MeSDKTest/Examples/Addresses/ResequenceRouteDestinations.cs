@@ -60,10 +60,7 @@ namespace Route4MeSDK.Examples
                                     out string errorString1);
 
             // Output the result
-            PrintExampleRouteResult(
-                "ResequenceRouteDestinations, switch 2 addresses.", 
-                route1, 
-                errorString1);
+            PrintExampleRouteResult(route1, errorString1);
 
             if (isInnerExample) RemoveTestOptimizations();
         }

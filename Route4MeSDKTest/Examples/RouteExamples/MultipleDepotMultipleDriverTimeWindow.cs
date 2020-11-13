@@ -690,7 +690,7 @@ namespace Route4MeSDK.Examples
       var dataObject = route4Me.RunOptimization(optimizationParameters, out string errorString);
 
       // Output the result
-      PrintExampleOptimizationResult("MultipleDepotMultipleDriverTimeWindow", dataObject, errorString);
+      PrintExampleOptimizationResult(dataObject, errorString);
 
       return dataObject;
     }
