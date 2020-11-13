@@ -16,7 +16,7 @@ namespace Route4MeSDK.Examples
             var route4Me = new Route4MeManager(ActualApiKey);
 
             #region ======= Add scheduled address book locations to an user account ================================
-            string sAddressFile = @"Data/addresses_1000.csv";
+            string sAddressFile = @"Data/CSV/addresses_1000.csv";
             Schedule sched0 = new Schedule("daily",false);
             //var csv = new CsvReader(File.OpenText("file.csv"));
 
