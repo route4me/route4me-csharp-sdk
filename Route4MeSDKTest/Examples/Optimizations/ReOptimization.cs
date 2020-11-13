@@ -9,17 +9,18 @@ namespace Route4MeSDK.Examples
     public void ReOptimization(string optimizationProblemID)
     {
       // Create the manager with the api key
-      Route4MeManager route4Me = new Route4MeManager(ActualApiKey);
+      var route4Me = new Route4MeManager(ActualApiKey);
     
-      OptimizationParameters optimizationParameters = new OptimizationParameters()
+      var optimizationParameters = new OptimizationParameters()
       {
         OptimizationProblemID = optimizationProblemID,
         ReOptimize = true
       };
 
       // Run the query
-      string errorString;
-      DataObject dataObject = route4Me.UpdateOptimization(optimizationParameters, out errorString);
+      DataObject dataObject = route4Me.UpdateOptimization(
+          optimizationParameters, 
+          out string errorString);
 
       Console.WriteLine("");
 

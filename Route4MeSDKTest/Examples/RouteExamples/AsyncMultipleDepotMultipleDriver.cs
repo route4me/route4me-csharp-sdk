@@ -184,7 +184,7 @@ namespace Route4MeSDK.Examples
            {
                dataObject = route4Me.RunAsyncOptimization(optimizationParameters, out errorString);
 
-               PrintExampleOptimizationResult("AsyncMultipleDepotMultipleDriver", dataObject, errorString);
+               PrintExampleOptimizationResult(dataObject, errorString);
 
                return dataObject;
            });

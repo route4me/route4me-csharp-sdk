@@ -9,7 +9,7 @@ namespace Route4MeSDK.Examples
     public DataObject MultipleDepotMultipleDriverWith24StopsTimeWindow()
     {
       // Create the manager with the api key
-      Route4MeManager route4Me = new Route4MeManager(ActualApiKey);
+      var route4Me = new Route4MeManager(ActualApiKey);
    
       // Prepare the addresses
       Address[] addresses = new Address[]
@@ -189,11 +189,10 @@ namespace Route4MeSDK.Examples
       };
 
       // Set parameters
-      RouteParameters parameters = new RouteParameters()
+      var parameters = new RouteParameters()
       {
         AlgorithmType = AlgorithmType.CVRP_TW_MD,
         RouteName     = "Multiple Depot, Multiple Driver with 24 Stops, Time Window",
-        //StoreRoute    = false,
 
         RouteDate            = R4MeUtils.ConvertToUnixTimestamp(DateTime.UtcNow.Date.AddDays(1)),
         RouteTime            = 60 * 60 * 7,
@@ -208,18 +207,19 @@ namespace Route4MeSDK.Examples
         Metric       = Metric.Geodesic
       };
 
-      OptimizationParameters optimizationParameters = new OptimizationParameters()
+      var optimizationParameters = new OptimizationParameters()
       {
         Addresses = addresses,
         Parameters = parameters
       };
 
       // Run the query
-      string errorString;
-      DataObject dataObject = route4Me.RunOptimization(optimizationParameters, out errorString);
+      DataObject dataObject = route4Me.RunOptimization(
+          optimizationParameters, 
+          out string errorString);
 
       // Output the result
-      PrintExampleOptimizationResult("MultipleDepotMultipleDriverWith24StopsTimeWindow", dataObject, errorString);
+      PrintExampleOptimizationResult(dataObject, errorString);
 
       return dataObject;
     }

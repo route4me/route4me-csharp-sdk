@@ -9,28 +9,35 @@ namespace Route4MeSDK.Examples
         public void GetOptimizations()
         {
             // Create the manager with the api key
-            Route4MeManager route4Me = new Route4MeManager(ActualApiKey);
+            var route4Me = new Route4MeManager(ActualApiKey);
 
-            OptimizationParameters queryParameters = new OptimizationParameters()
+            var queryParameters = new OptimizationParameters()
             {
                 Limit = 10,
                 Offset = 5
             };
 
             // Run the query
-            string errorString;
-            DataObject[] dataObjects = route4Me.GetOptimizations(queryParameters, out errorString);
+            DataObject[] dataObjects = route4Me.GetOptimizations(
+                queryParameters, 
+                out string errorString);
 
             Console.WriteLine("");
 
             if (dataObjects != null)
             {
-                Console.WriteLine("GetOptimizations executed successfully, {0} optimizations returned", dataObjects.Length);
+                Console.WriteLine(
+                    "GetOptimizations executed successfully, {0} optimizations returned", 
+                    dataObjects.Length);
+
                 Console.WriteLine("");
 
                 dataObjects.ForEach(optimization =>
                 {
-                    Console.WriteLine("Optimization Problem ID: {0}", optimization.OptimizationProblemId);
+                    Console.WriteLine(
+                        "Optimization Problem ID: {0}",
+                        optimization.OptimizationProblemId);
+
                     Console.WriteLine("");
                 });
             }

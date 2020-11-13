@@ -1803,7 +1803,7 @@ namespace Route4MeSDK.Examples
       DataObject dataObject = route4Me.RunOptimization(optimizationParameters, out errorString);
 
       // Output the result
-      PrintExampleOptimizationResult("SingleDepotMultipleDriverNoTimeWindow", dataObject, errorString);
+      PrintExampleOptimizationResult(dataObject, errorString);
 
       return dataObject;
     }

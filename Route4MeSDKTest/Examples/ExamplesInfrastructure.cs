@@ -57,13 +57,16 @@ namespace Route4MeSDK.Examples
 
         #region Optimizations, Routes, Destinations
 
-        private void PrintExampleRouteResult(string exampleName, DataObjectRoute dataObjectRoute, string errorString)
+        private void PrintExampleRouteResult(DataObjectRoute dataObjectRoute, string errorString)
         {
+            string testName = (new System.Diagnostics.StackTrace()).GetFrame(1).GetMethod().Name;
+            testName = testName != null ? testName : "";
+
             Console.WriteLine("");
 
             if (dataObjectRoute != null)
             {
-                Console.WriteLine("{0} executed successfully", exampleName);
+                Console.WriteLine("{0} executed successfully", testName);
                 Console.WriteLine("");
 
                 Console.WriteLine("Optimization Problem ID: {0}", dataObjectRoute.OptimizationProblemId);
@@ -78,17 +81,20 @@ namespace Route4MeSDK.Examples
             }
             else
             {
-                Console.WriteLine("{0} error {1}", exampleName, errorString);
+                Console.WriteLine("{0} error {1}", testName, errorString);
             }
         }
 
-        private void PrintExampleOptimizationResult(string exampleName, DataObject dataObject, string errorString)
+        private void PrintExampleOptimizationResult(DataObject dataObject, string errorString)
         {
+            string testName = (new System.Diagnostics.StackTrace()).GetFrame(1).GetMethod().Name;
+            testName = testName != null ? testName : "";
+
             Console.WriteLine("");
 
             if (dataObject != null)
             {
-                Console.WriteLine("{0} executed successfully", exampleName);
+                Console.WriteLine("{0} executed successfully", testName);
                 Console.WriteLine("");
 
                 Console.WriteLine("Optimization Problem ID: {0}", dataObject.OptimizationProblemId);
@@ -106,7 +112,7 @@ namespace Route4MeSDK.Examples
             }
             else
             {
-                Console.WriteLine("{0} error {1}", exampleName, errorString);
+                Console.WriteLine("{0} error {1}", testName, errorString);
             }
         }
 
