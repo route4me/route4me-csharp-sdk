@@ -9804,7 +9804,7 @@ namespace Route4MeSDKUnitTest
 
             var result = route4Me.UpdateOrder(order, out string errorString);
 
-            Assert.IsNotNull(result, "AddOrdersToRouteTest failed... " + errorString);
+            Assert.IsNotNull(result, "AddOrdersToRouteTest failed. " + errorString);
         }
 
         [TestMethod]

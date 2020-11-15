@@ -1,49 +1,37 @@
 ﻿using Route4MeSDK.DataTypes;
-using Route4MeSDK.QueryTypes;
 using System;
 
 namespace Route4MeSDK.Examples
 {
-  public sealed partial class Route4MeExamples
-  {
-    /// <summary>
-    /// Add Order
-    /// </summary>
-    /// <returns> Added Order </returns>
-    public Order AddOrder()
+    public sealed partial class Route4MeExamples
     {
-      // Create the manager with the api key
-      Route4MeManager route4Me = new Route4MeManager(ActualApiKey);
+        /// <summary>
+        /// Add Order
+        /// </summary>
+        /// <returns> Added Order </returns>
+        public void AddOrder()
+        {
+            // Create the manager with the api key
+            var route4Me = new Route4MeManager(ActualApiKey);
 
-      Order order = new Order()
-      {
-        address_1 = "Test Address1 " + (new Random()).Next().ToString(),
-        address_alias = "Test AddressAlias " + (new Random()).Next().ToString(),
-        cached_lat = 37.773972,
-        cached_lng = -122.431297
-      };
+            var order = new Order()
+            {
+                address_1 = "Test Address1 " + (new Random()).Next().ToString(),
+                address_alias = "Test AddressAlias " + (new Random()).Next().ToString(),
+                cached_lat = 37.773972,
+                cached_lng = -122.431297
+            };
 
-      // Run the query
-      string errorString;
-      Order resultOrder = route4Me.AddOrder(order, out errorString);
+            // Run the query
+            Order resultOrder = route4Me.AddOrder(order, out string errorString);
 
-      Console.WriteLine("");
+            if (resultOrder != null && resultOrder.GetType() == typeof(Order))
+                OrdersToRemove.Add(resultOrder.order_id.ToString());
 
-      if (resultOrder != null)
-      {
-        Console.WriteLine("AddOrder executed successfully");
+            PrintExampleOrder(resultOrder, errorString);
 
-        Console.WriteLine("Order ID: {0}", resultOrder.order_id);
-
-        return resultOrder;
-      }
-      else
-      {
-        Console.WriteLine("AddOrder error: {0}", errorString);
-
-        return null;
-      }
+            RemoveTestOrders();
+        }
     }
-  }
 }
 
