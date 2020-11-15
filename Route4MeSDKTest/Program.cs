@@ -252,29 +252,10 @@ namespace Route4MeSDKTest
 
 
             // Orders
-            Order order1 = examples.AddOrder();
-            Order order2 = examples.AddOrder();
-
+            examples.AddOrder();
             examples.GetOrders();
-
-            if (order1 != null)
-            {
-                order1.EXT_FIELD_last_name = "Updated " + (new Random()).Next().ToString();
-                examples.UpdateOrder(order1);
-            }
-            else
-            {
-                Console.WriteLine("order1 == null. UpdateOrder not called.");
-            }
-
-            List<string> orderIdsToRemove = new List<string>();
-
-            if (order1 != null)
-                orderIdsToRemove.Add(order1.order_id.ToString());
-            if (order2 != null)
-                orderIdsToRemove.Add(order2.order_id.ToString());
-
-            examples.RemoveOrders(orderIdsToRemove.ToArray());
+            examples.UpdateOrder();
+            examples.RemoveOrders();
 
             examples.GenericExample();
             examples.GenericExampleShortcut();

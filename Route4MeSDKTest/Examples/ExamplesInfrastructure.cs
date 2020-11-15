@@ -1230,6 +1230,14 @@ namespace Route4MeSDK.Examples
 
             bool removed = route4Me.RemoveOrders(OrdersToRemove.ToArray(), out string errorString);
 
+            Console.WriteLine("");
+
+            Console.WriteLine(
+                removed
+                ? "The test orders removed"
+                : "Cannot remove the test orders"
+            );
+
             lastCreatedOrder = null;
         }
 
