@@ -1,6 +1,4 @@
-﻿using Route4MeSDK.DataTypes;
-using Route4MeSDK.QueryTypes;
-using System;
+﻿using Route4MeSDK.QueryTypes;
 
 namespace Route4MeSDK.Examples
 {
@@ -9,31 +7,31 @@ namespace Route4MeSDK.Examples
         /// <summary>
         /// Get Orders be containing specified text in any text field
         /// </summary>
-        public void GetOrdersBySpecifiedText(string query)
+        public void GetOrdersBySpecifiedText(string query = null)
         {
             // Create the manager with the api key
-            Route4MeManager route4Me = new Route4MeManager(ActualApiKey);
+            var route4Me = new Route4MeManager(ActualApiKey);
 
-            OrderParameters oParams = new OrderParameters()
+            bool isInnerExample = query == null ? true : false;
+
+            if (isInnerExample)
+            {
+                CreateExampleOrder();
+                query = "Carol";
+            }
+
+            var oParams = new OrderParameters()
             {
                 Query = query,
                 Offset = 0,
                 Limit = 20
             };
 
-            string errorString = "";
-            Order[] orders = route4Me.SearchOrders(oParams, out errorString);
+            var result = route4Me.SearchOrders(oParams, out string errorString);
 
-            Console.WriteLine("");
+            PrintExampleOrder(result, errorString);
 
-            if (orders != null)
-            {
-                Console.WriteLine("GetOrdersByCustomFields executed successfully, orders searched total = {0}", orders.Length);
-            }
-            else
-            {
-                Console.WriteLine("GetOrdersByCustomFields error: {0}", errorString);
-            }
+            if (isInnerExample) RemoveTestOrders();
         }
     }
 }

@@ -6,6 +6,18 @@ namespace Route4MeSDK.QueryTypes
     public sealed class OrderFilterParameters : GenericParameters
     {
         /// <summary>
+        /// Limit per page, if you use 0 you will get all records
+        /// </summary>
+        [HttpQueryMemberAttribute(Name = "limit", EmitDefaultValue = false)]
+        public uint? Limit { get; set; }
+
+        /// <summary>
+        /// Offset
+        /// </summary>
+        [HttpQueryMemberAttribute(Name = "offset", EmitDefaultValue = false)]
+        public uint? Offset { get; set; }
+
+        /// <summary>
         /// filter for the orders
         /// </summary>
         [DataMember(Name = "filter")]
@@ -27,17 +39,5 @@ namespace Route4MeSDK.QueryTypes
         /// </summary>
         [DataMember(Name = "scheduled_for_YYMMDD")]
         public string[] Scheduled_for_YYMMDD { get; set; }
-
-        /// <summary>
-        /// Limit per page, if you use 0 you will get all records
-        /// </summary>
-        [HttpQueryMemberAttribute(Name = "limit", EmitDefaultValue = false)]
-        public uint? Limit { get; set; }
-
-        /// <summary>
-        /// Offset
-        /// </summary>
-        [HttpQueryMemberAttribute(Name = "offset", EmitDefaultValue = false)]
-        public uint? Offset { get; set; }
     }
 }

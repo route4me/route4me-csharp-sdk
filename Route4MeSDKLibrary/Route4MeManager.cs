@@ -2661,10 +2661,12 @@ namespace Route4MeSDK
 		public AddressBookGroup UpdateAddressBookGroup(AddressBookGroup group, out string errorString)
 		{
 			group.PrepareForSerialization();
-			AddressBookGroup result = GetJsonObjectFromAPI<AddressBookGroup>(group,
-																 R4MEInfrastructureSettings.AddressBookGroup,
-																 HttpMethodType.Put,
-																 out errorString);
+			AddressBookGroup result = GetJsonObjectFromAPI<AddressBookGroup>(
+                group,
+				R4MEInfrastructureSettings.AddressBookGroup,
+				HttpMethodType.Put,
+				out errorString);
+
 			return result;
 		}
 
@@ -2773,25 +2775,50 @@ namespace Route4MeSDK
         /// The response for the orders getting process.
         /// </summary>
 		[DataContract]
-		private sealed class GetOrdersResponse
+		public sealed class GetOrdersResponse
         {
-            /// <value>An arrary of the Order type objects </value>
+            /// <value>An arrary of the objects
+            /// Available types of the array item: Order (default), 
+            /// object[] (search by fields)</value>
 			[DataMember(Name = "results")]
 			public Order[] Results { get; set; }
 
             /// <value>Number of the returned orders</value>
             [DataMember(Name = "total")]
 			public uint Total { get; set; }
-		}
 
-		/// <summary>
-		/// Gets the Orders
-		/// </summary>
-		/// <param name="ordersQuery"> The query parameters for the orders request process </param>
-		/// <param name="total"> out: Total number of the orders </param>
-		/// <param name="errorString"> out: Error as string </param>
-		/// <returns> List of the Order type objects </returns>
-		public Order[] GetOrders(OrderParameters ordersQuery, out uint total, out string errorString)
+            [DataMember(Name = "fields", EmitDefaultValue = false)]
+            public string[] Fields { get; set; }
+        }
+
+        /// <summary>
+        /// The response from the orders searching process (contains specified fields).
+        /// </summary>
+        [DataContract]
+        public sealed class SearchOrdersResponse
+        {
+            /// <value>An arrary of the objects
+            /// Available types of the array item: Order (default), 
+            /// object[] (search by fields)</value>
+			[DataMember(Name = "results")]
+            public IList<object[]> Results { get; set; }
+
+            /// <value>Number of the returned orders</value>
+            [DataMember(Name = "total")]
+            public uint Total { get; set; }
+
+            [DataMember(Name = "fields", EmitDefaultValue = false)]
+            public string[] Fields { get; set; }
+        }
+
+        /// <summary>
+        /// Gets the Orders
+        /// </summary>
+        /// <param name="ordersQuery"> The query parameters for the orders request process </param>
+        /// <param name="total"> out: Total number of the orders </param>
+        /// <param name="errorString"> out: Error as string </param>
+        /// <returns> List of the Order type objects </returns>
+        public Order[] GetOrders(OrderParameters ordersQuery, out uint total, out string errorString)
 		{
 			var response = GetJsonObjectFromAPI<GetOrdersResponse>(ordersQuery,
 											R4MEInfrastructureSettings.Order,
@@ -2800,7 +2827,7 @@ namespace Route4MeSDK
 
             total = (response != null) ? response.Total : 0;
 
-            return (response != null) ? response.Results : null;
+            return (response != null) ? (Order[])response.Results : null;
 		}
 
         /// <summary>
@@ -2826,12 +2853,22 @@ namespace Route4MeSDK
         /// <param name="orderQuery">The OrderParameters type object as the query parameters</param>
         /// <param name="errorString">out: Error as string</param>
         /// <returns>List of the Order type objects</returns>
-		public Order[] SearchOrders(OrderParameters orderQuery, out string errorString)
+		public object SearchOrders(OrderParameters orderQuery, out string errorString)
 		{
-			var response = GetJsonObjectFromAPI<GetOrdersResponse>(orderQuery, 
-                R4MEInfrastructureSettings.Order, HttpMethodType.Get, out errorString);
+            bool showFields = (orderQuery?.Fields?.Length ?? 0) < 1
+                ? false 
+                : true;
 
-            return (response != null) ? response.Results : null;
+            if (showFields)
+            {
+                return GetJsonObjectFromAPI<SearchOrdersResponse>(orderQuery,
+                R4MEInfrastructureSettings.Order, HttpMethodType.Get, out errorString);
+            }
+            else
+            {
+                return GetJsonObjectFromAPI<GetOrdersResponse>(orderQuery,
+                R4MEInfrastructureSettings.Order, HttpMethodType.Get, out errorString);
+            }
 		}
 
         /// <summary>
@@ -2845,7 +2882,7 @@ namespace Route4MeSDK
             var response = GetJsonObjectFromAPI<GetOrdersResponse>(orderFilter,
                 R4MEInfrastructureSettings.Order, HttpMethodType.Post, out errorString);
 
-            return (response != null) ? response.Results : null;
+            return (response != null) ? (Order[])response.Results : null;
         }
 
 		/// <summary>
