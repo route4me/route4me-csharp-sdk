@@ -1,6 +1,5 @@
 ﻿using Route4MeSDK.DataTypes;
 using Route4MeSDK.QueryTypes;
-using System;
 
 namespace Route4MeSDK.Examples
 {
@@ -9,29 +8,31 @@ namespace Route4MeSDK.Examples
         /// <summary>
         /// Get Order details by order_id
         /// </summary>
-        public void GetOrderByID(string orderIds)
+        public void GetOrderByID(string orderIds = null)
         {
             // Create the manager with the api key
-            Route4MeManager route4Me = new Route4MeManager(ActualApiKey);
+            var route4Me = new Route4MeManager(ActualApiKey);
 
-            OrderParameters orderParameters = new OrderParameters()
+            bool isInnerExample = orderIds == null ? true : false;
+
+            if (isInnerExample) CreateExampleOrder();            
+
+            var orderId = isInnerExample 
+                ? OrdersToRemove[OrdersToRemove.Count - 1] 
+                : orderIds;
+
+            var orderParameters = new OrderParameters()
             {
-                order_id = orderIds
+                order_id = orderId
             };
 
-            string errorString;
-            Order order = route4Me.GetOrderByID(orderParameters, out errorString);
+            Order order = route4Me.GetOrderByID(
+                orderParameters, 
+                out string errorString);
 
-            Console.WriteLine("");
+            PrintExampleOrder(order, errorString);
 
-            if (order != null)
-            {
-                Console.WriteLine("GetOrderByID executed successfully");
-            }
-            else
-            {
-                Console.WriteLine("GetOrderByID error: {0}", errorString);
-            }
+            if (isInnerExample) RemoveTestOrders();
         }
     }
 }

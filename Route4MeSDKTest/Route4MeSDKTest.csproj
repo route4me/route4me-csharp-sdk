@@ -147,6 +147,10 @@
     <Compile Include="Examples\Optimizations\GetOptimizationsByText.cs" />
     <Compile Include="Examples\Optimizations\GetOptimizationsFromDateRange.cs" />
     <Compile Include="Examples\Optimizations\UpdateOptimizationDestination.cs" />
+    <Compile Include="Examples\Orders\CreateOrderWithCustomField.cs" />
+    <Compile Include="Examples\Orders\GetOrdersByInsertedDate.cs" />
+    <Compile Include="Examples\Orders\GetOrdersByScheduleFilter.cs" />
+    <Compile Include="Examples\Orders\UpdateOrderWithCustomField.cs" />
     <Compile Include="Examples\RouteExamples\AsyncMultipleDepotMultipleDriver.cs" />
     <Compile Include="Examples\RouteExamples\ExampleOptimization.cs" />
     <Compile Include="Examples\Users\CreateUser.cs" />
@@ -188,8 +192,7 @@
     <Compile Include="Examples\Orders\AddOrdersToRoute.cs" />
     <Compile Include="Examples\Orders\AddScheduledOrders.cs" />
     <Compile Include="Examples\Orders\GetOrderByID.cs" />
-    <Compile Include="Examples\Orders\GetOrderByInsertedDate.cs" />
-    <Compile Include="Examples\Orders\GetOrderByScheduledDate.cs" />
+    <Compile Include="Examples\Orders\GetOrdersByScheduledDate.cs" />
     <Compile Include="Examples\Orders\GetOrdersByCustomFields.cs" />
     <Compile Include="Examples\Orders\GetOrdersBySpecifiedText.cs" />
     <Compile Include="Examples\Orders\RemoveOrders.cs" />
