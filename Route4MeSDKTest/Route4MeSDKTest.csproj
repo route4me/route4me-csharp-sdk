@@ -147,6 +147,10 @@
     <Compile Include="Examples\Optimizations\GetOptimizationsByText.cs" />
     <Compile Include="Examples\Optimizations\GetOptimizationsFromDateRange.cs" />
     <Compile Include="Examples\Optimizations\UpdateOptimizationDestination.cs" />
+    <Compile Include="Examples\OrderCustomUserFields\CreateOrderCustomUserField.cs" />
+    <Compile Include="Examples\OrderCustomUserFields\GetOrderCustomUserFields.cs" />
+    <Compile Include="Examples\OrderCustomUserFields\RemoveOrderCustomUserField.cs" />
+    <Compile Include="Examples\OrderCustomUserFields\UpdateOrderCustomUserField.cs" />
     <Compile Include="Examples\Orders\CreateOrderWithCustomField.cs" />
     <Compile Include="Examples\Orders\GetOrdersByInsertedDate.cs" />
     <Compile Include="Examples\Orders\GetOrdersByScheduleFilter.cs" />

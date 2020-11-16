@@ -8,7 +8,6 @@ namespace Route4MeSDK.Examples
         /// <summary>
         /// Add Scheduled Order
         /// </summary>
-        /// <returns> Added Order </returns>
         public void AddScheduledOrder()
         {
             // Create the manager with the api key

@@ -10,13 +10,13 @@ namespace Route4MeSDK.Examples
         /// <summary>
         /// Add Orders to an Optimization Problem object
         /// </summary>
-        /// <returns> Optimization Problem object </returns>
         public void AddOrdersToOptimization()
         {
             // Create the manager with the api key
             var route4Me = new Route4MeManager(ActualApiKey);
 
             RunOptimizationSingleDriverRoute10Stops();
+
             OptimizationsToRemove = new List<string>() {SD10Stops_optimization_problem_id };
 
             var rQueryParams = new OptimizationParameters()
