@@ -9429,7 +9429,11 @@ namespace Route4MeSDKUnitTest
                 out uint total, 
                 out string errorString);
 
-            Assert.IsInstanceOfType(orders, typeof(Order[]), "GetOrdersTest failed. " + errorString);
+            Assert.IsInstanceOfType(
+                orders, 
+                typeof(Order[]), 
+                "GetOrdersTest failed. " + errorString
+             );
         }
 
         [TestMethod]
@@ -9623,7 +9627,8 @@ namespace Route4MeSDKUnitTest
                 EXT_FIELD_last_name = "Carol",
                 EXT_FIELD_email = "lcarol654@yahoo.com",
                 EXT_FIELD_phone = "897946541",
-                EXT_FIELD_custom_data = new Dictionary<string, string>() { { "order_type", "scheduled order" } },
+                EXT_FIELD_custom_data = new Dictionary<string, string>() 
+                { { "order_type", "scheduled order" } },
                 day_scheduled_for_YYMMDD = "2017-12-20",
                 local_time_window_end = 39000,
                 local_time_window_end_2 = 46200,
@@ -9635,7 +9640,7 @@ namespace Route4MeSDKUnitTest
 
             var newOrder = route4Me.AddOrder(orderParams, out string errorString);
 
-            Assert.IsNotNull(newOrder, "AddScheduledOrdersTest failed... " + errorString);
+            Assert.IsNotNull(newOrder, "AddScheduledOrdersTest failed. " + errorString);
         }
 
         [TestMethod]
@@ -9777,7 +9782,7 @@ namespace Route4MeSDKUnitTest
 
             var result = route4Me.AddOrder(orderParams, out string errorString);
 
-            Assert.IsNotNull(result, "AddOrdersToRouteTest failed... " + errorString);
+            Assert.IsNotNull(result, "AddOrdersToRouteTest failed. " + errorString);
 
             lsOrderIds.Add(result.order_id.ToString());
 
@@ -9986,12 +9991,12 @@ namespace Route4MeSDKUnitTest
 
             var orderCustomFieldParams = new OrderCustomFieldParameters()
             {
-                OrderCustomFieldName = "CustomField44",
-                OrderCustomFieldLabel = "Custom Field 44",
+                OrderCustomFieldName = "CustomField77",
+                OrderCustomFieldLabel = "Custom Field 77",
                 OrderCustomFieldType = "checkbox",
                 OrderCustomFieldTypeInfo = new Dictionary<string, object>()
                 {
-                    {"short_label", "cFl44" },
+                    {"short_label", "cFl77" },
                     {"description", "This is test order custom field" },
                     {"custom field no", 11 }
                 }

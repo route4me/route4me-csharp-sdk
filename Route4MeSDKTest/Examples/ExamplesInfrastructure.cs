@@ -34,6 +34,7 @@ namespace Route4MeSDK.Examples
         public List<string> configKeysToRemove = new List<string>();
         public List<string> CustomNoteTypesToRemove = new List<string>();
         public List<string> OrdersToRemove = new List<string>();
+        public List<int> OrderCustomFieldsToRemove = new List<int>();
 
         Order lastCreatedOrder;
 
@@ -1239,6 +1240,108 @@ namespace Route4MeSDK.Examples
             );
 
             lastCreatedOrder = null;
+        }
+
+        #endregion
+
+        #region Order Custom Users Fields
+
+        private void CreateTestOrderCustomUserField()
+        {
+            var route4Me = new Route4MeManager(ActualApiKey);
+
+            var orderCustomFieldParams = new OrderCustomFieldParameters()
+            {
+                OrderCustomFieldName = "CustomField77",
+                OrderCustomFieldLabel = "Custom Field 77",
+                OrderCustomFieldType = "checkbox",
+                OrderCustomFieldTypeInfo = new Dictionary<string, object>()
+                {
+                    {"short_label", "cFl77" },
+                    {"description", "This is test order custom field" },
+                    {"custom field no", 11 }
+                }
+            };
+
+            var orderCustomUserField = route4Me.CreateOrderCustomUserField(
+                    orderCustomFieldParams,
+                    out string errorString
+                );
+
+            if ((orderCustomUserField?.Data?.OrderCustomFieldId ?? -1)>0) 
+                OrderCustomFieldsToRemove.Add(orderCustomUserField.Data.OrderCustomFieldId);
+
+            PrintOrderCustomField(orderCustomUserField, errorString);
+        }
+
+        private void PrintOrderCustomField(object result, string errorString = "")
+        {
+            string testName = (new StackTrace()).GetFrame(1).GetMethod().Name;
+            testName = testName != null ? testName : "";
+
+            Console.WriteLine("");
+
+            if (result!=null)
+            {
+                Console.WriteLine(testName + " executed successfully");
+
+                if (result.GetType() == typeof(OrderCustomFieldCreateResponse))
+                {
+                    var ocfResponse = (OrderCustomFieldCreateResponse)result;
+
+                    if ((ocfResponse?.Data?.OrderCustomFieldId ?? -1)>0)
+                    {
+                        Console.WriteLine(
+                        "Order Custom user field ID: {0}",
+                        ocfResponse.Data.OrderCustomFieldId);
+                    }
+                    else
+                    {
+                        Console.WriteLine(
+                        "Order Custom user fields affected: {0}",
+                        ocfResponse.Affected);
+                    }
+                    
+                }
+                else
+                {
+                    foreach (var customField in (OrderCustomField[])result)
+                    {
+                        Console.WriteLine(
+                            "Order Custom user field ID: {0}", 
+                            customField.OrderCustomFieldId
+                        );
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine(testName + " error: {0}", errorString);
+            }
+        }
+
+        private void RemoveTestOrderCustomField()
+        {
+            if (OrderCustomFieldsToRemove == null || OrderCustomFieldsToRemove.Count < 1) return;
+
+            var route4Me = new Route4MeManager(ActualApiKey);
+
+            foreach (int fieldId in OrderCustomFieldsToRemove)
+            {
+                var orderCustomFieldParams = new OrderCustomFieldParameters()
+                {
+                    OrderCustomFieldId = fieldId
+                };
+
+                var response = route4Me.RemoveOrderCustomUserField(
+                    orderCustomFieldParams, 
+                    out string errorString);
+
+                Console.WriteLine(
+                    (response?.Affected ?? 0) > 0 
+                    ? String.Format("The custom field {0} removed.", fieldId)
+                    : String.Format("Cannot remove the custom field {0}.", fieldId));
+            }
         }
 
         #endregion

@@ -2777,9 +2777,7 @@ namespace Route4MeSDK
 		[DataContract]
 		public sealed class GetOrdersResponse
         {
-            /// <value>An arrary of the objects
-            /// Available types of the array item: Order (default), 
-            /// object[] (search by fields)</value>
+            /// <value>An arrary of the Order type objects</value>
 			[DataMember(Name = "results")]
 			public Order[] Results { get; set; }
 
@@ -2787,6 +2785,7 @@ namespace Route4MeSDK
             [DataMember(Name = "total")]
 			public uint Total { get; set; }
 
+            /// <value>Selected order fields to show</value>
             [DataMember(Name = "fields", EmitDefaultValue = false)]
             public string[] Fields { get; set; }
         }
@@ -2797,9 +2796,8 @@ namespace Route4MeSDK
         [DataContract]
         public sealed class SearchOrdersResponse
         {
-            /// <value>An arrary of the objects
-            /// Available types of the array item: Order (default), 
-            /// object[] (search by fields)</value>
+            /// <value>An arrary of the objects.
+            /// The item type: object[]</value>
 			[DataMember(Name = "results")]
             public IList<object[]> Results { get; set; }
 

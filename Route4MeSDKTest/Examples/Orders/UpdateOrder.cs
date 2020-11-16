@@ -4,14 +4,14 @@ using System;
 
 namespace Route4MeSDK.Examples
 {
-  public sealed partial class Route4MeExamples
-  {
-    /// <summary>
-    /// Update Order
-    /// </summary>
-    /// <param name="order1"> Order with updated attributes </param>
-    public void UpdateOrder(Order order1 = null)
+    public sealed partial class Route4MeExamples
     {
+        /// <summary>
+        /// Update Order
+        /// </summary>
+        /// <param name="order1"> Order with updated attributes </param>
+        public void UpdateOrder(Order order1 = null)
+        {
             // Create the manager with the api key
             var route4Me = new Route4MeManager(ActualApiKey);
 
@@ -19,8 +19,8 @@ namespace Route4MeSDK.Examples
 
             if (isInnerExample) CreateExampleOrder();
 
-            string orderId = isInnerExample 
-                ? OrdersToRemove[OrdersToRemove.Count - 1] 
+            string orderId = isInnerExample
+                ? OrdersToRemove[OrdersToRemove.Count - 1]
                 : order1.order_id.ToString();
 
             var orderParameters = new OrderParameters()
@@ -29,7 +29,7 @@ namespace Route4MeSDK.Examples
             };
 
             Order order = route4Me.GetOrderByID(
-                orderParameters, 
+                orderParameters,
                 out string errorString);
 
             order.EXT_FIELD_last_name = "Updated " + (new Random()).Next().ToString();
@@ -41,5 +41,5 @@ namespace Route4MeSDK.Examples
 
             if (isInnerExample) RemoveTestOrders();
         }
-  }
+    }
 }
