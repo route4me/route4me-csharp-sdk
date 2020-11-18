@@ -1,5 +1,4 @@
-﻿using Route4MeSDK.DataTypes;
-using Route4MeSDK.QueryTypes;
+﻿using Route4MeSDK.QueryTypes;
 using System;
 using System.Collections.Generic;
 
