@@ -4367,9 +4367,15 @@ namespace Route4MeSDKUnitTest
             Assert.IsTrue(result, "MoveDestinationToRouteTest failed... " + errorString);
         }
 
+        [TestMethod]
         public void MergeRoutesTest()
         {
+            if (skip == "yes") return;
+
             var route4Me = new Route4MeManager(c_ApiKey);
+
+            tdr.MultipleDepotMultipleDriverWith24StopsTimeWindowTest();
+            dataObjectMDMD24 = tdr.dataObjectMDMD24;
 
             Assert.IsNotNull(dataObjectMDMD24, "dataObjectMDMD24 is null...");
 
@@ -4384,7 +4390,7 @@ namespace Route4MeSDKUnitTest
             var mergeRoutesParameters = new MergeRoutesQuery()
             {
                 RouteIds = route1.RouteID + "," + route2.RouteID,
-                DepotAddress = route1.Addresses[0].AddressString.ToString(),
+                DepotAddress = route1.Addresses[0].AddressString,
                 RemoveOrigin = false,
                 DepotLat = route1.Addresses[0].Latitude,
                 DepotLng = route1.Addresses[0].Longitude
@@ -4392,7 +4398,9 @@ namespace Route4MeSDKUnitTest
 
             bool result = route4Me.MergeRoutes(mergeRoutesParameters, out string errorString);
 
-            Assert.IsTrue(result, "MergeRoutesTest failed... " + errorString);
+            Assert.IsTrue(result, "MergeRoutesTest failed. " + errorString);
+
+            //tdr.RemoveOptimization(new string[] { dataObjectMDMD24.OptimizationProblemId });
         }
 
         [TestMethod]

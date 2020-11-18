@@ -1,42 +1,47 @@
 ﻿using Route4MeSDK.DataTypes;
 using Route4MeSDK.QueryTypes;
-using System;
 
 namespace Route4MeSDK.Examples
 {
-  /// <summary>
-  /// Update Route Parameters
-  /// </summary>
-  public sealed partial class Route4MeExamples
-  {
-    public void ReoptimizeRoute(string routeId)
+    /// <summary>
+    /// Reoptimize a route
+    /// </summary>
+    public sealed partial class Route4MeExamples
     {
-      // Create the manager with the api key
-      Route4MeManager route4Me = new Route4MeManager(ActualApiKey);
+        public void ReoptimizeRoute(string routeId = null)
+        {
+            // Create the manager with the api key
+            var route4Me = new Route4MeManager(ActualApiKey);
 
-      RouteParametersQuery routeParameters = new RouteParametersQuery()
-      {
-        RouteId = routeId,
-        ReOptimize = true
-      };
+            bool isInnerExample = routeId == null ? true : false;
 
-      // Run the query
-      string errorString;
-      DataObjectRoute dataObject = route4Me.UpdateRoute(routeParameters, out errorString);
+            if (isInnerExample)
+            {
+                RunOptimizationSingleDriverRoute10Stops();
+                OptimizationsToRemove = new System.Collections.Generic.List<string>()
+                {
+                    SD10Stops_optimization_problem_id
+                };
 
-      Console.WriteLine("");
+                routeId = SD10Stops_route_id;
+            }
 
-      if (dataObject != null)
-      {
-        Console.WriteLine("ReoptimizeRoute executed successfully");
+            var routeParameters = new RouteParametersQuery()
+            {
+                RouteId = routeId,
+                ReOptimize = true
+            };
 
-        Console.WriteLine("Route ID: {0}", dataObject.RouteID);
-      }
-      else
-      {
-        Console.WriteLine("ReoptimizeRoute error: {0}", errorString);
-      }
+            // Run the query
+            DataObjectRoute dataObject = route4Me.UpdateRoute(
+                routeParameters, 
+                out string errorString
+            );
+
+            PrintExampleRouteResult(dataObject, errorString);
+
+            if (isInnerExample) RemoveTestOptimizations();
+        }
     }
-  }
 }
 
