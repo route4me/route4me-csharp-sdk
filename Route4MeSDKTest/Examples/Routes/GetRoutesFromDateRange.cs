@@ -1,27 +1,30 @@
 ﻿using Route4MeSDK.DataTypes;
 using Route4MeSDK.QueryTypes;
+using System;
 
 namespace Route4MeSDK.Examples
 {
     public sealed partial class Route4MeExamples
     {
         /// <summary>
-        /// Get limited number of the routes.
+        /// Gets the routes from specified date range.
         /// </summary>
-        public void GetRoutes()
+        public void GetRoutesFromDateRange()
         {
-            // Create the manager with the api key
             var route4Me = new Route4MeManager(ActualApiKey);
+
+            TimeSpan t10days = new TimeSpan(10, 0, 0, 0);
+            DateTime dtNow = DateTime.Now;
 
             var routeParameters = new RouteParametersQuery()
             {
-                Limit = 10,
-                Offset = 5
+                StartDate = (dtNow - t10days).ToString("yyyy-MM-dd"),
+                EndDate = dtNow.ToString("yyyy-MM-dd")
             };
 
             // Run the query
             DataObjectRoute[] dataObjects = route4Me.GetRoutes(
-                routeParameters,
+                routeParameters, 
                 out string errorString
             );
 

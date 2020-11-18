@@ -1,22 +1,19 @@
-﻿using Route4MeSDK.DataTypes;
+﻿using System.Collections.Generic;
+using Route4MeSDK.DataTypes;
 using Route4MeSDK.QueryTypes;
-using System.Collections.Generic;
 
 namespace Route4MeSDK.Examples
 {
     public sealed partial class Route4MeExamples
     {
         /// <summary>
-        /// Example refers to the process of searching for the specified text 
-        /// throughout all routes names belonging to the user's account.
+        /// Get route path points
         /// </summary>
-        /// <param name="query">Query text</param>
-        public void SearchRoutesForText()
+        public void GetRoutePathPoints()
         {
-            // Create the manager with the api key
             var route4Me = new Route4MeManager(ActualApiKey);
 
-            RunOptimizationSingleDriverRoute10Stops("Nonstandard route name");
+            RunOptimizationSingleDriverRoute10Stops();
             OptimizationsToRemove = new List<string>()
             {
                 SD10Stops_optimization_problem_id
@@ -24,16 +21,17 @@ namespace Route4MeSDK.Examples
 
             var routeParameters = new RouteParametersQuery()
             {
-                Query = "Nonstandard"
+                RouteId = SD10Stops_route_id,
+                RoutePathOutput = RoutePathOutput.Points.ToString()
             };
 
             // Run the query
-            DataObjectRoute[] dataObjects = route4Me.GetRoutes(
+            var dataObject = route4Me.GetRoute(
                 routeParameters, 
                 out string errorString
             );
 
-            PrintExampleRouteResult(dataObjects, errorString);
+            PrintExampleRouteResult(dataObject, errorString);
 
             RemoveTestOptimizations();
         }

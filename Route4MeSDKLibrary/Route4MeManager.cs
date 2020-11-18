@@ -747,7 +747,9 @@ namespace Route4MeSDK
                 new KeyValuePair<string, string>("depot_address", mergeRoutesParameters.DepotAddress),
                 new KeyValuePair<string, string>("remove_origin", mergeRoutesParameters.RemoveOrigin.ToString()),
                 new KeyValuePair<string, string>("depot_lat", mergeRoutesParameters.DepotLat.ToString()),
-                new KeyValuePair<string, string>("depot_lng", mergeRoutesParameters.DepotLng.ToString())
+                new KeyValuePair<string, string>("depot_lng", mergeRoutesParameters.DepotLng.ToString()),
+                new KeyValuePair<string, string>("to_route_id", mergeRoutesParameters.DepotLng.ToString()),
+                new KeyValuePair<string, string>("route_destination_id", mergeRoutesParameters.DepotLng.ToString())
             };
 
 			HttpContent httpContent = new FormUrlEncodedContent(keyValues);

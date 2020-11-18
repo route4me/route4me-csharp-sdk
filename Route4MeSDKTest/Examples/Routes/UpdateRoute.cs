@@ -1,46 +1,53 @@
-﻿using Route4MeSDK.DataTypes;
+﻿using System.Collections.Generic;
+using Route4MeSDK.DataTypes;
 using Route4MeSDK.QueryTypes;
-using System;
 
 namespace Route4MeSDK.Examples
 {
-  /// <summary>
-  /// Update Route Parameters
-  /// </summary>
-  public sealed partial class Route4MeExamples
-  {
-    public void UpdateRoute(string routeId)
+    /// <summary>
+    /// Update Route Parameters
+    /// </summary>
+    public sealed partial class Route4MeExamples
     {
-      // Create the manager with the api key
-      Route4MeManager route4Me = new Route4MeManager(ActualApiKey);
+        public void UpdateRoute(string routeId = null)
+        {
+            // Create the manager with the api key
+            var route4Me = new Route4MeManager(ActualApiKey);
 
-      var parametersNew = new RouteParameters()
-      {
-        RouteName = "New name of the route"
-      };
+            bool isInnerExample = routeId == null ? true : false;
 
-      var routeParameters = new RouteParametersQuery()
-      {
-        RouteId = routeId,
-        Parameters = parametersNew
-      };
+            if (isInnerExample)
+            {
+                RunOptimizationSingleDriverRoute10Stops();
+                OptimizationsToRemove = new List<string>()
+                {
+                    SD10Stops_optimization_problem_id
+                };
 
-      // Run the query
-      DataObjectRoute dataObject = route4Me.UpdateRoute(routeParameters, out string errorString);
+                routeId = SD10Stops_route_id;
+            }
 
-      Console.WriteLine("");
+            var parametersNew = new RouteParameters()
+            {
+                RouteName = "New name of the route"
+            };
 
-      if (dataObject != null)
-      {
-        Console.WriteLine("UpdateRoute executed successfully");
+            var routeParameters = new RouteParametersQuery()
+            {
+                RouteId = routeId,
+                Parameters = parametersNew
+            };
 
-        Console.WriteLine("Route ID: {0}", dataObject.RouteID);
-      }
-      else
-      {
-        Console.WriteLine("UpdateRoute error: {0}", errorString);
-      }
+            // Run the query
+            DataObjectRoute dataObject = route4Me.UpdateRoute(
+                routeParameters, 
+                out string errorString
+            );
+
+            PrintExampleRouteResult(dataObject, errorString);
+
+            RemoveTestOptimizations();
+        }
     }
-  }
 }
 
