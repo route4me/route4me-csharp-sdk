@@ -242,7 +242,6 @@
     <Compile Include="Examples\Routes\MergeRoutes.cs" />
     <Compile Include="Examples\Routes\ReoptimizeRoute.cs" />
     <Compile Include="Examples\Routes\ResequenceReoptimizeRoute.cs" />
-    <Compile Include="Examples\Routes\RouteSharing.cs" />
     <Compile Include="Examples\Routes\SearchRoutesForText.cs" />
     <Compile Include="Examples\Routes\UpdateRoute.cs" />
     <Compile Include="Examples\Routes\UpdateRouteCustomData.cs" />
@@ -275,6 +274,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="shortTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
