@@ -5,16 +5,21 @@ using System.Collections.Generic;
 
 namespace Route4MeSDK.Examples
 {
-  public sealed partial class Route4MeExamples
-  {
-    public DataObject SingleDriverRoute10Stops()
+    public sealed partial class Route4MeExamples
     {
-      // Create the manager with the api key
-      var route4Me = new Route4MeManager(ActualApiKey);
 
-      // Prepare the addresses
-      Address[] addresses = new Address[]
-      {
+        /// <summary>
+        /// The example refers to the process of creating an optimization 
+        /// with 10 stops and single-driver option.
+        /// </summary>
+        public void SingleDriverRoute10Stops()
+        {
+            // Create the manager with the api key
+            var route4Me = new Route4MeManager(ActualApiKey);
+
+            // Prepare the addresses
+            Address[] addresses = new Address[]
+            {
         #region Addresses
 
         new Address() { AddressString = "151 Arbor Way Milledgeville GA 31061",
@@ -81,36 +86,41 @@ namespace Route4MeSDK.Examples
                         Time = 0 }
 
         #endregion
-      };
+            };
 
-      // Set parameters
-      var parameters = new RouteParameters()
-      {
-        AlgorithmType = AlgorithmType.TSP,
-        RouteName = "Single Driver Route 10 Stops",
+            // Set parameters
+            var parameters = new RouteParameters()
+            {
+                AlgorithmType = AlgorithmType.TSP,
+                RouteName = "Single Driver Route 10 Stops",
 
-        RouteDate    = R4MeUtils.ConvertToUnixTimestamp(DateTime.UtcNow.Date.AddDays(1)),
-        RouteTime    = 60 * 60 * 7,
-        Optimize     = Optimize.Distance.Description(),
-        DistanceUnit = DistanceUnit.MI.Description(),
-        DeviceType   = DeviceType.Web.Description()
-      };
+                RouteDate = R4MeUtils.ConvertToUnixTimestamp(DateTime.UtcNow.Date.AddDays(1)),
+                RouteTime = 60 * 60 * 7,
+                Optimize = Optimize.Distance.Description(),
+                DistanceUnit = DistanceUnit.MI.Description(),
+                DeviceType = DeviceType.Web.Description()
+            };
 
-      var optimizationParameters = new OptimizationParameters()
-      {
-        Addresses = addresses,
-        Parameters = parameters
-      };
+            var optimizationParameters = new OptimizationParameters()
+            {
+                Addresses = addresses,
+                Parameters = parameters
+            };
 
-      // Run the query
-      DataObject dataObject = route4Me.RunOptimization(
-          optimizationParameters, 
-          out string errorString);
+            // Run the query
+            DataObject dataObject = route4Me.RunOptimization(
+                optimizationParameters,
+                out string errorString);
 
-      // Output the result
-      PrintExampleOptimizationResult(dataObject, errorString);
+            OptimizationsToRemove = new List<string>()
+            {
+                dataObject?.OptimizationProblemId ?? null
+            };
 
-      return dataObject;
+            // Output the result
+            PrintExampleOptimizationResult(dataObject, errorString);
+
+            RemoveTestOptimizations();
+        }
     }
-  }
 }

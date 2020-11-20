@@ -1,28 +1,33 @@
 ﻿using Route4MeSDK.DataTypes;
 using Route4MeSDK.QueryTypes;
 using System;
+using System.Collections.Generic;
 
 namespace Route4MeSDK.Examples
 {
-  public sealed partial class Route4MeExamples
-  {
-    public DataObject SingleDriverMultipleTimeWindows()
+    public sealed partial class Route4MeExamples
     {
-      // Create the manager with the api key
-      var route4Me = new Route4MeManager(ActualApiKey);
+        /// <summary>
+        /// The example refers to the process of creating an optimization 
+        /// with single-driver, multiple time windows options.
+        /// </summary>
+        public void SingleDriverMultipleTimeWindows()
+        {
+            // Create the manager with the api key
+            var route4Me = new Route4MeManager(ActualApiKey);
 
-      // Prepare the addresses
-      Address[] addresses = new Address[]
-      {
+            // Prepare the addresses
+            Address[] addresses = new Address[]
+            {
         #region Addresses
 
         new Address() { AddressString   = "3634 W Market St, Fairlawn, OH 44333",
                         //all possible originating locations are depots, should be marked as true
                         //stylistically we recommend all depots should be at the top of the destinations list
-                        IsDepot          = true, 
+                        IsDepot          = true,
                         Latitude         = 41.135762259364,
                         Longitude        = -81.629313826561,
-                        
+
                         TimeWindowStart  = null,
                         TimeWindowEnd    = null,
                         TimeWindowStart2 = null,
@@ -150,36 +155,41 @@ namespace Route4MeSDK.Examples
         }
 
         #endregion
-      };
+            };
 
-      // Set parameters
-      var parameters = new RouteParameters()
-      {
-        AlgorithmType = AlgorithmType.TSP,
-        RouteName = "Single Driver Multiple TimeWindows 12 Stops",
+            // Set parameters
+            var parameters = new RouteParameters()
+            {
+                AlgorithmType = AlgorithmType.TSP,
+                RouteName = "Single Driver Multiple TimeWindows 12 Stops",
 
-        RouteDate = R4MeUtils.ConvertToUnixTimestamp(DateTime.UtcNow.Date.AddDays(1)),
-        RouteTime = 5 * 3600 + 30 * 60,
-        Optimize = Optimize.Distance.Description(),
-        DistanceUnit = DistanceUnit.MI.Description(),
-        DeviceType = DeviceType.Web.Description()
-      };
+                RouteDate = R4MeUtils.ConvertToUnixTimestamp(DateTime.UtcNow.Date.AddDays(1)),
+                RouteTime = 5 * 3600 + 30 * 60,
+                Optimize = Optimize.Distance.Description(),
+                DistanceUnit = DistanceUnit.MI.Description(),
+                DeviceType = DeviceType.Web.Description()
+            };
 
-      var optimizationParameters = new OptimizationParameters()
-      {
-        Addresses = addresses,
-        Parameters = parameters
-      };
+            var optimizationParameters = new OptimizationParameters()
+            {
+                Addresses = addresses,
+                Parameters = parameters
+            };
 
-      // Run the query
-      DataObject dataObject = route4Me.RunOptimization(
-          optimizationParameters, 
-          out string errorString);
+            // Run the query
+            DataObject dataObject = route4Me.RunOptimization(
+                                                optimizationParameters,
+                                                out string errorString);
 
-      // Output the result
-      PrintExampleOptimizationResult(dataObject, errorString);
+            OptimizationsToRemove = new List<string>()
+            {
+                dataObject?.OptimizationProblemId ?? null
+            };
 
-      return dataObject;
+            // Output the result
+            PrintExampleOptimizationResult(dataObject, errorString);
+
+            RemoveTestOptimizations();
+        }
     }
-  }
 }

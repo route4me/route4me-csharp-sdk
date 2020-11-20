@@ -386,7 +386,7 @@ namespace Route4MeSDK.Examples
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Single Driver Route 10 Stops generation failed... " + ex.Message);
+                Console.WriteLine("Single Driver Route 10 Stops generation failed. " + ex.Message);
                 return false;
             }
         }

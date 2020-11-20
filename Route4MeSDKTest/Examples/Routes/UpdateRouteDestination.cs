@@ -30,7 +30,10 @@ namespace Route4MeSDK.Examples
             CustomData.Add("BatchId", "e7c672b1-a356-4a97-803e-97db88fdcf99");
             CustomData.Add("CustomerNumber", "2718500");
             CustomData.Add("DeliveryId", "2c71f6d9-c1aa-4672-a682-3e9f12badac9");
-            CustomData.Add("DeliveryInvoices", "<?xml version=\"1.0\" encoding=\"utf-16\"?>\u000d\u000a<!DOCTYPE EXAMPLEDelivery SYSTEM \"EXAMPLEDelivery.dtd\">\u000d\u000a<ArrayOfRouteDeliveryInvoice>\u000d\u000a  <RouteDeliveryInvoice>\u000d\u000a    <InvoiceNumber>999999</InvoiceNumber>\u000d\u000a    <InventoryIds>\u000d\u000a      <string>1790908</string>\u000d\u000a    </InventoryIds>\u000d\u000a    <IsRA>false</IsRA>\u000d\u000a    <IsDT>false</IsDT>\u000d\u000a    <IsINC>true</IsINC>\u000d\u000a    <IsPO>false</IsPO>\u000d\u000a    <IsPOPickup>false</IsPOPickup>\u000d\u000a  </RouteDeliveryInvoice>\u000d\u000a</ArrayOfRouteDeliveryInvoice>");
+            CustomData.Add(
+                "DeliveryInvoices", 
+                "<?xml version=\"1.0\" encoding=\"utf-16\"?>\u000d\u000a<!DOCTYPE EXAMPLEDelivery SYSTEM \"EXAMPLEDelivery.dtd\">\u000d\u000a<ArrayOfRouteDeliveryInvoice>\u000d\u000a  <RouteDeliveryInvoice>\u000d\u000a    <InvoiceNumber>999999</InvoiceNumber>\u000d\u000a    <InventoryIds>\u000d\u000a      <string>1790908</string>\u000d\u000a    </InventoryIds>\u000d\u000a    <IsRA>false</IsRA>\u000d\u000a    <IsDT>false</IsDT>\u000d\u000a    <IsINC>true</IsINC>\u000d\u000a    <IsPO>false</IsPO>\u000d\u000a    <IsPOPickup>false</IsPOPickup>\u000d\u000a  </RouteDeliveryInvoice>\u000d\u000a</ArrayOfRouteDeliveryInvoice>"
+            );
             CustomData.Add("DeliveryNotes", "");
             CustomData.Add("RouteId", "20191");
 
