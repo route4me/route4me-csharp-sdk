@@ -9,7 +9,7 @@ namespace Route4MeSDK.Examples
     {
         public void ExampleOptimization()
         {
-            Route4MeManager Route4Me = new Route4MeManager(ActualApiKey);
+            var Route4Me = new Route4MeManager(ActualApiKey);
 
             var dateWhenTheRouteStart = R4MeUtils.ConvertToUnixTimestamp(DateTime.UtcNow.Date.AddDays(1));
 
@@ -75,7 +75,7 @@ namespace Route4MeSDK.Examples
                 #endregion
             };
 
-            RouteParameters parameters = new RouteParameters()
+            var parameters = new RouteParameters()
             {
                 AlgorithmType = AlgorithmType.TSP,
 
@@ -92,29 +92,29 @@ namespace Route4MeSDK.Examples
                 DeviceType = DeviceType.Web.Description()
             };
 
-            OptimizationParameters optimizationParameters = new OptimizationParameters()
+            var optimizationParameters = new OptimizationParameters()
             {
                 Addresses = addresses.ToArray(),
 
                 Parameters = parameters
             };
 
-            string errorString;
+            var dataObject = Route4Me.RunOptimization(
+                                        optimizationParameters, 
+                                        out string errorString);
 
-            var dataObject = Route4Me.RunOptimization(optimizationParameters, out errorString);
-
-            //ClearAddresses();
-
-            if (dataObject != null)
+            OptimizationsToRemove = new List<string>()
             {
-                Console.WriteLine("Optimization Problem ID = " + dataObject.OptimizationProblemId);
-                // TODO
-                //SortOrders();
-            }
-            else
-            {
-                Console.WriteLine("ExampleOptimization failed");
-            }
+                dataObject?.OptimizationProblemId ?? null
+            };
+
+            Console.WriteLine(
+                dataObject != null 
+                    ? "Optimization Problem ID = " + dataObject.OptimizationProblemId 
+                    : "ExampleOptimization failed"
+                );
+
+            RemoveTestOptimizations();
         }
     }
 }

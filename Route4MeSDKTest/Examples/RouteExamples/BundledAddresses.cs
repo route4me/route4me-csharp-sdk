@@ -7,6 +7,10 @@ namespace Route4MeSDK.Examples
 {
     public sealed partial class Route4MeExamples
     {
+        /// <summary>
+        /// The example referes to the process of creating an optimization 
+        /// with bundled addresses.
+        /// </summary>
         public void BundledAddresses()
         {
             var route4Me = new Route4MeManager(ActualApiKey);
@@ -14,7 +18,7 @@ namespace Route4MeSDK.Examples
             if (!route4Me.MemberHasCommercialCapability(ActualApiKey, DemoApiKey, out string errorString0)) return;
 
             // Prepare the addresses
-            Address[] addresses = new Address[]
+            var addresses = new Address[]
               {
                 #region Addresses
 
