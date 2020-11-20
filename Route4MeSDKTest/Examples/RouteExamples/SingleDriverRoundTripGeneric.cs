@@ -1,63 +1,64 @@
 ﻿using Route4MeSDK.DataTypes;
 using Route4MeSDK.QueryTypes;
 using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace Route4MeSDK.Examples
 {
-  /// <summary>
-  /// This example demonstares how to use the API in a generic way, not bounded to the proposed Route4MeManager shortcucts
-  /// For the same functionality using shortcuts check the Route4MeExamples.SingleDriverRoundTrip()
-  /// </summary>
-  public sealed partial class Route4MeExamples
-  {
-    #region Types
-
-    // Inherit from GenericParameters and add any JSON serializable content
-    // Marked with attribute [DataMember]
-    [DataContract]
-    private class MyAddressAndParametersHolder : GenericParameters
+    /// <summary>
+    /// This example demonstares how to use the API in a generic way, not bounded to the proposed Route4MeManager shortcucts
+    /// For the same functionality using shortcuts check the Route4MeExamples.SingleDriverRoundTrip()
+    /// </summary>
+    public sealed partial class Route4MeExamples
     {
-      [DataMember]
-      public Address[] addresses { get; set; } // Using the defined class "Address", can use user-defined class instead
+        #region Types
 
-      [DataMember]
-      public RouteParameters parameters { get; set; } // Using the defined "RouteParameters", can use user-defined class instead
-    }
+        // Inherit from GenericParameters and add any JSON serializable content
+        // Marked with attribute [DataMember]
+        [DataContract]
+        private class MyAddressAndParametersHolder : GenericParameters
+        {
+            [DataMember]
+            public Address[] addresses { get; set; } // Using the defined class "Address", can use user-defined class instead
 
-    // Generic class for returned JSON holder
-    [DataContract]
-    private class MyDataObjectGeneric
-    {
-      [DataMember(Name = "optimization_problem_id")]
-      public string OptimizationProblemId { get; set; }
+            [DataMember]
+            public RouteParameters parameters { get; set; } // Using the defined "RouteParameters", can use user-defined class instead
+        }
 
-      [DataMember(Name = "state")]
-      public int MyState { get; set; }
+        // Generic class for returned JSON holder
+        [DataContract]
+        private class MyDataObjectGeneric
+        {
+            [DataMember(Name = "optimization_problem_id")]
+            public string OptimizationProblemId { get; set; }
 
-      [DataMember(Name = "addresses")]
-      public Address[] Addresses { get; set; } // Using the defined class "Address", can use user-defined class instead
+            [DataMember(Name = "state")]
+            public int MyState { get; set; }
 
-      [DataMember(Name = "parameters")]
-      public RouteParameters Parameters { get; set; } // Using the defined "RouteParameters", can use user-defined class instead
-    }
+            [DataMember(Name = "addresses")]
+            public Address[] Addresses { get; set; } // Using the defined class "Address", can use user-defined class instead
 
-    #endregion
+            [DataMember(Name = "parameters")]
+            public RouteParameters Parameters { get; set; } // Using the defined "RouteParameters", can use user-defined class instead
+        }
 
-    #region Methods
+        #endregion
 
-    public string SingleDriverRoundTripGeneric()
-    {
-      const string uri = R4MEInfrastructureSettings.MainHost + "/api.v4/optimization_problem.php";
-      string myApiKey = DemoApiKey;
+        #region Methods
 
-      // Create the manager with the api key
-      var route4Me = new Route4MeManager(myApiKey);
+        public void SingleDriverRoundTripGeneric()
+        {
+            const string uri = R4MEInfrastructureSettings.MainHost + "/api.v4/optimization_problem.php";
+            string myApiKey = DemoApiKey;
 
-      // Prepare the addresses
-      // Using the defined class, can use user-defined class instead
-     var addresses = new Address[]
-      {
+            // Create the manager with the api key
+            var route4Me = new Route4MeManager(myApiKey);
+
+            // Prepare the addresses
+            // Using the defined class, can use user-defined class instead
+            var addresses = new Address[]
+             {
         #region Addresses
 
         new Address() { AddressString = "754 5th Ave New York, NY 10019",
@@ -101,7 +102,7 @@ namespace Route4MeSDK.Examples
                         Alias         = "Toga Bike Shop",
                         Latitude      = 40.7753077,
                         Longitude     = -73.9861529,
-                        Time          = 0 }, 
+                        Time          = 0 },
 
         new Address() { AddressString = "555 W 57th St New York, NY 10019",
                         Alias         = "BMW of Manhattan",
@@ -115,68 +116,72 @@ namespace Route4MeSDK.Examples
                         Longitude     = -73.9862019,
                         Time          = 0 },
 
+                 #endregion
+             };
+
+            // Set parameters
+            // Using the defined class, can use user-defined class instead
+            var parameters = new RouteParameters()
+            {
+                AlgorithmType = AlgorithmType.TSP,
+                RouteName = "Single Driver Round Trip",
+
+                RouteDate = R4MeUtils.ConvertToUnixTimestamp(DateTime.UtcNow.Date.AddDays(1)),
+                RouteTime = 60 * 60 * 7,
+                RouteMaxDuration = 86400,
+                VehicleCapacity = 1,
+                VehicleMaxDistanceMI = 10000,
+
+                Optimize = Optimize.Distance.Description(),
+                DistanceUnit = DistanceUnit.MI.Description(),
+                DeviceType = DeviceType.Web.Description(),
+                TravelMode = TravelMode.Driving.Description(),
+            };
+
+            var myParameters = new MyAddressAndParametersHolder()
+            {
+                addresses = addresses,
+                parameters = parameters
+            };
+
+            // Run the query
+            MyDataObjectGeneric dataObject = route4Me
+                      .GetJsonObjectFromAPI<MyDataObjectGeneric>(
+                                              myParameters,
+                                              uri,
+                                              HttpMethodType.Post,
+                                              out string errorString);
+
+            OptimizationsToRemove = new List<string>()
+            {
+                dataObject?.OptimizationProblemId ?? null
+            };
+
+            Console.WriteLine("");
+
+            if (dataObject != null)
+            {
+                Console.WriteLine("SingleDriverRoundTripGeneric executed successfully");
+                Console.WriteLine("");
+
+                Console.WriteLine("Optimization Problem ID: {0}", dataObject.OptimizationProblemId);
+                Console.WriteLine("State: {0}", dataObject.MyState);
+                Console.WriteLine("");
+
+                dataObject.Addresses.ForEach(address =>
+                {
+                    Console.WriteLine("Address: {0}", address.AddressString);
+                    Console.WriteLine("Route ID: {0}", address.RouteId);
+                });
+            }
+            else
+            {
+                Console.WriteLine("SingleDriverRoundTripGeneric error {0}", errorString);
+            }
+
+            RemoveTestOptimizations();
+        }
+
         #endregion
-      };
-
-      // Set parameters
-      // Using the defined class, can use user-defined class instead
-      var parameters = new RouteParameters()
-      {
-        AlgorithmType = AlgorithmType.TSP,
-        RouteName     = "Single Driver Round Trip",
-
-        RouteDate            = R4MeUtils.ConvertToUnixTimestamp(DateTime.UtcNow.Date.AddDays(1)),
-        RouteTime            = 60 * 60 * 7,
-        RouteMaxDuration     = 86400,
-        VehicleCapacity      = 1,
-        VehicleMaxDistanceMI = 10000,
-
-        Optimize     = Optimize.Distance.Description(),
-        DistanceUnit = DistanceUnit.MI.Description(),
-        DeviceType   = DeviceType.Web.Description(),
-        TravelMode   = TravelMode.Driving.Description(),
-      };
-
-      var myParameters = new MyAddressAndParametersHolder()
-      {
-        addresses = addresses,
-        parameters = parameters
-      };
-
-      // Run the query
-      MyDataObjectGeneric dataObject = route4Me
-                .GetJsonObjectFromAPI<MyDataObjectGeneric>(
-                                        myParameters,
-                                        uri,
-                                        HttpMethodType.Post,
-                                        out string errorString);
-
-      Console.WriteLine("");
-
-      if (dataObject != null)
-      {
-        Console.WriteLine("SingleDriverRoundTripGeneric executed successfully");
-        Console.WriteLine("");
-
-        Console.WriteLine("Optimization Problem ID: {0}", dataObject.OptimizationProblemId);
-        Console.WriteLine("State: {0}", dataObject.MyState);
-        Console.WriteLine("");
-
-        dataObject.Addresses.ForEach(address =>
-        {
-          Console.WriteLine("Address: {0}", address.AddressString);
-          Console.WriteLine("Route ID: {0}", address.RouteId);
-        });
-
-        return dataObject.OptimizationProblemId;
-      }
-      else
-      {
-        Console.WriteLine("SingleDriverRoundTripGeneric error {0}", errorString);
-        return null;
-      }
     }
-
-    #endregion
-  }
 }
