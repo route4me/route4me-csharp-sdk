@@ -1,19 +1,24 @@
 ﻿using Route4MeSDK.DataTypes;
 using Route4MeSDK.QueryTypes;
 using System;
+using System.Collections.Generic;
 
 namespace Route4MeSDK.Examples
 {
-  public sealed partial class Route4MeExamples
-  {
-    public DataObject SingleDepotMultipleDriverNoTimeWindow()
+    public sealed partial class Route4MeExamples
     {
-      // Create the manager with the api key
-      Route4MeManager route4Me = new Route4MeManager(ActualApiKey);
+        /// <summary>
+        /// The example refers to the process of creating an optimization 
+        /// with single-depot, multi-driver, no time windows options.
+        /// </summary>
+        public void SingleDepotMultipleDriverNoTimeWindow()
+        {
+            // Create the manager with the api key
+            var route4Me = new Route4MeManager(ActualApiKey);
 
-      // Prepare the addresses
-      Address[] addresses = new Address[]
-      {
+            // Prepare the addresses
+            var addresses = new Address[]
+            {
         #region Addresses
 
         new Address() { AddressString   = "40 Mercer st, New York, NY",
@@ -1768,44 +1773,49 @@ namespace Route4MeSDK.Examples
                         TimeWindowEnd   = null }
 
         #endregion
-      };
+            };
 
-      // Set parameters
-      RouteParameters parameters = new RouteParameters()
-      {
-        AlgorithmType = AlgorithmType.CVRP_TW_MD,
-        RouteName = "Single Depot, Multiple Driver, No Time Window",
-        //StoreRoute = false,
+            // Set parameters
+            var parameters = new RouteParameters()
+            {
+                AlgorithmType = AlgorithmType.CVRP_TW_MD,
+                RouteName = "Single Depot, Multiple Driver, No Time Window",
 
-        RouteDate = R4MeUtils.ConvertToUnixTimestamp(DateTime.UtcNow.Date.AddDays(1)),
-        RouteTime = 60 * 60 * 7,
-        RT = true,
-        RouteMaxDuration = 86400,
-        VehicleCapacity = 20,
-        VehicleMaxDistanceMI = 99999,
-        Parts = 4,
+                RouteDate = R4MeUtils.ConvertToUnixTimestamp(DateTime.UtcNow.Date.AddDays(1)),
+                RouteTime = 60 * 60 * 7,
+                RT = true,
+                RouteMaxDuration = 86400,
+                VehicleCapacity = 20,
+                VehicleMaxDistanceMI = 99999,
+                Parts = 4,
 
-        Optimize = Optimize.Time.Description(),
-        DistanceUnit = DistanceUnit.MI.Description(),
-        DeviceType = DeviceType.Web.Description(),
-        TravelMode = TravelMode.Driving.Description(),
-        Metric = Metric.Geodesic
-      };
+                Optimize = Optimize.Time.Description(),
+                DistanceUnit = DistanceUnit.MI.Description(),
+                DeviceType = DeviceType.Web.Description(),
+                TravelMode = TravelMode.Driving.Description(),
+                Metric = Metric.Matrix
+            };
 
-      OptimizationParameters optimizationParameters = new OptimizationParameters()
-      {
-        Addresses = addresses,
-        Parameters = parameters
-      };
+            var optimizationParameters = new OptimizationParameters()
+            {
+                Addresses = addresses,
+                Parameters = parameters
+            };
 
-      // Run the query
-      string errorString;
-      DataObject dataObject = route4Me.RunOptimization(optimizationParameters, out errorString);
+            // Run the query
+            DataObject dataObject = route4Me.RunOptimization(
+                                                optimizationParameters, 
+                                                out string errorString);
 
-      // Output the result
-      PrintExampleOptimizationResult(dataObject, errorString);
+            OptimizationsToRemove = new List<string>()
+            {
+                dataObject?.OptimizationProblemId ?? null
+            };
 
-      return dataObject;
+            // Output the result
+            PrintExampleOptimizationResult(dataObject, errorString);
+
+            RemoveTestOptimizations();
+        }
     }
-  }
 }

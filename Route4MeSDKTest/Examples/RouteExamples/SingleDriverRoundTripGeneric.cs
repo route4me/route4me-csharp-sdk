@@ -49,14 +49,14 @@ namespace Route4MeSDK.Examples
     public string SingleDriverRoundTripGeneric()
     {
       const string uri = R4MEInfrastructureSettings.MainHost + "/api.v4/optimization_problem.php";
-      const string myApiKey = "11111111111111111111111111111111";
+      string myApiKey = DemoApiKey;
 
       // Create the manager with the api key
-      Route4MeManager route4Me = new Route4MeManager(myApiKey);
+      var route4Me = new Route4MeManager(myApiKey);
 
       // Prepare the addresses
       // Using the defined class, can use user-defined class instead
-      Address[] addresses = new Address[]
+     var addresses = new Address[]
       {
         #region Addresses
 
@@ -120,10 +120,9 @@ namespace Route4MeSDK.Examples
 
       // Set parameters
       // Using the defined class, can use user-defined class instead
-      RouteParameters parameters = new RouteParameters()
+      var parameters = new RouteParameters()
       {
         AlgorithmType = AlgorithmType.TSP,
-        StoreRoute    = false,
         RouteName     = "Single Driver Round Trip",
 
         RouteDate            = R4MeUtils.ConvertToUnixTimestamp(DateTime.UtcNow.Date.AddDays(1)),
@@ -138,18 +137,19 @@ namespace Route4MeSDK.Examples
         TravelMode   = TravelMode.Driving.Description(),
       };
 
-      MyAddressAndParametersHolder myParameters = new MyAddressAndParametersHolder()
+      var myParameters = new MyAddressAndParametersHolder()
       {
         addresses = addresses,
         parameters = parameters
       };
 
       // Run the query
-      string errorString;
-      MyDataObjectGeneric dataObject = route4Me.GetJsonObjectFromAPI<MyDataObjectGeneric>(myParameters,
-                                                                                          uri,
-                                                                                          HttpMethodType.Post,
-                                                                                          out errorString);
+      MyDataObjectGeneric dataObject = route4Me
+                .GetJsonObjectFromAPI<MyDataObjectGeneric>(
+                                        myParameters,
+                                        uri,
+                                        HttpMethodType.Post,
+                                        out string errorString);
 
       Console.WriteLine("");
 
@@ -167,6 +167,7 @@ namespace Route4MeSDK.Examples
           Console.WriteLine("Address: {0}", address.AddressString);
           Console.WriteLine("Route ID: {0}", address.RouteId);
         });
+
         return dataObject.OptimizationProblemId;
       }
       else

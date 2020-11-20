@@ -1,12 +1,17 @@
 ﻿using Route4MeSDK.DataTypes;
 using Route4MeSDK.QueryTypes;
 using System;
+using System.Collections.Generic;
 
 namespace Route4MeSDK.Examples
 {
     public sealed partial class Route4MeExamples
     {
-        public DataObject SingleDriverRoundTrip()
+        /// <summary>
+        /// The example refers to the process of creating 
+        /// an optimization with round trip option.
+        /// </summary>
+        public void SingleDriverRoundTrip()
         {
             // Create the manager with the api key
             var route4Me = new Route4MeManager(ActualApiKey);
@@ -86,7 +91,7 @@ namespace Route4MeSDK.Examples
                 VehicleCapacity = 1,
                 VehicleMaxDistanceMI = 10000,
 
-                Optimize = Optimize.Distance.Description(),
+                Optimize = Optimize.Time.Description(),
                 DistanceUnit = DistanceUnit.KM.Description(),
                 DeviceType = DeviceType.Web.Description(),
                 TravelMode = TravelMode.Driving.Description(),
@@ -100,13 +105,18 @@ namespace Route4MeSDK.Examples
 
             // Run the query
             DataObject dataObject = route4Me.RunOptimization(
-                optimizationParameters, 
-                out string errorString);
+                                                optimizationParameters, 
+                                                out string errorString);
+
+            OptimizationsToRemove = new List<string>()
+            {
+                dataObject?.OptimizationProblemId ?? null
+            };
 
             // Output the result
             PrintExampleOptimizationResult(dataObject, errorString);
 
-            return dataObject;
+            RemoveTestOptimizations();
         }
     }
 }

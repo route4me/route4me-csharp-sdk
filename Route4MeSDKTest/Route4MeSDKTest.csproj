@@ -156,7 +156,13 @@
     <Compile Include="Examples\Orders\GetOrdersByScheduleFilter.cs" />
     <Compile Include="Examples\Orders\UpdateOrderWithCustomField.cs" />
     <Compile Include="Examples\RouteExamples\AsyncMultipleDepotMultipleDriver.cs" />
+    <Compile Include="Examples\RouteExamples\BundledAddresses.cs" />
     <Compile Include="Examples\RouteExamples\ExampleOptimization.cs" />
+    <Compile Include="Examples\RouteExamples\GetScheduleCalendar.cs" />
+    <Compile Include="Examples\RouteExamples\MultipleDepotMultipleDriverFineTuning.cs" />
+    <Compile Include="Examples\RouteExamples\MultipleSeparateDepostMultipleDriver.cs" />
+    <Compile Include="Examples\RouteExamples\Route300Stops.cs" />
+    <Compile Include="Examples\RouteExamples\RouteSlowdown.cs" />
     <Compile Include="Examples\Routes\AssignMemberToRoute.cs" />
     <Compile Include="Examples\Routes\AssignVehicleToRoute.cs" />
     <Compile Include="Examples\Routes\ChangeRouteDepote.cs" />
@@ -274,7 +280,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="shortTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
