@@ -7,7 +7,6 @@ namespace Route4MeSDK.Examples
 {
     public sealed partial class Route4MeExamples
     {
-
         /// <summary>
         /// The example refers to the process of creating an optimization 
         /// with 10 stops and single-driver option.
