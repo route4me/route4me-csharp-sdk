@@ -74,5 +74,28 @@ namespace Route4MeSDK
         public const string ScheduleCalendar = MainHost + "/api/schedule_calendar_data.php";
 
         #endregion
+
+        
+    }
+
+    /// <summary>
+    /// Route4Me infrastructure settings
+    /// Api version 5 hosts constants
+    /// </summary>
+    public static class R4MEInfrastructureSettingsV5
+    {
+        #region Api V5
+
+        public const string ApiVersion = "5";
+
+        public const string MainHost = "https://wh.route4me.com/modules/api/v5.0";
+
+        public const string TeamUsers = MainHost+"/team/users";
+
+        public const string TeamUsersBulkCreate = MainHost+"/team/bulk-insert";
+
+        public const string DriverReview = MainHost + "/driver-reviews";
+
+        #endregion
     }
 }

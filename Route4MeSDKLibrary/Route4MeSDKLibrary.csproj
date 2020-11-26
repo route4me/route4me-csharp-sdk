@@ -148,6 +148,10 @@
     <Compile Include="DataTypes\MemberConfigurationResponse.cs" />
     <Compile Include="DataTypes\MemberResponse.cs" />
     <Compile Include="DataTypes\MemberResponseV4.cs" />
+    <Compile Include="DataTypes\V5\DriverReview.cs" />
+    <Compile Include="DataTypes\V5\Enums.cs" />
+    <Compile Include="DataTypes\V5\ResultResponse.cs" />
+    <Compile Include="DataTypes\V5\TeamResponse.cs" />
     <Compile Include="DataTypes\Order.cs" />
     <Compile Include="DataTypes\OrderCustomField.cs" />
     <Compile Include="DataTypes\OrderCustomFieldCreateResponse.cs" />
@@ -180,6 +184,7 @@
     <Compile Include="FastProcessing\FastBulkGeocoding.cs" />
     <Compile Include="FastProcessing\FastFileReading.cs" />
     <Compile Include="FastProcessing\Options.cs" />
+    <Compile Include="HttpClientExtensions.cs" />
     <Compile Include="HttpConnectionResponseContent2 .cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropertyValidation.cs" />
@@ -206,12 +211,15 @@
     <Compile Include="QueryTypes\OrderParameters.cs" />
     <Compile Include="QueryTypes\RouteParametersQuery.cs" />
     <Compile Include="QueryTypes\ScheduleCalendarQuery.cs" />
+    <Compile Include="QueryTypes\V5\DriverReviewParameters.cs" />
+    <Compile Include="QueryTypes\V5\TeamRequest.cs" />
     <Compile Include="QueryTypes\TelematicsVendorParameters.cs" />
     <Compile Include="QueryTypes\TerritoryQuery.cs" />
     <Compile Include="QueryTypes\VehicleParameters.cs" />
     <Compile Include="QueryTypes\VehicleV4Parameters.cs" />
     <Compile Include="Route4MeManager.cs" />
     <Compile Include="DataTypes\StatusResponse.cs" />
+    <Compile Include="Route4MeManagerV5.cs" />
     <Compile Include="Types.cs" />
     <Compile Include="Utils.cs" />
   </ItemGroup>

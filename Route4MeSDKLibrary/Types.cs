@@ -6,6 +6,7 @@ namespace Route4MeSDK
     Get,
     Put,
     Post,
-    Delete
+    Delete,
+    Patch
   }
 }

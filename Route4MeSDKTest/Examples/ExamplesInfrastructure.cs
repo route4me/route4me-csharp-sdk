@@ -1411,5 +1411,38 @@ namespace Route4MeSDK.Examples
         }
 
         #endregion
+
+        #region Telematics GateWay API
+
+        private void PrintExampleTelematicsVendor(object result, string errorString)
+        {
+            string testName = (new StackTrace()).GetFrame(1).GetMethod().Name;
+            testName = testName != null ? testName : "";
+
+            Console.WriteLine("");
+
+            if (result!=null)
+            {
+                Console.WriteLine(testName + " executed successfully");
+
+                if (result.GetType()== typeof(TelematicsVendorResponse))
+                {
+                    Console.WriteLine("Vendor :" + ((TelematicsVendorResponse)result).Vendor.Name);
+                }
+                else
+                {
+                    foreach (var vendor in ((TelematicsVendorsResponse)result).Vendors)
+                    {
+                        Console.WriteLine("Vendor :" + vendor.Name);
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine(testName + " error: {0}", errorString);
+            }
+        }
+
+        #endregion
     }
 }

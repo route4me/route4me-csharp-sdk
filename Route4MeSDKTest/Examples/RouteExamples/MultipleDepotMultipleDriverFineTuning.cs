@@ -229,7 +229,7 @@ namespace Route4MeSDK.Examples
 
             OptimizationsToRemove = new List<string>()
             {
-                dataObjectFineTuning.OptimizationProblemId
+                dataObjectFineTuning?.OptimizationProblemId ?? null
             };
 
             Console.WriteLine("");
