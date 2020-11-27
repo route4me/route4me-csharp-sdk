@@ -151,6 +151,7 @@
     <Compile Include="DataTypes\V5\DriverReview.cs" />
     <Compile Include="DataTypes\V5\Enums.cs" />
     <Compile Include="DataTypes\V5\ResultResponse.cs" />
+    <Compile Include="DataTypes\V5\RouteAdvancedConstraints.cs" />
     <Compile Include="DataTypes\V5\TeamResponse.cs" />
     <Compile Include="DataTypes\Order.cs" />
     <Compile Include="DataTypes\OrderCustomField.cs" />

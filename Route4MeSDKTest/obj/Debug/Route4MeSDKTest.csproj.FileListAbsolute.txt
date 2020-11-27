@@ -65,3 +65,5 @@ C:\Users\User\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKTest\bin\Debug\Web
 C:\Users\User\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKTest\bin\Debug\System.Security.AccessControl.xml
 C:\Users\User\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKTest\bin\Debug\System.Security.Permissions.xml
 C:\Users\User\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKTest\bin\Debug\System.Security.Principal.Windows.xml
+C:\Users\User\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKTest\bin\Debug\System.ValueTuple.dll
+C:\Users\User\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKTest\bin\Debug\System.ValueTuple.xml
