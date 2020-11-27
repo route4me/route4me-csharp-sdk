@@ -559,6 +559,13 @@ namespace Route4MeSDK.DataTypes
         [DataMember(Name = "bundling", EmitDefaultValue = false)]
         [DefaultValue(false)]
         public AddressBundling Bundling { get; set; }
+
+        /// <summary>
+        /// Advanced route constraints
+        /// </summary>
+        [DataMember(Name = "advanced_constraints", EmitDefaultValue = false)]
+        [DefaultValue(false)]
+        public V5.RouteAdvancedConstraints[] AdvancedConstraints { get; set; }
     }
 
     /// <summary>

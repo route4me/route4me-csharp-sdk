@@ -531,5 +531,13 @@ namespace Route4MeSDK.DataTypes
         [DataMember(Name = "bundle_items", EmitDefaultValue = true)]
         [ReadOnly(true)]
         public BundledItemResponse[] BundleItems { get; set; }
+
+        /// <summary>
+        /// The driver tags specified in a team member's custom data.
+        /// (e.g. "driver skills": 
+        /// ["Class A CDL", "Class B CDL", "Forklift", "Skid Steer Loader", "Independent Contractor"]
+        /// </summary>
+        [DataMember(Name = "tags", EmitDefaultValue = false)]
+        public string[] Tags { get; set; }
     }
 }

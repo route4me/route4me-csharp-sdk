@@ -75,7 +75,7 @@ namespace Route4MeSDK
         /// <summary>
         /// Retrieve all existing sub-users associated with the Member’s account.
         /// </summary>
-        /// <param name="errorString">Error message text</param>
+        /// <param name="resultResponse">Failing response</param>
         /// <returns>An array of the TeamResponseV5 type objects</returns>
         public TeamResponse[] GetTeamMembers(out ResultResponse failResponse)
         {
@@ -93,8 +93,8 @@ namespace Route4MeSDK
         /// Retrieve a team member by the parameter UserId
         /// </summary>
         /// <param name="parameters">Query parameters</param>
-        /// <param name="errorString">Error message text</param>
-        /// <returns></returns>
+        /// <param name="resultResponse">Failing response</param>
+        /// <returns>Retrieved team member</returns>
         public TeamResponse GetTeamMemberById(MemberQueryParameters parameters, 
                                               out ResultResponse resultResponse)
         {
@@ -124,8 +124,8 @@ namespace Route4MeSDK
         /// Creates new team member (sub-user) in the user's account
         /// </summary>
         /// <param name="memberParams">An object of the type MemberParametersV4</param>
-        /// <param name="errorString">Error message text</param>
-        /// <returns>An object of the type TeamResponse</returns>
+        /// <param name="resultResponse">Failing response</param>
+        /// <returns>Created team member</returns>
 		public TeamResponse CreateTeamMember(TeamRequest memberParams, 
                                             out ResultResponse resultResponse)
         {
@@ -155,7 +155,7 @@ namespace Route4MeSDK
         /// TO DO: there is no response from the function.
         /// </summary>
         /// <param name="membersParams"></param>
-        /// <param name="errorString"></param>
+        /// <param name="resultResponse">Failing response</param>
         /// <returns></returns>
         public ResultResponse BulkCreateTeamMembers(TeamRequest[] membersParams, out ResultResponse resultResponse)
         {
@@ -210,8 +210,8 @@ namespace Route4MeSDK
         /// Removes a team member (sub-user) from the user's account.
         /// </summary>
         /// <param name="parameters">An object of the type MemberParametersV4 containg the parameter UserId</param>
-        /// <param name="errorString">Error message text</param>
-        /// <returns>An object of the type TeamResponse</returns>
+        /// <param name="resultResponse">Failing response</param>
+        /// <returns>Removed team member</returns>
 		public TeamResponse RemoveTeamMember(MemberQueryParameters parameters, 
                                                 out ResultResponse resultResponse)
         {
@@ -244,8 +244,8 @@ namespace Route4MeSDK
         /// </summary>
         /// <param name="parameters">Member query parameters</param>
         /// <param name="requestPayload">Member request parameters</param>
-        /// <param name="errorString">>Error message text</param>
-        /// <returns>An object of the type TeamResponse</returns>
+        /// <param name="resultResponse">Failing response</param>
+        /// <returns>Updated team member</returns>
         public TeamResponse UpdateTeamMember(MemberQueryParameters queryParameters, 
                                              TeamRequest requestPayload, 
                                              out ResultResponse resultResponse)
@@ -287,6 +287,67 @@ namespace Route4MeSDK
             return response;
         }
 
+        /// <summary>
+        /// Add an array of skills to the driver.
+        /// </summary>
+        /// <param name="queryParameters">Query parameters</param>
+        /// <param name="skills">An array of the driver skills</param>
+        /// <param name="resultResponse">Failing response</param>
+        /// <returns>Updated team member</returns>
+        public TeamResponse AddSkillsToDriver(MemberQueryParameters queryParameters,
+                                             string[] skills,
+                                             out ResultResponse resultResponse)
+        {
+            if ((queryParameters?.UserId ?? null) == null)
+            {
+                resultResponse = new ResultResponse()
+                {
+                    Status = false,
+                    Messages = new Dictionary<string, string[]>()
+                    {
+                        { "Error", new string[] { "The UserId parameter is not specified" } }
+                    }
+                };
+
+                return null;
+            }
+
+            if ((skills?.Length ?? 0)<1)
+            {
+                resultResponse = new ResultResponse()
+                {
+                    Status = false,
+                    Messages = new Dictionary<string, string[]>()
+                    {
+                        { "Error", new string[] { "The driver skills array is empty." } }
+                    }
+                };
+
+                return null;
+            }
+
+            #region Prepare Request From Driver Skills
+
+            var driverSkills = new Dictionary<string, string>();
+
+            driverSkills.Add("driver_skills", String.Join(",", skills));
+
+            var requestPayload = new TeamRequest()
+            {
+                CustomData = driverSkills
+            };
+
+            #endregion
+
+            var response = GetJsonObjectFromAPI<TeamResponse>(
+                                    requestPayload,
+                                    R4MEInfrastructureSettingsV5.TeamUsers + "/" + queryParameters.UserId,
+                                    HttpMethodType.Patch,
+                                    out resultResponse);
+
+            return response;
+        }
+
         #endregion
 
         #region Driver Review
@@ -296,7 +357,7 @@ namespace Route4MeSDK
         /// </summary>
         /// <param name="parameters">Query parmeters</param>
         /// <param name="resultResponse">Failing response</param>
-        /// <returns>List of the drive reviews</returns>
+        /// <returns>List of the driver reviews</returns>
         public DriverReviewsResponse GetDriverReviewList(DriverReviewParameters parameters, 
                                                          out ResultResponse resultResponse)
         {
@@ -360,6 +421,13 @@ namespace Route4MeSDK
                             out resultResponse);
         }
 
+        /// <summary>
+        /// Update a driver review.
+        /// </summary>
+        /// <param name="driverReview">Request payload</param>
+        /// <param name="method">Http method</param>
+        /// <param name="resultResponse">Failing response</param>
+        /// <returns>Driver review</returns>
         public DriverReview UpdateDriverReview(DriverReview driverReview,
                                                 HttpMethodType method, 
                                                 out ResultResponse resultResponse)

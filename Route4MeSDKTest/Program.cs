@@ -1,7 +1,5 @@
-﻿using Route4MeSDK.DataTypes;
-using Route4MeSDK.Examples;
+﻿using Route4MeSDK.Examples;
 using System;
-using System.Collections.Generic;
 using NUnit.Framework;
 
 namespace Route4MeSDKTest
@@ -29,7 +27,7 @@ namespace Route4MeSDKTest
             // "api4" - execute all the examples related to the API 4 
             // "api5" - execute all the examples related to the API 5 
             // a method name - execute a specifed example method (e.g. "GetTeamMemberById")
-            string executeOption = "GetTeamMembers";
+            string executeOption = "CreateOptimizationWithDriverSkills";
 
             if (executeOption.ToLower() == "api4")
             {
@@ -379,6 +377,7 @@ namespace Route4MeSDKTest
                 examples.UpdateTeamMember();
                 examples.CreateTeamMember();
                 examples.BulkCreateTeamMembers();
+                examples.AddSkillsToDriver();
 
                 #endregion
 
@@ -388,6 +387,12 @@ namespace Route4MeSDKTest
                 examples.GetDriverReviewById();
                 examples.CreateDriverReview();
                 examples.UpdateDriverReview();
+
+                #endregion
+
+                #region Route Types
+
+                examples.CreateOptimizationWithDriverSkills();
 
                 #endregion
 
