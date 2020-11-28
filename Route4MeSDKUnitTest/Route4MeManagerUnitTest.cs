@@ -13146,13 +13146,11 @@ namespace Route4MeSDKUnitTest
                 perPage = 15
             };
 
-            string errorString = "";
-            var vendors = route4Me.SearchTelematicsVendors(vendorParameters, out errorString);
+            var vendors = route4Me.SearchTelematicsVendors(vendorParameters, out string errorString);
 
             Assert.IsNotNull(vendors, "The test searchVendorsTest failed. " + errorString);
 
-            Assert.IsInstanceOfType(vendors, typeof(TelematicsVendorsSearchResponse), "The test searchVendorsTest failed. " + errorString);
-
+            Assert.IsInstanceOfType(vendors, typeof(TelematicsVendorsResponse), "The test searchVendorsTest failed. " + errorString);
         }
 
         [TestMethod]
@@ -13165,12 +13163,14 @@ namespace Route4MeSDKUnitTest
                 Vendors = "55,56,57"
             };
 
-            string errorString = "";
-            var vendors = route4Me.SearchTelematicsVendors(vendorParameters, out errorString);
+            var vendors = route4Me.SearchTelematicsVendors(vendorParameters, out string errorString);
 
             Assert.IsNotNull(vendors, "The test vendorsComparisonTest failed. " + errorString);
 
-            Assert.IsInstanceOfType(vendors, typeof(TelematicsVendorsSearchResponse), "The test vendorsComparisonTest failed. " + errorString);
+            Assert.IsInstanceOfType(
+                vendors, typeof(TelematicsVendorsResponse), 
+                "The test vendorsComparisonTest failed. " + errorString
+            );
         }
 
     }
