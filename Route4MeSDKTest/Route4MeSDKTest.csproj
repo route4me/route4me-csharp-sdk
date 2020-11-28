@@ -194,6 +194,8 @@
     <Compile Include="Examples\Routes\UpdateWholeRoute.cs" />
     <Compile Include="Examples\TelematicsGateWayAPI\GetAllVendors.cs" />
     <Compile Include="Examples\TelematicsGateWayAPI\GetVendor.cs" />
+    <Compile Include="Examples\TelematicsGateWayAPI\SearchVendors.cs" />
+    <Compile Include="Examples\TelematicsGateWayAPI\VendorsComparison.cs" />
     <Compile Include="Examples\Users\CreateUser.cs" />
     <Compile Include="Examples\Databases\GenerateSqlDatabase.cs" />
     <Compile Include="Examples\Databases\MakeAddressbookCSVsample.cs" />

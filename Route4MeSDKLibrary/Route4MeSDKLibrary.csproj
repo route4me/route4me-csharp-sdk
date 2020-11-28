@@ -169,7 +169,6 @@
     <Compile Include="DataTypes\TelematicsVendorResponse.cs" />
     <Compile Include="DataTypes\TelematicsVendors.cs" />
     <Compile Include="DataTypes\TelematicsVendorsResponse.cs" />
-    <Compile Include="DataTypes\TelematicsVendorsSearchResponse.cs" />
     <Compile Include="DataTypes\TelematicsVendor.cs" />
     <Compile Include="DataTypes\Territory.cs" />
     <Compile Include="DataTypes\TerritoryZone.cs" />

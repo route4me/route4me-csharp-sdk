@@ -3627,13 +3627,14 @@ namespace Route4MeSDK
         /// </summary>
         /// <param name="vendorParams"> The TelematicsVendorParameters type object as query parameters </param>
         /// <param name="errorString"> out: Error as string </param>
-        /// <returns>The TelematicsVendorsSearchResponse type object containing found telematics vendors</returns>
-		public TelematicsVendorsSearchResponse SearchTelematicsVendors(TelematicsVendorParameters vendorParams, out string errorString)
+        /// <returns>The TelematicsVendorsResponse type object containing found telematics vendors</returns>
+		public TelematicsVendorsResponse SearchTelematicsVendors(TelematicsVendorParameters vendorParams, 
+                                                                 out string errorString)
 		{
-            return GetJsonObjectFromAPI<TelematicsVendorsSearchResponse>(vendorParams, 
-                            R4MEInfrastructureSettings.TeleamticsVendorsHost,
-							HttpMethodType.Get,
-							out errorString);
+            return GetJsonObjectFromAPI<TelematicsVendorsResponse>(vendorParams, 
+                                        R4MEInfrastructureSettings.TeleamticsVendorsHost,
+							            HttpMethodType.Get,
+							            out errorString);
 		}
 
 		#endregion
