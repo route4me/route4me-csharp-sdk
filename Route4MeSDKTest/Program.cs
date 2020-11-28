@@ -18,9 +18,6 @@ namespace Route4MeSDKTest
     {
         static void Main(string[] args)
         {
-            //shortTest.TestRun();
-            //return;
-
             var examples = new Route4MeExamples();
 
             // Available values for the variable executeOption:

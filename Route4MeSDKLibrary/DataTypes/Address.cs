@@ -538,6 +538,7 @@ namespace Route4MeSDK.DataTypes
         /// ["Class A CDL", "Class B CDL", "Forklift", "Skid Steer Loader", "Independent Contractor"]
         /// </summary>
         [DataMember(Name = "tags", EmitDefaultValue = false)]
+        [DefaultValue(false)]
         public string[] Tags { get; set; }
     }
 }
