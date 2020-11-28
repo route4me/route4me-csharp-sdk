@@ -358,6 +358,7 @@ namespace Route4MeSDKTest
                 examples.GetAllVendors();
                 examples.GetVendor();
                 examples.SearchVendors();
+				examples.VendorsComparison();
 
                 #endregion
 
