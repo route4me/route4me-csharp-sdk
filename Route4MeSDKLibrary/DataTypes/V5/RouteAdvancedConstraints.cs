@@ -41,9 +41,9 @@ namespace Route4MeSDK.DataTypes.V5
         public string[] Tags { get; set; }
 
         /// <summary>
-        /// ID of a skilled driver.
+        /// An array of the skilled driver IDs.
         /// </summary>
         [DataMember(Name = "route4me_members_id", EmitDefaultValue = false)]
-        public int? Route4meMembersId { get; set; }
+        public int[] Route4meMembersId { get; set; }
     }
 }

@@ -18,45 +18,85 @@ namespace Route4MeSDK.Examples
             // Create the manager with the api key
             var route4Me = new Route4MeManager(ActualApiKey);
 
-            #region Create Skilled Driver
+            #region Create Skilled Drivers
 
             int? ownerId = GetOwnerMemberId();
 
             if (ownerId == null) return;
 
-            var newMemberParameters = new TeamRequest()
+            #region 1st Driver
+
+            var newMemberParameters1 = new TeamRequest()
             {
                 NewPassword = testPassword,
-                MemberFirstName = "John",
-                MemberLastName = "Doe",
+                MemberFirstName = "John1",
+                MemberLastName = "Doe1",
                 MemberCompany = "Test Member Created",
-                MemberEmail = GetTestEmail(),
+                MemberEmail = GetTestEmail().Replace("+","1+"),
                 OwnerMemberId = (int)ownerId
             };
 
-            newMemberParameters.SetMemberType(DataTypes.V5.MemberTypes.Driver);
+            newMemberParameters1.SetMemberType(DataTypes.V5.MemberTypes.Driver);
 
             var route4MeV5 = new Route4MeManagerV5(ActualApiKey);
 
             // Run the query
-            var member = route4MeV5.CreateTeamMember(newMemberParameters,
+            var member1 = route4MeV5.CreateTeamMember(newMemberParameters1,
                                                     out DataTypes.V5.ResultResponse resultResponse);
 
-            if (member != null && member.GetType() == typeof(DataTypes.V5.TeamResponse)) membersToRemove.Add(member);
+            if (member1 != null && member1.GetType() == typeof(DataTypes.V5.TeamResponse)) membersToRemove.Add(member1);
 
-            var queryParams = new MemberQueryParameters()
+            var queryParams1 = new MemberQueryParameters()
             {
-                UserId = member.MemberId.ToString()
+                UserId = member1.MemberId.ToString()
             };
 
-            string[] skills = new string[]
+            string[] skills1 = new string[]
             {
-                "Class A CDL", "Forklift", "Skid Steer Loader"
+                "Class A CDL", "Forklift"
             };
 
-            var updatedMember = route4MeV5.AddSkillsToDriver(queryParams,
-                                                            skills,
+            var updatedMember1 = route4MeV5.AddSkillsToDriver(queryParams1,
+                                                            skills1,
                                                             out resultResponse);
+
+            #endregion
+
+            #region 2nd Driver
+
+            var newMemberParameters2 = new TeamRequest()
+            {
+                NewPassword = testPassword,
+                MemberFirstName = "John2",
+                MemberLastName = "Doe2",
+                MemberCompany = "Test Member Created",
+                MemberEmail = GetTestEmail().Replace("+", "2+"),
+                OwnerMemberId = (int)ownerId
+            };
+
+            newMemberParameters2.SetMemberType(DataTypes.V5.MemberTypes.Driver);
+
+            // Run the query
+            var member2 = route4MeV5.CreateTeamMember(newMemberParameters2,
+                                                    out resultResponse);
+
+            if (member2 != null && member2.GetType() == typeof(DataTypes.V5.TeamResponse)) membersToRemove.Add(member2);
+
+            var queryParams2 = new MemberQueryParameters()
+            {
+                UserId = member2.MemberId.ToString()
+            };
+
+            string[] skills2 = new string[]
+            {
+                "Forklift", "Skid Steer Loader"
+            };
+
+            var updatedMember2 = route4MeV5.AddSkillsToDriver(queryParams2,
+                                                            skills2,
+                                                            out resultResponse);
+
+            #endregion
 
             #endregion
 
@@ -95,9 +135,10 @@ namespace Route4MeSDK.Examples
                         Time            = 300,
                         TimeWindowStart = 30529,
                         TimeWindowEnd   = 33779,
-                        Tags            = new string[] { "Forklift" } },
+                        Tags            = new string[] { "Class A CDL", "Forklift" } },
 
         new Address() { AddressString   = "512 Florida Pl, Barberton, OH 44203",
+                        IsDepot         = true,
                         Latitude        = 41.003671512008,
                         Longitude       = -81.598461046815,
                         Time            = 100,
@@ -110,7 +151,7 @@ namespace Route4MeSDK.Examples
                         Time            = 300,
                         TimeWindowStart = 33944,
                         TimeWindowEnd   = 34801,
-                        Tags            = new string[] { "Class A CDL" } },
+                        Tags            = new string[] { "Forklift", "Skid Steer Loader" } },
 
         new Address() { AddressString   = "1659 Hibbard Dr, Stow, OH 44224",
                         Latitude        = 41.194505989552,
@@ -231,7 +272,11 @@ namespace Route4MeSDK.Examples
                         MaximumCargoVolume = 15,
                         MembersCount = 10,
                         Tags = new string[] { "Forklift","Skid Steer Loader" },
-                        Route4meMembersId = updatedMember.MemberId
+                        Route4meMembersId = new int[] 
+                        { 
+                            (int)updatedMember1.MemberId,
+                            (int)updatedMember2.MemberId
+                        }
                     }
                 }
             };
