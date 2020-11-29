@@ -10,27 +10,30 @@ namespace Route4MeSDK.Examples
         /// <summary>
         /// Get Device History from Time Range
         /// </summary>
-        public void GetDeviceHistoryTimeRange(string routeId)
+        public void GetDeviceHistoryTimeRange()
         {
             // Create the manager with the api key
-            Route4MeManager route4Me = new Route4MeManager(ActualApiKey);
+            var route4Me = new Route4MeManager(ActualApiKey);
 
-            int uStartTime = 0;
-            int uEndTime = 0;
-            uStartTime = (int)(new DateTime(2016, 10, 20, 0, 0, 0) - (new DateTime(1970, 1, 1, 0, 0, 0))).TotalSeconds;
-            uEndTime = (int)(new DateTime(2016, 10, 26, 23, 59, 59) - (new DateTime(1970, 1, 1, 0, 0, 0))).TotalSeconds;
+            DateTime zeroTime = new DateTime(1970, 1, 1, 0, 0, 0);
 
-            GPSParameters gpsParameters = new GPSParameters
+            int uStartTime = (int)(new DateTime(2016, 10, 20, 0, 0, 0) - zeroTime).TotalSeconds;
+            int uEndTime = (int)(new DateTime(2026, 10, 26, 23, 59, 59) - zeroTime).TotalSeconds;
+
+            RunOptimizationSingleDriverRoute10Stops();
+            OptimizationsToRemove = new List<string>();
+            OptimizationsToRemove.Add(SD10Stops_optimization_problem_id);
+
+            var gpsParameters = new GPSParameters
             {
                 Format = "csv",
-                RouteId = routeId,
+                RouteId = SD10Stops_route_id,
                 TimePeriod = "custom",
                 StartDate = uStartTime,
                 EndDate = uEndTime
             };
 
-            string errorString = "";
-            var response = route4Me.SetGPS(gpsParameters, out errorString);
+            var response = route4Me.SetGPS(gpsParameters, out string errorString);
 
             if (!string.IsNullOrEmpty(errorString))
             {
@@ -41,7 +44,7 @@ namespace Route4MeSDK.Examples
             Console.WriteLine("SetGps response: {0}", response.Status.ToString());
 
             GenericParameters genericParameters = new GenericParameters();
-            genericParameters.ParametersCollection.Add("route_id", routeId);
+            genericParameters.ParametersCollection.Add("route_id", SD10Stops_route_id);
             genericParameters.ParametersCollection.Add("device_tracking_history", "1");
 
             var dataObject = route4Me.GetLastLocation(genericParameters, out errorString);
@@ -68,6 +71,8 @@ namespace Route4MeSDK.Examples
             {
                 Console.WriteLine("GetDeviceHistoryTimeRange error: {0}", errorString);
             }
+
+            RemoveTestOptimizations();
         }
     }
 }
