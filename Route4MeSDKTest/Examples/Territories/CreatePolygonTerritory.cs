@@ -1,6 +1,5 @@
 ﻿using Route4MeSDK.DataTypes;
 using Route4MeSDK.QueryTypes;
-using System;
 
 namespace Route4MeSDK.Examples
 {
@@ -12,9 +11,9 @@ namespace Route4MeSDK.Examples
         public void CreatePolygonTerritory()
         {
             // Create the manager with the api key
-            Route4MeManager route4Me = new Route4MeManager(ActualApiKey);
+            var route4Me = new Route4MeManager(ActualApiKey);
 
-            AvoidanceZoneParameters territoryParameters = new AvoidanceZoneParameters
+            var territoryParameters = new AvoidanceZoneParameters
             {
                 TerritoryName = "Test Territory",
                 TerritoryColor = "ff0000",
@@ -36,21 +35,14 @@ namespace Route4MeSDK.Examples
             };
 
             // Run the query
-            string errorString = "";
-            TerritoryZone territory = route4Me.CreateTerritory(territoryParameters, out errorString);
+            TerritoryZone territory = route4Me.CreateTerritory(territoryParameters, 
+                                                               out string errorString);
 
-            Console.WriteLine("");
+            if ((territory?.TerritoryId ?? null) != null) TerritoryZonesToRemove.Add(territory.TerritoryId);
 
-            if (territory != null)
-            {
-                Console.WriteLine("CreatePolygonTerritory executed successfully");
+            PrintExampleTerritory(territory, errorString);
 
-                Console.WriteLine("Territory ID: {0}", territory.TerritoryId);
-            }
-            else
-            {
-                Console.WriteLine("CreatePolygonTerritory error: {0}", errorString);
-            }
+            RemoveTestTerritoryZones();
         }
     }
 }

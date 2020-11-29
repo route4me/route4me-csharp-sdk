@@ -1,6 +1,5 @@
 ﻿using Route4MeSDK.DataTypes;
 using Route4MeSDK.QueryTypes;
-using System;
 
 namespace Route4MeSDK.Examples
 {
@@ -12,11 +11,13 @@ namespace Route4MeSDK.Examples
         public void UpdateTerritory()
         {
             // Create the manager with the api key
-            Route4MeManager route4Me = new Route4MeManager(ActualApiKey);
+            var route4Me = new Route4MeManager(ActualApiKey);
 
-            string territoryId = "1CEFEC7568D900FB781C21603780775E";
+            CreateTerritoryZone();
 
-            AvoidanceZoneParameters territoryParameters = new AvoidanceZoneParameters
+            string territoryId = TerritoryZonesToRemove[TerritoryZonesToRemove.Count - 1];
+
+            var territoryParameters = new AvoidanceZoneParameters
             {
                 TerritoryId = territoryId,
                 TerritoryName = "Test Territory Updated",
@@ -32,20 +33,12 @@ namespace Route4MeSDK.Examples
             };
 
             // Run the query
-            string errorString = "";
-            AvoidanceZone territory = route4Me.UpdateTerritory(territoryParameters, out errorString);
+            AvoidanceZone territory = route4Me.UpdateTerritory(territoryParameters, 
+                                                               out string errorString);
 
-            Console.WriteLine("");
+            PrintExampleTerritory(territory, errorString);
 
-            if (territory != null)
-            {
-                Console.WriteLine("UpdateTerritory executed successfully");
-                Console.WriteLine("Territory ID: {0}", territory.TerritoryId);
-            }
-            else
-            {
-                Console.WriteLine("UpdateTerritory error: {0}", errorString);
-            }
+            RemoveTestTerritoryZones();
         }
     }
 }
