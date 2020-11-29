@@ -24,7 +24,7 @@ namespace Route4MeSDKTest
             // "api4" - execute all the examples related to the API 4 
             // "api5" - execute all the examples related to the API 5 
             // a method name - execute a specifed example method (e.g. "GetTeamMemberById")
-            string executeOption = "SearchVendors";
+            string executeOption = "UpdateTerritory";
 
             if (executeOption.ToLower() == "api4")
             {
@@ -358,7 +358,7 @@ namespace Route4MeSDKTest
                 examples.GetAllVendors();
                 examples.GetVendor();
                 examples.SearchVendors();
-				examples.VendorsComparison();
+                examples.VendorsComparison();
 
                 #endregion
 

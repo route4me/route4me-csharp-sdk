@@ -1,6 +1,5 @@
 ﻿using Route4MeSDK.DataTypes;
 using Route4MeSDK.QueryTypes;
-using System;
 
 namespace Route4MeSDK.Examples
 {
@@ -12,9 +11,9 @@ namespace Route4MeSDK.Examples
         public void CreateRectTerritory()
         {
             // Create the manager with the api key
-            Route4MeManager route4Me = new Route4MeManager(ActualApiKey);
+            var route4Me = new Route4MeManager(ActualApiKey);
 
-            AvoidanceZoneParameters territoryParameters = new AvoidanceZoneParameters
+            var territoryParameters = new AvoidanceZoneParameters
             {
                 TerritoryName = "Test Territory",
                 TerritoryColor = "ff0000",
@@ -22,27 +21,21 @@ namespace Route4MeSDK.Examples
                 {
                     Type = TerritoryType.Rect.Description(),
                     Data = new string[] {
-			            "43.51668853502909,-109.3798828125",
-			            "46.98025235521883,-101.865234375"
-		            }
+                        "43.51668853502909,-109.3798828125",
+                        "46.98025235521883,-101.865234375"
+                    }
                 }
             };
 
             // Run the query
-            string errorString = "";
-            TerritoryZone territory = route4Me.CreateTerritory(territoryParameters, out errorString);
+            TerritoryZone territory = route4Me.CreateTerritory(territoryParameters,
+                                                               out string errorString);
 
-            Console.WriteLine("");
+            if ((territory?.TerritoryId ?? null) != null) TerritoryZonesToRemove.Add(territory.TerritoryId);
 
-            if (territory != null)
-            {
-                Console.WriteLine("CreateRectTerritory executed successfully");
-                Console.WriteLine("Territory ID: {0}", territory.TerritoryId);
-            }
-            else
-            {
-                Console.WriteLine("CreateRectTerritory error: {0}", errorString);
-            }
+            PrintExampleTerritory(territory, errorString);
+
+            RemoveTestTerritoryZones();
         }
     }
 }
