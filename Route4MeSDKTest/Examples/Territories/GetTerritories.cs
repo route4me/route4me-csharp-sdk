@@ -1,6 +1,5 @@
 ﻿using Route4MeSDK.DataTypes;
 using Route4MeSDK.QueryTypes;
-using System;
 
 namespace Route4MeSDK.Examples
 {
@@ -21,19 +20,6 @@ namespace Route4MeSDK.Examples
                                                                   out string errorString);
 
             PrintExampleTerritory(territories, errorString);
-
-            //Console.WriteLine("");
-
-            //if (territories != null)
-            //{
-            //    Console.WriteLine("GetTerritories executed successfully");
-
-            //    Console.WriteLine("GetAvoidanceZones executed successfully, {0} territories returned", territories.Length);
-            //}
-            //else
-            //{
-            //    Console.WriteLine("GetTerritories error: {0}", errorString);
-            //}
         }
     }
 }
