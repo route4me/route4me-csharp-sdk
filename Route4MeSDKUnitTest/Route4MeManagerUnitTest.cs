@@ -10937,15 +10937,22 @@ namespace Route4MeSDKUnitTest
         {
             var route4Me = new Route4MeManager(c_ApiKey);
 
-            string tracking = tdr.SDRT_route != null ? (tdr.SDRT_route.Addresses.Length > 1 ? (tdr.SDRT_route.Addresses[1].tracking_number != null ? tdr.SDRT_route.Addresses[1].tracking_number : "") : "") : "";
+            string tracking = tdr.SDRT_route != null 
+                ? (tdr.SDRT_route.Addresses.Length > 1 
+                    ? (tdr.SDRT_route.Addresses[1].tracking_number != null 
+                        ? tdr.SDRT_route.Addresses[1].tracking_number 
+                        : ""
+                       ) 
+                    : ""
+                  ) 
+                : "";
 
-            Assert.IsTrue(tracking != "", "Can not find valid tracking number in the newly generated route's second destination...");
+            Assert.IsTrue(tracking != "", "Can not find valid tracking number in the newly generated route's second destination.");
 
             // Run the query
-            string errorString = "";
-            var result = route4Me.FindAsset(tracking, out errorString);
+            var result = route4Me.FindAsset(tracking, out string errorString);
 
-            Assert.IsInstanceOfType(result, typeof(FindAssetResponse), "FindAssetTest failed... " + errorString);
+            Assert.IsInstanceOfType(result, typeof(FindAssetResponse), "FindAssetTest failed. " + errorString);
         }
 
         [TestMethod]
@@ -10953,8 +10960,12 @@ namespace Route4MeSDKUnitTest
         {
             var route4Me = new Route4MeManager(ApiKeys.actualApiKey);
 
-            double lat = tdr.SDRT_route.Addresses.Length > 1 ? tdr.SDRT_route.Addresses[1].Latitude : 33.14384;
-            double lng = tdr.SDRT_route.Addresses.Length > 1 ? tdr.SDRT_route.Addresses[1].Longitude : -83.22466;
+            double lat = tdr.SDRT_route.Addresses.Length > 1 
+                ? tdr.SDRT_route.Addresses[1].Latitude 
+                : 33.14384;
+            double lng = tdr.SDRT_route.Addresses.Length > 1 
+                ? tdr.SDRT_route.Addresses[1].Longitude 
+                : -83.22466;
             
             // Create the gps parametes
             var gpsParameters = new GPSParameters()

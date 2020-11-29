@@ -777,7 +777,15 @@ namespace Route4MeSDK.Examples
                 avoidanceZoneParameters,
                 out string errorString);
 
-            PrintExampleAvoidanceZone(avoidanceZone);
+            if (avoidanceZone != null)
+            {
+                if ((AvoidanceZonesToRemove?.Count ?? 0) < 1)
+                    AvoidanceZonesToRemove = new List<string>();
+
+                AvoidanceZonesToRemove.Add(avoidanceZone.TerritoryId);
+            }
+
+            PrintExampleAvoidanceZone(avoidanceZone, errorString);
         }
 
         #endregion
