@@ -15,27 +15,37 @@ namespace Route4MeSDK.Examples
             // Create the manager with the api key
             var route4Me = new Route4MeManager(ActualApiKey);
 
+            #region Create GPS event record
+
+            var tsp2days = new TimeSpan(2, 0, 0, 0);
+            DateTime dtNow = DateTime.Now;
+
             RunOptimizationSingleDriverRoute10Stops();
             OptimizationsToRemove = new List<string>();
             OptimizationsToRemove.Add(SD10Stops_optimization_problem_id);
 
-            // Create the gps parametes
-            var gpsParameters = new GPSParameters()
+            double lat = SD10Stops_route.Addresses.Length > 1
+                ? SD10Stops_route.Addresses[1].Latitude
+                : 33.14384;
+            double lng = SD10Stops_route.Addresses.Length > 1
+                ? SD10Stops_route.Addresses[1].Longitude
+                : -83.22466;
+
+            var gpsParameters = new GPSParameters
             {
                 Format = Format.Csv.Description(),
                 RouteId = SD10Stops_route_id,
-                Latitude = 33.14384,
-                Longitude = -83.22466,
+                Latitude = lat,
+                Longitude = lng,
                 Course = 1,
                 Speed = 120,
                 DeviceType = DeviceType.IPhone.Description(),
-                MemberId = 1,
+                MemberId = (int)SD10Stops_route.Addresses[1].MemberId,
                 DeviceGuid = "TEST_GPS",
-                DeviceTimestamp = "2014-06-14 17:43:35"
+                DeviceTimestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
             };
 
-            string errorString;
-            var response = route4Me.SetGPS(gpsParameters, out errorString);
+            var response = route4Me.SetGPS(gpsParameters, out string errorString);
 
             if (!string.IsNullOrEmpty(errorString))
             {
@@ -43,13 +53,17 @@ namespace Route4MeSDK.Examples
                 return;
             }
 
-            Console.WriteLine("SetGps response: {0}", response.ToString());
+            Console.WriteLine("SetGps response: {0}", response.Status.ToString());
 
-            GenericParameters genericParameters = new GenericParameters();
-            genericParameters.ParametersCollection.Add("route_id", SD10Stops_route_id);
-            genericParameters.ParametersCollection.Add("device_tracking_history", "1");
+            #endregion
 
-            var dataObject = route4Me.GetLastLocation(genericParameters, out errorString);
+            var trParameters = new RouteParametersQuery()
+            {
+                RouteId = SD10Stops_route_id,
+                DeviceTrackingHistory = true
+            };
+
+            var dataObject = route4Me.GetLastLocation(trParameters, out errorString);
 
             Console.WriteLine("");
 

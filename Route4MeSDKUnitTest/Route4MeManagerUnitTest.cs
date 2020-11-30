@@ -10930,6 +10930,10 @@ namespace Route4MeSDKUnitTest
             Assert.IsTrue(tdr.SDRT_route.Addresses.Length > 0, "The route has no addresses...");
 
             lsOptimizationIDs.Add(tdr.SDRT_optimization_problem_id);
+
+            bool recorded = SetAddressGPSPosition(tdr.SDRT_route.Addresses[1]);
+
+            Assert.IsTrue(recorded, "Cannot record GPS position of the address");
         }
 
         [TestMethod]
@@ -10947,12 +10951,19 @@ namespace Route4MeSDKUnitTest
                   ) 
                 : "";
 
-            Assert.IsTrue(tracking != "", "Can not find valid tracking number in the newly generated route's second destination.");
+            Assert.IsTrue(
+                tracking != "", 
+                "Can not find valid tracking number in the newly generated route's second destination."
+            );
 
             // Run the query
             var result = route4Me.FindAsset(tracking, out string errorString);
 
-            Assert.IsInstanceOfType(result, typeof(FindAssetResponse), "FindAssetTest failed. " + errorString);
+            Assert.IsInstanceOfType(
+                result, 
+                typeof(FindAssetResponse), 
+                "FindAssetTest failed. " + errorString
+            );
         }
 
         [TestMethod]
@@ -10977,16 +10988,53 @@ namespace Route4MeSDKUnitTest
                 Course = 1,
                 Speed = 120,
                 DeviceType = DeviceType.IPhone.Description(),
-                MemberId = 725205,
+                MemberId =  (int)tdr.SDRT_route.Addresses[1].MemberId,
                 DeviceGuid = "TEST_GPS",
                 DeviceTimestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
             };
 
-            string errorString;
-            var response = route4Me.SetGPS(gpsParameters, out errorString);
+            var response = route4Me.SetGPS(gpsParameters, out string errorString);
 
-            Assert.IsNotNull(response, "SetGPSPositionTest failed... " + errorString);
-            Assert.IsTrue(response.Status, "SetGPSPositionTest failed... " + errorString);
+            Assert.IsNotNull(
+                response, 
+                "SetGPSPositionTest failed. " + errorString
+            );
+            Assert.IsTrue(
+                response.Status, 
+                "SetGPSPositionTest failed. " + errorString
+            );
+        }
+
+        /// <summary>
+        /// Set GPS postion record by route address
+        /// </summary>
+        /// <param name="address">Route address</param>
+        /// <returns>True if the GPS position recorded successfully.</returns>
+        private static bool SetAddressGPSPosition(Address address)
+        {
+            var route4Me = new Route4MeManager(ApiKeys.actualApiKey);
+
+            double lat = address.Latitude;
+            double lng = address.Longitude;
+
+            // Create the gps parametes
+            var gpsParameters = new GPSParameters()
+            {
+                Format = Format.Csv.Description(),
+                RouteId = tdr.SDRT_route_id,
+                Latitude = lat,
+                Longitude = lng,
+                Course = 1,
+                Speed = 120,
+                DeviceType = DeviceType.IPhone.Description(),
+                MemberId = (int)address.MemberId,
+                DeviceGuid = "TEST_GPS",
+                DeviceTimestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+            };
+
+            var response = route4Me.SetGPS(gpsParameters, out string _);
+
+            return (response != null && response.GetType() == typeof(SetGpsResponse)) ? true : false;
         }
 
         [TestMethod]
@@ -10994,25 +11042,25 @@ namespace Route4MeSDKUnitTest
         {
             var route4Me = new Route4MeManager(c_ApiKey);
 
-            int uStartTime = 0;
-            int uEndTime = 0;
-            uStartTime = (int)(new DateTime(DateTime.Now.Year, 1, 1, 0, 0, 0) - (new DateTime(1970, 1, 1, 0, 0, 0))).TotalSeconds;
-            uStartTime = 0;
-            uEndTime = (int)(DateTime.Now - (new DateTime(1970, 1, 1, 0, 0, 0))).TotalSeconds;
+            var tsp2days = new TimeSpan(2, 0, 0, 0);
+            DateTime dtNow = DateTime.Now;
 
             var gpsParameters = new GPSParameters
             {
                 Format = "json",
-                RouteId = "8D1A03A79E24D57C9EBEB1A03C12CA6B",
+                RouteId = tdr.SDRT_route.RouteID,
                 TimePeriod = "custom",
-                StartDate = uStartTime,
-                EndDate = uEndTime
+                StartDate = R4MeUtils.ConvertToUnixTimestamp(dtNow - tsp2days),
+                EndDate = R4MeUtils.ConvertToUnixTimestamp(dtNow + tsp2days)
             };
 
-            string errorString = "";
-            var response = route4Me.GetDeviceLocationHistory(gpsParameters, out errorString);
+            var response = route4Me.GetDeviceLocationHistory(gpsParameters, out string errorString);
 
-            Assert.IsNotInstanceOfType(response, typeof(String), "GetDeviceHistoryTimeRangeTest failed... " + errorString);
+            Assert.IsInstanceOfType(
+                response, 
+                typeof(GetDeviceLocationHistoryResponse), 
+                "GetDeviceHistoryTimeRangeTest failed. " + errorString
+            );
         }
 
         [TestMethod]
@@ -11020,14 +11068,15 @@ namespace Route4MeSDKUnitTest
         {
             var route4Me = new Route4MeManager(c_ApiKey);
 
-            var genericParameters = new GenericParameters();
-            genericParameters.ParametersCollection.Add("route_id", tdr.SDRT_route_id);
-            genericParameters.ParametersCollection.Add("device_tracking_history", "1");
+            var trParameters = new RouteParametersQuery()
+            {
+                RouteId = tdr.SDRT_route_id,
+                DeviceTrackingHistory = true
+            };
 
-            string errorString;
-            var dataObject = route4Me.GetLastLocation(genericParameters, out errorString);
+            var dataObject = route4Me.GetLastLocation(trParameters, out string errorString);
 
-            Assert.IsNotNull(dataObject, "TrackDeviceLastLocationHistoryTest failed... " + errorString);
+            Assert.IsNotNull(dataObject, "TrackDeviceLastLocationHistoryTest failed. " + errorString);
         }
 
         [TestMethod]
@@ -11039,7 +11088,7 @@ namespace Route4MeSDKUnitTest
 
             var userLocations = route4Me.GetUserLocations(genericParameters, out string errorString);
 
-            Assert.IsNotNull(userLocations, "GetAllUserLocationsTest failed... " + errorString);
+            Assert.IsNotNull(userLocations, "GetAllUserLocationsTest failed. " + errorString);
         }
 
         [TestMethod]
@@ -11051,7 +11100,10 @@ namespace Route4MeSDKUnitTest
 
             var userLocations = route4Me.GetUserLocations(genericParameters, out string errorString);
 
-            Assert.IsNotNull(userLocations, "GetAllUserLocationsTest failed... " + errorString);
+            Assert.IsNotNull(
+                userLocations, 
+                "GetAllUserLocationsTest failed. " + errorString
+            );
 
             var userLocation = userLocations.Where(x => x.UserTracking != null).FirstOrDefault();
 
@@ -11061,9 +11113,15 @@ namespace Route4MeSDKUnitTest
 
             var queriedUserLocations = route4Me.GetUserLocations(genericParameters, out errorString);
 
-            Assert.IsNotNull(queriedUserLocations, "QueryUserLocationsTest failed... " + errorString);
+            Assert.IsNotNull(
+                queriedUserLocations, 
+                "QueryUserLocationsTest failed. " + errorString
+            );
 
-            Assert.IsTrue(queriedUserLocations.Count()==1, "QueryUserLocationsTest failed... " + errorString);
+            Assert.IsTrue(
+                queriedUserLocations.Count()==1, 
+                "QueryUserLocationsTest failed. " + errorString
+            );
         }
 
         [ClassCleanup()]
@@ -11071,7 +11129,7 @@ namespace Route4MeSDKUnitTest
         {
             bool result = tdr.RemoveOptimization(lsOptimizationIDs.ToArray());
 
-            Assert.IsTrue(result, "Removing of the testing optimization problem failed...");
+            Assert.IsTrue(result, "Removing of the testing optimization problem failed.");
         }
     }
 

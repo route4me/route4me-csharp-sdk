@@ -2,6 +2,7 @@
 using Route4MeSDK.QueryTypes;
 using System;
 using System.Collections.Generic;
+using static Route4MeSDK.Route4MeManager;
 
 namespace Route4MeSDK.Examples
 {
@@ -15,22 +16,34 @@ namespace Route4MeSDK.Examples
             // Create the manager with the api key
             var route4Me = new Route4MeManager(ActualApiKey);
 
-            DateTime zeroTime = new DateTime(1970, 1, 1, 0, 0, 0);
+            #region Create GPS event record
 
-            int uStartTime = (int)(new DateTime(2016, 10, 20, 0, 0, 0) - zeroTime).TotalSeconds;
-            int uEndTime = (int)(new DateTime(2026, 10, 26, 23, 59, 59) - zeroTime).TotalSeconds;
+            var tsp2days = new TimeSpan(2, 0, 0, 0);
+            DateTime dtNow = DateTime.Now;
 
             RunOptimizationSingleDriverRoute10Stops();
             OptimizationsToRemove = new List<string>();
             OptimizationsToRemove.Add(SD10Stops_optimization_problem_id);
 
+            double lat = SD10Stops_route.Addresses.Length > 1
+                ? SD10Stops_route.Addresses[1].Latitude
+                : 33.14384;
+            double lng = SD10Stops_route.Addresses.Length > 1
+                ? SD10Stops_route.Addresses[1].Longitude
+                : -83.22466;
+
             var gpsParameters = new GPSParameters
             {
-                Format = "csv",
+                Format = Format.Csv.Description(),
                 RouteId = SD10Stops_route_id,
-                TimePeriod = "custom",
-                StartDate = uStartTime,
-                EndDate = uEndTime
+                Latitude = lat,
+                Longitude = lng,
+                Course = 1,
+                Speed = 120,
+                DeviceType = DeviceType.IPhone.Description(),
+                MemberId = (int)SD10Stops_route.Addresses[1].MemberId,
+                DeviceGuid = "TEST_GPS",
+                DeviceTimestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
             };
 
             var response = route4Me.SetGPS(gpsParameters, out string errorString);
@@ -43,33 +56,38 @@ namespace Route4MeSDK.Examples
 
             Console.WriteLine("SetGps response: {0}", response.Status.ToString());
 
-            GenericParameters genericParameters = new GenericParameters();
-            genericParameters.ParametersCollection.Add("route_id", SD10Stops_route_id);
-            genericParameters.ParametersCollection.Add("device_tracking_history", "1");
+            #endregion
 
-            var dataObject = route4Me.GetLastLocation(genericParameters, out errorString);
-
-            Console.WriteLine("");
-
-            if (dataObject != null)
+            var trParameters = new GPSParameters
             {
-                Console.WriteLine("GetDeviceHistoryTimeRange executed successfully");
+                Format = "json",
+                RouteId = SD10Stops_route_id,
+                TimePeriod = "custom",
+                StartDate = R4MeUtils.ConvertToUnixTimestamp(dtNow - tsp2days),
+                EndDate = R4MeUtils.ConvertToUnixTimestamp(dtNow + tsp2days)
+            };
+
+            var result = route4Me.GetDeviceLocationHistory(trParameters, out errorString);
+
+            Console.WriteLine(
+                    result != null && result.GetType()==typeof(GetDeviceLocationHistoryResponse) 
+                    ? "GetDeviceHistoryTimeRangeTest executed successfully" 
+                    : "GetDeviceHistoryTimeRangeTest failed. " + errorString
+                );
+
+            if (result != null && result.GetType() == typeof(GetDeviceLocationHistoryResponse))
+            {
                 Console.WriteLine("");
 
-                Console.WriteLine("Optimization Problem ID: {0}", dataObject.OptimizationProblemId);
-                Console.WriteLine("");
-                foreach (TrackingHistory th in dataObject.TrackingHistory)
+                var locationHistoryResul = (GetDeviceLocationHistoryResponse)result;
+
+                if ((locationHistoryResul.data?.Length ?? 0) > 0)
                 {
-                    Console.WriteLine("Speed: {0}", th.Speed);
-                    Console.WriteLine("Longitude: {0}", th.Longitude);
-                    Console.WriteLine("Latitude: {0}", th.Latitude);
-                    Console.WriteLine("Time Stamp: {0}", th.TimeStampFriendly);
-                    Console.WriteLine("");
+                    foreach (var locationHistory in locationHistoryResul.data)
+                    {
+                        Console.WriteLine("Location: {0}, {1}", locationHistory.Latitude, locationHistory.Longitude);
+                    }
                 }
-            }
-            else
-            {
-                Console.WriteLine("GetDeviceHistoryTimeRange error: {0}", errorString);
             }
 
             RemoveTestOptimizations();
