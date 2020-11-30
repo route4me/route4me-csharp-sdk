@@ -10,7 +10,6 @@ namespace Route4MeSDK.Examples
         /// <summary>
         /// The example refers to the process of setting the GPS position of a device.
         /// </summary>
-        /// <param name="routeId"></param>
         public void SetGPSPosition()
         {
             // Create the manager with the api key
@@ -20,19 +19,26 @@ namespace Route4MeSDK.Examples
             OptimizationsToRemove = new List<string>();
             OptimizationsToRemove.Add(SD10Stops_optimization_problem_id);
 
-            // Create the gps parametes
+            double lat = SD10Stops_route.Addresses.Length > 1
+                ? SD10Stops_route.Addresses[1].Latitude
+                : 33.14384;
+            double lng = SD10Stops_route.Addresses.Length > 1
+                ? SD10Stops_route.Addresses[1].Longitude
+                : -83.22466;
+
+            // Create the gps parameters
             var gpsParameters = new GPSParameters()
             {
                 Format = Format.Csv.Description(),
                 RouteId = SD10Stops_route_id,
-                Latitude = 33.14384,
-                Longitude = -83.22466,
+                Latitude = lat,
+                Longitude = lng,
                 Course = 1,
                 Speed = 120,
                 DeviceType = DeviceType.IPhone.Description(),
-                MemberId = 1,
+                MemberId = (int)SD10Stops_route.Addresses[1].MemberId,
                 DeviceGuid = "TEST_GPS",
-                DeviceTimestamp = "2014-06-14 17:43:35"
+                DeviceTimestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
             };
 
             // Run query
