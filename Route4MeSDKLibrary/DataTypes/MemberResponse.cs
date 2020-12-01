@@ -24,7 +24,7 @@ namespace Route4MeSDK.DataTypes
         /// Session ID
         /// </summary>
         [DataMember(Name = "session_id")]
-        public int? SessionId { get; set; }
+        public string SessionId { get; set; }
 
         /// <summary>
         /// Session GUID

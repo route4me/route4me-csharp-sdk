@@ -198,6 +198,7 @@
     <Compile Include="Examples\TelematicsGateWayAPI\VendorsComparison.cs" />
     <Compile Include="Examples\Tracking\GetAllUserLocations.cs" />
     <Compile Include="Examples\Tracking\QueryUserLocations.cs" />
+    <Compile Include="Examples\Users\AddEditCustomDataToUser.cs" />
     <Compile Include="Examples\Users\CreateUser.cs" />
     <Compile Include="Examples\Databases\GenerateSqlDatabase.cs" />
     <Compile Include="Examples\Databases\MakeAddressbookCSVsample.cs" />
@@ -339,6 +340,9 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Examples\NewFolder1\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

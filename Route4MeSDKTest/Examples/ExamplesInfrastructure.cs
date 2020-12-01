@@ -64,6 +64,9 @@ namespace Route4MeSDK.Examples
         AvoidanceZone avoidanceZone;
         TerritoryZone territoryZone;
 
+        List<string> usersToRemove = new List<string>();
+        MemberResponseV4 lastCreatedUser;
+
         #region Optimizations, Routes, Destinations
 
         private void PrintExampleRouteResult(object dataObjectRoute, string errorString)
@@ -1566,6 +1569,129 @@ namespace Route4MeSDK.Examples
             {
                 Console.WriteLine(testName + " error: {0}", errorString);
             }
+        }
+
+        #endregion
+
+        #region Users
+
+        public void CreateTestUser()
+        {
+            var route4Me = new Route4MeManager(ActualApiKey);
+
+            string userFirstName = "";
+            string userLastName = "";
+            string userPhone = "";
+
+            string memberType = "SUB_ACCOUNT_DISPATCHER";
+
+            switch (memberType)
+            {
+                case "SUB_ACCOUNT_DISPATCHER":
+                    userFirstName = "Clay";
+                    userLastName = "Abraham";
+                    userPhone = "571-259-5939";
+                    break;
+                case "SUB_ACCOUNT_DRIVER":
+                    userFirstName = "Driver";
+                    userLastName = "Driverson";
+                    userPhone = "577-222-5555";
+                    break;
+            }
+
+            var @params = new MemberParametersV4()
+            {
+                HIDE_ROUTED_ADDRESSES = "FALSE",
+                member_phone = userPhone,
+                member_zipcode = "22102",
+                member_email = "regression.autotests+" + DateTime.Now.ToString("yyyyMMddHHmmss") + "@gmail.com",
+                HIDE_VISITED_ADDRESSES = "FALSE",
+                READONLY_USER = "FALSE",
+                member_type = memberType,
+                date_of_birth = "2010",
+                member_first_name = userFirstName,
+                member_password = "123456",
+                HIDE_NONFUTURE_ROUTES = "FALSE",
+                member_last_name = userLastName,
+                SHOW_ALL_VEHICLES = "FALSE",
+                SHOW_ALL_DRIVERS = "FALSE"
+            };
+
+            var result = route4Me.CreateUser(@params, out string errorString);
+
+            if (result!=null && result.GetType()==typeof(MemberResponseV4))
+            {
+                usersToRemove.Add(result.member_id);
+                lastCreatedUser = result;
+            }
+        }
+
+        private void PrintTestUsers(object result, string errorString)
+        {
+            Console.WriteLine("");
+
+            string testName = (new StackTrace()).GetFrame(1).GetMethod().Name;
+            testName = testName != null ? testName : "";
+
+            if (result != null)
+            {
+                Console.WriteLine(testName + " executed successfully");
+
+                if (result.GetType() == typeof(MemberResponseV4))
+                {
+                    var user = (MemberResponseV4)result;
+                    Console.WriteLine("Member: {0}", user.member_first_name + " " + user.member_last_name);
+                }
+                else if (result.GetType() == typeof(Route4MeManager.GetUsersResponse))
+                {
+                    var users = ((Route4MeManager.GetUsersResponse)result).results;
+
+                    foreach (var user in users)
+                    {
+                        Console.WriteLine("Member: {0}", user.member_first_name + " " + user.member_last_name);
+                    }
+                }
+                else if (result.GetType() == typeof(MemberResponse))
+                {
+                    var result2 = (MemberResponse)result;
+                    
+                    Console.WriteLine("status: " + result2.Status);
+                    Console.WriteLine("api_key: " + result2.ApiKey);
+                    Console.WriteLine("member_id: " + result2.MemberId);
+                    Console.WriteLine("---------------------------");
+                }
+                else
+                {
+                    Console.WriteLine(testName + ": unknown response type");
+                }
+            }
+            else
+            {
+                Console.WriteLine("{0} error: {1}", testName, errorString);
+            }
+        }
+
+        private void RemoveTestUsers()
+        {
+            var route4Me = new Route4MeManager(ActualApiKey);
+
+            // Run the query
+            if (usersToRemove == null || usersToRemove.Count < 1) return;
+
+            foreach (var userId in usersToRemove)
+            {
+                var @params = new MemberParametersV4 { member_id = Convert.ToInt32(userId) };
+
+                bool result = route4Me.UserDelete(@params, out string errorString);
+
+                Console.WriteLine(
+                    result 
+                    ? String.Format("The user {0} removed successfully.", userId) 
+                    : String.Format("Cannot remove the user {0}.", userId)
+                );
+            }
+
+            
         }
 
         #endregion
