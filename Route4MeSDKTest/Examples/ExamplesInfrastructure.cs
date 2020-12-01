@@ -67,6 +67,8 @@ namespace Route4MeSDK.Examples
         List<string> usersToRemove = new List<string>();
         MemberResponseV4 lastCreatedUser;
 
+        List<string> vehiclesToRemove = new List<string>();
+
         #region Optimizations, Routes, Destinations
 
         private void PrintExampleRouteResult(object dataObjectRoute, string errorString)
@@ -1690,8 +1692,139 @@ namespace Route4MeSDK.Examples
                     : String.Format("Cannot remove the user {0}.", userId)
                 );
             }
+        }
 
-            
+        #endregion
+
+        #region Vehicles
+
+        private void CreateTestVehcile()
+        {
+            var route4Me = new Route4MeManager(ActualApiKey);
+
+            var class6TruckParams = new VehicleV4Parameters()
+            {
+                VehicleName = "GMC TopKick C5500",
+                VehicleAlias = "GMC TopKick C5500",
+                VehicleVin = "SAJXA01A06FN08012",
+                VehicleLicensePlate = "CVH4561",
+                VehicleModel = "TopKick C5500",
+                VehicleModelYear = 1995,
+                VehicleYearAcquired = 2008,
+                VehicleRegCountryId = 223,
+                VehicleMake = "GMC",
+                VehicleTypeID = "pickup_truck",
+                VehicleAxleCount = 2,
+                MpgCity = 7,
+                MpgHighway = 14,
+                FuelType = "diesel",
+                HeightInches = 97,
+                HeightMetric = 243,
+                WeightLb = 19000,
+                MaxWeightPerAxleGroupInPounds = 9500,
+                MaxWeightPerAxleGroupMetric = 4300,
+                WidthInInches = 96,
+                WidthMetric = 240,
+                LengthInInches = 244,
+                LengthMetric = 610,
+                Use53FootTrailerRouting = "NO",
+                UseTruckRestrictions = "NO",
+                DividedHighwayAvoidPreference = "NEUTRAL",
+                FreewayAvoidPreference = "NEUTRAL",
+                TruckConfig = "FULLSIZEVAN"
+            };
+
+            var result = route4Me.CreateVehicle(class6TruckParams, out string errorString);
+
+            if (result!=null && result.GetType()==typeof(VehicleV4CreateResponse))
+            {
+                Console.WriteLine("The test vehicle {0} created successfully.", result.VehicleGuid);
+
+                vehiclesToRemove.Add(result.VehicleGuid);
+            }
+            else
+            {
+                Console.WriteLine("Cannot create a test vehicle");
+            }
+        }
+
+        private void PrintTestVehciles(object result, string errorString)
+        {
+            Console.WriteLine("");
+
+            string testName = (new StackTrace()).GetFrame(1).GetMethod().Name;
+            testName = testName != null ? testName : "";
+
+            if (result != null)
+            {
+                Console.WriteLine(testName + " executed successfully");
+
+                if (result.GetType() == typeof(VehicleV4CreateResponse))
+                {
+                    var vehicle = (VehicleV4CreateResponse)result;
+
+                    Console.WriteLine(
+                        "Vehicle ID: {0}, Status: {1}", 
+                        vehicle.VehicleGuid , 
+                        vehicle.status
+                    );
+                }
+                else if (result.GetType() == typeof(VehiclesPaginated))
+                {
+                    var vehicles = ((VehiclesPaginated)result).Data;
+
+                    foreach (var vehicle in vehicles)
+                    {
+                        Console.WriteLine(
+                        "Vehicle ID: {0}, Alias: {1}",
+                        vehicle.VehicleId,
+                        vehicle.VehicleAlias
+                        );
+                    }
+                }
+                else if (result.GetType() == typeof(VehicleV4Response))
+                {
+                    var vehicle = (VehicleV4Response)result;
+
+                    Console.WriteLine(
+                        "Vehicle ID: {0}, Alias: {1}",
+                        vehicle.VehicleId,
+                        vehicle.VehicleAlias
+                    );
+                }
+                else
+                {
+                    Console.WriteLine(testName + ": unknown response type");
+                }
+            }
+            else
+            {
+                Console.WriteLine("{0} error: {1}", testName, errorString);
+            }
+        }
+
+        private void RemoveTestVehicles()
+        {
+            var route4Me = new Route4MeManager(ActualApiKey);
+
+            // Run the query
+            if (vehiclesToRemove == null || vehiclesToRemove.Count < 1) return;
+
+            foreach (var vehicleId in vehiclesToRemove)
+            {
+                var vehicleParams = new VehicleV4Parameters()
+                {
+                    VehicleId = vehicleId
+                };
+
+                var result = route4Me.deleteVehicle(vehicleParams, out string errorString);
+
+                Console.WriteLine(
+                    (result!=null && result.GetType()==typeof(VehicleV4Response)) 
+                    ? String.Format("The vehicle {0} removed successfully.", vehicleId)
+                    : String.Format("Cannot remove the vehicle {0}.", vehicleId)
+                );
+            }
         }
 
         #endregion

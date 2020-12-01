@@ -20,6 +20,7 @@ namespace Route4MeSDK.Examples
                 MemberId = 1,
                 Format = "json"
             };
+
             // Run the query
             MemberResponse result = route4Me.ValidateSession(@params, out string errorString);
 

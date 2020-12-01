@@ -295,7 +295,11 @@
     <Compile Include="Examples\Users\UserAuthentication.cs" />
     <Compile Include="Examples\Users\UserRegistration.cs" />
     <Compile Include="Examples\Users\ValidateSession.cs" />
+    <Compile Include="Examples\Vehicles\CreatetVehicle.cs" />
+    <Compile Include="Examples\Vehicles\DeleteVehicle.cs" />
+    <Compile Include="Examples\Vehicles\GetVehicle.cs" />
     <Compile Include="Examples\Vehicles\GetVehicles.cs" />
+    <Compile Include="Examples\Vehicles\UpdateVehicle.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">

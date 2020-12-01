@@ -11157,9 +11157,7 @@ namespace Route4MeSDKUnitTest
 
             var route4Me = new Route4MeManager(c_ApiKey);
 
-            var parameters = new GenericParameters()
-            {
-            };
+            var parameters = new GenericParameters();
 
             var dispetcher = (new UsersGroup()).CreateUser("SUB_ACCOUNT_DISPATCHER", out string errorString);
             Assert.IsInstanceOfType(dispetcher, typeof(MemberResponseV4), "Cannot create dispetcher. "+errorString);
@@ -11632,10 +11630,13 @@ namespace Route4MeSDKUnitTest
             };
 
             // Run the query
-            string errorString = "";
-            var vehicles = route4Me.GetVehicles(vehicleParameters, out errorString);
+            var vehicles = route4Me.GetVehicles(vehicleParameters, out string errorString);
             
-            Assert.IsInstanceOfType(vehicles, typeof(VehiclesPaginated), "getVehiclesList failed... " + errorString);
+            Assert.IsInstanceOfType(
+                vehicles, 
+                typeof(VehiclesPaginated), 
+                "getVehiclesList failed. " + errorString
+            );
 
             return vehicles;
         }
@@ -11789,8 +11790,7 @@ namespace Route4MeSDKUnitTest
             };
 
             // Run the query
-            string errorString = "";
-            var vehicles = route4Me.GetVehicle(vehicleParameters, out errorString);
+            var vehicles = route4Me.GetVehicle(vehicleParameters, out string errorString);
             
             Assert.IsInstanceOfType(vehicles, typeof(VehicleV4Response), "getVehicleTest failed... " + errorString);
         }
@@ -11826,8 +11826,10 @@ namespace Route4MeSDKUnitTest
             };
 
             // Run the query
-            string errorString = "";
-            var vehicles = route4Me.updateVehicle(vehicleParams, lsVehicleIDs[lsVehicleIDs.Count - 1], out errorString);
+            var vehicles = route4Me.updateVehicle(
+                                        vehicleParams, 
+                                        lsVehicleIDs[lsVehicleIDs.Count - 1], 
+                                        out string errorString);
 
             Assert.IsInstanceOfType(vehicles, typeof(VehicleV4Response), "updateVehicleTest failed. " + errorString);
         }
@@ -11854,8 +11856,7 @@ namespace Route4MeSDKUnitTest
             };
 
             // Run the query
-            string errorString = "";
-            var vehicles = route4Me.deleteVehicle(vehicleParams, out errorString);
+            var vehicles = route4Me.deleteVehicle(vehicleParams, out string errorString);
 
             Assert.IsInstanceOfType(vehicles, typeof(VehicleV4Response), "updateVehicleTest failed... " + errorString);
 
