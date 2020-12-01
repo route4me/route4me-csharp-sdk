@@ -12,17 +12,16 @@ namespace Route4MeSDK.Examples
         public void ValidateSession()
         {
             // Create the manager with the api key
-            Route4MeManager route4Me = new Route4MeManager(ActualApiKey);
+            var route4Me = new Route4MeManager(ActualApiKey);
 
-            MemberParameters @params = new MemberParameters
+            var @params = new MemberParameters
             {
                 SessionGuid = "ad9001f33ed6875b5f0e75bce52cbc34",
                 MemberId = 1,
                 Format = "json"
             };
             // Run the query
-            string errorString = "";
-            MemberResponse result = route4Me.ValidateSession(@params, out errorString);
+            MemberResponse result = route4Me.ValidateSession(@params, out string errorString);
 
             Console.WriteLine("");
 

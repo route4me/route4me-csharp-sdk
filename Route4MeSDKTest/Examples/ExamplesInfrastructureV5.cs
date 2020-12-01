@@ -58,28 +58,6 @@ namespace Route4MeSDK.Examples
             else
             {
                 PrintFailResponse(resultResponse, testName);
-
-                //Console.WriteLine("GetTeamMembers failed:");
-                //Console.WriteLine("Status: {0}", resultResponse?.Status.ToString() ?? "");
-                //Console.WriteLine("Status code: {0}", resultResponse?.Code.ToString() ?? "");
-                //Console.WriteLine("Exit code: {0}", resultResponse?.ExitCode.ToString() ?? "");
-
-                //if ((resultResponse?.Messages?.Count ?? 0)>0)
-                //{
-                //    foreach (var message in resultResponse.Messages)
-                //    {
-                //        if (message.Key!=null && (message.Value?.Length ?? 0)>0)
-                //        {
-                //            Console.WriteLine("");
-                //            Console.WriteLine((message.Key ?? "") + ":");
-
-                //            foreach (var msg in message.Value)
-                //            {
-                //                Console.WriteLine("    " + msg);
-                //            }
-                //        }
-                //    }
-                //}
             }
         }
 
@@ -143,7 +121,6 @@ namespace Route4MeSDK.Examples
 
             return ownerMemberId;
         }
-
 
         private void CreateTestTeamMember()
         {

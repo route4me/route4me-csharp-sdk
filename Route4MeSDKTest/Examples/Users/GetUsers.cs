@@ -1,39 +1,23 @@
-﻿using Route4MeSDK.DataTypes;
-using Route4MeSDK.QueryTypes;
-using System;
+﻿using Route4MeSDK.QueryTypes;
 
 namespace Route4MeSDK.Examples
 {
-  public sealed partial class Route4MeExamples
-  {
-    public void GetUsers()
+    public sealed partial class Route4MeExamples
     {
-      // Create the manager with the api key
-      Route4MeManager route4Me = new Route4MeManager(ActualApiKey);
-
-      GenericParameters parameters = new GenericParameters()
-      {
-      };
-
-      // Run the query
-      string errorString;
-      Route4MeManager.GetUsersResponse dataObjects = route4Me.GetUsers(parameters, out errorString);
-
-      Console.WriteLine("");
-
-      if (dataObjects != null)
-      {
-        if (dataObjects.results != null)
+        /// <summary>
+        /// The example refers to the process of getting the existing sub-users.
+        /// </summary>
+        public void GetUsers()
         {
-            Console.WriteLine("GetUsers executed successfully, {0} users returned", dataObjects.results.Length);
-            Console.WriteLine("");
-        } else Console.WriteLine("GetUsers error: {0}", errorString);
+            // Create the manager with the api key
+            var route4Me = new Route4MeManager(ActualApiKey);
 
-            }
-      else
-      {
-        Console.WriteLine("GetUsers error: {0}", errorString);
-      }
+            var parameters = new GenericParameters();
+
+            // Run the query
+            Route4MeManager.GetUsersResponse dataObjects = route4Me.GetUsers(parameters, out string errorString);
+
+            PrintTestUsers(dataObjects, errorString);
+        }
     }
-  }
 }

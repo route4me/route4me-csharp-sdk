@@ -12,27 +12,20 @@ namespace Route4MeSDK.Examples
         public void GetUserById()
         {
             // Create the manager with the api key
-            Route4MeManager route4Me = new Route4MeManager(ActualApiKey);
+            var route4Me = new Route4MeManager(ActualApiKey);
 
-            MemberParametersV4 @params = new MemberParametersV4 { member_id = 45844 };
+            CreateTestUser();
+
+            int memberId = Convert.ToInt32(usersToRemove[usersToRemove.Count - 1]);
+
+            var @params = new MemberParametersV4 { member_id = memberId };
 
             // Run the query
-            string errorString = "";
-            MemberResponseV4 result = route4Me.GetUserById(@params, out errorString);
+            MemberResponseV4 result = route4Me.GetUserById(@params, out string errorString);
 
-            Console.WriteLine("");
+            PrintTestUsers(result, errorString);
 
-            if (result != null)
-            {
-                Console.WriteLine("GetUserById executed successfully");
-                Console.WriteLine("User: " + result.member_first_name + " " + result.member_last_name);
-                Console.WriteLine("member_id: " + result.member_id);
-                Console.WriteLine("---------------------------");
-            }
-            else
-            {
-                Console.WriteLine("GetUserById error: {0}", errorString);
-            }
+            RemoveTestUsers();
         }
     }
 }

@@ -24,7 +24,7 @@ namespace Route4MeSDKTest
             // "api4" - execute all the examples related to the API 4 
             // "api5" - execute all the examples related to the API 5 
             // a method name - execute a specifed example method (e.g. "GetTeamMemberById")
-            string executeOption = "TrackDeviceLastLocationHistory";
+            string executeOption = "AddEditCustomDataToUser";
 
             if (executeOption.ToLower() == "api4")
             {
@@ -287,13 +287,15 @@ namespace Route4MeSDKTest
 
                 #region ==== Users ====
 
-                examples.ValidateSession();
-                examples.UserRegistration();
-                examples.UserAuthentication();
-                examples.UpdateUser();
-                examples.GetUserById();
-                examples.DeleteUser();
+                examples.AddEditCustomDataToUser();
                 examples.CreateUser();
+                examples.DeleteUser();
+                examples.GetUserById();
+                examples.GetUsers();
+                examples.UpdateUser();
+                examples.UserAuthentication();
+                examples.UserRegistration();
+                examples.ValidateSession();
 
                 #endregion
 
