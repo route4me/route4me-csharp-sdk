@@ -3436,6 +3436,7 @@ namespace Route4MeSDK
         #endregion
 
         #region Vehicles
+
         /// <summary>
         /// Creates a vehicle
         /// </summary>
@@ -3460,9 +3461,11 @@ namespace Route4MeSDK
         /// <returns> The VehiclesPaginated type object containing an array of the vehicles</returns>
         public VehiclesPaginated GetVehicles(VehicleParameters vehParams, out string errorString)
 		{
-            return GetJsonObjectFromAPI<VehiclesPaginated>(vehParams, R4MEInfrastructureSettings.Vehicle_V4,
-															                       HttpMethodType.Get,
-															                       out errorString);
+            return GetJsonObjectFromAPI<VehiclesPaginated>(
+                                                vehParams, 
+                                                R4MEInfrastructureSettings.Vehicle_V4,
+				                                HttpMethodType.Get,
+				                                out errorString);
 		}
 
         /// <summary>
@@ -3522,20 +3525,6 @@ namespace Route4MeSDK
             return GetJsonObjectFromAPI<VehicleV4Response>(vehParams, 
                             R4MEInfrastructureSettings.Vehicle_V4 + "/" + vehParams.VehicleId, 
 							HttpMethodType.Delete,
-							out errorString);
-		}
-
-        /// <summary>
-        /// Removes a vehicle from a user's account
-        /// </summary>
-        /// <param name="vehParams">The VehicleParameters type object as the query parameters containing parameter VehicleId</param>
-        /// <param name="errorString"> out: Error as string </param>
-        /// <returns>The removed vehicle</returns>
-		public VehicleV4Response deleteVehicle(VehicleParameters vehParams, out string errorString)
-		{
-            return GetJsonObjectFromAPI<VehicleV4Response>(vehParams, 
-                            R4MEInfrastructureSettings.Vehicle_V4,
-							HttpMethodType.Get,
 							out errorString);
 		}
 

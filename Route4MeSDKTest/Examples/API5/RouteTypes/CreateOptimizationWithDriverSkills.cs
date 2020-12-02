@@ -237,7 +237,7 @@ namespace Route4MeSDK.Examples
             var parameters = new RouteParameters()
             {
                 //specify capacitated vehicle routing with time windows and multiple depots, with multiple drivers
-                AlgorithmType = AlgorithmType.CVRP_TW_MD,
+                AlgorithmType = AlgorithmType.ADVANCED_CVRP_TW,
 
                 //set an arbitrary route name
                 //this value shows up in the website, and all the connected mobile device
@@ -263,10 +263,10 @@ namespace Route4MeSDK.Examples
                 {
                     new DataTypes.V5.RouteAdvancedConstraints()
                     {
-                        AvailableTimeWindows = new Tuple<int, int>[]
+                        AvailableTimeWindows = new List<int[]>()
                                         {
-                                            Tuple.Create(25200,39600),
-                                            Tuple.Create(57600,61200)
+                                            new int[] { 25200,39600 },
+                                            new int[] {57600,61200 }
                                         },
                         MaximumCapacity = 30,
                         MaximumCargoVolume = 15,
