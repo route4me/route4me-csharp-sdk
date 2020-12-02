@@ -1,6 +1,7 @@
 ﻿using System.Runtime.Serialization;
 using System;
 using Route4MeSDK.QueryTypes;
+using System.Collections.Generic;
 
 namespace Route4MeSDK.DataTypes.V5
 {
@@ -30,7 +31,7 @@ namespace Route4MeSDK.DataTypes.V5
         /// An array of the available time windows (e.g. [ [25200, 75000 ] )
         /// </summary>
         [DataMember(Name = "available_time_windows", EmitDefaultValue = false)]
-        public Tuple<int,int>[] AvailableTimeWindows { get; set; }
+        public List<int[]> AvailableTimeWindows { get; set; }
 
         /// <summary>
         /// The driver tags specified in a team member's custom data.

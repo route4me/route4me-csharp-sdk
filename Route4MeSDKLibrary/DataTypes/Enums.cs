@@ -17,13 +17,15 @@ namespace Route4MeSDK.DataTypes
     /// </summary>
     public enum AlgorithmType
     {
+        STATE_NEW = 0,
         TSP = 1,
         VRP = 2,
         CVRP_TW_SD = 3,
         CVRP_TW_MD = 4,
         TSP_TW = 5,
         TSP_TW_CR = 6,
-        BBCVRP = 7,
+        OPTIMIZATION_STATE_IN_QUEUE = 7,
+        ADVANCED_CVRP_TW = 9,
         ALG_NONE = 100,
         ALG_LEGACY_DISTRIBUTED = 101
     }
