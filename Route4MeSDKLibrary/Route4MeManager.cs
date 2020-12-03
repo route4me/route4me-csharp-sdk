@@ -3875,9 +3875,7 @@ namespace Route4MeSDK
 			}
 			catch (HttpListenerException e)
 			{
-				errorMessage = e is AggregateException ? e.InnerException.Message : e.Message;
-
-				errorMessage = e.Message + " --- " + errorMessage;
+				errorMessage = e.Message;
 				result = null;
 			}
 			catch (Exception e)

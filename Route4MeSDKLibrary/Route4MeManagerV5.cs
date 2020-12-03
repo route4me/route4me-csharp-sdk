@@ -740,7 +740,9 @@ namespace Route4MeSDK
 
                 if ((e.InnerException?.Message ?? null) != null)
                 {
-                    if (resultResponse.Messages == null) new Dictionary<string, string[]>();
+                    if (resultResponse.Messages == null)  
+                        resultResponse.Messages = new Dictionary<string, string[]>();
+
                     resultResponse.Messages.Add("Error", new string[] { e.InnerException.Message });
                 }
 
@@ -763,7 +765,9 @@ namespace Route4MeSDK
 
                 if ((e.InnerException?.Message ?? null) != null)
                 {
-                    if (resultResponse.Messages == null) new Dictionary<string, string[]>();
+                    if (resultResponse.Messages == null) 
+                        resultResponse.Messages = new Dictionary<string, string[]>();
+                    
                     resultResponse.Messages.Add("InnerException Error", new string[] { e.InnerException.Message });
                 }
 
@@ -1005,7 +1009,9 @@ namespace Route4MeSDK
 
                 if ((e.InnerException?.Message ?? null) != null)
                 {
-                    if (resultResponse.Messages == null) new Dictionary<string, string[]>();
+                    if (resultResponse.Messages == null) 
+                        resultResponse.Messages = new Dictionary<string, string[]>();
+
                     resultResponse.Messages.Add("Error", new string[] { e.InnerException.Message });
                 }
 

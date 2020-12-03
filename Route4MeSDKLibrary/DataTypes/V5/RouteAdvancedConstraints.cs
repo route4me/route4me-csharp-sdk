@@ -1,6 +1,4 @@
 ﻿using System.Runtime.Serialization;
-using System;
-using Route4MeSDK.QueryTypes;
 using System.Collections.Generic;
 
 namespace Route4MeSDK.DataTypes.V5
