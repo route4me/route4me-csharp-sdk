@@ -46,18 +46,12 @@ namespace Route4MeSDK.Examples
                         TimeWindowEnd   = 30529},
 
         new Address() { AddressString   = "512 Florida Pl, Barberton, OH 44203",
+                        IsDepot         = true,
                         Latitude        = 41.003671512008,
                         Longitude       = -81.598461046815,
                         Time            = 300,
                         TimeWindowStart = 30529,
                         TimeWindowEnd   = 33779},
-
-        new Address() { AddressString   = "512 Florida Pl, Barberton, OH 44203",
-                        Latitude        = 41.003671512008,
-                        Longitude       = -81.598461046815,
-                        Time            = 100,
-                        TimeWindowStart = 33779,
-                        TimeWindowEnd   = 33944},
 
         new Address() { AddressString   = "3495 Purdue St, Cuyahoga Falls, OH 44221",
                         Latitude        = 41.162971496582,
@@ -93,13 +87,6 @@ namespace Route4MeSDK.Examples
                         Time            = 300,
                         TimeWindowStart = 41617,
                         TimeWindowEnd   = 43660},
-
-        new Address() { AddressString   = "367 Cathy Dr, Munroe Falls, OH 44262",
-                        Latitude        = 41.148578643799,
-                        Longitude       = -81.429229736328,
-                        Time            = 300,
-                        TimeWindowStart = 43660,
-                        TimeWindowEnd   = 46392},
 
         new Address() { AddressString   = "512 Florida Pl, Barberton, OH 44203",
                         Latitude        = 41.003671512008,
@@ -163,14 +150,14 @@ namespace Route4MeSDK.Examples
 
                 //the maximum duration of a route
                 RouteMaxDuration = 86400,
-                VehicleCapacity = 1,
+                VehicleCapacity = 5,
                 VehicleMaxDistanceMI = 10000,
 
                 Optimize = Optimize.Distance.Description(),
                 DistanceUnit = DistanceUnit.MI.Description(),
                 DeviceType = DeviceType.Web.Description(),
                 TravelMode = TravelMode.Driving.Description(),
-                Metric = Metric.Geodesic
+                Metric = Metric.Matrix
             };
 
             var optimizationParameters = new OptimizationParameters()

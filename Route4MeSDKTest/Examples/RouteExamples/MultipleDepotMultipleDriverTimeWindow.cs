@@ -93,6 +93,7 @@ namespace Route4MeSDK.Examples
                         TimeWindowEnd   = 47353 },
 
         new Address() { AddressString   = "7305 ROYAL WOODS DR, Louisville, KY, 40214",
+                        IsDepot         = true,
                         Latitude        = 38.162472,
                         Longitude       = -85.792854,
                         Time            = 300,

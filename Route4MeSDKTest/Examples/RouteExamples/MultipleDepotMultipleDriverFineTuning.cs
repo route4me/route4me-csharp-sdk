@@ -36,13 +36,7 @@ namespace Route4MeSDK.Examples
                                 TimeWindowEnd   = 30529 },
 
                 new Address() { AddressString   = "512 Florida Pl, Barberton, OH 44203",
-                                Latitude        = 41.003671512008,
-                                Longitude       = -81.598461046815,
-                                Time            = 300,
-                                TimeWindowStart = 30529,
-                                TimeWindowEnd   = 33479 },
-
-                new Address() { AddressString   = "512 Florida Pl, Barberton, OH 44203",
+                                IsDepot         = true,
                                 Latitude        = 41.003671512008,
                                 Longitude       = -81.598461046815,
                                 Time            = 300,
