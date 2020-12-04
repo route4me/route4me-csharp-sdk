@@ -10,38 +10,33 @@ namespace Route4MeSDK.Examples
         /// Merge two routes in one.
         /// </summary>
         /// <param name="mergeRoutesParameters">MergeRoutesQuery type parameters</param>
-        public void MergeRoutes(MergeRoutesQuery mergeRoutesParameters = null)
+        public void MergeRoutes()
         {
             // Create the manager with the api key
             var route4Me = new Route4MeManager(ActualApiKey);
 
-            bool isInnerExample = mergeRoutesParameters == null ? true : false;
-
-            if (isInnerExample)
+            RunOptimizationSingleDriverRoute10Stops();
+            OptimizationsToRemove = new List<string>()
             {
-                RunOptimizationSingleDriverRoute10Stops();
-                OptimizationsToRemove = new List<string>()
-                {
-                    SD10Stops_optimization_problem_id
-                };
+                SD10Stops_optimization_problem_id
+            };
 
-                RunSingleDriverRoundTrip();
-                OptimizationsToRemove.Add(SDRT_optimization_problem_id);
+            RunSingleDriverRoundTrip();
+            OptimizationsToRemove.Add(SDRT_optimization_problem_id);
 
-                mergeRoutesParameters = new MergeRoutesQuery()
-                {
-                    RouteIds = SD10Stops_route_id+","+ SDRT_route_id,
-                    ToRouteId = SD10Stops_route_id,
-                    DepotAddress = SD10Stops_route.Addresses[0].AddressString,
-                    RouteDestinationId = SD10Stops_route
-                                            .Addresses[0]
-                                            .RouteDestinationId
-                                            .ToString(),
-                    DepotLat = SD10Stops_route.Addresses[0].Latitude,
-                    DepotLng = SD10Stops_route.Addresses[0].Longitude,
-                    RemoveOrigin = false
-                };
-            }
+            var mergeRoutesParameters = new MergeRoutesQuery()
+            {
+                RouteIds = SD10Stops_route_id+","+ SDRT_route_id,
+                ToRouteId = SD10Stops_route_id,
+                DepotAddress = SD10Stops_route.Addresses[0].AddressString,
+                RouteDestinationId = SD10Stops_route
+                                        .Addresses[0]
+                                        .RouteDestinationId
+                                        .ToString(),
+                DepotLat = SD10Stops_route.Addresses[0].Latitude,
+                DepotLng = SD10Stops_route.Addresses[0].Longitude,
+                RemoveOrigin = false
+            };
 
             // Run the query
             bool result = route4Me.MergeRoutes(
