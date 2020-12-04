@@ -153,14 +153,14 @@ namespace Route4MeSDK.Examples
 
                 //the maximum duration of a route
                 RouteMaxDuration = 86400,
-                VehicleCapacity = 1,
+                VehicleCapacity = 5,
                 VehicleMaxDistanceMI = 10000,
 
                 Optimize = Optimize.Distance.Description(),
                 DistanceUnit = DistanceUnit.MI.Description(),
                 DeviceType = DeviceType.Web.Description(),
                 TravelMode = TravelMode.Driving.Description(),
-                Metric = Metric.Geodesic
+                Metric = Metric.Matrix
             };
 
             var optimizationParameters = new OptimizationParameters()
