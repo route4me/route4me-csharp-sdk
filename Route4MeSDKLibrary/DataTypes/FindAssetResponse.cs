@@ -22,10 +22,22 @@ namespace Route4MeSDK.DataTypes
         public string LargeLogoUri { get; set; }
 
         /// <summary>
+        /// A link to a large logo (2x)
+        /// </summary>
+        [DataMember(Name = "large_logo_uri_2x")]
+        public string LargeLogoUri2x { get; set; }
+
+        /// <summary>
         /// A link to a mobile logo
         /// </summary>
         [DataMember(Name = "mobile_logo_uri")]
         public string MobileLogoUri { get; set; }
+
+        /// <summary>
+        /// A link to a mobile logo (2x)
+        /// </summary>
+        [DataMember(Name = "mobile_logo_uri_2x")]
+        public string MobileLogoUri2x { get; set; }
 
         /// <summary>
         /// The asset color on a map
@@ -68,6 +80,9 @@ namespace Route4MeSDK.DataTypes
         /// </summary>
         [DataMember(Name = "customer_service_phone")]
         public string CustomerServicePhone { get; set; }
+
+        [DataMember(Name = "hide_covid19_warning")]
+        public string HideCovid19Warning { get; set; }
 
         /// <summary>
         /// Driver name

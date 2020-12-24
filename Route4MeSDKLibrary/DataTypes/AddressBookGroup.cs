@@ -45,5 +45,11 @@ namespace Route4MeSDK.DataTypes
         /// </summary>
         [DataMember(Name = "filter", EmitDefaultValue = false)]
         public AddressBookGroupFilter Filter { get; set; }
+
+        /// <summary>
+        /// If true, the address book group is valid.
+        /// </summary>
+        [DataMember(Name = "valid", EmitDefaultValue = false)]
+        public bool? Valid { get; set; }
     }
 }

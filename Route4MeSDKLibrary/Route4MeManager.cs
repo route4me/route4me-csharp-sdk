@@ -776,7 +776,11 @@ namespace Route4MeSDK
 				Optimize = roParames["optimize"]
 			};
 
-			var response = GetJsonObjectFromAPI<StatusResponse>(request, R4MEInfrastructureSettings.RouteReoptimize, HttpMethodType.Get, out errorString);
+			var response = GetJsonObjectFromAPI<StatusResponse>(
+                request, 
+                R4MEInfrastructureSettings.RouteReoptimize, 
+                HttpMethodType.Get, 
+                out errorString);
 
 			return (response != null && response.status) ? true : false;
 		}
@@ -1046,18 +1050,21 @@ namespace Route4MeSDK
 		/// If query was without error, but nothing was found, returns null.
 		/// If query failed, return error string.
 		/// </returns>
-		public object GetDeviceLocationHistory(GPSParameters gpsParameters, out string errorString)
+		public DeviceLocationHistoryResponse GetDeviceLocationHistory(GPSParameters gpsParameters, out string errorString)
 		{
-			var result = GetJsonObjectFromAPI<GetDeviceLocationHistoryResponse>(gpsParameters,
+			var result = GetJsonObjectFromAPI<DeviceLocationHistoryResponse>(gpsParameters,
 													R4MEInfrastructureSettings.DeviceLocation,
 													HttpMethodType.Get,
-													false,
+                                                    false,
 													out errorString);
 
-            var dataLength = ((GetDeviceLocationHistoryResponse)result).data.Length;
+            //var dataLength = ((DeviceLocationHistoryResponse)result).data.Length;
 
-            return (result == null && errorString != "") ? errorString 
-                : ((dataLength == 0) ? null : (object)result);
+            return (result == null && errorString != "") 
+                ? null 
+                : ((((DeviceLocationHistoryResponse)result).data.Length == 0) 
+                    ? null 
+                    : (DeviceLocationHistoryResponse)result);
 		}
 
         /// <summary>
@@ -1185,7 +1192,11 @@ namespace Route4MeSDK
         /// <returns>True if a member was successfuly removed from the user's account</returns>
 		public bool UserDelete(MemberParametersV4 memParams, out string errorString)
 		{
-			var response = GetJsonObjectFromAPI<StatusResponse>(memParams, R4MEInfrastructureSettings.GetUsersHost, HttpMethodType.Delete, out errorString);
+			var response = GetJsonObjectFromAPI<StatusResponse>(
+                memParams, 
+                R4MEInfrastructureSettings.GetUsersHost,
+                HttpMethodType.Delete, 
+                out errorString);
 
             return (response == null) ? false : ((response.status) ? true : false);
 		}
@@ -1198,7 +1209,11 @@ namespace Route4MeSDK
         /// <returns>An object of the type MemberResponseV4</returns>
 		public MemberResponseV4 GetUserById(MemberParametersV4 memParams, out string errorString)
 		{
-            return GetJsonObjectFromAPI<MemberResponseV4>(memParams, R4MEInfrastructureSettings.GetUsersHost, HttpMethodType.Get, out errorString);
+            return GetJsonObjectFromAPI<MemberResponseV4>(
+                memParams, 
+                R4MEInfrastructureSettings.GetUsersHost, 
+                HttpMethodType.Get, 
+                out errorString);
 		}
 
         /// <summary>
@@ -1236,8 +1251,12 @@ namespace Route4MeSDK
 
             using (HttpContent httpContent = new FormUrlEncodedContent(keyValues))
             {
-                return GetJsonObjectFromAPI<MemberResponse>(roParams, R4MEInfrastructureSettings.UserAuthentication,
-                    HttpMethodType.Post, httpContent, out errorString);
+                return GetJsonObjectFromAPI<MemberResponse>(
+                    roParams, 
+                    R4MEInfrastructureSettings.UserAuthentication,
+                    HttpMethodType.Post, 
+                    httpContent, 
+                    out errorString);
             };
         }
 
@@ -1309,7 +1328,12 @@ namespace Route4MeSDK
 				Format = memParams.Format
 			};
 
-            return GetJsonObjectFromAPI<MemberResponse>(request, R4MEInfrastructureSettings.ValidateSession, HttpMethodType.Get, false, out errorString);
+            return GetJsonObjectFromAPI<MemberResponse>(
+                request, 
+                R4MEInfrastructureSettings.ValidateSession, 
+                HttpMethodType.Get, 
+                false, 
+                out errorString);
 		}
 
         /// <summary>
@@ -1805,7 +1829,7 @@ namespace Route4MeSDK
 		/// <param name="activityParameters">Query parameters</param>
 		/// <param name="errorString">Error string</param>
 		/// <returns>An array of the activities.</returns>
-        public Activity[] GetActiviies(ActivityParameters activityParameters, out string errorString)
+        public Activity[] GetActivities(ActivityParameters activityParameters, out string errorString)
         {
             var response = GetJsonObjectFromAPI<GetActivitiesResponse>(activityParameters,
                                             R4MEInfrastructureSettings.GetActivitiesHost,
@@ -2137,7 +2161,7 @@ namespace Route4MeSDK
 		}
 
         /// <summary>
-        /// Marks an address as deaprted.
+        /// Marks an address as departed.
         /// </summary>
         /// <param name="aParams">An AddressParameters type object as the input parameters</param>
         /// <param name="errorString">out: Error as string</param>
@@ -2199,7 +2223,11 @@ namespace Route4MeSDK
 				IsVisited = aParams.IsVisited
 			};
 
-            return GetJsonObjectFromAPI<Address>(request, R4MEInfrastructureSettings.GetAddress, HttpMethodType.Put, out errorString);
+            return GetJsonObjectFromAPI<Address>(
+                request, 
+                R4MEInfrastructureSettings.GetAddress, 
+                HttpMethodType.Put, 
+                out errorString);
 		}
 
         /// <summary>
@@ -2217,7 +2245,11 @@ namespace Route4MeSDK
 				IsDeparted = aParams.IsDeparted
 			};
 
-            return GetJsonObjectFromAPI<Address>(request, R4MEInfrastructureSettings.GetAddress, HttpMethodType.Put, out errorString);
+            return GetJsonObjectFromAPI<Address>(
+                request, 
+                R4MEInfrastructureSettings.GetAddress, 
+                HttpMethodType.Put, 
+                out errorString);
 		}
 
 		#endregion

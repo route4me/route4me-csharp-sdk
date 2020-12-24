@@ -98,6 +98,25 @@ namespace Route4MeSDK.DataTypes
         public double? RouteCost { get; set; }
 
         /// <summary>
+        /// Route weight
+        /// </summary>
+        [DataMember(Name = "route_weight", EmitDefaultValue = false)]
+        [ReadOnly(true)]
+        public double? RouteWeight { get; set; }
+
+        /// <summary>
+        /// Route total cubic volume of the carried cargo (vehicle capacity)
+        /// </summary>
+        [DataMember(Name = "route_cube", EmitDefaultValue = false)]
+        public double? RouteCube { get; set; }
+
+        /// <summary>
+        /// The total number of route pieces (vehicle pieces).
+        /// </summary>
+        [DataMember(Name = "route_pieces", EmitDefaultValue = false)]
+        public int? RoutePieces { get; set; }
+
+        /// <summary>
         /// Total route revenue
         /// </summary>
         [DataMember(Name = "route_revenue", EmitDefaultValue = false)]

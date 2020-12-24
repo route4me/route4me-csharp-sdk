@@ -578,6 +578,18 @@ namespace Route4MeSDK.DataTypes
         /// </summary>
         [DataMember(Name = "time", EmitDefaultValue = false), CustomValidation(typeof(PropertyValidation), "ValidateEpochTime")]
         public long? Time { get; set; }
+
+        /// <summary>
+        /// Route address stop type
+        /// </summary>
+        [DataMember(Name = "address_stop_type")]
+        public string AddressStopType { get; set; }
+
+        /// <summary>
+        /// The address group
+        /// </summary>
+        [DataMember(Name = "group", EmitDefaultValue = false)]
+        public string Group { get; set; }
     }
 
     /// <summary>

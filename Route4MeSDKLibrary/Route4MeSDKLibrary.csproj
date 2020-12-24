@@ -150,6 +150,7 @@
     <Compile Include="DataTypes\MemberResponseV4.cs" />
     <Compile Include="DataTypes\V5\DriverReview.cs" />
     <Compile Include="DataTypes\V5\Enums.cs" />
+    <Compile Include="DataTypes\V5\OrderInventory.cs" />
     <Compile Include="DataTypes\V5\ResultResponse.cs" />
     <Compile Include="DataTypes\V5\RouteAdvancedConstraints.cs" />
     <Compile Include="DataTypes\V5\TeamResponse.cs" />

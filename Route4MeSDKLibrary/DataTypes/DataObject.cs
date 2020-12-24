@@ -17,6 +17,12 @@ namespace Route4MeSDK.DataTypes
         public OptimizationState State { get; set; }
 
         /// <summary>
+        /// Smart optimization ID
+        /// </summary>
+        [DataMember(Name = "smart_optimization_id")]
+        public string SmartOptimizationId { get; set; }
+
+        /// <summary>
         /// An array of the user errors
         /// </summary>
         [DataMember(Name = "user_errors")]

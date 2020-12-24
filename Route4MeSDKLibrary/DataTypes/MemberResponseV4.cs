@@ -195,5 +195,11 @@ namespace Route4MeSDK.DataTypes
             }
         }
         private Dictionary<string, string> _custom_data;
+
+        /// <summary>
+        /// User API key.
+        /// </summary>
+        [DataMember(Name = "api_key")]
+        public string ApiKey { get; set; }
     }
 }

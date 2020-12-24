@@ -160,7 +160,8 @@ namespace Route4MeSDKUnitTest
 
             var routeParameters = new RouteParametersQuery()
             {
-                RouteId = routeId
+                RouteId = routeId,
+                Directions = true
             };
 
             routeParameters.Directions = true;
@@ -4676,7 +4677,7 @@ namespace Route4MeSDKUnitTest
             var parameters = new RouteParameters()
             {
                 AlgorithmType = AlgorithmType.CVRP_TW_SD,
-                RouteName = "Trucking SD Multiple TW 09-02-2018 from c# SDK " + DateTime.Now.ToString("yymMddHHmmss"),
+                RouteName = "Trucking SD Multiple TW from c# SDK " + DateTime.Now.ToString("yymMddHHmmss"),
                 OptimizationQuality = 3,
                 DeviceType = DeviceType.Web.Description(),
                 DistanceUnit = DistanceUnit.MI.Description(),
@@ -9586,9 +9587,7 @@ namespace Route4MeSDKUnitTest
         {
             var route4Me = new Route4MeManager(c_ApiKey);
 
-            var territoryQuery = new AvoidanceZoneQuery()
-            {
-            };
+            var territoryQuery = new AvoidanceZoneQuery();
 
             // Run the query
              AvoidanceZone[] territories = route4Me.GetTerritories(territoryQuery, out string errorString);
@@ -10519,7 +10518,7 @@ namespace Route4MeSDKUnitTest
             };
 
             // Run the query
-            Activity[] activities = route4Me.GetActivityFeed(activityParameters, out string errorString);
+            Activity[] activities = route4Me.GetActivities(activityParameters, out string errorString);
 
             Assert.IsInstanceOfType(
                 activities, 
@@ -10539,7 +10538,7 @@ namespace Route4MeSDKUnitTest
             };
 
             // Run the query
-            Activity[] activities = route4Me.GetActivityFeed(activityParameters, out string errorString);
+            Activity[] activities = route4Me.GetActivities(activityParameters, out string errorString);
 
             Assert.IsInstanceOfType(
                 activities, 
@@ -10576,7 +10575,7 @@ namespace Route4MeSDKUnitTest
             };
 
             // Run the query
-            Activity[] activities = route4Me.GetActiviies(activityParameters, out string errorString);
+            Activity[] activities = route4Me.GetActivities(activityParameters, out string errorString);
 
             Assert.IsInstanceOfType(
                 activities, 
@@ -10607,7 +10606,7 @@ namespace Route4MeSDKUnitTest
             };
 
             // Run the query
-            Activity[] activities = route4Me.GetActivityFeed(activityParameters, out string errorString);
+            Activity[] activities = route4Me.GetActivities(activityParameters, out string errorString);
 
             foreach (Activity activity in activities)
             {
@@ -10628,7 +10627,7 @@ namespace Route4MeSDKUnitTest
             var activityParameters = new ActivityParameters { ActivityType = "area-updated" };
 
             // Run the query
-            Activity[] activities = route4Me.GetActivityFeed(activityParameters, out string errorString);
+            Activity[] activities = route4Me.GetActivities(activityParameters, out string errorString);
 
             Assert.IsInstanceOfType(
                 activities, 
@@ -10644,7 +10643,7 @@ namespace Route4MeSDKUnitTest
             var activityParameters = new ActivityParameters { ActivityType = "area-added" };
 
             // Run the query
-            Activity[] activities = route4Me.GetActivityFeed(activityParameters, out string errorString);
+            Activity[] activities = route4Me.GetActivities(activityParameters, out string errorString);
 
             Assert.IsInstanceOfType(
                 activities, 
@@ -10660,7 +10659,7 @@ namespace Route4MeSDKUnitTest
             var activityParameters = new ActivityParameters { ActivityType = "area-removed" };
 
             // Run the query
-            Activity[] activities = route4Me.GetActivityFeed(activityParameters, out string errorString);
+            Activity[] activities = route4Me.GetActivities(activityParameters, out string errorString);
 
             Assert.IsInstanceOfType(
                 activities, 
@@ -10676,11 +10675,11 @@ namespace Route4MeSDKUnitTest
             var activityParameters = new ActivityParameters
             {
                 ActivityType = "delete-destination",
-                RouteId = "5C15E83A4BE005BCD1537955D28D51D7"
+                //RouteId = "5C15E83A4BE005BCD1537955D28D51D7"
             };
 
             // Run the query
-            Activity[] activities = route4Me.GetActivityFeed(activityParameters, out string errorString);
+            Activity[] activities = route4Me.GetActivities(activityParameters, out string errorString);
 
             Assert.IsInstanceOfType(
                 activities, 
@@ -10696,11 +10695,11 @@ namespace Route4MeSDKUnitTest
             var activityParameters = new ActivityParameters
             {
                 ActivityType = "insert-destination",
-                RouteId = "87B8873BAEA4E09942C68E2C92A9C4B7"
+                //RouteId = "87B8873BAEA4E09942C68E2C92A9C4B7"
             };
 
             // Run the query
-            Activity[] activities = route4Me.GetActivityFeed(activityParameters, out string errorString);
+            Activity[] activities = route4Me.GetActivities(activityParameters, out string errorString);
 
             Assert.IsInstanceOfType(
                 activities, 
@@ -10716,11 +10715,11 @@ namespace Route4MeSDKUnitTest
             var activityParameters = new ActivityParameters
             {
                 ActivityType = "mark-destination-departed",
-                RouteId = "03CEF546324F727239ABA69EFF3766E1"
+                //RouteId = "03CEF546324F727239ABA69EFF3766E1"
             };
 
             // Run the query
-            Activity[] activities = route4Me.GetActivityFeed(activityParameters, out string errorString);
+            Activity[] activities = route4Me.GetActivities(activityParameters, out string errorString);
 
             Assert.IsInstanceOfType(
                 activities, 
@@ -10736,7 +10735,7 @@ namespace Route4MeSDKUnitTest
             var activityParameters = new ActivityParameters { ActivityType = "destination-out-sequence" };
 
             // Run the query
-            Activity[] activities = route4Me.GetActivityFeed(activityParameters, out string errorString);
+            Activity[] activities = route4Me.GetActivities(activityParameters, out string errorString);
 
             Assert.IsInstanceOfType(
                 activities, 
@@ -10752,7 +10751,7 @@ namespace Route4MeSDKUnitTest
             var activityParameters = new ActivityParameters { ActivityType = "update-destinations" };
 
             // Run the query
-            Activity[] activities = route4Me.GetActivityFeed(activityParameters, out string errorString);
+            Activity[] activities = route4Me.GetActivities(activityParameters, out string errorString);
 
             Assert.IsInstanceOfType(
                 activities, 
@@ -10768,7 +10767,7 @@ namespace Route4MeSDKUnitTest
             var activityParameters = new ActivityParameters { ActivityType = "driver-arrived-early" };
 
             // Run the query
-            Activity[] activities = route4Me.GetActivityFeed(activityParameters, out string errorString);
+            Activity[] activities = route4Me.GetActivities(activityParameters, out string errorString);
 
             Assert.IsInstanceOfType(
                 activities, 
@@ -10784,7 +10783,7 @@ namespace Route4MeSDKUnitTest
             var activityParameters = new ActivityParameters { ActivityType = "driver-arrived-late" };
 
             // Run the query
-            Activity[] activities = route4Me.GetActivityFeed(activityParameters, out string errorString);
+            Activity[] activities = route4Me.GetActivities(activityParameters, out string errorString);
 
             Assert.IsInstanceOfType(
                 activities, 
@@ -10800,7 +10799,7 @@ namespace Route4MeSDKUnitTest
             var activityParameters = new ActivityParameters { ActivityType = "driver-arrived-on-time" };
 
             // Run the query
-            Activity[] activities = route4Me.GetActivityFeed(activityParameters, out string errorString);
+            Activity[] activities = route4Me.GetActivities(activityParameters, out string errorString);
 
             Assert.IsInstanceOfType(
                 activities, 
@@ -10816,7 +10815,7 @@ namespace Route4MeSDKUnitTest
             var activityParameters = new ActivityParameters { ActivityType = "geofence-entered" };
 
             // Run the query
-            Activity[] activities = route4Me.GetActivityFeed(activityParameters, out string errorString);
+            Activity[] activities = route4Me.GetActivities(activityParameters, out string errorString);
 
             Assert.IsInstanceOfType(
                 activities, 
@@ -10832,7 +10831,7 @@ namespace Route4MeSDKUnitTest
             var activityParameters = new ActivityParameters { ActivityType = "geofence-left" };
 
             // Run the query
-            Activity[] activities = route4Me.GetActivityFeed(activityParameters, out string errorString);
+            Activity[] activities = route4Me.GetActivities(activityParameters, out string errorString);
 
             Assert.IsInstanceOfType(
                 activities, 
@@ -10848,7 +10847,7 @@ namespace Route4MeSDKUnitTest
             var activityParameters = new ActivityParameters { ActivityType = "insert-destination" };
 
             // Run the query
-            Activity[] activities = route4Me.GetActivityFeed(activityParameters, out string errorString);
+            Activity[] activities = route4Me.GetActivities(activityParameters, out string errorString);
 
             Assert.IsInstanceOfType(
                 activities, 
@@ -10864,7 +10863,7 @@ namespace Route4MeSDKUnitTest
             var activityParameters = new ActivityParameters { ActivityType = "mark-destination-departed" };
 
             // Run the query
-            Activity[] activities = route4Me.GetActivityFeed(activityParameters, out string errorString);
+            Activity[] activities = route4Me.GetActivities(activityParameters, out string errorString);
 
             Assert.IsInstanceOfType(
                 activities, 
@@ -10880,7 +10879,7 @@ namespace Route4MeSDKUnitTest
             var activityParameters = new ActivityParameters { ActivityType = "mark-destination-visited" };
 
             // Run the query
-            Activity[] activities = route4Me.GetActivityFeed(activityParameters, out string errorString);
+            Activity[] activities = route4Me.GetActivities(activityParameters, out string errorString);
 
             Assert.IsInstanceOfType(
                 activities, 
@@ -10896,7 +10895,7 @@ namespace Route4MeSDKUnitTest
             var activityParameters = new ActivityParameters { ActivityType = "member-created" };
 
             // Run the query
-            Activity[] activities = route4Me.GetActivityFeed(activityParameters, out string errorString);
+            Activity[] activities = route4Me.GetActivities(activityParameters, out string errorString);
 
             Assert.IsInstanceOfType(
                 activities, 
@@ -10912,7 +10911,7 @@ namespace Route4MeSDKUnitTest
             var activityParameters = new ActivityParameters { ActivityType = "member-deleted" };
 
             // Run the query
-            Activity[] activities = route4Me.GetActivityFeed(activityParameters, out string errorString);
+            Activity[] activities = route4Me.GetActivities(activityParameters, out string errorString);
 
             Assert.IsInstanceOfType(
                 activities, 
@@ -10928,7 +10927,7 @@ namespace Route4MeSDKUnitTest
             var activityParameters = new ActivityParameters { ActivityType = "member-modified" };
 
             // Run the query
-            Activity[] activities = route4Me.GetActivityFeed(activityParameters, out string errorString);
+            Activity[] activities = route4Me.GetActivities(activityParameters, out string errorString);
 
             Assert.IsInstanceOfType(
                 activities, 
@@ -10944,7 +10943,7 @@ namespace Route4MeSDKUnitTest
             var activityParameters = new ActivityParameters { ActivityType = "move-destination" };
 
             // Run the query
-            Activity[] activities = route4Me.GetActivityFeed(activityParameters, out string errorString);
+            Activity[] activities = route4Me.GetActivities(activityParameters, out string errorString);
 
             Assert.IsInstanceOfType(
                 activities, 
@@ -10960,11 +10959,11 @@ namespace Route4MeSDKUnitTest
             var activityParameters = new ActivityParameters
             {
                 ActivityType = "note-insert",
-                RouteId = "C3E7FD2F8775526674AE5FD83E25B88A"
+                //RouteId = "C3E7FD2F8775526674AE5FD83E25B88A"
             };
 
             // Run the query
-            Activity[] activities = route4Me.GetActivityFeed(activityParameters, out string errorString);
+            Activity[] activities = route4Me.GetActivities(activityParameters, out string errorString);
 
             Assert.IsInstanceOfType(
                 activities, 
@@ -10980,7 +10979,7 @@ namespace Route4MeSDKUnitTest
             var activityParameters = new ActivityParameters { ActivityType = "note-insert" };
 
             // Run the query
-            Activity[] activities = route4Me.GetActivityFeed(activityParameters, out string errorString);
+            Activity[] activities = route4Me.GetActivities(activityParameters, out string errorString);
 
             Assert.IsInstanceOfType(
                 activities, 
@@ -10996,7 +10995,7 @@ namespace Route4MeSDKUnitTest
             var activityParameters = new ActivityParameters { ActivityType = "route-delete" };
 
             // Run the query
-            Activity[] activities = route4Me.GetActivityFeed(activityParameters, out string errorString);
+            Activity[] activities = route4Me.GetActivities(activityParameters, out string errorString);
 
             Assert.IsInstanceOfType(
                 activities, 
@@ -11012,7 +11011,7 @@ namespace Route4MeSDKUnitTest
             var activityParameters = new ActivityParameters { ActivityType = "route-optimized" };
 
             // Run the query
-            Activity[] activities = route4Me.GetActivityFeed(activityParameters, out string errorString);
+            Activity[] activities = route4Me.GetActivities(activityParameters, out string errorString);
 
             Assert.IsInstanceOfType(
                 activities, 
@@ -11028,11 +11027,11 @@ namespace Route4MeSDKUnitTest
             var activityParameters = new ActivityParameters
             {
                 ActivityType = "route-owner-changed",
-                RouteId = "5C15E83A4BE005BCD1537955D28D51D7"
+                //RouteId = "5C15E83A4BE005BCD1537955D28D51D7"
             };
 
             // Run the query
-            Activity[] activities = route4Me.GetActivityFeed(activityParameters, out string errorString);
+            Activity[] activities = route4Me.GetActivities(activityParameters, out string errorString);
 
             Assert.IsInstanceOfType(
                 activities, 
@@ -11110,7 +11109,7 @@ namespace Route4MeSDKUnitTest
             var route4Me = new Route4MeManager(c_ApiKey);
 
             // Prepare the address that we are going to add to an existing route optimization
-            Address[] addresses = new Address[]
+            var addresses = new Address[]
             {
                 new Address() { AddressString = "717 5th Ave New York, NY 10021",
                             Alias         = "Giorgio Armani",
@@ -11129,8 +11128,7 @@ namespace Route4MeSDKUnitTest
             };
 
             // Execute the optimization to re-optimize and rebalance all the routes in this optimization
-            string errorString;
-            var dataObject = route4Me.UpdateOptimization(optimizationParameters, out errorString);
+            var dataObject = route4Me.UpdateOptimization(optimizationParameters, out string errorString);
 
             tdr.SDRT_route_id = dataObject.Routes.Length > 0 ? dataObject.Routes[0].RouteID : "";
 
@@ -11404,6 +11402,10 @@ namespace Route4MeSDKUnitTest
             bool recorded = SetAddressGPSPosition(tdr.SDRT_route.Addresses[1]);
 
             Assert.IsTrue(recorded, "Cannot record GPS position of the address");
+
+            recorded = SetAddressGPSPosition(tdr.SDRT_route.Addresses[2]);
+
+            Assert.IsTrue(recorded, "Cannot record GPS position of the address");
         }
 
         [TestMethod]
@@ -11515,6 +11517,8 @@ namespace Route4MeSDKUnitTest
             var route4Me = new Route4MeManager(c_ApiKey);
 
             var tsp2days = new TimeSpan(2, 0, 0, 0);
+
+
             DateTime dtNow = DateTime.Now;
 
             var gpsParameters = new GPSParameters
@@ -11522,15 +11526,16 @@ namespace Route4MeSDKUnitTest
                 Format = "json",
                 RouteId = tdr.SDRT_route.RouteID,
                 TimePeriod = "custom",
-                StartDate = R4MeUtils.ConvertToUnixTimestamp(dtNow - tsp2days),
-                EndDate = R4MeUtils.ConvertToUnixTimestamp(dtNow + tsp2days)
+                StartDate = 0, //R4MeUtils.ConvertToUnixTimestamp(dtNow - tsp2days),
+                EndDate = R4MeUtils.ConvertToUnixTimestamp(dtNow + tsp2days),
+                DeviceType = "web"
             };
 
             var response = route4Me.GetDeviceLocationHistory(gpsParameters, out string errorString);
 
             Assert.IsInstanceOfType(
                 response, 
-                typeof(GetDeviceLocationHistoryResponse), 
+                typeof(DeviceLocationHistoryResponse), 
                 "GetDeviceHistoryTimeRangeTest failed. " + errorString
             );
         }
@@ -11811,8 +11816,8 @@ namespace Route4MeSDKUnitTest
 
             var @params = new MemberParameters
             {
-                StrEmail = "aaaaaaaa@gmail.com",
-                StrPassword = "11111111111",
+                StrEmail = "evgenysoloshenko@gmail.com",
+                StrPassword = ")n8GMhX<",
                 Format = "json"
             };
 
@@ -13897,8 +13902,12 @@ namespace Route4MeSDKUnitTest
                 dataObjectSD10Stops = r4mm.RunOptimization(optimizationParameters, out errorString);
 
                 SD10Stops_optimization_problem_id = dataObjectSD10Stops.OptimizationProblemId;
-                SD10Stops_route = (dataObjectSD10Stops != null && dataObjectSD10Stops.Routes != null && dataObjectSD10Stops.Routes.Length > 0) ? dataObjectSD10Stops.Routes[0] : null;
-                SD10Stops_route_id = (SD10Stops_route != null) ? SD10Stops_route.RouteID : null;
+                SD10Stops_route = (dataObjectSD10Stops != null && 
+                                    dataObjectSD10Stops.Routes != null && 
+                                    dataObjectSD10Stops.Routes.Length > 0) 
+                                  ? dataObjectSD10Stops.Routes[0] 
+                                  : null;
+                SD10Stops_route_id = SD10Stops_route != null ? SD10Stops_route.RouteID : null;
 
                 return true;
             }

@@ -40,15 +40,91 @@ namespace Route4MeSDK.DataTypes
         public string MemberId { get; set; }
 
         /// <summary>
-        /// Route ID
+        /// Parent route ID
         /// </summary>
         [DataMember(Name = "route_id", EmitDefaultValue = false)]
         public string RouteId { get; set; }
+
+        /// <summary>
+        /// Parent route name
+        /// </summary>
+        [DataMember(Name = "route_name", EmitDefaultValue = false)]
+        public string RouteName { get; set; }
 
         /// <summary>
         /// Route destination ID
         /// </summary>
         [DataMember(Name = "route_destination_id", EmitDefaultValue = false)]
         public string RouteDestinationId { get; set; }
+
+        /// <summary>
+        /// Note ID
+        /// </summary>
+        [DataMember(Name = "note_id", EmitDefaultValue = false)]
+        public string NoteId { get; set; }
+
+        /// <summary>
+        /// Note type
+        /// </summary>
+        [DataMember(Name = "note_type", EmitDefaultValue = false)]
+        public string NoteType { get; set; }
+
+        /// <summary>
+        /// Note contents
+        /// </summary>
+        [DataMember(Name = "note_contents", EmitDefaultValue = false)]
+        public string NoteContents { get; set; }
+
+        /// <summary>
+        /// URL of the uploaded note.
+        /// </summary>
+        [DataMember(Name = "note_file", EmitDefaultValue = false)]
+        public string NoteFile { get; set; }
+
+        /// <summary>
+        /// Member-owner of the activity.
+        /// </summary>
+        [DataMember(Name = "member", EmitDefaultValue = false)]
+        public ActivityMember Member { get; set; }
+
+        /// <summary>
+        /// A route destination name
+        /// </summary>
+        [DataMember(Name = "destination_name", EmitDefaultValue = false)]
+        public string DestinationName { get; set; }
+
+        /// <summary>
+        /// A route destination alias
+        /// </summary>
+        [DataMember(Name = "destination_alias", EmitDefaultValue = false)]
+        public string DestinationAlias { get; set; }
+    }
+
+    [DataContract]
+    public class ActivityMember : GenericParameters
+    {
+        /// <summary>
+        /// Member ID
+        /// </summary>
+        [DataMember(Name = "member_id", EmitDefaultValue = false)]
+        public int? MemberId { get; set; }
+
+        /// <summary>
+        /// First name of an user created an activity.
+        /// </summary>
+        [DataMember(Name = "member_first_name", EmitDefaultValue = false)]
+        public string MemberFirstName { get; set; }
+
+        /// <summary>
+        /// Last name of an user created an activity.
+        /// </summary>
+        [DataMember(Name = "member_last_name", EmitDefaultValue = false)]
+        public string MemberLastName { get; set; }
+
+        /// <summary>
+        /// Email of an user created an activity.
+        /// </summary>
+        [DataMember(Name = "member_email", EmitDefaultValue = false)]
+        public string MemberEmail { get; set; }
     }
 }
