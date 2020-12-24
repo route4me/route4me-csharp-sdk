@@ -11,7 +11,7 @@ namespace Route4MeSDK.DataTypes
     /// <para>CVRP_TW_MD = 4, multiple depot, multiple driver, capacitated, time windows</para>
     /// <para>TSP_TW = 5, single depot, single driver, time windows</para>
     /// <para>TSP_TW_CR = 6, single depot, single driver, time windows, continuous optimization (minimal location shifting)</para>
-    /// <para>OPTIMIZATION_STATE_IN_QUEUE = 7, shifts addresses from one route to another over time on a recurring schedule</para>
+    /// <para>ADVANCED_CVRP_TW = 9, optimization with advanced constraints</para>
     /// <para>ALG_NONE = 100</para>
     /// <para>ALG_LEGACY_DISTRIBUTED = 101</para>
     /// </summary>

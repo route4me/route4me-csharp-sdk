@@ -15,9 +15,7 @@ namespace Route4MeSDK.Examples
 
             var route4Me = new Route4MeManager(ActualApiKey);
 
-            var parameters = new GenericParameters()
-            {
-            };
+            var parameters = new GenericParameters();
 
             var response = route4Me.GetUsers(parameters, out string userErrorString);
 
@@ -41,7 +39,7 @@ namespace Route4MeSDK.Examples
             };
 
             // Run the query
-            Activity[] activities = route4Me.GetActiviies(activityParameters, out string errorString);
+            Activity[] activities = route4Me.GetActivities(activityParameters, out string errorString);
 
             PrintExampleActivities(activities, errorString);
         }
