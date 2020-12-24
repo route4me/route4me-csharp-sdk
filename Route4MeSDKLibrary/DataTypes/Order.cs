@@ -9,7 +9,6 @@ namespace Route4MeSDK.DataTypes
     [DataContract]
     public sealed class Order : GenericParameters
     {
-
         /// <summary>
         /// Order ID
         /// </summary>
@@ -180,8 +179,16 @@ namespace Route4MeSDK.DataTypes
         [DataMember(Name = "order_icon", EmitDefaultValue = false)]
         public string order_icon { get; set; }
 
-
+        /// <summary>
+        /// Custom user fields.
+        /// </summary>
         [DataMember(Name = "custom_user_fields", EmitDefaultValue = false)]
         public OrderCustomField[] CustomUserFields { get; set; }
+
+        /// <summary>
+        /// How many times the order visited.
+        /// </summary>
+        [DataMember(Name = "visited_count", EmitDefaultValue = false)]
+        public int VisitedCount { get; set; }
     }
 }

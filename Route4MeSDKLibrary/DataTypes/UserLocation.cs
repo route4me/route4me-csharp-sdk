@@ -9,13 +9,13 @@ namespace Route4MeSDK.DataTypes
         /// <summary>
         /// Member data.
         /// </summary>
-        [DataMember(Name = "member_data")]
+        [DataMember(Name = "member_data", EmitDefaultValue = false)]
         public User MemberData { get; set; }
 
         /// <summary>
         /// User tracking.
         /// </summary>
-        [DataMember(Name = "tracking")]
+        [DataMember(Name = "tracking", EmitDefaultValue = false)]
         public UserTracking UserTracking { get; set; }
 
         /// <summary>
@@ -30,67 +30,94 @@ namespace Route4MeSDK.DataTypes
         /// <summary>
         /// Position longitude
         /// </summary>
-        [DataMember(Name = "position_lng")]
+        [DataMember(Name = "position_lng", EmitDefaultValue = false)]
         public double PositionLongitude { get; set; }
 
         /// <summary>
         /// Position latitude
         /// </summary>
-        [DataMember(Name = "position_lat")]
+        [DataMember(Name = "position_lat", EmitDefaultValue = false)]
         public double PositionLatitude { get; set; }
 
         /// <summary>
         /// Movement direction in the degrees (north = 0, clockwise).
         /// </summary>
-        [DataMember(Name = "direction")]
+        [DataMember(Name = "direction", EmitDefaultValue = false)]
         public int? Direction { get; set; }
 
         /// <summary>
         /// Data source name.
         /// </summary>
-        [DataMember(Name = "data_source_name")]
+        [DataMember(Name = "data_source_name", EmitDefaultValue = false)]
         public string DataSourceName { get; set; }
 
         /// <summary>
         /// Activity timestamp (EPOCH).
         /// </summary>
-        [DataMember(Name = "activity_timestamp")]
+        [DataMember(Name = "activity_timestamp", EmitDefaultValue = false)]
         public long? ActivityTimestamp { get; set; }
 
         /// <summary>
         /// Device timestamp (EPOCH).
         /// </summary>
-        [DataMember(Name = "device_timestamp")]
+        [DataMember(Name = "device_timestamp", EmitDefaultValue = false)]
         public long? DeviceTimestamp { get; set; }
 
         /// <summary>
         /// Route ID.
         /// </summary>
-        [DataMember(Name = "route_id")]
+        [DataMember(Name = "route_id", EmitDefaultValue = false)]
         public string RouteId { get; set; }
 
         /// <summary>
         /// Device ID.
         /// </summary>
-        [DataMember(Name = "device_id")]
+        [DataMember(Name = "device_id", EmitDefaultValue = false)]
         public string DeviceId { get; set; }
 
         /// <summary>
         /// Vehicle movement speed.
         /// </summary>
-        [DataMember(Name = "speed")]
+        [DataMember(Name = "speed", EmitDefaultValue = false)]
         public double? Speed { get; set; }
+
+        /// <summary>
+        /// Calculated speed
+        /// </summary>
+        [DataMember(Name = "calculated_speed", EmitDefaultValue = false)]
+        public string CalculatedSpeed { get; set; }
+
+        /// <summary>
+        /// Speed Accuracy
+        /// </summary>
+        [DataMember(Name = "speed_accuracy", EmitDefaultValue = false)]
+        public string SpeedAccuracy { get; set; }
+
+        /// <summary>
+        /// speed Unit
+        /// </summary>
+        [DataMember(Name = "speed_unit", EmitDefaultValue = false)]
+        public string SpeedUnit { get; set; }
+
+        [DataMember(Name = "bearing", EmitDefaultValue = false)]
+        public int? Bearing { get; set; }
+
+        [DataMember(Name = "bearing_accuracy", EmitDefaultValue = false)]
+        public string BearingAccuracy { get; set; }
+
+        [DataMember(Name = "accuracy", EmitDefaultValue = false)]
+        public string Accuracy { get; set; }
 
         /// <summary>
         /// Vehicle movement speed.
         /// </summary>
-        [DataMember(Name = "altitude")]
+        [DataMember(Name = "altitude", EmitDefaultValue = false)]
         public int? Altitude { get; set; }
 
         /// <summary>
         /// Footsteps.
         /// </summary>
-        [DataMember(Name = "footsteps")]
+        [DataMember(Name = "footsteps", EmitDefaultValue = false)]
         public int? Footsteps { get; set; }
 
         /// <summary>
@@ -114,7 +141,7 @@ namespace Route4MeSDK.DataTypes
         /// <summary>
         /// Vehicle ID.
         /// </summary>
-        [DataMember(Name = "vehicle_id")]
+        [DataMember(Name = "vehicle_id", EmitDefaultValue = false)]
         public string VehicleId { get; set; }
 
         /// <summary>
@@ -126,7 +153,7 @@ namespace Route4MeSDK.DataTypes
         /// <summary>
         /// Device type.
         /// </summary>
-        [DataMember(Name = "device_type")]
+        [DataMember(Name = "device_type", EmitDefaultValue = false)]
         public string DeviceType { get; set; }
 
         /// <summary>
@@ -136,9 +163,15 @@ namespace Route4MeSDK.DataTypes
         public int? MemberId { get; set; }
 
         /// <summary>
+        /// Root member ID
+        /// </summary>
+        [DataMember(Name = "root_member_id", EmitDefaultValue = false)]
+        public int? RootMemberId { get; set; }
+
+        /// <summary>
         /// Activity timestamp friendly.
         /// </summary>
-        [DataMember(Name = "activity_timestamp_friendly")]
+        [DataMember(Name = "activity_timestamp_friendly", EmitDefaultValue = false)]
         public string ActivityTimestampFriendly { get; set; }
 
         /// <summary>

@@ -308,6 +308,13 @@ namespace Route4MeSDK.DataTypes
         [DataMember(Name = "address_customer_po", EmitDefaultValue = false)]
         public string AddressCustomerPo { get; set; }
 
+        /// <summary>
+        /// If true, a location assigned to a route.
+        /// </summary>
+        [DataMember(Name = "is_assigned", EmitDefaultValue = false)]
+        public string IsAssigned { get; set; }
+
+
         [OnSerializing()]
         internal void OnSerializingMethod(StreamingContext context)
         {
