@@ -16,7 +16,7 @@ namespace Route4MeSDK.Examples
             var activityParameters = new ActivityParameters { ActivityType = "route-delete" };
 
             // Run the query
-            Activity[] activities = route4Me.GetActivityFeed(activityParameters, out string errorString);
+            Activity[] activities = route4Me.GetActivities(activityParameters, out string errorString);
 
             PrintExampleActivities(activities, errorString);
         }

@@ -46,14 +46,14 @@ namespace Route4MeSDK.Examples
                 return;
             }
 
-            ActivityParameters activityParameters = new ActivityParameters
+            var activityParameters = new ActivityParameters
             {
                 ActivityType = "insert-destination",
                 RouteId = routeId
             };
 
             // Run the query
-            Activity[] activities = route4Me.GetActivityFeed(activityParameters, out errorString);
+            Activity[] activities = route4Me.GetActivities(activityParameters, out errorString);
 
             PrintExampleActivities(activities, errorString);
 

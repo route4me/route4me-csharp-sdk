@@ -11816,8 +11816,8 @@ namespace Route4MeSDKUnitTest
 
             var @params = new MemberParameters
             {
-                StrEmail = "evgenysoloshenko@gmail.com",
-                StrPassword = ")n8GMhX<",
+                StrEmail = "aaaaaaaa@gmail.com",
+                StrPassword = "11111111111",
                 Format = "json"
             };
 

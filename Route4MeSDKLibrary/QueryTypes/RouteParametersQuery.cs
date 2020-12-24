@@ -93,11 +93,22 @@ namespace Route4MeSDK.QueryTypes
         [HttpQueryMemberAttribute(Name = "reoptimize", EmitDefaultValue = false)]
         public bool? ReOptimize { get; set; }
 
-
+        /// <summary>
+        /// Whether disable or not a route optimization.
+        /// <para>Available values: </para>
+        /// <value>true - disable a route optimization. false - not disable a route optimization.</value>
+        /// <remarks><para>Query parameter.</para></remarks>
+        /// </summary>
         [IgnoreDataMember()]
         [HttpQueryMemberAttribute(Name = "disable_optimization", EmitDefaultValue = false)]
         public bool? DisableOptimization { get; set; }
 
+        /// <summary>
+        /// The driving directions will be generated biased for this selection. This has no impact on route sequencing.
+        /// <para>Available values: </para>
+        /// <value>'Distance', 'Time', 'timeWithTraffic'.</value>
+        /// <remarks><para>Query parameter.</para></remarks>
+        /// </summary>
         [IgnoreDataMember()]
         [HttpQueryMemberAttribute(Name = "optimize", EmitDefaultValue = false)]
         public string Optimize { get; set; }

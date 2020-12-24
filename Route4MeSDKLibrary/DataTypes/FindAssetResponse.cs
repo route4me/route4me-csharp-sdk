@@ -81,6 +81,9 @@ namespace Route4MeSDK.DataTypes
         [DataMember(Name = "customer_service_phone")]
         public string CustomerServicePhone { get; set; }
 
+        /// <summary>
+        /// If true, Covid19 warning hidden
+        /// </summary>
         [DataMember(Name = "hide_covid19_warning")]
         public string HideCovid19Warning { get; set; }
 

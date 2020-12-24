@@ -1181,7 +1181,11 @@ namespace Route4MeSDK
         /// <returns>An object of the type MemberResponseV4</returns>
 		public MemberResponseV4 CreateUser(MemberParametersV4 memParams, out string errorString)
 		{
-            return GetJsonObjectFromAPI<MemberResponseV4>(memParams, R4MEInfrastructureSettings.GetUsersHost, HttpMethodType.Post, out errorString);
+            return GetJsonObjectFromAPI<MemberResponseV4>(
+                memParams, 
+                R4MEInfrastructureSettings.GetUsersHost, 
+                HttpMethodType.Post, 
+                out errorString);
 		}
 
         /// <summary>
