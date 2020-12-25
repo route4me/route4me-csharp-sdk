@@ -58,7 +58,7 @@ namespace Route4MeSDK.DataTypes
         public string MobileLogoAlignment { get; set; }
 
         /// <summary>
-        /// An alignment of a mobile logo
+        /// Show map zoom controls
         /// </summary>
         [DataMember(Name = "show_map_zoom_controls")]
         public bool? ShowMapZoomControls { get; set; }

@@ -94,7 +94,7 @@ namespace Route4MeSDK.DataTypes
         public string SpeedAccuracy { get; set; }
 
         /// <summary>
-        /// speed Unit
+        /// Speed Unit
         /// </summary>
         [DataMember(Name = "speed_unit", EmitDefaultValue = false)]
         public string SpeedUnit { get; set; }
