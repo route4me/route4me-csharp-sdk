@@ -239,7 +239,7 @@ namespace Route4MeSDK.DataTypes
         public long? IdlingTime { get; set; }
 
         /// <summary>
-        /// Idling time.
+        /// Paying miles
         /// </summary>
         [DataMember(Name = "paying_miles", EmitDefaultValue = false)]
         [ReadOnly(true)]
@@ -320,6 +320,9 @@ namespace Route4MeSDK.DataTypes
         [ReadOnly(true)]
         public DataObjectRoute OriginalRoute { get; set; }
 
+        /// <summary>
+        /// Bundled items
+        /// </summary>
         [DataMember(Name = "bundle_items", EmitDefaultValue = true)]
         [ReadOnly(true)]
         public BundledItemResponse[] BundleItems { get; set; }

@@ -17,7 +17,7 @@ namespace Route4MeSDK.QueryTypes
         public string RouteId { get; set; }
 
         /// <summary>
-        ///  	Pass True to return directions and the route path
+        /// Pass True to return directions and the route path
         /// </summary>
         [IgnoreDataMember]
         [HttpQueryMemberAttribute(Name = "directions", EmitDefaultValue = false)]

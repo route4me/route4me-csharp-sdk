@@ -15,7 +15,7 @@ namespace Route4MeSDK.DataTypes.V5
         public int? InventoryId { get; set; }
 
         /// <summary>
-        /// Unique order ID"
+        /// Unique order ID
         /// </summary>
         [DataMember(Name = "order_id", EmitDefaultValue = false)]
         public int? OrderId { get; set; }
