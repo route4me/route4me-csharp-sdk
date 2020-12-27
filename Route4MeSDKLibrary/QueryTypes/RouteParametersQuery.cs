@@ -78,6 +78,20 @@ namespace Route4MeSDK.QueryTypes
         public bool? Notes { get; set; }
 
         /// <summary>
+        /// If true, the order inventory info included in the response.
+        /// </summary>
+        [IgnoreDataMember]
+        [HttpQueryMemberAttribute(Name = "order_inventory", EmitDefaultValue = false)]
+        public bool? OrderInventory { get; set; }
+
+        /// <summary>
+        /// If true, not visited destinations of an active route re-optimized (re-sequenced).
+        /// </summary>
+        [IgnoreDataMember]
+        [HttpQueryMemberAttribute(Name = "remaining", EmitDefaultValue = false)]
+        public bool? Remaining { get; set; }
+
+        /// <summary>
         /// Search query
         /// </summary>
         [IgnoreDataMember]
@@ -175,5 +189,7 @@ namespace Route4MeSDK.QueryTypes
         /// </summary>
         [DataMember(Name = "unlink_from_master_optimization", EmitDefaultValue = false)]
         public bool UnlinkFromMasterOptimization { get; set; }
+
+
     }
 }
