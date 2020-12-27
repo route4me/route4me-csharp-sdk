@@ -247,6 +247,47 @@ namespace Route4MeSDKUnitTest
         }
 
         [TestMethod]
+        public void ReoptimizeRemainingStopsTest()
+        {
+            var route4Me = new Route4MeManager(c_ApiKey);
+
+            var route = tdr2.SDRT_route;
+
+            var visitedParams = new AddressParameters
+            {
+                RouteId = route.RouteID,
+                AddressId = (int)route.Addresses[1].RouteDestinationId,
+                IsVisited = true
+            };
+
+            int result = route4Me.MarkAddressVisited(visitedParams, out string errorString);
+
+            Assert.IsNotNull(result, "MarkAddressVisitedTest. " + errorString);
+
+            visitedParams = new AddressParameters
+            {
+                RouteId = route.RouteID,
+                AddressId = (int)route.Addresses[2].RouteDestinationId,
+                IsVisited = true
+            };
+
+            result = route4Me.MarkAddressVisited(visitedParams, out errorString);
+
+            Assert.IsNotNull(result, "MarkAddressVisitedTest. " + errorString);
+
+            var routeParameters = new RouteParametersQuery()
+            {
+                RouteId = route.RouteID,
+                ReOptimize = true,
+                Remaining = true
+            };
+
+            var updatedRoute = route4Me.UpdateRoute(routeParameters, out errorString);
+
+            Assert.IsNotNull(updatedRoute, "Cannot update the route " + route.RouteID);
+        }
+
+        [TestMethod]
         public void UpdateRouteTest()
         {
             var route4Me = new Route4MeManager(c_ApiKey);

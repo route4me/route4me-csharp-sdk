@@ -186,6 +186,7 @@
     <Compile Include="Examples\Routes\GetRoutePathPoints.cs" />
     <Compile Include="Examples\Routes\GetRoutesByIDs.cs" />
     <Compile Include="Examples\Routes\GetRoutesFromDateRange.cs" />
+    <Compile Include="Examples\Routes\ReoptimizeRemainingStops.cs" />
     <Compile Include="Examples\Routes\ResequenceRouteDestinations.cs" />
     <Compile Include="Examples\Routes\RouteOriginParameter.cs" />
     <Compile Include="Examples\Routes\ShareRoute.cs" />
@@ -345,9 +346,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Examples\NewFolder1\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
