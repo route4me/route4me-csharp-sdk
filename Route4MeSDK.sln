@@ -1,13 +1,26 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
-VisualStudioVersion = 16.0.29306.81
+VisualStudioVersion = 16.0.28729.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Route4MeSDKLibrary", "Route4MeSDKLibrary\Route4MeSDKLibrary.csproj", "{37E5D3FC-BBF7-4BD8-98E6-A58DC9138D98}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Route4MeSDKTest", "Route4MeSDKTest\Route4MeSDKTest.csproj", "{DBA0AA41-4223-4404-B3E6-4948FE147A40}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{8BA18B34-5258-42D7-BCAE-6EEB86520598}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\packages.config = .nuget\packages.config
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1931F7E2-192B-4C1A-9150-A4D454B04C02}"
+	ProjectSection(SolutionItems) = preProject
+		Route4MeSDK.vsmdi = Route4MeSDK.vsmdi
+		Route4MeSDKUnitTest.testsettings = Route4MeSDKUnitTest.testsettings
+	EndProjectSection
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Route4MeSDKUnitTest", "Route4MeSDKUnitTest\Route4MeSDKUnitTest.csproj", "{2F85C71C-685A-4353-9A1B-7A1E3C409325}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Route4MeSdkV5UnitTest", "Route4MeSdkV5UnitTest\Route4MeSdkV5UnitTest.csproj", "{17A5494A-47ED-43BB-8488-D2858DB84364}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,11 +40,18 @@ Global
 		{2F85C71C-685A-4353-9A1B-7A1E3C409325}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F85C71C-685A-4353-9A1B-7A1E3C409325}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2F85C71C-685A-4353-9A1B-7A1E3C409325}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17A5494A-47ED-43BB-8488-D2858DB84364}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17A5494A-47ED-43BB-8488-D2858DB84364}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17A5494A-47ED-43BB-8488-D2858DB84364}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17A5494A-47ED-43BB-8488-D2858DB84364}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {09D7E376-BD90-4E92-BCFF-8A07E3683B95}
+		SolutionGuid = {ACE5CD27-A856-4D62-B815-4C33CB943BD2}
+	EndGlobalSection
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = Route4MeSDK.vsmdi
 	EndGlobalSection
 EndGlobal
