@@ -1,6 +1,63 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.0.1.2] - 2021-02-05
+
+### Added
+
+The file [Consts.cs: ](https://github.com/Olman62/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/Consts.cs)  
+– **Endpoints**: MainHostWeb, Routes, RoutesDuplicate, RoutesMerge, RoutesPaginate, RoutesFallbackPaginate, RoutesFallbackDatatable, RoutesFallback, RoutesReindexCallback, RoutesDatatable, RoutesDatatableConfig, RoutesDatatableConfigFallback  
+
+The file [Enums.cs: ](https://github.com/Olman62/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/DataTypes/Enums.cs)  
+– **Enumeration**: AddressStopType
+	
+The file [Address.cs: ](https://github.com/Olman62/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/DataTypes/V5/Address/Address.cs)  
+– **Class (API 5 version)**: Address 
+
+The file [*.*: ](https://github.com/Olman62/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/DataTypes/V5/DataObject.cs)
+– **Class (API 5 version)**: DataObject 
+	
+The file [DataObjectBase.cs: ](https://github.com/Olman62/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/DataTypes/V5/DataObjectBase.cs)  
+– **Class (API 5 version)**: DataObjectBase 
+
+The file [Enums.cs: ](https://github.com/Olman62/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/DataTypes/V5/Enums.cs)  
+– **Enumeration (API 5 version)**: AddressStopType
+	
+The file [Route.cs: ](https://github.com/Olman62/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/DataTypes/V5/Routes/Route.cs)  
+– **Class (API 5 version)**: Route 
+	
+The file [RouteDataTableConfigResponse.cs: ](https://github.com/Olman62/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/DataTypes/V5/Routes/RouteDataTableConfigResponse.cs)  
+– **Class (API 5 version)**: RouteDataTableConfigResponse 
+	
+The file [RouteDuplicateResponse.cs: ](https://github.com/Olman62/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/DataTypes/V5/Routes/RouteDuplicateResponse.cs)  
+– **Class (API 5 version)**: RouteDuplicateResponse
+	
+The file [RouteParameters.cs: ](https://github.com/Olman62/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/DataTypes/V5/Routes/RouteParameters.cs)  
+– **Class (API 5 version)**: RouteParameters
+
+The file [RoutesDeleteResponse.cs: ](https://github.com/Olman62/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/DataTypes/V5/Routes/RoutesDeleteResponse.cs)  
+– **Class (API 5 version)**: RoutesDeleteResponse
+	
+The file [StatusResponse.cs: ](https://github.com/Olman62/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/DataTypes/V5/StatusResponse.cs)  
+– **Class (API 5 version)**: StatusResponse
+
+The file [OptimizationParameters.cs: ](https://github.com/Olman62/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/QueryTypes/V5/OptimizationParameters.cs)  
+– **Class (API 5 version)**: OptimizationParameters
+
+The file [RouteFilterParameters.cs: ](https://github.com/Olman62/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/QueryTypes/V5/RouteFilterParameters.cs)  
+– **Class (API 5 version)**: RouteFilterParameters
+
+The file [RouteParametersQuery.cs: ](https://github.com/Olman62/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/QueryTypes/V5/RouteParametersQuery.cs)  
+– **Class (API 5 version)**: RouteParametersQuery
+
+The file [Route4MeManagerV5.cs: ](https://github.com/Olman62/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/Route4MeManagerV5.cs)  
+– **Methods(API 5 version)**: RemoveAddressBookContacts, GetRoutes, GetAllRoutesWithPagination, GetPaginatedRouteListWithoutElasticSearch, GetRouteDataTableWithElasticSearch, GetRouteDatatableWithElasticSearch, GetRouteListWithoutElasticSearch, DuplicateRoute, DeleteRoutes, GetRouteDataTableConfig, GetRouteDataTableFallbackConfig, UpdateRoute, RunOptimization, RemoveOptimization, 
+– **Classes (API 5 version)**: RemoveAddressBookContactsRequest, RemoveOptimizationResponse, RemoveOptimizationRequest 
+
+The file [AddOnRoutesApiTests.cs: ](https://github.com/Olman62/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/V5/AddOnRoutesApi/AddOnRoutesApiTests.cs)  
+– **Class (API 5 version)**: AddOnRoutesApiTests
+
+
 ## [1.0.1.1] - 2021-01-21
 
 ### Added
@@ -11,7 +68,6 @@ The file [Utils.cs: ](https://github.com/Olman62/route4me-csharp-sdk/blob/master
 The file [RouteParameters.cs: ](https://github.com/Olman62/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/DataTypes/RouteParameters.cs)  
  **Properties**: Slowdowns (type SlowdownParams), IgnoreTw(bool?), is_dynamic_start_time(bool), Bundling(AddressBundling), AdvancedConstraints(V5.RouteAdvancedConstraints[]), AddressStopType(string), Group(string) <br>
  **Class**: SlowdownParams 
-
 	
 The file [Consts.cs: ](https://github.com/Olman62/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/Consts.cs)  
 – **Endpoints**: MemberCapabilities, ScheduleCalendar.   
