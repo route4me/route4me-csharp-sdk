@@ -5,6 +5,8 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+Added the unit test project for the API 5 endpoints done in the Xunit 2.4.1.
+
 The file [Consts.cs: ](https://github.com/Olman62/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/Consts.cs)  
 – **Endpoints**: MainHostWeb, Routes, RoutesDuplicate, RoutesMerge, RoutesPaginate, RoutesFallbackPaginate, RoutesFallbackDatatable, RoutesFallback, RoutesReindexCallback, RoutesDatatable, RoutesDatatableConfig, RoutesDatatableConfigFallback  
 
