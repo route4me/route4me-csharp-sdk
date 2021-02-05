@@ -1,5 +1,5 @@
-﻿using Route4MeSDK.DataTypes;
-using Route4MeSDK.QueryTypes;
+﻿using Route4MeSDK.DataTypes.V5;
+//using Route4MeSDK.QueryTypes;
 using Route4MeSDK.QueryTypes.V5;
 using System;
 using System.Collections.Generic;
@@ -16,7 +16,7 @@ namespace Route4MeSDK.Examples
         public void CreateOptimizationWithDriverSkills()
         {
             // Create the manager with the api key
-            var route4Me = new Route4MeManager(ActualApiKey);
+            var route4Me = new Route4MeManagerV5(ActualApiKey);
 
             #region Create Skilled Drivers
 
@@ -290,7 +290,7 @@ namespace Route4MeSDK.Examples
             // Run the query
             DataObject dataObject = route4Me.RunOptimization(
                                         optimizationParameters,
-                                        out string errorString);
+                                        out ResultResponse resultResponse1);
 
             OptimizationsToRemove = new List<string>()
             {
@@ -298,7 +298,10 @@ namespace Route4MeSDK.Examples
             };
 
             // Output the result
-            PrintExampleOptimizationResult(dataObject, errorString);
+            PrintExampleOptimizationResult(
+                dataObject,
+                resultResponse1.Messages.Count>0 ? String.Join(Environment.NewLine, resultResponse1.Messages) : ""
+                );
 
             RemoveTestOptimizations();
 

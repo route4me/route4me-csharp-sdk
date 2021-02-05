@@ -148,11 +148,20 @@
     <Compile Include="DataTypes\MemberConfigurationResponse.cs" />
     <Compile Include="DataTypes\MemberResponse.cs" />
     <Compile Include="DataTypes\MemberResponseV4.cs" />
+    <Compile Include="DataTypes\V5\Address\Address.cs" />
+    <Compile Include="DataTypes\V5\DataObject.cs" />
+    <Compile Include="DataTypes\V5\DataObjectBase.cs" />
     <Compile Include="DataTypes\V5\DriverReview.cs" />
     <Compile Include="DataTypes\V5\Enums.cs" />
     <Compile Include="DataTypes\V5\OrderInventory.cs" />
     <Compile Include="DataTypes\V5\ResultResponse.cs" />
     <Compile Include="DataTypes\V5\RouteAdvancedConstraints.cs" />
+    <Compile Include="DataTypes\V5\Routes\Route.cs" />
+    <Compile Include="DataTypes\V5\Routes\RouteDataTableConfigResponse.cs" />
+    <Compile Include="DataTypes\V5\Routes\RouteDuplicateResponse.cs" />
+    <Compile Include="DataTypes\V5\Routes\RouteParameters.cs" />
+    <Compile Include="DataTypes\V5\Routes\RoutesDeleteResponse.cs" />
+    <Compile Include="DataTypes\V5\StatusResponse.cs" />
     <Compile Include="DataTypes\V5\TeamResponse.cs" />
     <Compile Include="DataTypes\Order.cs" />
     <Compile Include="DataTypes\OrderCustomField.cs" />
@@ -213,6 +222,9 @@
     <Compile Include="QueryTypes\RouteParametersQuery.cs" />
     <Compile Include="QueryTypes\ScheduleCalendarQuery.cs" />
     <Compile Include="QueryTypes\V5\DriverReviewParameters.cs" />
+    <Compile Include="QueryTypes\V5\OptimizationParameters.cs" />
+    <Compile Include="QueryTypes\V5\RouteFilterParameters.cs" />
+    <Compile Include="QueryTypes\V5\RouteParametersQuery.cs" />
     <Compile Include="QueryTypes\V5\TeamRequest.cs" />
     <Compile Include="QueryTypes\TelematicsVendorParameters.cs" />
     <Compile Include="QueryTypes\TerritoryQuery.cs" />
@@ -233,6 +245,7 @@
     <None Include="r4m_csharp_sdk.snk" />
     <None Include="Route4MeExcelAddIn_1_TemporaryKey.pfx" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

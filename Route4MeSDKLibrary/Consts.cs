@@ -90,6 +90,20 @@ namespace Route4MeSDK
 
         public const string MainHost = "https://wh.route4me.com/modules/api/v5.0";
 
+        public const string MainHostWeb = "https://wh.route4me.com/modules/webapi/v5.0";
+
+        public const string Routes = MainHost + "/routes";
+        public const string RoutesDuplicate = MainHost + "/routes/duplicate";
+        public const string RoutesMerge = MainHost + "/routes/merge";
+        public const string RoutesPaginate = MainHost + "/routes/paginate";
+        public const string RoutesFallbackPaginate = MainHost + "/routes/fallback/paginate";
+        public const string RoutesFallbackDatatable = MainHost + "/routes/fallback/datatable";
+        public const string RoutesFallback = MainHost + "/routes/fallback";
+        public const string RoutesReindexCallback = MainHost + "/routes/reindex-callback";
+        public const string RoutesDatatable = MainHost + "/routes/datatable";
+        public const string RoutesDatatableConfig = MainHost + "/routes/datatable/config";
+        public const string RoutesDatatableConfigFallback = MainHost + "/routes/fallback/datatable/config";
+
         public const string TeamUsers = MainHost+"/team/users";
 
         public const string TeamUsersBulkCreate = MainHost+"/team/bulk-insert";

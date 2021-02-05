@@ -250,6 +250,33 @@ namespace Route4MeSDK.DataTypes
     }
 
     /// <summary>
+    /// Address stop type.
+    /// </summary>
+    public enum AddressStopType : uint
+    {
+        [Description("DELIVERY")]
+        Delivery,
+
+        [Description("PICKUP")]
+        PickUp,
+
+        [Description("BREAK")]
+        Break,
+
+        [Description("MEETUP")]
+        MeetUp,
+
+        [Description("SERVICE")]
+        Service,
+
+        [Description("VISIT")]
+        Visit,
+
+        [Description("DRIVEBY")]
+        DriverBy,
+    }
+
+    /// <summary>
     /// Enumeration of the territory types
     /// </summary>
     public enum TerritoryType : uint

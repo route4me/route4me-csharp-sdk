@@ -1,6 +1,6 @@
 ﻿using Route4MeSDK.DataTypes.V5;
 using Route4MeSDK.QueryTypes.V5;
-using Route4MeSDK.QueryTypes;
+//using Route4MeSDK.QueryTypes;
 using Route4MeSDKLibrary.DataTypes;
 using System;
 using System.Linq;
@@ -14,7 +14,7 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
-using Route4MeSDK.DataTypes;
+//using Route4MeSDK.DataTypes;
 
 namespace Route4MeSDK
 {
@@ -48,16 +48,52 @@ namespace Route4MeSDK
 
         #endregion
 
+        #region Address Book Contacts
+
+        /// <summary>
+        /// The request parameter for the address book contacts removing process.
+        /// </summary>
+		[DataContract]
+        private sealed class RemoveAddressBookContactsRequest : QueryTypes.GenericParameters
+        {
+            /// <value>The array of the address IDs</value>
+			[DataMember(Name = "address_ids", EmitDefaultValue = false)]
+            public string[] AddressIds { get; set; }
+        }
+
+        /// <summary>
+        /// Remove the address book contacts.
+        /// </summary>
+        /// <param name="addressIds">The array of the address IDs</param>
+        /// <param name="errorString">out: Error as string</param>
+        /// <returns>If true the contacts were removed successfully</returns>
+		public bool RemoveAddressBookContacts(string[] addressIds, out ResultResponse resultResponse)
+        {
+            var request = new RemoveAddressBookContactsRequest()
+            {
+                AddressIds = addressIds
+            };
+
+            var response = GetJsonObjectFromAPI<StatusResponse>(request,
+                                R4MEInfrastructureSettings.AddressBook,
+                                HttpMethodType.Delete,
+                                out resultResponse);
+
+            return (response != null && response.status) ? true : false;
+        }
+
+        #endregion
+
         #region Team Management
 
         /// <summary>
         /// The request parameters for retrieving team members.
         /// </summary>
-		[DataContract()]
-        public sealed class MemberQueryParameters : GenericParameters
+        [DataContract()]
+        public sealed class MemberQueryParameters : QueryTypes.GenericParameters
         {
             /// <value>Team user ID</value>
-			[HttpQueryMemberAttribute(Name = "user_id", EmitDefaultValue = false)]
+			[QueryTypes.HttpQueryMemberAttribute(Name = "user_id", EmitDefaultValue = false)]
             public string UserId { get; set; }
         }
 
@@ -65,7 +101,7 @@ namespace Route4MeSDK
         /// The request class to bulk create the team members.
         /// </summary>
         [DataContract]
-        private sealed class BulkMembersRequest : GenericParameters
+        private sealed class BulkMembersRequest : QueryTypes.GenericParameters
         {
             // Array of the team member requests
             [DataMember(Name = "users")]
@@ -79,7 +115,7 @@ namespace Route4MeSDK
         /// <returns>An array of the TeamResponseV5 type objects</returns>
         public TeamResponse[] GetTeamMembers(out ResultResponse failResponse)
         {
-            var parameters = new GenericParameters();
+            var parameters = new QueryTypes.GenericParameters();
 
             var result = GetJsonObjectFromAPI<TeamResponse[]>(parameters,
                                 R4MEInfrastructureSettingsV5.TeamUsers,
@@ -95,10 +131,10 @@ namespace Route4MeSDK
         /// <param name="parameters">Query parameters</param>
         /// <param name="resultResponse">Failing response</param>
         /// <returns>Retrieved team member</returns>
-        public TeamResponse GetTeamMemberById(MemberQueryParameters parameters, 
+        public TeamResponse GetTeamMemberById(MemberQueryParameters parameters,
                                               out ResultResponse resultResponse)
         {
-            if ((parameters?.UserId ?? null)==null)
+            if ((parameters?.UserId ?? null) == null)
             {
                 resultResponse = new ResultResponse()
                 {
@@ -113,7 +149,7 @@ namespace Route4MeSDK
             }
 
             var result = GetJsonObjectFromAPI<TeamResponse>(parameters,
-                                R4MEInfrastructureSettingsV5.TeamUsers+"/"+ parameters.UserId,
+                                R4MEInfrastructureSettingsV5.TeamUsers + "/" + parameters.UserId,
                                 HttpMethodType.Get,
                                 out resultResponse);
 
@@ -126,7 +162,7 @@ namespace Route4MeSDK
         /// <param name="memberParams">An object of the type MemberParametersV4</param>
         /// <param name="resultResponse">Failing response</param>
         /// <returns>Created team member</returns>
-		public TeamResponse CreateTeamMember(TeamRequest memberParams, 
+		public TeamResponse CreateTeamMember(TeamRequest memberParams,
                                             out ResultResponse resultResponse)
         {
             if (!memberParams.ValidateMemberCreateRequest(out string error0))
@@ -145,8 +181,8 @@ namespace Route4MeSDK
 
             return GetJsonObjectFromAPI<TeamResponse>(
                             memberParams,
-                            R4MEInfrastructureSettingsV5.TeamUsers, 
-                            HttpMethodType.Post, 
+                            R4MEInfrastructureSettingsV5.TeamUsers,
+                            HttpMethodType.Post,
                             out resultResponse);
         }
 
@@ -161,7 +197,7 @@ namespace Route4MeSDK
         {
             resultResponse = default(ResultResponse);
 
-            if ((membersParams?.Length ?? 0)<1)
+            if ((membersParams?.Length ?? 0) < 1)
             {
                 resultResponse = new ResultResponse()
                 {
@@ -212,7 +248,7 @@ namespace Route4MeSDK
         /// <param name="parameters">An object of the type MemberParametersV4 containg the parameter UserId</param>
         /// <param name="resultResponse">Failing response</param>
         /// <returns>Removed team member</returns>
-		public TeamResponse RemoveTeamMember(MemberQueryParameters parameters, 
+		public TeamResponse RemoveTeamMember(MemberQueryParameters parameters,
                                                 out ResultResponse resultResponse)
         {
             if ((parameters?.UserId ?? null) == null)
@@ -225,14 +261,14 @@ namespace Route4MeSDK
                         { "Error", new string[] { "The UserId parameter is not specified" } }
                     }
                 };
-                
+
                 return null;
             }
 
             var response = GetJsonObjectFromAPI<TeamResponse>(
-                                    parameters, 
-                                    R4MEInfrastructureSettingsV5.TeamUsers + "/" + parameters.UserId, 
-                                    HttpMethodType.Delete, 
+                                    parameters,
+                                    R4MEInfrastructureSettingsV5.TeamUsers + "/" + parameters.UserId,
+                                    HttpMethodType.Delete,
                                     out resultResponse);
 
             return response;
@@ -246,8 +282,8 @@ namespace Route4MeSDK
         /// <param name="requestPayload">Member request parameters</param>
         /// <param name="resultResponse">Failing response</param>
         /// <returns>Updated team member</returns>
-        public TeamResponse UpdateTeamMember(MemberQueryParameters queryParameters, 
-                                             TeamRequest requestPayload, 
+        public TeamResponse UpdateTeamMember(MemberQueryParameters queryParameters,
+                                             TeamRequest requestPayload,
                                              out ResultResponse resultResponse)
         {
             if ((queryParameters?.UserId ?? null) == null)
@@ -312,7 +348,7 @@ namespace Route4MeSDK
                 return null;
             }
 
-            if ((skills?.Length ?? 0)<1)
+            if ((skills?.Length ?? 0) < 1)
             {
                 resultResponse = new ResultResponse()
                 {
@@ -358,10 +394,10 @@ namespace Route4MeSDK
         /// <param name="parameters">Query parmeters</param>
         /// <param name="resultResponse">Failing response</param>
         /// <returns>List of the driver reviews</returns>
-        public DriverReviewsResponse GetDriverReviewList(DriverReviewParameters parameters, 
+        public DriverReviewsResponse GetDriverReviewList(DriverReviewParameters parameters,
                                                          out ResultResponse resultResponse)
         {
-            
+
 
             parseWithNewtonJson = true;
 
@@ -429,10 +465,10 @@ namespace Route4MeSDK
         /// <param name="resultResponse">Failing response</param>
         /// <returns>Driver review</returns>
         public DriverReview UpdateDriverReview(DriverReview driverReview,
-                                                HttpMethodType method, 
+                                                HttpMethodType method,
                                                 out ResultResponse resultResponse)
         {
-            if (method!= HttpMethodType.Patch && method != HttpMethodType.Put)
+            if (method != HttpMethodType.Patch && method != HttpMethodType.Put)
             {
                 resultResponse = new ResultResponse()
                 {
@@ -446,7 +482,7 @@ namespace Route4MeSDK
                 return null;
             }
 
-            if (driverReview.RatingId==null)
+            if (driverReview.RatingId == null)
             {
                 resultResponse = new ResultResponse()
                 {
@@ -462,9 +498,261 @@ namespace Route4MeSDK
 
             return GetJsonObjectFromAPI<DriverReview>(
                             driverReview,
-                            R4MEInfrastructureSettingsV5.DriverReview+"/"+ driverReview.RatingId,
+                            R4MEInfrastructureSettingsV5.DriverReview + "/" + driverReview.RatingId,
                             method,
                             out resultResponse);
+        }
+
+        #endregion
+
+        #region Routes
+
+        public DataObjectRoute[] GetRoutes(RouteParametersQuery routeParameters, out ResultResponse resultResponse)
+        {
+            var result = GetJsonObjectFromAPI<DataObjectRoute[]>(routeParameters,
+                                                                 R4MEInfrastructureSettingsV5.Routes,
+                                                                 HttpMethodType.Get,
+                                                                 out resultResponse);
+
+            return result;
+        }
+
+        public DataObjectRoute[] GetAllRoutesWithPagination(RouteParametersQuery routeParameters, out ResultResponse resultResponse)
+        {
+            var result = GetJsonObjectFromAPI<DataObjectRoute[]>(routeParameters,
+                                                                 R4MEInfrastructureSettingsV5.RoutesPaginate,
+                                                                 HttpMethodType.Get,
+                                                                 out resultResponse);
+
+            return result;
+        }
+
+        public DataObjectRoute[] GetPaginatedRouteListWithoutElasticSearch(RouteParametersQuery routeParameters, out ResultResponse resultResponse)
+        {
+            var result = GetJsonObjectFromAPI<DataObjectRoute[]>(routeParameters,
+                                                                 R4MEInfrastructureSettingsV5.RoutesFallbackPaginate,
+                                                                 HttpMethodType.Get,
+                                                                 out resultResponse);
+
+            return result;
+        }
+
+        public DataObjectRoute[] GetRouteDataTableWithElasticSearch(
+                                                            RouteFilterParameters routeFilterParameters, 
+                                                            out ResultResponse resultResponse)
+        {
+            var result = GetJsonObjectFromAPI<DataObjectRoute[]>(
+                            routeFilterParameters,
+                            R4MEInfrastructureSettingsV5.RoutesFallbackDatatable,
+                            HttpMethodType.Post,
+                            out resultResponse);
+
+            return result;
+        }
+
+        public DataObjectRoute[] GetRouteDatatableWithElasticSearch(
+                                                            RouteFilterParameters routeFilterParameters,
+                                                            out ResultResponse resultResponse)
+        {
+            var result = GetJsonObjectFromAPI<DataObjectRoute[]>(
+                            routeFilterParameters,
+                            R4MEInfrastructureSettingsV5.RoutesDatatable,
+                            HttpMethodType.Post,
+                            out resultResponse);
+
+            return result;
+        }
+
+        public DataObjectRoute[] GetRouteListWithoutElasticSearch(RouteParametersQuery routeParameters, out ResultResponse resultResponse)
+        {
+            var result = GetJsonObjectFromAPI<DataObjectRoute[]>(routeParameters,
+                                                                 R4MEInfrastructureSettingsV5.RoutesFallback,
+                                                                 HttpMethodType.Get,
+                                                                 out resultResponse);
+
+            return result;
+        }
+
+        public RouteDuplicateResponse DuplicateRoute(string[] routeIDs, out ResultResponse resultResponse)
+        {
+            var duplicateParameter = new Dictionary<string, string[]>()
+            {
+                {
+                    "duplicate_routes_id" , routeIDs
+                }
+            };
+
+            var duplicateParameterJsonString = R4MeUtils.SerializeObjectToJson(duplicateParameter, true);
+
+            var content = new StringContent(duplicateParameterJsonString, System.Text.Encoding.UTF8, "application/json");
+
+            var genParams = new RouteParametersQuery();
+
+            var result = GetJsonObjectFromAPI<RouteDuplicateResponse>(
+                genParams,
+                R4MEInfrastructureSettingsV5.RoutesDuplicate, 
+                HttpMethodType.Post, 
+                content, 
+                out resultResponse);
+
+            return result;
+        }
+
+        public RoutesDeleteResponse DeleteRoutes(string[] routeIds, out ResultResponse resultResponse)
+        {
+            string str_route_ids = "";
+
+            foreach (string routeId in routeIds)
+            {
+                if (str_route_ids.Length > 0) str_route_ids += ",";
+                str_route_ids += routeId;
+            }
+
+            var genericParameters = new QueryTypes.GenericParameters();
+
+            genericParameters.ParametersCollection.Add("route_id", str_route_ids);
+
+            var response = GetJsonObjectFromAPI<RoutesDeleteResponse>(genericParameters,
+                                                R4MEInfrastructureSettingsV5.Routes,
+                                                HttpMethodType.Delete,
+                                                out resultResponse);
+
+            return response;
+        }
+
+        public RouteDataTableConfigResponse GetRouteDataTableConfig(out ResultResponse resultResponse)
+        {
+            var genericParameters = new QueryTypes.GenericParameters();
+
+            var result = GetJsonObjectFromAPI<RouteDataTableConfigResponse>(genericParameters,
+                                                                 R4MEInfrastructureSettingsV5.RoutesDatatableConfig,
+                                                                 HttpMethodType.Get,
+                                                                 out resultResponse);
+
+            return result;
+        }
+
+        public RouteDataTableConfigResponse GetRouteDataTableFallbackConfig(out ResultResponse resultResponse)
+        {
+            var genericParameters = new QueryTypes.GenericParameters();
+
+            var result = GetJsonObjectFromAPI<RouteDataTableConfigResponse>(genericParameters,
+                                                                 R4MEInfrastructureSettingsV5.RoutesDatatableConfigFallback,
+                                                                 HttpMethodType.Get,
+                                                                 out resultResponse);
+
+            return result;
+        }
+
+        /// <summary>
+        /// You can update a route in two ways:
+        /// 1. Modify existing route and put in this function the route object as parameter.
+        /// 2. Create an empty route object and assign values to the parameters:
+        /// - RouteID;
+        /// - Parameters (optional);
+        /// - Addresses (Optional).
+        /// </summary>
+        /// <param name="route">Route object</param>
+        /// <param name="resultResponse">Failing response</param>
+        /// <returns>Updated route</returns>
+        [Obsolete("Will be finished after implementing Route Destinations API")]
+        public DataObjectRoute UpdateRoute(DataObjectRoute route, out ResultResponse resultResponse)
+        {
+            var routeQueryParams = new RouteParametersQuery();
+
+            routeQueryParams.RouteId = route.RouteID;
+
+            if (route.Parameters != null) routeQueryParams.Parameters = route.Parameters;
+
+            if (route.Addresses != null && route.Addresses.Length>0) routeQueryParams.Addresses = route.Addresses;
+
+            var response = GetJsonObjectFromAPI<DataObjectRoute>(
+                                    routeQueryParams,
+                                    R4MEInfrastructureSettingsV5.Routes,
+                                    HttpMethodType.Put,
+                                    out resultResponse);
+
+            return response;
+        }
+
+        #endregion
+
+        #region Optimizations
+
+        /// <summary>
+        /// Generates optimized routes
+        /// </summary>
+        /// <param name="optimizationParameters">The input parameters for the routes optimization, which encapsulates:
+        /// the route parameters and the addresses. </param>
+        /// <param name="errorString">Returned error string in case of an optimization processs failing</param>
+        /// <returns>Generated optimization problem object</returns>
+        public DataObject RunOptimization(OptimizationParameters optimizationParameters, out ResultResponse resultResponse)
+        {
+            var result = GetJsonObjectFromAPI<DataObject>(optimizationParameters,
+                                                          R4MEInfrastructureSettings.ApiHost,
+                                                          HttpMethodType.Post,
+                                                          false,
+                                                          out resultResponse);
+
+            return result;
+        }
+
+        /// <summary>
+        /// The response returned by the remove optimization command
+        /// </summary>
+		[DataContract]
+        private sealed class RemoveOptimizationResponse
+        {
+            /// <value>True if an optimization was removed successfuly </value>
+			[DataMember(Name = "status")]
+            public bool Status { get; set; }
+
+            /// <value>The number of the removed optimizations </value>
+			[DataMember(Name = "removed")]
+            public int Removed { get; set; }
+        }
+
+        /// <summary>
+        /// The request parameters for an optimization removing
+        /// </summary>
+		[DataContract()]
+        private sealed class RemoveOptimizationRequest : QueryTypes.GenericParameters
+        {
+            /// <value>If true will be redirected</value>
+			[QueryTypes.HttpQueryMemberAttribute(Name = "redirect", EmitDefaultValue = false)]
+            public int redirect { get; set; }
+
+            /// <value>The array of the optimization problem IDs to be removed</value>
+			[DataMember(Name = "optimization_problem_ids", EmitDefaultValue = false)]
+            public string[] optimization_problem_ids { get; set; }
+        }
+
+        /// <summary>
+        /// Remove an existing optimization belonging to an user.
+        /// </summary>
+        /// <param name="optimizationProblemID"> Optimization Problem ID </param>
+        /// <param name="errorString"> Returned error string in case of the processs failing </param>
+        /// <returns> Result status true/false </returns>
+        public bool RemoveOptimization(string[] optimizationProblemIDs, out ResultResponse resultResponse)
+        {
+            var remParameters = new RemoveOptimizationRequest()
+            {
+                redirect = 0,
+                optimization_problem_ids = optimizationProblemIDs
+            };
+
+            var response = GetJsonObjectFromAPI<RemoveOptimizationResponse>(remParameters,
+                                                                 R4MEInfrastructureSettings.ApiHost,
+                                                                 HttpMethodType.Delete,
+                                                                 out resultResponse);
+            if (response != null)
+            {
+                if (response.Status && response.Removed > 0) return true; else return false;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         #endregion
@@ -472,7 +760,7 @@ namespace Route4MeSDK
         #region Generic Methods
 
 
-        public string GetStringResponseFromAPI(GenericParameters optimizationParameters,
+        public string GetStringResponseFromAPI(QueryTypes.GenericParameters optimizationParameters,
                                                string url,
                                                HttpMethodType httpMethod,
                                                out ResultResponse resultResponse)
@@ -486,7 +774,9 @@ namespace Route4MeSDK
             return result;
         }
 
-        public T GetJsonObjectFromAPI<T>(GenericParameters optimizationParameters,
+
+
+        public T GetJsonObjectFromAPI<T>(QueryTypes.GenericParameters optimizationParameters,
                                          string url,
                                          HttpMethodType httpMethod,
                                          out ResultResponse resultResponse)
@@ -501,7 +791,7 @@ namespace Route4MeSDK
             return result;
         }
 
-        public T GetJsonObjectFromAPI<T>(GenericParameters optimizationParameters,
+        public T GetJsonObjectFromAPI<T>(QueryTypes.GenericParameters optimizationParameters,
                                          string url,
                                          HttpMethodType httpMethod,
                                          HttpContent httpContent,
@@ -518,7 +808,7 @@ namespace Route4MeSDK
             return result;
         }
 
-        private T GetJsonObjectFromAPI<T>(GenericParameters optimizationParameters,
+        private T GetJsonObjectFromAPI<T>(QueryTypes.GenericParameters optimizationParameters,
                                           string url,
                                           HttpMethodType httpMethod,
                                           bool isString,
@@ -535,7 +825,7 @@ namespace Route4MeSDK
             return result;
         }
 
-        private async Task<Tuple<T, ResultResponse>> GetJsonObjectFromAPIAsync<T>(GenericParameters optimizationParameters,
+        private async Task<Tuple<T, ResultResponse>> GetJsonObjectFromAPIAsync<T>(QueryTypes.GenericParameters optimizationParameters,
                                         string url,
                                         HttpMethodType httpMethod,
                                         bool isString)
@@ -555,7 +845,7 @@ namespace Route4MeSDK
 
         }
 
-        private async Task<Tuple<T, ResultResponse>> GetJsonObjectFromAPIAsync<T>(GenericParameters optimizationParameters,
+        private async Task<Tuple<T, ResultResponse>> GetJsonObjectFromAPIAsync<T>(QueryTypes.GenericParameters optimizationParameters,
                                        string url,
                                        HttpMethodType httpMethod,
                                        HttpContent httpContent,
@@ -670,7 +960,7 @@ namespace Route4MeSDK
 
                                     Task<string> errorMessageContent = null;
 
-                                    if (response.Content.GetType() != typeof(StreamContent)) 
+                                    if (response.Content.GetType() != typeof(StreamContent))
                                         errorMessageContent = response.Content.ReadAsStringAsync();
 
 
@@ -740,7 +1030,7 @@ namespace Route4MeSDK
 
                 if ((e.InnerException?.Message ?? null) != null)
                 {
-                    if (resultResponse.Messages == null)  
+                    if (resultResponse.Messages == null)
                         resultResponse.Messages = new Dictionary<string, string[]>();
 
                     resultResponse.Messages.Add("Error", new string[] { e.InnerException.Message });
@@ -765,9 +1055,9 @@ namespace Route4MeSDK
 
                 if ((e.InnerException?.Message ?? null) != null)
                 {
-                    if (resultResponse.Messages == null) 
+                    if (resultResponse.Messages == null)
                         resultResponse.Messages = new Dictionary<string, string[]>();
-                    
+
                     resultResponse.Messages.Add("InnerException Error", new string[] { e.InnerException.Message });
                 }
 
@@ -778,7 +1068,7 @@ namespace Route4MeSDK
         }
 
 
-        private T GetJsonObjectFromAPI<T>(GenericParameters optimizationParameters,
+        private T GetJsonObjectFromAPI<T>(QueryTypes.GenericParameters optimizationParameters,
                                               string url,
                                               HttpMethodType httpMethod,
                                               HttpContent httpContent,
@@ -1009,7 +1299,7 @@ namespace Route4MeSDK
 
                 if ((e.InnerException?.Message ?? null) != null)
                 {
-                    if (resultResponse.Messages == null) 
+                    if (resultResponse.Messages == null)
                         resultResponse.Messages = new Dictionary<string, string[]>();
 
                     resultResponse.Messages.Add("Error", new string[] { e.InnerException.Message });
@@ -1024,10 +1314,10 @@ namespace Route4MeSDK
                     Status = false
                 };
 
-                if (e.Message!=null)
+                if (e.Message != null)
                 {
-                    resultResponse.Messages = new Dictionary<string, string[]>() 
-                    { 
+                    resultResponse.Messages = new Dictionary<string, string[]>()
+                    {
                         { "Error", new string[] { e.Message } }
                     };
                 }
@@ -1044,10 +1334,10 @@ namespace Route4MeSDK
             return result;
         }
 
-        private string GetXmlObjectFromAPI<T>(GenericParameters optimizationParameters, 
-                                                string url, 
-                                                HttpMethodType httpMethod__1, 
-                                                HttpContent httpContent, 
+        private string GetXmlObjectFromAPI<T>(QueryTypes.GenericParameters optimizationParameters,
+                                                string url,
+                                                HttpMethodType httpMethod__1,
+                                                HttpContent httpContent,
                                                 bool isString,
                                                 out ResultResponse resultResponse) where T : class
         {
@@ -1071,8 +1361,8 @@ namespace Route4MeSDK
 
                                 if (response.IsCompleted)
                                 {
-                                    result = isString 
-                                        ? response.Result.ReadString() as String 
+                                    result = isString
+                                        ? response.Result.ReadString() as String
                                         : response.Result.ReadObject<String>(); // Oleg T -> String
                                 }
                             }
@@ -1085,8 +1375,8 @@ namespace Route4MeSDK
 
                                 if (response.IsCompleted)
                                 {
-                                    result = isString 
-                                        ? response.Result.ReadString() as String 
+                                    result = isString
+                                        ? response.Result.ReadString() as String
                                         : response.Result.ReadObject<String>(); // Oleg T -> String
                                 }
                             }
@@ -1156,7 +1446,7 @@ namespace Route4MeSDK
 
                                     ErrorResponse errorResponse = null;
 
-                                    Task<string> errorMessageContent = response.Result.Content.GetType() != typeof(StreamContent) 
+                                    Task<string> errorMessageContent = response.Result.Content.GetType() != typeof(StreamContent)
                                         ? errorMessageContent = response.Result.Content.ReadAsStringAsync()
                                         : null;
 
