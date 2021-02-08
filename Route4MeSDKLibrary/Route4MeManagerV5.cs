@@ -190,7 +190,7 @@ namespace Route4MeSDK
         /// Bulk create the team members
         /// TO DO: there is no response from the function.
         /// </summary>
-        /// <param name="membersParams"></param>
+        /// <param name="membersParams">Member request parameters</param>
         /// <param name="resultResponse">Failing response</param>
         /// <returns></returns>
         public ResultResponse BulkCreateTeamMembers(TeamRequest[] membersParams, out ResultResponse resultResponse)
@@ -507,6 +507,12 @@ namespace Route4MeSDK
 
         #region Routes
 
+        /// <summary>
+        /// Get all Routes of the User filtered by specifying the corresponding query parameters.
+        /// </summary>
+        /// <param name="routeParameters">Route query parameters</param>
+        /// <param name="resultResponse">Failing response</param>
+        /// <returns>An array of the routes</returns>
         public DataObjectRoute[] GetRoutes(RouteParametersQuery routeParameters, out ResultResponse resultResponse)
         {
             var result = GetJsonObjectFromAPI<DataObjectRoute[]>(routeParameters,
@@ -517,6 +523,12 @@ namespace Route4MeSDK
             return result;
         }
 
+        /// <summary>
+        /// Get all Routes of the User filtered by specifying the corresponding query parameters.
+        /// </summary>
+        /// <param name="routeParameters">Route query parameters</param>
+        /// <param name="resultResponse">Failing response</param>
+        /// <returns>An array of the routes</returns>
         public DataObjectRoute[] GetAllRoutesWithPagination(RouteParametersQuery routeParameters, out ResultResponse resultResponse)
         {
             var result = GetJsonObjectFromAPI<DataObjectRoute[]>(routeParameters,
@@ -527,7 +539,14 @@ namespace Route4MeSDK
             return result;
         }
 
-        public DataObjectRoute[] GetPaginatedRouteListWithoutElasticSearch(RouteParametersQuery routeParameters, out ResultResponse resultResponse)
+        /// <summary>
+        /// Get all Routes of the User filtered by specifying the corresponding query parameters (without using ElasticSearch).
+        /// </summary>
+        /// <param name="routeParameters">Route query parameters</param>
+        /// <param name="resultResponse">Failing response</param>
+        /// <returns>An array of the routes</returns>
+        public DataObjectRoute[] GetPaginatedRouteListWithoutElasticSearch(RouteParametersQuery routeParameters, 
+                                                                            out ResultResponse resultResponse)
         {
             var result = GetJsonObjectFromAPI<DataObjectRoute[]>(routeParameters,
                                                                  R4MEInfrastructureSettingsV5.RoutesFallbackPaginate,
@@ -537,9 +556,14 @@ namespace Route4MeSDK
             return result;
         }
 
-        public DataObjectRoute[] GetRouteDataTableWithElasticSearch(
-                                                            RouteFilterParameters routeFilterParameters, 
-                                                            out ResultResponse resultResponse)
+        /// <summary>
+        /// Get route list using Elastic Search.
+        /// </summary>
+        /// <param name="routeFilterParameters">Route filter parameters</param>
+        /// <param name="resultResponse">Failing response</param>
+        /// <returns>An array of the routes</returns>
+        public DataObjectRoute[] GetRouteDataTableWithElasticSearch(RouteFilterParameters routeFilterParameters, 
+                                                                    out ResultResponse resultResponse)
         {
             var result = GetJsonObjectFromAPI<DataObjectRoute[]>(
                             routeFilterParameters,
@@ -550,19 +574,12 @@ namespace Route4MeSDK
             return result;
         }
 
-        public DataObjectRoute[] GetRouteDatatableWithElasticSearch(
-                                                            RouteFilterParameters routeFilterParameters,
-                                                            out ResultResponse resultResponse)
-        {
-            var result = GetJsonObjectFromAPI<DataObjectRoute[]>(
-                            routeFilterParameters,
-                            R4MEInfrastructureSettingsV5.RoutesDatatable,
-                            HttpMethodType.Post,
-                            out resultResponse);
-
-            return result;
-        }
-
+        /// <summary>
+        /// Get route list without using Elastic Search.
+        /// </summary>
+        /// <param name="routeParameters">Route filter parameters</param>
+        /// <param name="resultResponse">Failing response</param>
+        /// <returns>An array of the routes</returns>
         public DataObjectRoute[] GetRouteListWithoutElasticSearch(RouteParametersQuery routeParameters, out ResultResponse resultResponse)
         {
             var result = GetJsonObjectFromAPI<DataObjectRoute[]>(routeParameters,
@@ -573,6 +590,12 @@ namespace Route4MeSDK
             return result;
         }
 
+        /// <summary>
+        /// Duplicate multiple Routes by sending a body payload with the array of the corresponding Route IDs.
+        /// </summary>
+        /// <param name="routeIDs">An array of the route ID</param>
+        /// <param name="resultResponse">Failing response</param>
+        /// <returns>A response with status code</returns>
         public RouteDuplicateResponse DuplicateRoute(string[] routeIDs, out ResultResponse resultResponse)
         {
             var duplicateParameter = new Dictionary<string, string[]>()
@@ -598,6 +621,12 @@ namespace Route4MeSDK
             return result;
         }
 
+        /// <summary>
+        /// Delete multiple Routes by sending a comma-delimited list of the corresponding Route IDs as a query string.
+        /// </summary>
+        /// <param name="routeIds">An array of the route IDs</param>
+        /// <param name="resultResponse">Failing response</param>
+        /// <returns>A response with status code</returns>
         public RoutesDeleteResponse DeleteRoutes(string[] routeIds, out ResultResponse resultResponse)
         {
             string str_route_ids = "";
@@ -620,6 +649,11 @@ namespace Route4MeSDK
             return response;
         }
 
+        /// <summary>
+        /// Get the datatable configuration.
+        /// </summary>
+        /// <param name="resultResponse">Failing response</param>
+        /// <returns>A response with status code</returns>
         public RouteDataTableConfigResponse GetRouteDataTableConfig(out ResultResponse resultResponse)
         {
             var genericParameters = new QueryTypes.GenericParameters();
@@ -632,6 +666,11 @@ namespace Route4MeSDK
             return result;
         }
 
+        /// <summary>
+        /// Get a datatable fallback configuration request.
+        /// </summary>
+        /// <param name="resultResponse">Failing response</param>
+        /// <returns>RouteDataTableConfigResponse type object</returns>
         public RouteDataTableConfigResponse GetRouteDataTableFallbackConfig(out ResultResponse resultResponse)
         {
             var genericParameters = new QueryTypes.GenericParameters();
@@ -684,7 +723,7 @@ namespace Route4MeSDK
         /// </summary>
         /// <param name="optimizationParameters">The input parameters for the routes optimization, which encapsulates:
         /// the route parameters and the addresses. </param>
-        /// <param name="errorString">Returned error string in case of an optimization processs failing</param>
+        /// <param name="resultResponse">Failing response</param>
         /// <returns>Generated optimization problem object</returns>
         public DataObject RunOptimization(OptimizationParameters optimizationParameters, out ResultResponse resultResponse)
         {
@@ -730,8 +769,8 @@ namespace Route4MeSDK
         /// <summary>
         /// Remove an existing optimization belonging to an user.
         /// </summary>
-        /// <param name="optimizationProblemID"> Optimization Problem ID </param>
-        /// <param name="errorString"> Returned error string in case of the processs failing </param>
+        /// <param name="optimizationProblemID"> Optimization Problem IDs </param>
+        /// <param name="resultResponse"> Failing response </param>
         /// <returns> Result status true/false </returns>
         public bool RemoveOptimization(string[] optimizationProblemIDs, out ResultResponse resultResponse)
         {

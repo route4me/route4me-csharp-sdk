@@ -336,6 +336,9 @@ namespace Route4MeSDK.DataTypes.V5
         [ReadOnly(true)]
         public double? DistanceToNextDestination { get; set; }
 
+        /// <summary>
+        /// UDU distance to next destination.
+        /// </summary>
         [DataMember(Name = "udu_distance_to_next_destination", EmitDefaultValue = false)]
         [ReadOnly(true)]
         public double? UduDistanceToNextDestination { get; set; }
@@ -542,11 +545,17 @@ namespace Route4MeSDK.DataTypes.V5
         [DataMember(Name = "joint", EmitDefaultValue = false)]
         public int? Joint { get; set; }
 
+        /// <summary>
+        /// Bundle count
+        /// </summary>
         [DataMember(Name = "bundle_count", EmitDefaultValue = true)]
         [DefaultValue(0)]
         [ReadOnly(true)]
         public int BundleCount { get; set; }
 
+        /// <summary>
+        /// Bundle items
+        /// </summary>
         [DataMember(Name = "bundle_items", EmitDefaultValue = true)]
         [ReadOnly(true)]
         public BundledItemResponse[] BundleItems { get; set; }

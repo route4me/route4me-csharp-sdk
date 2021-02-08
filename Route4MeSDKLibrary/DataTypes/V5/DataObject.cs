@@ -12,7 +12,6 @@ namespace Route4MeSDK.DataTypes.V5
         /// <summary>
         /// An optimization problem state. See <see cref="OptimizationState"/>
         /// </summary>
-        /// 
         [DataMember(Name = "state")]
         public OptimizationState State { get; set; }
 

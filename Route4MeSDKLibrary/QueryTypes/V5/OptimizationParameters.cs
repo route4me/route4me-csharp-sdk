@@ -3,14 +3,22 @@ using System.Runtime.Serialization;
 
 namespace Route4MeSDK.QueryTypes.V5
 {
-
+    /// <summary>
+    /// Optimization request parameters.
+    /// </summary>
     [DataContract]
     public sealed class OptimizationParameters : QueryTypes.GenericParameters
     {
+        /// <summary>
+        /// Optimization problem ID
+        /// </summary>
         [IgnoreDataMember] // Don't serialize as JSON
         [HttpQueryMemberAttribute(Name = "optimization_problem_id", EmitDefaultValue = false)]
         public string OptimizationProblemID { get; set; }
 
+        /// <summary>
+        /// If true, the optimization will be reoptimized.
+        /// </summary>
         [IgnoreDataMember] // Don't serialize as JSON
         [HttpQueryMemberAttribute(Name = "reoptimize", EmitDefaultValue = false)]
         public bool? ReOptimize { get; set; }
@@ -22,10 +30,16 @@ namespace Route4MeSDK.QueryTypes.V5
         [HttpQueryMemberAttribute(Name = "redirect", EmitDefaultValue = false)]
         public bool? Redirect { get; set; }
 
+        /// <summary>
+        /// If true, the directions are shown in the optimization.
+        /// </summary>
         [IgnoreDataMember] // Don't serialize as JSON
         [HttpQueryMemberAttribute(Name = "show_directions", EmitDefaultValue = false)]
         public bool? ShowDirections { get; set; }
 
+        /// <summary>
+        /// Optimization callback URL
+        /// </summary>
         [IgnoreDataMember] // Don't serialize as JSON
         [HttpQueryMemberAttribute(Name = "optimized_callback_url", EmitDefaultValue = false)]
         public string OptimizedCallbackURL { get; set; }
@@ -44,14 +58,23 @@ namespace Route4MeSDK.QueryTypes.V5
         [HttpQueryMemberAttribute(Name = "offset", EmitDefaultValue = false)]
         public uint? Offset { get; set; }
 
+        /// <summary>
+        /// Route start date
+        /// </summary>
         [IgnoreDataMember]
         [HttpQueryMemberAttribute(Name = "start_date", EmitDefaultValue = false)]
         public string StartDate { get; set; }
 
+        /// <summary>
+        /// Route end date
+        /// </summary>
         [IgnoreDataMember]
         [HttpQueryMemberAttribute(Name = "end_date", EmitDefaultValue = false)]
         public string EndDate { get; set; }
 
+        /// <summary>
+        /// Optimization query string
+        /// </summary>
         [IgnoreDataMember]
         [HttpQueryMemberAttribute(Name = "query", EmitDefaultValue = false)]
         public string Query { get; set; }

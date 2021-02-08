@@ -21,7 +21,7 @@ namespace Route4MeSDK.DataTypes.V5
         public bool? Async { get; set; }
 
         /// <summary>
-        /// An array of the duplicated route IDs.-
+        /// An array of the duplicated route IDs.
         /// </summary>
         [DataMember(Name = "route_ids", EmitDefaultValue = false)]
         public string[] RouteIDs { get; set; }
