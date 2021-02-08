@@ -53,10 +53,16 @@ namespace Route4MeSDK.QueryTypes.V5
         [HttpQueryMemberAttribute(Name = "offset", EmitDefaultValue = false)]
         public uint? Offset { get; set; }
 
+        /// <summary>
+        /// Start date
+        /// </summary>
         [IgnoreDataMember]
         [HttpQueryMemberAttribute(Name = "start_date", EmitDefaultValue = false)]
         public string StartDate { get; set; }
 
+        /// <summary>
+        /// End date
+        /// </summary>
         [IgnoreDataMember]
         [HttpQueryMemberAttribute(Name = "end_date", EmitDefaultValue = false)]
         public string EndDate { get; set; }

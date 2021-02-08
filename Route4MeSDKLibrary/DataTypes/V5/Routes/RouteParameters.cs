@@ -433,7 +433,7 @@ namespace Route4MeSDK.DataTypes.V5
         public string TruckBorders { get; set; }
 
         /// <summary>
-        ///Truck side street adherence.
+        /// Truck side street adherence.
         /// enum: ["OFF", "MINIMAL","MODERATE","AVERAGE","STRICT","ADHERE","STRONGLYHERE"]
         /// </summary>
         [DataMember(Name = "truck_side_street_adherence", EmitDefaultValue = false)]
@@ -628,7 +628,6 @@ namespace Route4MeSDK.DataTypes.V5
         /// </summary>
         [DataMember(Name = "travel_time", EmitDefaultValue = false)]
         public int? TravelTime { get; set; }
-
         
     }
 }

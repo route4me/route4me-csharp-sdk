@@ -4572,7 +4572,9 @@ namespace Route4MeSDKUnitTest
                 DepotAddress = route1.Addresses[0].AddressString,
                 RemoveOrigin = false,
                 DepotLat = route1.Addresses[0].Latitude,
-                DepotLng = route1.Addresses[0].Longitude
+                DepotLng = route1.Addresses[0].Longitude,
+                ToRouteId = route2.RouteID,
+                RouteDestinationId = route1.Addresses[0].RouteDestinationId.ToString()
             };
 
             bool result = route4Me.MergeRoutes(mergeRoutesParameters, out string errorString);
