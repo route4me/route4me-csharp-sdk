@@ -213,7 +213,7 @@ namespace Route4MeSDK.DataTypes.V5
         public double? DriverHourlyRate { get; set; }
 
         /// <summary>
-        /// User zipcode
+        /// Vendor ID
         /// </summary>
         [DataMember(Name = "vendor_id")]
         public string VendorId { get; set; }
