@@ -110,6 +110,25 @@ namespace Route4MeSDK
 
         public const string DriverReview = MainHost + "/driver-reviews";
 
+        #region Vehicles
+
+        public const string Vehicles = MainHost + "/vehicles";
+
+        public const string VehicleTemporary = MainHost + "/vehicles/assign";
+
+        public const string VehicleExecuteOrder = MainHost + "/vehicles/execute";
+
+        public const string VehicleLocation = MainHost + "/vehicles/location";
+
+        public const string VehicleProfiles = MainHost + "/vehicle-profiles";
+
+        public const string VehicleLicense = MainHost + "/vehicles/license";
+
+        public const string VehicleSearch = MainHost + "/vehicles/search";
+
+        #endregion
+
+
         #endregion
     }
 }

@@ -125,7 +125,7 @@ namespace Route4MeSdkV5UnitTest.AddOnRoutesApi
                 PerPage = 20,
                 Filters = new RouteFilterParametersFilters()
                 {
-                    ScheduleDate = new string[] { "2021-02-01", "2021-02-01" }
+                    ScheduleDate = new string[] { "2021-02-01", "2021-02-02" }
                 },
                 OrderBy = new List<string[]>()
                 {
@@ -134,7 +134,7 @@ namespace Route4MeSdkV5UnitTest.AddOnRoutesApi
                 Timezone = "UTC"
             };
 
-            DataObjectRoute[] dataObjects = route4Me.GetRouteDataTableWithElasticSearch(
+            DataObjectRoute[] dataObjects = route4Me.GetRouteDataTableWithoutElasticSearch(
                 routeParameters,
                 out ResultResponse resultResponse);
 
@@ -149,14 +149,14 @@ namespace Route4MeSdkV5UnitTest.AddOnRoutesApi
             var routeParameters = new RouteFilterParameters()
             {
                 Page = 1,
-                PerPage = 20,
+                PerPage = 10,
                 Filters = new RouteFilterParametersFilters()
                 {
-                    ScheduleDate = new string[] { "2021-02-01", "2021-02-01" }
+                    ScheduleDate = new string[] { "2021-02-11", "2021-02-12" }
                 },
                 OrderBy = new List<string[]>()
                 {
-                    new string[] { "route_created_unix", "desc" }
+                    new string[] { "route_created_unix", "asc" }
                 },
                 Timezone = "UTC"
             };

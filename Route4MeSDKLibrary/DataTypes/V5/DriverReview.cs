@@ -34,7 +34,7 @@ namespace Route4MeSDK.DataTypes.V5
         /// </summary>
         [DataMember(Name = "rating")]
         [Range(1, 4)]
-        public double? Rating { get; set; }
+        public int? Rating { get; set; }
 
         /// <summary>
         /// When the review was created.
@@ -90,14 +90,17 @@ namespace Route4MeSDK.DataTypes.V5
         [DataMember(Name = "path")]
         public string Path { get; set; }
 
+        /// <summary>
+        /// Path to the first page of the driver reviews collection.
+        /// </summary>
         [DataMember(Name = "first")]
         public string First { get; set; }
 
         [DataMember(Name = "prev")]
-        public int? Previous { get; set; }
+        public string Previous { get; set; }
 
         [DataMember(Name = "next")]
-        public int? Next { get; set; }
+        public string Next { get; set; }
     }
 
     /// <summary>

@@ -64,7 +64,7 @@ namespace Route4MeSDK.DataTypes
         public long? ActualArrivalTimeTs { get; set; }
 
         /// <summary>
-        /// Time when the address was mared as departed UTC. 
+        /// Time when the address was marked as departed UTC. 
         /// This is actually equal to timestamp_last_departed most of the time.
         /// </summary>
         [DataMember(Name = "actual_departure_time_ts", EmitDefaultValue = false)]

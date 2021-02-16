@@ -149,6 +149,7 @@
     <Compile Include="DataTypes\MemberResponse.cs" />
     <Compile Include="DataTypes\MemberResponseV4.cs" />
     <Compile Include="DataTypes\V5\Address\Address.cs" />
+    <Compile Include="DataTypes\V5\Address\Geocoding.cs" />
     <Compile Include="DataTypes\V5\DataObject.cs" />
     <Compile Include="DataTypes\V5\DataObjectBase.cs" />
     <Compile Include="DataTypes\V5\DriverReview.cs" />
@@ -185,6 +186,14 @@
     <Compile Include="DataTypes\TrackingHistory.cs" />
     <Compile Include="DataTypes\User.cs" />
     <Compile Include="DataTypes\UserLocation.cs" />
+    <Compile Include="DataTypes\V5\Vehicles\Vehicle.cs" />
+    <Compile Include="DataTypes\V5\Vehicles\VehicleLocationResponse.cs" />
+    <Compile Include="DataTypes\V5\Vehicles\VehicleOrderResponse.cs" />
+    <Compile Include="DataTypes\V5\Vehicles\VehicleProfile.cs" />
+    <Compile Include="DataTypes\V5\Vehicles\VehicleProfilesResponse.cs" />
+    <Compile Include="DataTypes\V5\Vehicles\VehicleResponse.cs" />
+    <Compile Include="DataTypes\V5\Vehicles\VehicleTemporary.cs" />
+    <Compile Include="DataTypes\V5\Vehicles\VehicleTrackResponse.cs" />
     <Compile Include="DataTypes\VehicleResponse.cs" />
     <Compile Include="DataTypes\VehiclesPaginated.cs" />
     <Compile Include="DataTypes\VehicleV4CreateResponse.cs" />
@@ -228,6 +237,10 @@
     <Compile Include="QueryTypes\V5\TeamRequest.cs" />
     <Compile Include="QueryTypes\TelematicsVendorParameters.cs" />
     <Compile Include="QueryTypes\TerritoryQuery.cs" />
+    <Compile Include="QueryTypes\V5\Vehicles\VehicleOrderParameters.cs" />
+    <Compile Include="QueryTypes\V5\Vehicles\VehicleParameters.cs" />
+    <Compile Include="QueryTypes\V5\Vehicles\VehicleProfileParameters.cs" />
+    <Compile Include="QueryTypes\V5\Vehicles\VehicleSearchParameters.cs" />
     <Compile Include="QueryTypes\VehicleParameters.cs" />
     <Compile Include="QueryTypes\VehicleV4Parameters.cs" />
     <Compile Include="Route4MeManager.cs" />

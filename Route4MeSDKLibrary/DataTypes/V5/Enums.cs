@@ -373,4 +373,79 @@ namespace Route4MeSDK.DataTypes.V5
         [Description("SUB_ACCOUNT_VENDOR")]
         Vendor
     }
+    
+    /// <summary>
+    /// Enumeration of the fuel types.
+    /// </summary>
+    public enum FuelTypes
+    {
+        [Description("unleaded 87")]
+        Unleaded_87,
+
+        [Description("unleaded 89")]
+        Unleaded_89,
+
+        [Description("unleaded 91")]
+        Unleaded_91,
+
+        [Description("unleaded 93")]
+        Unleaded_93,
+
+        [Description("diesel")]
+        Diesel,
+
+        [Description("electric")]
+        Electric,
+
+        [Description("hybrid")]
+        Hybrid
+    }
+
+    /// <summary>
+    /// Fuel consumption units enumeration.
+    /// </summary>
+    public enum FuelConsumptionUnits
+    {
+        [Description("L/100km")]
+        LitersPer100Kilometers,
+
+        [Description("km/l")]
+        KilometersPerLiter,
+
+        [Description("mpg")]
+        MilesPerGallonUS,
+
+        [Description("mpg uk")]
+        MilesPerGallonUK,
+
+        [Description("mi/l")]
+        MilesPerLiter
+    }
+
+    /// <summary>
+    /// Vehicle size (height, weidth, length) units.
+    /// </summary>
+    public enum VehicleSizeUnits
+    {
+        [Description("m")]
+        Meter,
+
+        [Description("ft")]
+        Foot
+    }
+
+    /// <summary>
+    /// Vehicle weight units.
+    /// </summary>
+    public enum VehicleWeightUnits
+    {
+        [Description("kg")]
+        Kilogram,
+
+        [Description("lb")]
+        Pound,
+
+        [Description("t")]
+        Tonne
+    }
 }
