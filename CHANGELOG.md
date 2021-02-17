@@ -118,7 +118,7 @@ The file [Route4MeManagerV5.cs: ](https://github.com/route4me/route4me-csharp-sd
 – **Methods(API 5 version)**: RemoveAddressBookContacts, GetRoutes, GetAllRoutesWithPagination, GetPaginatedRouteListWithoutElasticSearch, GetRouteDataTableWithElasticSearch, GetRouteDatatableWithElasticSearch, GetRouteListWithoutElasticSearch, DuplicateRoute, DeleteRoutes, GetRouteDataTableConfig, GetRouteDataTableFallbackConfig, UpdateRoute, RunOptimization, RemoveOptimization, 
 – **Classes (API 5 version)**: RemoveAddressBookContactsRequest, RemoveOptimizationResponse, RemoveOptimizationRequest 
 
-The file [AddOnRoutesApiTests.cs: ](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/V5/AddOnRoutesApi/AddOnRoutesApiTests.cs)  
+The file [AddOnRoutesApiTests.cs: ](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSdkV5UnitTest/V5/AddOnRoutesApi/AddOnRoutesApiTests.cs)  
 – **Class (API 5 version)**: AddOnRoutesApiTests
 
 
@@ -183,10 +183,10 @@ The file [TeamResponse.cs: ](https://github.com/route4me/route4me-csharp-sdk/blo
 The file [HttpClientExtensions.cs: ](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/HttpClientExtensions.cs)  
 – **Class**: HttpClientExtensions
 	
-The file [DriverReviewParameters.cs: ](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/DataTypes/V5/DriverReviewParameters.cs)  
+The file [DriverReviewParameters.cs: ](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/QueryTypes/V5/DriverReviewParameters.cs)  
 – **Class (API 5 version)**: DriverReviewParameters
 	
-The file [TeamRequest.cs: ](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/QueryTypes/TeamRequest.cs)  
+The file [TeamRequest.cs: ](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/QueryTypes/V5/TeamRequest.cs)  
 – **Class (API 5 version)**: TeamRequest
 	
 The file [Route4MeManagerV5.cs: ](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/Route4MeManagerV5.cs)  
@@ -428,4 +428,4 @@ in the The class [Route4MeManager](https://github.com/route4me/route4me-csharp-s
 
 - The method [GetAddressBookLocation](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/Route4MeManager.cs#L2152) in the Route4MeManager class - before, it was necessary to specify the AddressId parameter in the form of a list of address identifiers separated by commas, even in the case of extracting one location (for example, "52908503,52908503") - fixed.
 
-- The method [CreateVehicle](LL) in the Route4MeManager class - now it returns a response of type VehicleV4CreateResponse.
+- The method CreateVehicle in the Route4MeManager class - now it returns a response of type VehicleV4CreateResponse.
