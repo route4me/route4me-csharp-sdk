@@ -9,6 +9,17 @@ namespace Route4MeSDK.DataTypes.V5
     public sealed class VehicleResponse : QueryTypes.GenericParameters
     {
         /// <summary>
+        /// Vehicle data
+        /// </summary>
+        [DataMember(Name = "data", EmitDefaultValue = false)]
+        public DataVehicle Data { get; set; }
+    }
+
+
+    [DataContract]
+    public class DataVehicle
+    {
+        /// <summary>
         /// Reduced vehicle object
         /// </summary>
         [DataMember(Name = "vehicle", EmitDefaultValue = false)]
