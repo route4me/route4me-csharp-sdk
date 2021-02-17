@@ -100,14 +100,14 @@ namespace Route4MeSdkV5UnitTest.VehiclesApi
             var vehProfileParams1 = new VehicleProfile()
             {
                 Name = "Heavy Duty - 28 Double Trailer " + DateTime.Now.ToString("yyMMddHHmmss"),
-                HeightUnits = VehicleSizeUnits.Foot.Description(),
-                WidthUnits = VehicleSizeUnits.Foot.Description(),
-                LengthUnits = VehicleSizeUnits.Foot.Description(),
+                HeightUnits = VehicleSizeUnits.Meter.Description(),
+                WidthUnits = VehicleSizeUnits.Meter.Description(),
+                LengthUnits = VehicleSizeUnits.Meter.Description(),
                 IsPredefined = false,
                 IsDefault = false,
-                Height = 13,
-                Width = 8,
-                Length = 40,
+                Height = 4,
+                Width = 2.44,
+                Length = 12.2,
                 WeightUnits = VehicleWeightUnits.Kilogram.Description(),
                 Weight = 20400,
                 MaxWeightPerAxle = 15400,
@@ -128,14 +128,14 @@ namespace Route4MeSdkV5UnitTest.VehiclesApi
             var vehProfileParams2 = new VehicleProfile()
             {
                 Name = "Heavy Duty - 40 Straight Truck " + DateTime.Now.ToString("yyMMddHHmmss"),
-                HeightUnits = VehicleSizeUnits.Foot.Description(),
-                WidthUnits = VehicleSizeUnits.Foot.Description(),
-                LengthUnits = VehicleSizeUnits.Foot.Description(),
+                HeightUnits = VehicleSizeUnits.Meter.Description(),
+                WidthUnits = VehicleSizeUnits.Meter.Description(),
+                LengthUnits = VehicleSizeUnits.Meter.Description(),
                 IsPredefined = false,
                 IsDefault = false,
-                Height = 13,
-                Width = 8,
-                Length = 48,
+                Height = 4,
+                Width = 2.44,
+                Length = 14.6,
                 WeightUnits = VehicleWeightUnits.Kilogram.Description(),
                 Weight = 36300,
                 MaxWeightPerAxle = 15400,
@@ -363,17 +363,17 @@ namespace Route4MeSdkV5UnitTest.VehiclesApi
             var vehProfileParams3 = new VehicleProfile()
             {
                 Name = "Heavy Duty - 48 Semitrailer " + DateTime.Now.ToString("yyMMddHHmmss"),
-                HeightUnits = VehicleSizeUnits.Foot.Description(),
-                WidthUnits = VehicleSizeUnits.Foot.Description(),
-                LengthUnits = VehicleSizeUnits.Foot.Description(),
-                Height = 11,
-                Width = 8,
-                Length = 52,
+                HeightUnits = VehicleSizeUnits.Meter.Description(),
+                WidthUnits = VehicleSizeUnits.Meter.Description(),
+                LengthUnits = VehicleSizeUnits.Meter.Description(),
+                Height = 3.5,
+                Width = 2.5,
+                Length = 16,
                 IsPredefined = false,
                 IsDefault = false,
-                WeightUnits = VehicleWeightUnits.Pound.Description(),
-                Weight = 77000,
-                MaxWeightPerAxle = 38000,
+                WeightUnits = VehicleWeightUnits.Kilogram.Description(),
+                Weight = 35000,
+                MaxWeightPerAxle = 17500,
                 FuelType = FuelTypes.Unleaded_87.Description(),
                 FuelConsumptionCity = 6,
                 FuelConsumptionHighway = 11,
@@ -437,7 +437,9 @@ namespace Route4MeSdkV5UnitTest.VehiclesApi
 
             Assert.NotNull(result);
             Assert.IsType<VehicleResponse>(result);
-            Assert.Equal(lsVehicles[0].VehicleLicensePlate, result.Vehicle.VehicleLicensePlate);
+            Assert.Equal(lsVehicles[0].VehicleLicensePlate, (result?.Data?.Vehicle?.VehicleLicensePlate ?? null));
+            //Assert.IsType<Vehicle>(result);
+            //Assert.Equal(lsVehicles[0].VehicleLicensePlate, result.VehicleLicensePlate);
         }
 
         [Fact(Skip = "The tested method is temporary deprecated")]
