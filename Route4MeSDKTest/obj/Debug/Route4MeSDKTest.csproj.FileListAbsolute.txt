@@ -67,3 +67,6 @@ C:\Users\User\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKTest\bin\Debug\Sys
 C:\Users\User\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKTest\bin\Debug\System.Security.Principal.Windows.xml
 C:\Users\User\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKTest\bin\Debug\System.ValueTuple.dll
 C:\Users\User\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKTest\bin\Debug\System.ValueTuple.xml
+C:\Users\Odin62\Documents\GitHub\Route4Me\route4me-csharp-sdk\Route4MeSDKTest\bin\Debug\System.ValueTuple.dll
+C:\Users\Odin62\Documents\GitHub\Route4Me\route4me-csharp-sdk\Route4MeSDKTest\bin\Debug\System.ValueTuple.xml
+C:\Users\Odin62\Documents\GitHub\Route4Me\route4me-csharp-sdk\Route4MeSDKTest\obj\Debug\Route4MeSDKTest.csproj.CoreCompileInputs.cache
