@@ -816,7 +816,7 @@ namespace Route4MeSDK
         /// Creates a vehicle
         /// </summary>
         /// <param name="vehicle">The VehicleV4Parameters type object as the request payload </param>
-        /// <param name="errorString"> out: Error as string </param>
+        /// <param name="resultResponse"> Failing response </param>
         /// <returns>The created vehicle </returns>
         public Vehicle CreateVehicle(Vehicle vehicle, out ResultResponse resultResponse)
         {
@@ -891,7 +891,7 @@ namespace Route4MeSDK
         /// Execute a vehicle order
         /// </summary>
         /// <param name="vehOrderParams">Vehicle order parameters</param>
-        /// <param name="resultResponse">Failing response</param>
+        /// <param name="resultResponse">Error response</param>
         /// <returns>Created vehicle order</returns>
         public VehicleOrderResponse ExecuteVehicleOrder(VehicleOrderParameters vehOrderParams, out ResultResponse resultResponse)
         {
@@ -974,8 +974,6 @@ namespace Route4MeSDK
 
         /// <summary>
         /// Create a vehicle profile.
-        /// Note: the unit settings (size, weight) predefined by the user's configuration (Distance unit).
-        /// TO DO: check, if it's intended to make the unit parameters settable.
         /// </summary>
         /// <param name="vehicleProfileParams">Vehicle profile body parameters</param>
         /// <param name="resultResponse">Failing response</param>
@@ -1104,8 +1102,6 @@ namespace Route4MeSDK
 
         /// <summary>
         /// Update a vehicle
-        /// Note: the unit settings (size, weight) predefined by the user's configuration (Distance unit).
-        /// TO DO: check, if it's intended to make the unit parameters settable.
         /// </summary>
         /// <param name="vehicleParams">Vehicle body parameters</param>
         /// <param name="resultResponse">Failing response</param>

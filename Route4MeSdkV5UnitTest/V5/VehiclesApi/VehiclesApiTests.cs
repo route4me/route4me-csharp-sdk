@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Route4MeSDK;
 using Route4MeSDK.DataTypes.V5;
 using Route4MeSDK.QueryTypes.V5;
@@ -100,9 +98,9 @@ namespace Route4MeSdkV5UnitTest.VehiclesApi
             var vehProfileParams1 = new VehicleProfile()
             {
                 Name = "Heavy Duty - 28 Double Trailer " + DateTime.Now.ToString("yyMMddHHmmss"),
-                HeightUnits = VehicleSizeUnits.Meter.Description(),
-                WidthUnits = VehicleSizeUnits.Meter.Description(),
-                LengthUnits = VehicleSizeUnits.Meter.Description(),
+                HeightUnits = VehicleSizeUnits.Foot.Description(),
+                WidthUnits = VehicleSizeUnits.Foot.Description(),
+                LengthUnits = VehicleSizeUnits.Foot.Description(),
                 IsPredefined = false,
                 IsDefault = false,
                 Height = 13,
@@ -128,9 +126,9 @@ namespace Route4MeSdkV5UnitTest.VehiclesApi
             var vehProfileParams2 = new VehicleProfile()
             {
                 Name = "Heavy Duty - 40 Straight Truck " + DateTime.Now.ToString("yyMMddHHmmss"),
-                HeightUnits = VehicleSizeUnits.Meter.Description(),
-                WidthUnits = VehicleSizeUnits.Meter.Description(),
-                LengthUnits = VehicleSizeUnits.Meter.Description(),
+                HeightUnits = VehicleSizeUnits.Foot.Description(),
+                WidthUnits = VehicleSizeUnits.Foot.Description(),
+                LengthUnits = VehicleSizeUnits.Foot.Description(),
                 IsPredefined = false,
                 IsDefault = false,
                 Height = 13,
@@ -356,7 +354,7 @@ namespace Route4MeSdkV5UnitTest.VehiclesApi
         }
 
         [Fact]
-        public void CreeateVehicleProfileTest()
+        public void CreateVehicleProfileTest()
         {
             var route4Me = new Route4MeManagerV5(c_ApiKey);
 
