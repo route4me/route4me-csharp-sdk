@@ -91,7 +91,7 @@ namespace Route4MeSDK.DataTypes.V5
         public double? FuelConsumptionHighway { get; set; }
 
         /// <summary>
-        /// Type of a hazardous matrial.
+        /// Type of a hazardous material.
         /// enum: ['general', 'explosives', 'flammable', 'inhalants', 'caustic', 'radioactive']
         /// </summary>
         [DataMember(Name = "hazmat_type", EmitDefaultValue = false)]
