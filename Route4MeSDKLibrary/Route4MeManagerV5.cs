@@ -1,4 +1,5 @@
 ﻿using Route4MeSDK.DataTypes.V5;
+using Route4MeSDK.DataTypes.V5.TelematicsPlatform;
 using Route4MeSDK.QueryTypes.V5;
 //using Route4MeSDK.QueryTypes;
 using Route4MeSDKLibrary.DataTypes;
@@ -49,13 +50,13 @@ namespace Route4MeSDK
         }
 
         #endregion
-
+        
         #region Address Book Contacts
 
         /// <summary>
         /// The request parameter for the address book contacts removing process.
         /// </summary>
-		[DataContract]
+        [DataContract]
         private sealed class RemoveAddressBookContactsRequest : QueryTypes.GenericParameters
         {
             /// <value>The array of the address IDs</value>
@@ -82,6 +83,44 @@ namespace Route4MeSDK
                                 out resultResponse);
 
             return (response != null && response.status) ? true : false;
+        }
+
+        #endregion
+
+        #region Account Profile
+
+        /// <summary>
+        /// Get account profile
+        /// </summary>
+        /// <param name="failResponse">Error response</param>
+        /// <returns>Account profile</returns>
+        public AccountProfile GetAccountProfile(out ResultResponse failResponse)
+        {
+            var parameters = new QueryTypes.GenericParameters();
+
+            var result = GetJsonObjectFromAPI<AccountProfile>(parameters,
+                                R4MEInfrastructureSettingsV5.AccountProfile,
+                                HttpMethodType.Get,
+                                out failResponse);
+
+            return result;
+        }
+
+        public string GetAccountPreferedUnit(out ResultResponse failResponse)
+        {
+            var accountProfile = this.GetAccountProfile(out failResponse);
+
+            var ownerId = accountProfile.RootMemberId;
+
+            var r4me = new Route4MeManager(this.m_ApiKey);
+
+            var memPars = new QueryTypes.MemberParametersV4() { member_id = ownerId };
+
+            var user = r4me.GetUserById(memPars, out string errorString);
+
+            string prefUnit = user.preferred_units;
+
+            return prefUnit;
         }
 
         #endregion
@@ -126,6 +165,8 @@ namespace Route4MeSDK
 
             return result;
         }
+
+
 
         /// <summary>
         /// Retrieve a team member by the parameter UserId
@@ -1175,6 +1216,129 @@ namespace Route4MeSDK
 
             return result;
         }
+
+        #endregion
+
+        #region Teleamtics Platform
+
+        #region Connection
+
+        /// <summary>
+        /// Get all registered telematics connections.
+        /// </summary>
+        /// <param name="resultResponse">Error response</param>
+        /// <returns>An array of the Connection type objects</returns>
+        public Connection[] GetTelematicsConnections(out ResultResponse resultResponse)
+        {
+            var result = GetJsonObjectFromAPI<Connection[]>(
+                                                new QueryTypes.GenericParameters(),
+                                                R4MEInfrastructureSettingsV5.TelematicsConnection,
+                                                HttpMethodType.Get,
+                                                out resultResponse);
+
+            return result;
+        }
+
+        /// <summary>
+        /// Get a telematics connection by specified access token
+        /// </summary>
+        /// <param name="connectionParams">The telematics query paramaters 
+        /// as ConnectionPaameters type object</param>
+        /// <param name="resultResponse">Error response</param>
+        /// <returns>A connection type object</returns>
+        public Connection GetTelematicsConnectionByToken(ConnectionParameters connectionParams, out ResultResponse resultResponse)
+        {
+            var result = GetJsonObjectFromAPI<Connection>(
+                                                new QueryTypes.GenericParameters(),
+                                                R4MEInfrastructureSettingsV5.TelematicsConnection+"/"+connectionParams.ConnectionToken,
+                                                HttpMethodType.Get,
+                                                out resultResponse);
+
+            return result;
+        }
+
+        /// <summary>
+        /// Register a telematics connection.
+        /// </summary>
+        /// <param name="connectionParams">The telematics query paramaters 
+        /// as ConnectionPaameters type object</param>
+        /// <param name="resultResponse">Error response</param>
+        /// <returns>A connection type object</returns>
+        public Connection RegisterTelematicsConnection(ConnectionParameters connectionParams, out ResultResponse resultResponse)
+        {
+            var result = GetJsonObjectFromAPI<Connection>(
+                                                connectionParams,
+                                                R4MEInfrastructureSettingsV5.TelematicsConnection,
+                                                HttpMethodType.Post,
+                                                out resultResponse);
+
+            return result;
+        }
+
+        /// <summary>
+        /// Delete telematics connection account by specified access token.
+        /// </summary>
+        /// <param name="connectionParams">The telematics query paramaters 
+        /// as ConnectionPaameters type object</param>
+        /// <param name="resultResponse">Error response</param>
+        /// <returns>Removed teleamtics connection</returns>
+        public Connection DeleteTelematicsConnection(ConnectionParameters connectionParams, out ResultResponse resultResponse)
+        {
+            if ((connectionParams?.ConnectionToken ?? "").Length < 1)
+            {
+                resultResponse = new ResultResponse()
+                {
+                    Status = false,
+                    Messages = new Dictionary<string, string[]>()
+                    {
+                         { "Error", new string[] { "The connection token is not specified" } }
+                    }
+                };
+
+                return null;
+            }
+
+            var result = GetJsonObjectFromAPI<Connection>(new QueryTypes.GenericParameters(),
+                            R4MEInfrastructureSettingsV5.TelematicsConnection + "/" + connectionParams.ConnectionToken,
+                            HttpMethodType.Delete,
+                            out resultResponse);
+
+            return result;
+        }
+
+        /// <summary>
+        /// Update telemetics connection's account
+        /// </summary>
+        /// <param name="connectionParams">The telematics query paramaters 
+        /// as ConnectionPaameters type object</param>
+        /// <param name="resultResponse">Error response</param>
+        /// <returns>Updated teleamtics connection</returns>
+        public Connection UpdateTelematicsConnection(ConnectionParameters connectionParams, out ResultResponse resultResponse)
+        {
+            if ((connectionParams?.ConnectionToken ?? "").Length < 1)
+            {
+                resultResponse = new ResultResponse()
+                {
+                    Status = false,
+                    Messages = new Dictionary<string, string[]>()
+                    {
+                         { "Error", new string[] { "The connection token is not specified" } }
+                    }
+                };
+
+                return null;
+            }
+
+            var result = GetJsonObjectFromAPI<Connection>(
+                                                connectionParams,
+                                                R4MEInfrastructureSettingsV5.TelematicsConnection + "/" + connectionParams.ConnectionToken,
+                                                HttpMethodType.Put,
+                                                out resultResponse);
+
+            return result;
+        }
+
+        #endregion
 
         #endregion
 

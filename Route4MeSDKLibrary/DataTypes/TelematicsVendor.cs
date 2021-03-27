@@ -21,12 +21,6 @@ namespace Route4MeSDK.DataTypes
         public string Name { get; set; }
 
         /// <summary>
-        /// Vendor title.
-        /// </summary>
-        [DataMember(Name = "title", EmitDefaultValue = false)]
-        public string Title { get; set; }
-
-        /// <summary>
         /// Vendor slug.
         /// </summary>
         [DataMember(Name = "slug", EmitDefaultValue = false)]

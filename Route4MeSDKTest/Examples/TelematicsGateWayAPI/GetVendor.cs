@@ -19,7 +19,7 @@ namespace Route4MeSDK.Examples
 
             var vendorParameters = new TelematicsVendorParameters()
             {
-                vendorID = Convert.ToUInt32(randomVendorID)
+                VendorID = Convert.ToUInt32(randomVendorID)
             };
 
             var vendor = route4Me.GetTelematicsVendor(vendorParameters, out errorString);

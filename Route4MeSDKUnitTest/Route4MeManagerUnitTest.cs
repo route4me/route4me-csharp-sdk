@@ -14,6 +14,8 @@ using System.CodeDom.Compiler;
 using CsvHelper;
 using System.Linq;
 using static Route4MeSDK.Route4MeManager;
+using Route4MeSDKLibrary.DataTypes;
+using NUnit.Framework.Internal.Commands;
 
 namespace Route4MeSDKUnitTest
 {
@@ -31,11 +33,13 @@ namespace Route4MeSDKUnitTest
         static TestDataRepository tdr;
         static TestDataRepository tdr2;
         static List<string> lsOptimizationIDs;
+        static List<string> lsVehicleIDs;
 
         [ClassInitialize()]
         public static void RoutesGroupInitialize(TestContext context)
         {
             lsOptimizationIDs = new List<string>();
+            lsVehicleIDs = new List<string>();
 
             tdr = new TestDataRepository();
             tdr2 = new TestDataRepository();
@@ -486,8 +490,24 @@ namespace Route4MeSDKUnitTest
             var vehicleGroup = new VehiclesGroup();
             var vehicles = vehicleGroup.getVehiclesList();
 
-            int randomNumber = (new Random()).Next(0, vehicles.PerPage-1);
-            var vehicleId = vehicles.Data[randomNumber].VehicleId;
+            if ((vehicles?.Total ?? 0) < 1)
+            {
+                var newVehicle = new VehicleV4Parameters()
+                {
+                    VehicleName = "Ford Transit Test 6",
+                    VehicleAlias = "Ford Transit Test 6"
+                };
+
+                var vehicle = vehicleGroup.createVehicle(newVehicle);
+                lsVehicleIDs.Add(vehicle.VehicleGuid);
+            }
+
+            string vehicleId = (vehicles?.Total ?? 0) > 0 
+                ? vehicles.Data[(new Random()).Next(0, vehicles.PerPage - 1)].VehicleId
+                : lsVehicleIDs[0];
+
+            //int randomNumber = (new Random()).Next(0, vehicles.PerPage-1);
+            //var vehicleId = vehicles.Data[randomNumber].VehicleId;
 
             string routeId = tdr.SD10Stops_route_id;
             Assert.IsNotNull(routeId, "routeId_SingleDriverRoute10Stops is null.");
@@ -772,6 +792,25 @@ namespace Route4MeSDKUnitTest
             bool result = tdr.RemoveOptimization(lsOptimizationIDs.ToArray());
 
             Assert.IsTrue(result, "Removing of the testing optimization problem failed.");
+
+            if (lsVehicleIDs.Count>0)
+            {
+                var route4Me = new Route4MeManager(c_ApiKey);
+
+                foreach (string vehId in lsVehicleIDs)
+                {
+                    var vehicleParams = new VehicleV4Parameters()
+                    {
+                        VehicleId = vehId
+                    };
+
+                    // Run the query
+                    var vehicles = route4Me.deleteVehicle(vehicleParams, out string errorString);
+                }
+
+                lsVehicleIDs.Clear();
+            }
+            
         }
     }
 
@@ -10605,13 +10644,13 @@ namespace Route4MeSDKUnitTest
                 typeof(MemberResponseV4[]), 
                 "GetActivitiesByMemberTest failed - cannot get users");
             Assert.IsTrue(
-                response.results.Length > 1, 
-                "Cannot retrieve more than 1 users");
+                response.results.Length > 0, 
+                "Cannot retrieve more than 0 users");
 
             var activityParameters = new ActivityParameters()
             {
-                MemberId = response.results[1].member_id!=null 
-                            ? Convert.ToInt32(response.results[1].member_id) 
+                MemberId = response.results[0].member_id!=null 
+                            ? Convert.ToInt32(response.results[0].member_id) 
                             : -1,
                 Offset = 0,
                 Limit = 10
@@ -12134,10 +12173,11 @@ namespace Route4MeSDKUnitTest
 
             var vehicles = vehicleGroup.getVehiclesList();
 
-            if (vehicles.Total < 1)
+            if ((vehicles?.Total ?? 0) < 1)
             {
                 var newVehicle = new VehicleV4Parameters()
                 {
+                    VehicleName = "Ford Transit Test 6",
                     VehicleAlias = "Ford Transit Test 6"
                 };
 
@@ -12173,20 +12213,12 @@ namespace Route4MeSDKUnitTest
             // Run the query
             var vehicles = route4Me.GetVehicles(vehicleParameters, out string errorString);
             
-            Assert.IsInstanceOfType(
-                vehicles, 
-                typeof(VehiclesPaginated), 
-                "getVehiclesList failed. " + errorString
-            );
-
             return vehicles;
         }
 
         [TestMethod]
         public void CreatetVehicleTest()
         {
-            if (c_ApiKey == ApiKeys.demoApiKey) return;
-
             // Create common vehicle
             var commonVehicleParams = new VehicleV4Parameters()
             {
@@ -12195,6 +12227,9 @@ namespace Route4MeSDKUnitTest
             };
 
             var commonVehicle = createVehicle(commonVehicleParams);
+
+            if (commonVehicle != null && commonVehicle.GetType() == typeof(VehicleV4CreateResponse))
+                lsVehicleIDs.Add(commonVehicle.VehicleGuid);
             
             // Create a truck belonging to the class 6
             var class6TruckParams = new VehicleV4Parameters()
@@ -12230,6 +12265,9 @@ namespace Route4MeSDKUnitTest
             };
 
             var class6Truck = createVehicle(class6TruckParams);
+
+            if (class6Truck != null && class6Truck.GetType() == typeof(VehicleV4CreateResponse))
+                lsVehicleIDs.Add(class6Truck.VehicleGuid);
 
             // Create a truck belonging to the class 7
             var class7TruckParams = new VehicleV4Parameters()
@@ -12268,7 +12306,10 @@ namespace Route4MeSDKUnitTest
             };
 
             var class7Truck = createVehicle(class7TruckParams);
-            
+
+            if (class7Truck != null && class7Truck.GetType() == typeof(VehicleV4CreateResponse))
+                lsVehicleIDs.Add(class7Truck.VehicleGuid);
+
             // Create a truck belonging to the class 8
             var class8TruckParams = new VehicleV4Parameters()
             {
@@ -12306,6 +12347,9 @@ namespace Route4MeSDKUnitTest
             };
 
             var class8Truck = createVehicle(class8TruckParams);
+
+            if (class8Truck != null && class8Truck.GetType() == typeof(VehicleV4CreateResponse))
+                lsVehicleIDs.Add(class8Truck.VehicleGuid);
         }
 
         public VehicleV4CreateResponse createVehicle(VehicleV4Parameters vehicleParams)
@@ -12411,6 +12455,23 @@ namespace Route4MeSDKUnitTest
 
             lsVehicleIDs.RemoveAt(lsVehicleIDs.Count - 1);
         }
+
+        [ClassCleanup()]
+        public static void VehiclesGroupCleanup()
+        {
+            var route4Me = new Route4MeManager(c_ApiKey);
+
+            foreach (var vehicleId in lsVehicleIDs)
+            {
+                var vehicleParams = new VehicleV4Parameters()
+                {
+                    VehicleId = vehicleId
+                };
+
+                // Run the query
+                var vehicles = route4Me.deleteVehicle(vehicleParams, out string errorString);
+            }
+        }
     }
 
     [TestClass]
@@ -12508,7 +12569,8 @@ namespace Route4MeSDKUnitTest
                 Console.WriteLine("Total Geocoded Addresses -> " + lsAddresses.Count);
             };
 
-            fastProcessing.uploadAndGeocodeLargeJsonFile(@"Data\JSON\batch_socket_upload_error_addresses_data_5.json");
+            var stPath = AppDomain.CurrentDomain.BaseDirectory;
+            fastProcessing.uploadAndGeocodeLargeJsonFile(stPath+@"\Data\JSON\batch_socket_upload_error_addresses_data_5.json");
 
         }
 
@@ -12653,6 +12715,7 @@ namespace Route4MeSDKUnitTest
     }
 
     [TestClass]
+    [Ignore]
     public class DatabasesGroup
     {
         static string c_ApiKey = ApiKeys.actualApiKey;
@@ -12694,10 +12757,12 @@ namespace Route4MeSDKUnitTest
                 string sDictionaryDDLSqlCom = "";
                 string sDictionaryDMLSqlCom = "";
 
-                sAddressbookSqlCom = File.ReadAllText(@"Data/SQL/MySQL/addressbook_v4.sql");
-                sOrdersSqlCom = File.ReadAllText(@"Data/SQL/MySQL/orders.sql");
-                sDictionaryDDLSqlCom = File.ReadAllText(@"Data/SQL/MySQL/csv_to_api_dictionary_DDL.sql");
-                sDictionaryDMLSqlCom = File.ReadAllText(@"Data/SQL/MySQL/csv_to_api_dictionary_DML.sql");
+                var stPath = AppDomain.CurrentDomain.BaseDirectory;
+
+                sAddressbookSqlCom = File.ReadAllText(stPath+@"/Data/SQL/MySQL/addressbook_v4.sql");
+                sOrdersSqlCom = File.ReadAllText(stPath + @"/Data/SQL/MySQL/orders.sql");
+                sDictionaryDDLSqlCom = File.ReadAllText(stPath + @"/Data/SQL/MySQL/csv_to_api_dictionary_DDL.sql");
+                sDictionaryDMLSqlCom = File.ReadAllText(stPath + @"/Data/SQL/MySQL/csv_to_api_dictionary_DML.sql");
 
                 sqlDB.OpenConnection();
 
@@ -12746,10 +12811,12 @@ namespace Route4MeSDKUnitTest
                 string sDictionaryDDLSqlCom = "";
                 string sDictionaryDMLSqlCom = "";
 
-                sAddressbookSqlCom = File.ReadAllText(@"Data/SQL/MSSQL/addressbook_v4.sql");
-                sOrdersSqlCom = File.ReadAllText(@"Data/SQL/MSSQL/orders.sql");
-                sDictionaryDDLSqlCom = File.ReadAllText(@"Data/SQL/MSSQL/csv_to_api_dictionary_DDL.sql");
-                sDictionaryDMLSqlCom = File.ReadAllText(@"Data/SQL/MSSQL/csv_to_api_dictionary_DML.sql");
+                var stPath = AppDomain.CurrentDomain.BaseDirectory;
+
+                sAddressbookSqlCom = File.ReadAllText(stPath+@"/Data/SQL/MSSQL/addressbook_v4.sql");
+                sOrdersSqlCom = File.ReadAllText(stPath + @"/Data/SQL/MSSQL/orders.sql");
+                sDictionaryDDLSqlCom = File.ReadAllText(stPath + @"/Data/SQL/MSSQL/csv_to_api_dictionary_DDL.sql");
+                sDictionaryDMLSqlCom = File.ReadAllText(stPath + @"/Data/SQL/MSSQL/csv_to_api_dictionary_DML.sql");
 
                 sqlDB.OpenConnection();
 
@@ -12797,10 +12864,12 @@ namespace Route4MeSDKUnitTest
                 string sDictionaryDDLSqlCom = "";
                 string sDictionaryDMLSqlCom = "";
 
-                sAddressbookSqlCom = File.ReadAllText(@"Data/SQL/SQLCE/addressbook_v4.sql");
-                sOrdersSqlCom = File.ReadAllText(@"Data/SQL/SQLCE/orders.sql");
-                sDictionaryDDLSqlCom = File.ReadAllText(@"Data/SQL/SQLCE/csv_to_api_dictionary_DDL.sql");
-                sDictionaryDMLSqlCom = File.ReadAllText(@"Data/SQL/SQLCE/csv_to_api_dictionary_DML.sql");
+                var stPath = AppDomain.CurrentDomain.BaseDirectory;
+
+                sAddressbookSqlCom = File.ReadAllText(stPath+@"/Data/SQL/SQLCE/addressbook_v4.sql");
+                sOrdersSqlCom = File.ReadAllText(stPath + @"/Data/SQL/SQLCE/orders.sql");
+                sDictionaryDDLSqlCom = File.ReadAllText(stPath + @"/Data/SQL/SQLCE/csv_to_api_dictionary_DDL.sql");
+                sDictionaryDMLSqlCom = File.ReadAllText(stPath + @"/Data/SQL/SQLCE/csv_to_api_dictionary_DML.sql");
 
                 sqlDB.OpenConnection();
 
@@ -12851,10 +12920,12 @@ namespace Route4MeSDKUnitTest
                 string sDictionaryDDLSqlCom = "";
                 string sDictionaryDMLSqlCom = "";
 
-                sAddressbookSqlCom = File.ReadAllText(@"Data/SQL/PostgreSQL/addressbook_v4.sql");
-                sOrdersSqlCom = File.ReadAllText(@"Data/SQL/PostgreSQL/orders.sql");
-                sDictionaryDDLSqlCom = File.ReadAllText(@"Data/SQL/PostgreSQL/csv_to_api_dictionary_DDL.sql");
-                sDictionaryDMLSqlCom = File.ReadAllText(@"Data/SQL/PostgreSQL/csv_to_api_dictionary_DML.sql");
+                var stPath = AppDomain.CurrentDomain.BaseDirectory;
+
+                sAddressbookSqlCom = File.ReadAllText(stPath+@"/Data/SQL/PostgreSQL/addressbook_v4.sql");
+                sOrdersSqlCom = File.ReadAllText(stPath + @"/Data/SQL/PostgreSQL/orders.sql");
+                sDictionaryDDLSqlCom = File.ReadAllText(stPath + @"/Data/SQL/PostgreSQL/csv_to_api_dictionary_DDL.sql");
+                sDictionaryDMLSqlCom = File.ReadAllText(stPath + @"/Data/SQL/PostgreSQL/csv_to_api_dictionary_DML.sql");
 
                 sqlDB.OpenConnection();
 
@@ -12881,8 +12952,8 @@ namespace Route4MeSDKUnitTest
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Generating of the SQL tables failed!.. " + ex.Message);
-                Assert.IsTrue(0 > 1, "GeneratePostgreSQLDatabaseTest failed... " + ex.Message);
+                Console.WriteLine("Generating of the SQL tables failed! " + ex.Message);
+                Assert.IsTrue(0 > 1, "GeneratePostgreSQLDatabaseTest failed. " + ex.Message);
             }
             finally
             {
@@ -12901,7 +12972,9 @@ namespace Route4MeSDKUnitTest
 
                 Console.WriteLine("Connection opened");
 
-                sqlDB.Table2Csv(@"Data/CSV/addressbook v4.csv", "addressbook_v4", true);
+                var stPath = AppDomain.CurrentDomain.BaseDirectory;
+
+                sqlDB.Table2Csv(stPath+@"/Data/CSV/addressbook v4.csv", "addressbook_v4", true);
                 Console.WriteLine("The file addressbook v4.csv was created.");
                 Assert.IsTrue(1 > 0, "");
             }
@@ -12927,7 +13000,9 @@ namespace Route4MeSDKUnitTest
 
                 Console.WriteLine("Connection opened");
 
-                sqlDB.Json2Table(@"Data/JSON/Addressbook Get Contacts RESPONSE.json", "addressbook_v4", "id", R4M_DataType.Addressbook);
+                var stPath = AppDomain.CurrentDomain.BaseDirectory;
+
+                sqlDB.Json2Table(stPath+@"/Data/JSON/Addressbook Get Contacts RESPONSE.json", "addressbook_v4", "id", R4M_DataType.Addressbook);
 
                 Console.WriteLine("The file 'Addressbook Get Contacts RESPONSE.json' was uploaded to the SQL server.");
 
@@ -12955,7 +13030,9 @@ namespace Route4MeSDKUnitTest
 
                 Console.WriteLine("Connection opened");
 
-                sqlDB.Csv2Table(@"Data/CSV/Route4Me Address Book 03-09-2017.csv", "addressbook_v4", "id", 33, true);
+                var stPath = AppDomain.CurrentDomain.BaseDirectory;
+
+                sqlDB.Csv2Table(stPath+@"/Data/CSV/Route4Me Address Book 03-09-2017.csv", "addressbook_v4", "id", 33, true);
 
                 Console.WriteLine("The file orders.csv was uploaded to the SQL server.");
 
@@ -12983,7 +13060,9 @@ namespace Route4MeSDKUnitTest
 
                 Console.WriteLine("Connection opened");
 
-                sqlDB.Csv2Table(@"Data/CSV/orders 1000 with order id.csv", "orders", "order_id", 10, true);
+                var stPath = AppDomain.CurrentDomain.BaseDirectory;
+
+                sqlDB.Csv2Table(stPath+@"/Data/CSV/orders 1000 with order id.csv", "orders", "order_id", 10, true);
 
                 Console.WriteLine("The orders CSV file was uploaded to the SQL server.");
 
@@ -13011,7 +13090,9 @@ namespace Route4MeSDKUnitTest
 
                 Console.WriteLine("Connection opened");
 
-                sqlDB.Json2Table(@"Data/JSON/get orders RESPONSE.json", "orders", "id", R4M_DataType.Order);
+                var stPath = AppDomain.CurrentDomain.BaseDirectory;
+
+                sqlDB.Json2Table(stPath+@"/Data/JSON/get orders RESPONSE.json", "orders", "id", R4M_DataType.Order);
 
                 Console.WriteLine("The JSON file was uploaded to the SQL server.");
 
@@ -13063,8 +13144,8 @@ namespace Route4MeSDKUnitTest
 
             var queryParameters = new OptimizationParameters()
             {
-                Limit = 10,
-                Offset = 5
+                Limit = 5,
+                Offset = 2
             };
 
             // Run the query
@@ -13212,7 +13293,7 @@ namespace Route4MeSDKUnitTest
             var route4Me = new Route4MeManager(ApiKey);
 
             #region ======= Add scheduled address book locations to an user account ================================
-            string sAddressFile = @"Data/CSV/addresses_1000.csv";
+            string sAddressFile = AppDomain.CurrentDomain.BaseDirectory+@"/Data/CSV/addresses_1000.csv";
             Schedule sched0 = new Schedule("daily", false);
             //var csv = new CsvReader(File.OpenText("file.csv"));
 
@@ -13520,7 +13601,7 @@ namespace Route4MeSDKUnitTest
             var route4Me = new Route4MeManager(ApiKey);
 
             #region ======= Add scheduled address book locations to an user account ================================
-            string sAddressFile = @"Data/CSV/orders_1000.csv";
+            string sAddressFile = AppDomain.CurrentDomain.BaseDirectory + @"/Data/CSV/orders_1000.csv";
 
             using (TextReader reader = File.OpenText(sAddressFile))
             {
@@ -13719,11 +13800,90 @@ namespace Route4MeSDKUnitTest
     public class TelematicsGateWayAPI
     {
         static string c_ApiKey = ApiKeys.actualApiKey;
+        //static List<string> lsMembers;
+        static string firstMemberId;
 
-        [TestInitialize]
-        public void TelematicsGateWayAPIInitialize()
+        static string apiToken;
+
+        static List<TelematicsConnection> lsCreatedConnections;
+
+        static TelematicsVendors tomtomVendor;
+
+        [ClassInitialize()]
+        public static void TelematicsGateWayAPIInitialize(TestContext context)
         {
-            //Console.SetOut(new StreamWriter(new FileStream("Console_Output.txt", FileMode.Append)) { AutoFlush = true });
+            if (ApiKeys.actualApiKey==ApiKeys.demoApiKey) Assert.Inconclusive("The test cannot done with demo API key");
+
+            var route4Me = new Route4MeManager(c_ApiKey);
+
+            //lsMembers = new List<string>();
+            lsCreatedConnections = new List<TelematicsConnection>();
+
+            var members = route4Me.GetUsers(new GenericParameters(), out string errString);
+
+            Assert.IsNotNull((members?.results?.Length ?? 0) > 0,
+                  "Cannot retrieve the account members." + Environment.NewLine + errString);
+
+            firstMemberId = members.results[0].member_id;
+
+            var memberParameters = new TelematicsVendorParameters()
+            {
+                MemberID = Convert.ToUInt32(firstMemberId),
+                ApiKey = c_ApiKey
+            };
+
+            var result = route4Me.RegisterTelematicsMember(memberParameters, out string errorString);
+
+            Assert.IsNotNull(
+                result,
+                "The test registerMemberTest failed. " + errorString);
+
+            Assert.IsInstanceOfType(
+                result,
+                typeof(TelematicsRegisterMemberResponse));
+
+            apiToken = result.ApiToken;
+
+            var vendParams = new TelematicsVendorParameters() { Search = "tomtom" };
+
+            var vendors = route4Me.SearchTelematicsVendors(vendParams, out string errorString2);
+
+            Assert.IsNotNull(
+                vendors?.Vendors ?? null,
+                "Cannot retrieve tomtom vendor. " + errorString);
+
+            Assert.IsInstanceOfType(
+                vendors.Vendors,
+                typeof(TelematicsVendors[]));
+
+            Assert.IsTrue(vendors.Vendors.Length > 0);
+
+            tomtomVendor = vendors.Vendors[0];
+
+            #region Test Connection
+
+            var conParams = new TelematicsConnectionParameters()
+            {
+                Vendor = TelematicsVendorType.Geotab.Description(),
+                AccountId = "54321",
+                UserName = "John Doe 0",
+                Password = "password0",
+                VehiclePositionRefreshRate = 60,
+                Name = "Test Geotab Connection from c# SDK",
+                ValidateRemoteCredentials = false
+            };
+
+            var result0 = route4Me.CreateTelematicsConnection(apiToken, conParams, out string errorString0);
+
+            Assert.IsNotNull(result0,
+            "The test createTelematicsConnectionTest failed. " + errorString);
+
+            Assert.IsInstanceOfType(result0,
+                typeof(TelematicsConnection));
+
+            lsCreatedConnections.Add(result0);
+
+            #endregion
         }
 
         [TestMethod]
@@ -13757,7 +13917,7 @@ namespace Route4MeSDKUnitTest
 
             var vendorParameters = new TelematicsVendorParameters()
             {
-                vendorID = Convert.ToUInt32(randomVendorID)
+                VendorID = Convert.ToUInt32(randomVendorID)
             };
 
             var vendor = route4Me.GetTelematicsVendor(vendorParameters, out errorString);
@@ -13815,6 +13975,157 @@ namespace Route4MeSDKUnitTest
                 vendors, typeof(TelematicsVendorsResponse), 
                 "The test vendorsComparisonTest failed. " + errorString
             );
+        }
+
+        [TestMethod]
+        public void registerMemberTest()
+        {
+            var route4Me = new Route4MeManager(c_ApiKey);
+
+            var vendorParameters = new TelematicsVendorParameters()
+            {
+                MemberID = Convert.ToUInt32(firstMemberId),
+                ApiKey = c_ApiKey
+            };
+
+            var result = route4Me.RegisterTelematicsMember(vendorParameters, out string errorString);
+
+            Assert.IsNotNull(
+                result,
+                "The test registerMemberTest failed. " + errorString);
+
+            Assert.IsInstanceOfType(
+                result, 
+                typeof(TelematicsRegisterMemberResponse));
+        }
+
+        [TestMethod]
+        public void getTelematicsConnectionsTest()
+        {
+            var route4Me = new Route4MeManager(c_ApiKey);
+
+            var vendorParameters = new TelematicsVendorParameters()
+            {
+                ApiToken = apiToken
+            };
+
+            var result = route4Me.GetTelematicsConnections(vendorParameters, out string errorString);
+
+            Assert.IsNotNull(
+                result,
+                "The test getTelematicsConnectionsTest failed. " + errorString);
+
+            Assert.IsInstanceOfType(
+                result,
+                typeof(TelematicsConnection[]));
+        }
+
+        [TestMethod]
+        public void createTelematicsConnectionTest()
+        {
+            var route4Me = new Route4MeManager(c_ApiKey);
+
+            var conParams = new TelematicsConnectionParameters()
+            {
+                VendorID = Convert.ToUInt32(tomtomVendor.ID),
+                Vendor = tomtomVendor.Slug,
+                AccountId = "12345",
+                UserName = "John Doe",
+                Password = "password",
+                VehiclePositionRefreshRate = 60,
+                Name = "Test Telematics Connection from c# SDK",
+                ValidateRemoteCredentials = false
+            };
+
+            var result = route4Me.CreateTelematicsConnection(apiToken, conParams, out string errorString);
+
+                Assert.IsNotNull(
+                result,
+                "The test createTelematicsConnectionTest failed. " + errorString);
+
+            Assert.IsInstanceOfType(
+                result,
+                typeof(TelematicsConnection));
+
+            lsCreatedConnections.Add(result);
+        }
+
+        [TestMethod]
+        public void deleteTelematicsConnectionTest()
+        {
+            if (lsCreatedConnections.Count < 1) return;
+
+            var route4Me = new Route4MeManager(c_ApiKey);
+
+            var result = route4Me.DeleteTelematicsConnection(
+                apiToken, 
+                lsCreatedConnections[lsCreatedConnections.Count-1].ConnectionToken, 
+                out string errorString);
+
+            Assert.IsNotNull(
+                result,
+                "The test deleteTelematicsConnectionTest failed. " + errorString);
+
+            Assert.IsInstanceOfType(
+                result,
+                typeof(TelematicsConnection));
+
+            lsCreatedConnections.RemoveAt(lsCreatedConnections.Count - 1);
+        }
+
+        [TestMethod]
+        public void updateTelematicsConnectionTest()
+        {
+            if (lsCreatedConnections.Count < 1) return;
+
+            var route4Me = new Route4MeManager(c_ApiKey);
+
+            var conParams = new TelematicsConnectionParameters()
+            {
+                VendorID = Convert.ToUInt32(tomtomVendor.ID),
+                AccountId = "12345",
+                UserName = "John Doe",
+                Password = "password",
+                VehiclePositionRefreshRate = 60,
+                Name = "Test Telematics Connection from c# SDK",
+                ValidateRemoteCredentials = false
+            };
+        }
+
+        [TestMethod]
+        public void getTelematicsConnectionTest()
+        {
+            if (lsCreatedConnections.Count < 1) return;
+
+            var route4Me = new Route4MeManager(c_ApiKey);
+
+            var result = route4Me.GetTelematicsConnection(
+                apiToken,
+                lsCreatedConnections[0].ConnectionToken,
+                out string errorString);
+
+            Assert.IsNotNull(
+                result,
+                "The test getTelematicsConnectionTest failed. " + errorString);
+
+            Assert.IsInstanceOfType(
+                result,
+                typeof(TelematicsConnection));
+        }
+
+        [ClassCleanup()]
+        public static void TelematicsGateWayAPICleanup()
+        {
+            if (lsCreatedConnections.Count > 0)
+            {
+                var route4Me = new Route4MeManager(c_ApiKey);
+
+                foreach (var conn in lsCreatedConnections)
+                {
+                    var result = route4Me.DeleteTelematicsConnection(apiToken, conn.ConnectionToken, out string errorString);
+                }
+            }
+
         }
 
     }
@@ -14348,10 +14659,12 @@ namespace Route4MeSDKUnitTest
                 string sDictionaryDDLSqlCom = "";
                 string sDictionaryDMLSqlCom = "";
 
-                sAddressbookSqlCom = File.ReadAllText(@"Data/SQL/SQLCE/addressbook_v4.sql");
-                sOrdersSqlCom = File.ReadAllText(@"Data/SQL/SQLCE/orders.sql");
-                sDictionaryDDLSqlCom = File.ReadAllText(@"Data/SQL/SQLCE/csv_to_api_dictionary_DDL.sql");
-                sDictionaryDMLSqlCom = File.ReadAllText(@"Data/SQL/SQLCE/csv_to_api_dictionary_DML.sql");
+                var stPath = AppDomain.CurrentDomain.BaseDirectory;
+
+                sAddressbookSqlCom = File.ReadAllText(stPath+@"/Data/SQL/SQLCE/addressbook_v4.sql");
+                sOrdersSqlCom = File.ReadAllText(stPath + @"/Data/SQL/SQLCE/orders.sql");
+                sDictionaryDDLSqlCom = File.ReadAllText(stPath + @"/Data/SQL/SQLCE/csv_to_api_dictionary_DDL.sql");
+                sDictionaryDMLSqlCom = File.ReadAllText(stPath + @"/Data/SQL/SQLCE/csv_to_api_dictionary_DML.sql");
 
                 sqlDB.OpenConnection();
 

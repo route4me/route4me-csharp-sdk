@@ -148,6 +148,9 @@
     <Compile Include="DataTypes\MemberConfigurationResponse.cs" />
     <Compile Include="DataTypes\MemberResponse.cs" />
     <Compile Include="DataTypes\MemberResponseV4.cs" />
+    <Compile Include="DataTypes\TelematicsConnection.cs" />
+    <Compile Include="DataTypes\TelematicsRegisterMemberResponse.cs" />
+    <Compile Include="DataTypes\V5\AccountProfile.cs" />
     <Compile Include="DataTypes\V5\Address\Address.cs" />
     <Compile Include="DataTypes\V5\Address\Geocoding.cs" />
     <Compile Include="DataTypes\V5\DataObject.cs" />
@@ -186,6 +189,7 @@
     <Compile Include="DataTypes\TrackingHistory.cs" />
     <Compile Include="DataTypes\User.cs" />
     <Compile Include="DataTypes\UserLocation.cs" />
+    <Compile Include="DataTypes\V5\TelematicsPlatform\Connection\Connection.cs" />
     <Compile Include="DataTypes\V5\Vehicles\Vehicle.cs" />
     <Compile Include="DataTypes\V5\Vehicles\VehicleLocationResponse.cs" />
     <Compile Include="DataTypes\V5\Vehicles\VehicleOrderResponse.cs" />
@@ -230,6 +234,7 @@
     <Compile Include="QueryTypes\OrderParameters.cs" />
     <Compile Include="QueryTypes\RouteParametersQuery.cs" />
     <Compile Include="QueryTypes\ScheduleCalendarQuery.cs" />
+    <Compile Include="QueryTypes\TelematicsConnectionParameters.cs" />
     <Compile Include="QueryTypes\V5\DriverReviewParameters.cs" />
     <Compile Include="QueryTypes\V5\OptimizationParameters.cs" />
     <Compile Include="QueryTypes\V5\RouteFilterParameters.cs" />
@@ -237,6 +242,7 @@
     <Compile Include="QueryTypes\V5\TeamRequest.cs" />
     <Compile Include="QueryTypes\TelematicsVendorParameters.cs" />
     <Compile Include="QueryTypes\TerritoryQuery.cs" />
+    <Compile Include="QueryTypes\V5\TelematicsPlatform\ConnectionParameters.cs" />
     <Compile Include="QueryTypes\V5\Vehicles\VehicleOrderParameters.cs" />
     <Compile Include="QueryTypes\V5\Vehicles\VehicleParameters.cs" />
     <Compile Include="QueryTypes\V5\Vehicles\VehicleProfileParameters.cs" />
