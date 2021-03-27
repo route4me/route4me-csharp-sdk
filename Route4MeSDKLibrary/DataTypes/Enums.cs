@@ -343,5 +343,29 @@ namespace Route4MeSDK.DataTypes
         InheritFromPrimary = 3
     }
 
+    /// <summary>
+    /// Telematics vendor types
+    /// </summary>
+    public enum TelematicsVendorType : uint
+    {
+        [Description("tomtom")]
+        Tomtom,
+
+        [Description("teletrac")]
+        Teletrac,
+
+        [Description("azuga")]
+        Azuga,
+
+        [Description("geotab")]
+        Geotab,
+
+        [Description("silentpassenger")]
+        SilentPassenger,
+
+        [Description("new_teletrac")]
+        NewTeletrac
+    }
+
     #endregion
 }
