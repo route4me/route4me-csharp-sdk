@@ -448,4 +448,28 @@ namespace Route4MeSDK.DataTypes.V5
         [Description("t")]
         Tonne
     }
+    
+    /// <summary>
+    /// Telematics vendor types
+    /// </summary>
+    public enum TelematicsVendorType : uint
+    {
+        [Description("tomtom")]
+        Tomtom,
+
+        [Description("teletrac")]
+        Teletrac,
+
+        [Description("azuga")]
+        Azuga,
+
+        [Description("geotab")]
+        Geotab,
+
+        [Description("silentpassenger")]
+        SilentPassenger,
+
+        [Description("new_teletrac")]
+        NewTeletrac
+    }
 }

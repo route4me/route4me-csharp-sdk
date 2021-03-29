@@ -22,6 +22,8 @@ namespace Route4MeSdkV5UnitTest.VehiclesApi
 
         static List<VehicleProfile> lsVehicleProfiles;
 
+        static string preferedUnit;
+
         public VehiclesApiTests(ITestOutputHelper output)
         {
             _output = output;
@@ -97,17 +99,16 @@ namespace Route4MeSdkV5UnitTest.VehiclesApi
 
             var route4me = new Route4MeManagerV5(c_ApiKey);
 
+            preferedUnit = (route4me.GetAccountPreferedUnit(out ResultResponse resultResponse)?.ToLower() ?? "mi");
+
             var vehProfileParams1 = new VehicleProfile()
             {
                 Name = "Heavy Duty - 28 Double Trailer " + DateTime.Now.ToString("yyMMddHHmmss"),
-                HeightUnits = VehicleSizeUnits.Meter.Description(),
-                WidthUnits = VehicleSizeUnits.Meter.Description(),
-                LengthUnits = VehicleSizeUnits.Meter.Description(),
                 IsPredefined = false,
                 IsDefault = false,
-                Height = 13,
-                Width = 8,
-                Length = 40,
+                Height = preferedUnit == "mi" ? 4*3.28 : 4,
+                Width = preferedUnit == "mi" ? 2.44*3.28 : 2.44,
+                Length = preferedUnit == "mi" ? 12.2*3.28 : 12.2,
                 WeightUnits = VehicleWeightUnits.Kilogram.Description(),
                 Weight = 20400,
                 MaxWeightPerAxle = 15400,
@@ -118,7 +119,7 @@ namespace Route4MeSdkV5UnitTest.VehiclesApi
                 FuelConsumptionHighwayUnit = FuelConsumptionUnits.MilesPerGallonUS.Description()
             };
 
-            var vehProfile1 = route4me.CreateVehicleProfile(vehProfileParams1, out ResultResponse resultResponse);
+            var vehProfile1 = route4me.CreateVehicleProfile(vehProfileParams1, out ResultResponse resultResponse2);
 
             if (vehProfile1 != null && vehProfile1.GetType() == typeof(VehicleProfile) && vehProfile1.VehicleProfileId > 0)
             {
@@ -133,9 +134,9 @@ namespace Route4MeSdkV5UnitTest.VehiclesApi
                 LengthUnits = VehicleSizeUnits.Meter.Description(),
                 IsPredefined = false,
                 IsDefault = false,
-                Height = 13,
-                Width = 8,
-                Length = 48,
+                Height = 4,
+                Width = 2.44,
+                Length = 14.6,
                 WeightUnits = VehicleWeightUnits.Kilogram.Description(),
                 Weight = 36300,
                 MaxWeightPerAxle = 15400,
@@ -146,7 +147,7 @@ namespace Route4MeSdkV5UnitTest.VehiclesApi
                 FuelConsumptionHighwayUnit = FuelConsumptionUnits.MilesPerGallonUS.Description()
             };
 
-            var vehProfile2 = route4me.CreateVehicleProfile(vehProfileParams2, out ResultResponse resultResponse2);
+            var vehProfile2 = route4me.CreateVehicleProfile(vehProfileParams2, out ResultResponse resultResponse3);
 
             if (vehProfile2 != null && vehProfile2.GetType() == typeof(VehicleProfile) && vehProfile2.VehicleProfileId > 0)
             {
@@ -155,6 +156,8 @@ namespace Route4MeSdkV5UnitTest.VehiclesApi
 
             #endregion
         }
+
+
 
         public void Dispose()
         {
@@ -356,19 +359,16 @@ namespace Route4MeSdkV5UnitTest.VehiclesApi
         }
 
         [Fact]
-        public void CreeateVehicleProfileTest()
+        public void CreateVehicleProfileTest()
         {
             var route4Me = new Route4MeManagerV5(c_ApiKey);
 
             var vehProfileParams3 = new VehicleProfile()
             {
                 Name = "Heavy Duty - 48 Semitrailer " + DateTime.Now.ToString("yyMMddHHmmss"),
-                HeightUnits = VehicleSizeUnits.Foot.Description(),
-                WidthUnits = VehicleSizeUnits.Foot.Description(),
-                LengthUnits = VehicleSizeUnits.Foot.Description(),
-                Height = 11,
-                Width = 6.6,
-                Length = 52,
+                Height = preferedUnit == "mi" ? 3.5 * 3.28 : 3.5,
+                Width = preferedUnit == "mi" ? 2.5 * 3.28 : 2.5,
+                Length = preferedUnit == "mi" ? 16 * 3.28 : 16,
                 IsPredefined = false,
                 IsDefault = false,
                 WeightUnits = VehicleWeightUnits.Kilogram.Description(),
