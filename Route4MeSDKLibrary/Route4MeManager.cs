@@ -15,6 +15,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Dynamic;
 using Newtonsoft.Json.Linq;
+using SuperSocket.ClientEngine;
+using System.Linq.Expressions;
 
 namespace Route4MeSDK
 {
@@ -880,7 +882,12 @@ namespace Route4MeSDK
 
             using (HttpContent httpContent = new FormUrlEncodedContent(keyValues))
             {
-                var response = GetJsonObjectFromAPI<StatusResponse>(roParames, R4MEInfrastructureSettings.RouteSharing, HttpMethodType.Post, httpContent, out errorString);
+                var response = GetJsonObjectFromAPI<StatusResponse>(
+                    roParames, 
+                    R4MEInfrastructureSettings.RouteSharing, 
+                    HttpMethodType.Post, 
+                    httpContent, 
+                    out errorString);
 
                 return (response != null && response.status) ? true : false;
             };
@@ -1423,9 +1430,11 @@ namespace Route4MeSDK
 		}
 
 
-        public MemberCapabilities GetMemberCapabilities(out string errorString)
+        public MemberCapabilities GetMemberCapabilities(string apiKey, out string errorString)
         {
             var parameters = new GenericParameters();
+
+            parameters.ParametersCollection.Add("ApiKey", apiKey);
 
             var result = GetJsonObjectFromAPI<MemberCapabilities>(parameters,
                                 R4MEInfrastructureSettings.MemberCapabilities,
@@ -1446,7 +1455,7 @@ namespace Route4MeSDK
         {
             try
             {
-                var memberCapabilities = this.GetMemberCapabilities(out errorString);
+                var memberCapabilities = this.GetMemberCapabilities(actualApiKey, out errorString);
 
                 if (actualApiKey == demoApiKey || memberCapabilities == null) return false;
 
@@ -1457,6 +1466,12 @@ namespace Route4MeSDK
                     .FirstOrDefault();
 
                 if (commercialSubscription == null) return false;
+                
+                if (commercialSubscription.GetValue(memberCapabilities).GetType() != typeof(bool)) return false;
+
+                bool isCommercial = (bool)commercialSubscription.GetValue(memberCapabilities);
+
+                if (!isCommercial) return false;
 
                 return true;
             }
@@ -3649,11 +3664,14 @@ namespace Route4MeSDK
         /// <returns>The telematics vendors</returns>
         public TelematicsVendorsResponse GetAllTelematicsVendors(TelematicsVendorParameters vendorParams, out string errorString)
 		{
-            return GetJsonObjectFromAPI<TelematicsVendorsResponse>(vendorParams, 
-                            R4MEInfrastructureSettings.TeleamticsVendorsHost,
+            var result =  GetJsonObjectFromAPI<TelematicsVendorsResponse>(vendorParams, 
+                            R4MEInfrastructureSettings.TelematicsVendorsHost,
 							HttpMethodType.Get,
 							out errorString);
-		}
+
+            return result;
+
+        }
 
         /// <summary>
         /// Returns a telematics vendor
@@ -3664,7 +3682,7 @@ namespace Route4MeSDK
 		public TelematicsVendorResponse GetTelematicsVendor(TelematicsVendorParameters vendorParams, out string errorString)
 		{
             return GetJsonObjectFromAPI<TelematicsVendorResponse>(vendorParams, 
-                            R4MEInfrastructureSettings.TeleamticsVendorsHost,
+                            R4MEInfrastructureSettings.TelematicsVendorsHost,
 							HttpMethodType.Get,
 							out errorString);
 		}
@@ -3679,18 +3697,194 @@ namespace Route4MeSDK
                                                                  out string errorString)
 		{
             return GetJsonObjectFromAPI<TelematicsVendorsResponse>(vendorParams, 
-                                        R4MEInfrastructureSettings.TeleamticsVendorsHost,
+                                        R4MEInfrastructureSettings.TelematicsVendorsHost,
 							            HttpMethodType.Get,
 							            out errorString);
 		}
 
-		#endregion
+        /// <summary>
+        /// Register telematics member
+        /// </summary>
+        /// <param name="vendorParams">Parameters containing API key and member ID</param>
+        /// <param name="errorString"> out: Error as string</param>
+        /// <returns>Response with a member's API token</returns>
+        public TelematicsRegisterMemberResponse RegisterTelematicsMember(TelematicsVendorParameters vendorParams,
+                                                                         out string errorString)
+        {
+            vendorParams.PrepareForSerialization();
 
-		#endregion
+            return GetJsonObjectFromAPI<TelematicsRegisterMemberResponse>(vendorParams,
+                                        R4MEInfrastructureSettings.TelematicsRegisterHost,
+                                        HttpMethodType.Get,
+                                        out errorString);
+        }
 
-		#region Generic Methods
+        /// <summary>
+        /// Get all telematics connections.
+        /// </summary>
+        /// <param name="vendorParams">Parameters containing API token</param>
+        /// <param name="errorString">out: Error as string</param>
+        /// <returns>An array of the telematics connections</returns>
+        public TelematicsConnection[] GetTelematicsConnections(TelematicsVendorParameters vendorParams, out string errorString)
+        {
+            var result = GetJsonObjectFromAPI<TelematicsConnection[]>(vendorParams,
+                            R4MEInfrastructureSettings.TelematicsVendorsHost,
+                            HttpMethodType.Get,
+                            out errorString);
 
-		public string GetStringResponseFromAPI(GenericParameters optimizationParameters,
+            return result;
+
+        }
+
+        /// <summary>
+        /// Create a telematics connection.
+        /// </summary>
+        /// <param name="apiToken">API token</param>
+        /// <param name="connectionParams">Telematics connection parameters</param>
+        /// <param name="errorString">out: Error as string</param>
+        /// <returns>Created telematics connection</returns>
+        public TelematicsConnection CreateTelematicsConnection(string apiToken, 
+                                                               TelematicsConnectionParameters connectionParams,
+                                                               out string errorString
+                                                               )
+        {
+            var roParames = new GenericParameters();
+            roParames.ParametersCollection.Add("api_token", apiToken);
+
+            var keyValues = new List<KeyValuePair<string, string>>();
+
+            if (connectionParams.AccountId != null) 
+                keyValues.Add(new KeyValuePair<string, string>("account_id", connectionParams.AccountId));
+            if (connectionParams.UserName != null) 
+                keyValues.Add(new KeyValuePair<string, string>("username", connectionParams.UserName));
+            if (connectionParams.Password != null) 
+                keyValues.Add(new KeyValuePair<string, string>("password", connectionParams.Password));
+            if (connectionParams.Host != null) 
+                keyValues.Add(new KeyValuePair<string, string>("host", connectionParams.Host));
+            if (connectionParams.VendorID != null) 
+                keyValues.Add(new KeyValuePair<string, string>("vendor_id", connectionParams.VendorID.ToString()));
+            if (connectionParams.Name != null) 
+                keyValues.Add(new KeyValuePair<string, string>("name", connectionParams.Name));
+            if (connectionParams.VehiclePositionRefreshRate != null) 
+                keyValues.Add(new KeyValuePair<string, string>("vehicle_position_refresh_rate", connectionParams.VehiclePositionRefreshRate.ToString()));
+            if (connectionParams.UserId != null) 
+                keyValues.Add(new KeyValuePair<string, string>("user_id", connectionParams.UserId.ToString()));
+            if (connectionParams.ID != null) 
+                keyValues.Add(new KeyValuePair<string, string>("id", connectionParams.ID.ToString()));
+            if (connectionParams.Vendor != null) 
+                keyValues.Add(new KeyValuePair<string, string>("vendor", connectionParams.Vendor));
+            
+            using (HttpContent httpContent = new FormUrlEncodedContent(keyValues))
+            {
+                TelematicsConnection response = GetJsonObjectFromAPI<TelematicsConnection>
+                    (roParames, R4MEInfrastructureSettings.TelematicsConnection,
+                    HttpMethodType.Post, httpContent, out errorString);
+
+                return response;
+            };
+        }
+
+        /// <summary>
+        /// Delete a telematics connection
+        /// </summary>
+        /// <param name="apiToken">API token</param>
+        /// <param name="connectionToken">Connection token</param>
+        /// <param name="errorString">out: Error as string</param>
+        /// <returns>Deleted telematics connection</returns>
+        public TelematicsConnection DeleteTelematicsConnection(string apiToken,
+                                                               string connectionToken,
+                                                               out string errorString)
+        {
+            var roParames = new GenericParameters();
+            roParames.ParametersCollection.Add("api_token", apiToken);
+            roParames.ParametersCollection.Add("connection_token", connectionToken);
+
+            var result = GetJsonObjectFromAPI<TelematicsConnection>(roParames,
+                            R4MEInfrastructureSettings.TelematicsConnection,
+                            HttpMethodType.Delete,
+                            out errorString);
+
+            return result;
+        }
+
+        /// <summary>
+        /// Update telematics connection
+        /// </summary>
+        /// <param name="apiToken">API token</param>
+        /// <param name="connectionToken">Connection token</param>
+        /// <param name="connectionParams">Telematics connection parameters</param>
+        /// <param name="errorString">out: Error as string</param>
+        /// <returns>Updated telematics connection</returns>
+        public TelematicsConnection UpdateTelematicsConnection(string apiToken,
+                                                               string connectionToken,
+                                                               TelematicsConnectionParameters connectionParams,
+                                                               out string errorString)
+        {
+            var roParames = new GenericParameters();
+            roParames.ParametersCollection.Add("api_token", apiToken);
+            roParames.ParametersCollection.Add("connection_token", connectionToken);
+
+            var keyValues = new List<KeyValuePair<string, string>>();
+
+            if (connectionParams.AccountId != null)
+                keyValues.Add(new KeyValuePair<string, string>("account_id", connectionParams.AccountId));
+            if (connectionParams.UserName != null)
+                keyValues.Add(new KeyValuePair<string, string>("username", connectionParams.UserName));
+            if (connectionParams.Password != null)
+                keyValues.Add(new KeyValuePair<string, string>("password", connectionParams.Password));
+            if (connectionParams.Host != null)
+                keyValues.Add(new KeyValuePair<string, string>("host", connectionParams.Host));
+            if (connectionParams.VendorID != null)
+                keyValues.Add(new KeyValuePair<string, string>("vendor_id", connectionParams.VendorID.ToString()));
+            if (connectionParams.Name != null)
+                keyValues.Add(new KeyValuePair<string, string>("name", connectionParams.Name));
+            if (connectionParams.VehiclePositionRefreshRate != null)
+                keyValues.Add(new KeyValuePair<string, string>("vehicle_position_refresh_rate", connectionParams.VehiclePositionRefreshRate.ToString()));
+            if (connectionParams.UserId != null)
+                keyValues.Add(new KeyValuePair<string, string>("user_id", connectionParams.UserId.ToString()));
+            if (connectionParams.Vendor != null)
+                keyValues.Add(new KeyValuePair<string, string>("vendor", connectionParams.Vendor));
+
+            using (HttpContent httpContent = new FormUrlEncodedContent(keyValues))
+            {
+                TelematicsConnection response = GetJsonObjectFromAPI<TelematicsConnection>
+                    (roParames, R4MEInfrastructureSettings.TelematicsConnection,
+                    HttpMethodType.Put, httpContent, out errorString);
+
+                return response;
+            };
+        }
+
+        /// <summary>
+        /// Get a telematics connection
+        /// </summary>
+        /// <param name="apiToken">API token</param>
+        /// <param name="connectionToken">Connection token</param>
+        /// <param name="errorString">out: Error as string</param>
+        /// <returns>Telematics connection</returns>
+        public TelematicsConnection GetTelematicsConnection(string apiToken,
+                                                               string connectionToken,
+                                                               out string errorString)
+        {
+            var roParames = new GenericParameters();
+            roParames.ParametersCollection.Add("api_token", apiToken);
+            roParames.ParametersCollection.Add("connection_token", connectionToken);
+
+            var result = GetJsonObjectFromAPI<TelematicsConnection>(roParames,
+                            R4MEInfrastructureSettings.TelematicsConnection,
+                            HttpMethodType.Get,
+                            out errorString);
+
+            return result;
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Generic Methods
+
+        public string GetStringResponseFromAPI(GenericParameters optimizationParameters,
 											   string url,
 											   HttpMethodType httpMethod,
 											   out string errorMessage)
@@ -3939,11 +4133,21 @@ namespace Route4MeSDK
 			try
 			{
 				using (HttpClient httpClient = CreateHttpClient(url))
-				{
-					// Get the parameters
-					string parametersURI = optimizationParameters.Serialize(m_ApiKey);
+                {
+                    bool hasApiKey = (optimizationParameters
+                                        .GetType()
+                                        .GetProperties()
+                                        .Where(x => x.Name == "ApiKey" || x.Name == "api_key")
+                                        .FirstOrDefault()
+                                        ?.GetValue(optimizationParameters) ?? null) != null;
 
-					switch (httpMethod)
+                    string parametersURI = hasApiKey
+                                            ? optimizationParameters.Serialize(String.Empty) 
+                                            : optimizationParameters.Serialize(m_ApiKey);
+
+                    parametersURI = parametersURI.Replace("?&", "?");
+
+                    switch (httpMethod)
 					{
 						case HttpMethodType.Get:
 							{

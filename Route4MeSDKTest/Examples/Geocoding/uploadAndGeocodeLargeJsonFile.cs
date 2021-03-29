@@ -60,7 +60,8 @@ namespace Route4MeSDK.Examples
                 Console.WriteLine("Total Geocoded Addresses -> " + lsAddresses.Count);
             };
 
-            fastProcessing.uploadAndGeocodeLargeJsonFile(@"Data\JSON\batch_socket_upload_error_addresses_data_5.json");
+            var stPath = AppDomain.CurrentDomain.BaseDirectory;
+            fastProcessing.uploadAndGeocodeLargeJsonFile(stPath+@"\Data\JSON\batch_socket_upload_error_addresses_data_5.json");
         }
     }
 }

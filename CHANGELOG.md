@@ -1,18 +1,18 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [1.0.1.3] - 2021-02-17
+## [1.0.1.3] - 2021-03-28
 
 ### Added
 
 The file [Consts.cs: ](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/Consts.cs)  
-– **Endpoints**: /vehicles, /vehicles/assign, /vehicles/execute, /vehicles/location, /vehicle-profiles, /vehicles/license, /vehicles/search.  
+– **Endpoints**: /vehicles, /vehicles/assign, /vehicles/execute, /vehicles/location, /vehicle-profiles, /vehicles/license, /vehicles/search, TelematicsVendorsHost, TelematicsRegisterHost, TelematicsConnection, TelematicsVendorsInfo
 
 The file [Consts.cs: ](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/DataTypes/V5/Address/Geocoding.cs)  
 – **Class (API 5 version)**: Geocoding  
 
 The file [Enums.cs: ](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/DataTypes/V5/Enums.cs)  
-– **Enumerations (API 5 version)**: FuelTypes, FuelConsumptionUnits, VehicleSizeUnits, VehicleWeightUnits.  
+– **Enumerations (API 5 version)**: FuelTypes, FuelConsumptionUnits, VehicleSizeUnits, VehicleWeightUnits, TelematicsVendorType.  
 
 The file [Vehicle.cs: ](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/DataTypes/V5/Vehicles/Vehicle.cs)  
 – **Class (API 5 version)**: Vehicle  
@@ -53,14 +53,39 @@ The file [VehicleSearchParameters.cs: ](https://github.com/route4me/route4me-csh
 The file [Route4MeManagerV5.cs: ](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/Route4MeManagerV5.cs)  
 – **Methods (API 5 version)**: GetRouteDataTableWithElasticSearch, CreateVehicle, GetPaginatedVehiclesList, DeleteVehicle, CreateTemporaryVehicle, ExecuteVehicleOrder, GetVehicleLocations, GetVehicleById, GetVehicleTrack, GetVehicleProfiles, CreateVehicleProfile, DeleteVehicleProfile, GetVehicleProfileById, GetVehicleByLicensePlate, SearchVehicles, UpdateVehicle, UpdateVehicleProfile.  
 
+The file [AccountProfile.cs: ](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/DataTypes/V5/AccountProfile.cs)  
+– **Class (API 5 version)**: AccountProfile  
+
+The file [TelematicsConnection.cs: ](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/DataTypes/TelematicsConnection.cs)  
+– **Class**: TelematicsConnection  
+
+The file [TelematicsRegisterMemberResponse.cs: ](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/DataTypes/TelematicsRegisterMemberResponse.cs)  
+– **Class**: TelematicsRegisterMemberResponse  
+
+The file [TelematicsConnectionParameters.cs: ](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/QueryTypes/TelematicsConnectionParameters.cs)  
+– **Class**: TelematicsConnectionParameters  
+
+Added the unit tests for the 'Telematics GateWay API' endpoints (TelematicsGateWayAPI).
+
 Added the unit tests for the 'Route4Me Vehicles API 5' endpoints (VehiclesApiTests).  
 
 
 ### Changed
 
 The file [Consts.cs: ](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/DataTypes/V5/DriverReview.cs)
-– Changed property types of of the class DriverReview: **Rating** (double? to int?), **Previous** (int? to string), **Next** (int? to string).
+– Changed property types of of the class DriverReview: **Rating** (double? to int?), **Previous** (int? to string), **Next** (int? to string).  
 
+The file [TelematicsVendors.cs: ](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/DataTypes/TelematicsVendors.cs)  
+– Added the properties: Description, WebsiteURL, ApiDocsURL.
+
+The file [TelematicsVendorParameters.cs: ](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/QueryTypes/TelematicsVendorParameters.cs)  
+– Added the properties: MemberID, isVirtual, ApiKey, ValidateRemoteCredentials, ApiToken.
+
+The file [Route4MeManager.cs: ](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/Route4MeManager.cs)  
+– Added the methods: RegisterTelematicsMember, GetTelematicsConnections, CreateTelematicsConnection, DeleteTelematicsConnection, UpdateTelematicsConnection, GetTelematicsConnection.
+
+The file [Route4MeManagerV5.cs: ](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/Route4MeManagerV5.cs)  
+– Added the methods: GetAccountProfile, GetAccountPreferedUnit, GetTelematicsConnections, GetTelematicsConnectionByToken, RegisterTelematicsConnection, DeleteTelematicsConnection, UpdateTelematicsConnection.
 
 
 ## [1.0.1.2] - 2021-02-05
