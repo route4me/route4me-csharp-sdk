@@ -1,6 +1,25 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.0.1.4] - 2021-04-10
+
+
+### Added
+
+The file [TelematicsConnection.cs: ](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/DataTypes/TelematicsConnection.cs)
+– Added the method ReoptimizeRoute instead of obsolete method ResequenceReoptimizeRoute.
+
+
+
+### Changed
+
+The file [TelematicsConnection.cs: ](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/DataTypes/TelematicsConnection.cs)
+– Added properties: ApiKey, MaxIdleTime, IsEnabled, LastVehiclesReload, LastAddressesReload, LastPositionReload, TotalAddressesCount.
+
+The file [RouteParametersQuery.cs: ](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/QueryTypes/RouteParametersQuery.cs)
+– Added the property: DeviceType.
+
+
 ## [1.0.1.3] - 2021-03-28
 
 ### Added
