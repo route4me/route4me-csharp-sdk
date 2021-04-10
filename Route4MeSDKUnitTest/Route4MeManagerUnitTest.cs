@@ -237,17 +237,23 @@ namespace Route4MeSDKUnitTest
 
             Assert.IsNotNull(route_id, "rote_id is null...");
 
-            var roParameters = new Dictionary<string, string>()
+            var routeParams = new RouteParametersQuery()
             {
-                {"route_id",route_id},
-                {"disable_optimization","0"},
-                {"optimize","Distance"},
+                RouteId = route_id,
+                ReOptimize = true,
+                Remaining = false,
+                DeviceType = DeviceType.Web.Description()
             };
 
             // Run the query
-            bool result = route4Me.ResequenceReoptimizeRoute(roParameters, out string errorString);
+            var result = route4Me.ReoptimizeRoute(routeParams, out string errorString);
 
-            Assert.IsTrue(result, "ResequenceReoptimizeRouteTest failed.");
+            Assert.IsNotNull(result, "ResequenceReoptimizeRouteTest failed.");
+
+            Assert.IsInstanceOfType(
+                result,
+                typeof(DataObjectRoute),
+                "ResequenceReoptimizeRouteTest failed. " + errorString);
         }
 
         [TestMethod]
@@ -13812,7 +13818,7 @@ namespace Route4MeSDKUnitTest
         [ClassInitialize()]
         public static void TelematicsGateWayAPIInitialize(TestContext context)
         {
-            if (ApiKeys.actualApiKey==ApiKeys.demoApiKey) Assert.Inconclusive("The test cannot done with demo API key");
+            if (ApiKeys.actualApiKey == ApiKeys.demoApiKey) Assert.Inconclusive("The test cannot done with demo API key");
 
             var route4Me = new Route4MeManager(c_ApiKey);
 

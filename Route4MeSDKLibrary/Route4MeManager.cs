@@ -13,10 +13,6 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Dynamic;
-using Newtonsoft.Json.Linq;
-using SuperSocket.ClientEngine;
-using System.Linq.Expressions;
 
 namespace Route4MeSDK
 {
@@ -770,7 +766,9 @@ namespace Route4MeSDK
         /// <param name="roParames">The parameters for reoptimizng</param>
         /// <param name="errorString">Error string</param>
         /// <returns>True, if a route reoptimized/resequences successfully</returns>
-		public bool ResequenceReoptimizeRoute(Dictionary<string, string> roParames, out string errorString)
+        /// 
+		[Obsolete("The method is obsolete, use the method ReoptimizeRoute instead.")]
+        public bool ResequenceReoptimizeRoute(Dictionary<string, string> roParames, out string errorString)
 		{
 			var request = new RouteParametersQuery
 			{
@@ -787,6 +785,25 @@ namespace Route4MeSDK
 
 			return (response != null && response.status) ? true : false;
 		}
+
+        /// <summary>
+        /// Reoptimze a route
+        /// </summary>
+        /// <param name="queryParams">Route query parameters containing parameters:
+        /// <para>ReOptimize = true, enables reoptimization of a route</para>
+        /// <para>Remaining=0 - disables resequencing of the remaining stops. </para>
+        /// <para>Remaining=1 - enables resequencing of the remaining stops. </para></param>
+        /// <param name="errorString">Error string</param>
+        /// <returns>Reoptimized route</returns>
+        public DataObjectRoute ReoptimizeRoute(RouteParametersQuery queryParams, out string errorString)
+        {
+            var result = GetJsonObjectFromAPI<DataObjectRoute>(queryParams,
+                                            R4MEInfrastructureSettings.RouteHost,
+                                            HttpMethodType.Put,
+                                            out errorString);
+
+            return result;
+        }
 
         /// <summary>
         /// The request parameters for manually resequencing of a route
