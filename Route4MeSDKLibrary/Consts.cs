@@ -12,7 +12,7 @@ namespace Route4MeSDK
         public const string ApiVersion = "4";
 
         public const string MainHost = "https://api.route4me.com";
-        //public const string MainHost = "https://api.broono.com";
+
         public const string ApiHost = MainHost + "/api.v4/optimization_problem.php";
         public const string ShowRouteHost = MainHost + "/route4me.php";
         public const string RouteHost = MainHost + "/api.v4/route.php";
@@ -40,7 +40,13 @@ namespace Route4MeSDK
         public const string Order = MainHost + "/api.v4/order.php";
         public const string OrderCustomField = MainHost + "/api.v4/order_custom_user_fields.php";
         public const string MergeRoutes = MainHost + "/actions/merge_routes.php";
+
+        /// <summary>
+        /// The endpoint /api.v3/route/reoptimize_2.php is obsolete,
+        /// use /api.v4/route.php for reoptimization instead.
+        /// </summary>
         public const string RouteReoptimize = MainHost + "/api.v3/route/reoptimize_2.php";
+
         public const string RouteSharing = MainHost + "/actions/route/share_route.php";
 
         public const string MarkAddressDeparted = MainHost + "/api/route/mark_address_departed.php";

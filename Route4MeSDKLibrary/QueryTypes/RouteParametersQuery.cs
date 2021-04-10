@@ -190,6 +190,13 @@ namespace Route4MeSDK.QueryTypes
         [DataMember(Name = "unlink_from_master_optimization", EmitDefaultValue = false)]
         public bool UnlinkFromMasterOptimization { get; set; }
 
+        /// <value>iphone</value>,
+        /// <value>ipad</value>,
+        /// <value>android_phone</value>,
+        /// <value>android_tablet</value>
+        /// </summary>
+        [DataMember(Name = "device_type", EmitDefaultValue = false)]
+        public string DeviceType { get; set; }
 
     }
 }

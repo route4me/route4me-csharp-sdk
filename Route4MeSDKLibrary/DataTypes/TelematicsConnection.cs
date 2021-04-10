@@ -36,6 +36,12 @@ namespace Route4MeSDKLibrary.DataTypes
         public string Host { get; set; }
 
         /// <summary>
+        /// Telematics connection access api_key
+        /// </summary>
+        [DataMember(Name = "api_key", EmitDefaultValue = false)]
+        public string ApiKey { get; set; }
+
+        /// <summary>
         /// Telemetics connection type ID
         /// </summary>
         [DataMember(Name = "vendor_id", EmitDefaultValue = false)]
@@ -52,6 +58,36 @@ namespace Route4MeSDKLibrary.DataTypes
         /// </summary>
         [DataMember(Name = "vehicle_position_refresh_rate", EmitDefaultValue = false)]
         public int? VehiclePositionRefreshRate { get; set; }
+
+        /// <summary>
+        /// Maimum idle time
+        /// </summary>
+        [DataMember(Name = "max_idle_time", EmitDefaultValue = false)]
+        public int? MaxIdleTime { get; set; }
+
+        /// <summary>
+        /// Disable/enable vehicle tracking
+        /// </summary>
+        [DataMember(Name = "is_enabled", EmitDefaultValue = false)]
+        public bool? IsEnabled { get; set; }
+
+        /// <summary>
+        /// The last timestamp the vehicles reloaded
+        /// </summary>
+        [DataMember(Name = "last_vehicles_reload", EmitDefaultValue = false)]
+        public string LastVehiclesReload { get; set; }
+
+        /// <summary>
+        /// The last timestamp the addresses reloaded
+        /// </summary>
+        [DataMember(Name = "last_addresses_reload", EmitDefaultValue = false)]
+        public string LastAddressesReload { get; set; }
+
+        /// <summary>
+        /// The last timestamp the postions reloaded
+        /// </summary>
+        [DataMember(Name = "last_position_reload", EmitDefaultValue = false)]
+        public string LastPositionReload { get; set; }
 
         /// <summary>
         /// Telematics connection access token
@@ -94,6 +130,12 @@ namespace Route4MeSDKLibrary.DataTypes
         /// </summary>
         [DataMember(Name = "total_vehicles_count", EmitDefaultValue = false)]
         public int? TotalVehiclesCount { get; set; }
+
+        /// <summary>
+        /// Total addresses count
+        /// </summary>
+        [DataMember(Name = "total_addresses_count", EmitDefaultValue = false)]
+        public int? TotalAddressesCount { get; set; }
 
         /// <summary>
         /// Syncronized vehicles count
