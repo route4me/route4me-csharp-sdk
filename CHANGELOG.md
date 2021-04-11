@@ -17,8 +17,11 @@ The file [TelematicsConnection.cs: ](https://github.com/route4me/route4me-csharp
 – Added properties: ApiKey, MaxIdleTime, IsEnabled, LastVehiclesReload, LastAddressesReload, LastPositionReload, TotalAddressesCount.
 
 The file [RouteParametersQuery.cs: ](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/QueryTypes/RouteParametersQuery.cs)
-– Added the property: DeviceType.
+– Added the properties: DeviceType, ShiftByTimeZone.
 
+The file [Route4MeManager.cs: ](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/Route4MeManager.cs)
+– Added the method: ShiftRouteDateTimeByTz.
+- Changed the methods: GetRoute, GetRoutes, UpdateRoute, RemoveDuplicatedAddressesFromRoute, ReoptimizeRoute, ManuallyResequenceRoute.
 
 ## [1.0.1.3] - 2021-03-28
 
