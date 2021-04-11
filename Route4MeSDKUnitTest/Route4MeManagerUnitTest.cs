@@ -70,7 +70,8 @@ namespace Route4MeSDKUnitTest
             var routeParameters = new RouteParametersQuery()
             {
                 Limit = 1,
-                Offset = 15
+                Offset = 10,
+                ShiftByTimeZone = true
             };
 
             // Run the query
@@ -111,7 +112,8 @@ namespace Route4MeSDKUnitTest
 
             var routeParameters = new RouteParametersQuery()
             {
-                RouteId = tdr.SD10Stops_route_id
+                RouteId = "038A42A74126E77536FD83FB1E664EEA", // tdr.SD10Stops_route_id
+                ShiftByTimeZone = false
             };
 
             // Run the query

@@ -787,5 +787,16 @@ namespace Route4MeSDK
                 return "Error reading app settings."+Environment.NewLine+ex.Message;
             }
         }
+
+        /// <summary>
+        /// Get local timezone in seconds.
+        /// </summary>
+        /// <returns>Timezone in seconds</returns>
+        public static int GetLocalTimeZone()
+        {
+            var seconds = (int)TimeZoneInfo.Local.GetUtcOffset(DateTime.UtcNow).TotalSeconds;
+
+            return seconds;
+        }
     }
 }
