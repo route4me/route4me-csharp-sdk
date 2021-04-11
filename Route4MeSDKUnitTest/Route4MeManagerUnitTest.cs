@@ -112,7 +112,7 @@ namespace Route4MeSDKUnitTest
 
             var routeParameters = new RouteParametersQuery()
             {
-                RouteId = "038A42A74126E77536FD83FB1E664EEA", // tdr.SD10Stops_route_id
+                RouteId = tdr.SD10Stops_route_id,
                 ShiftByTimeZone = false
             };
 
