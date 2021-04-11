@@ -198,5 +198,9 @@ namespace Route4MeSDK.QueryTypes
         [DataMember(Name = "device_type", EmitDefaultValue = false)]
         public string DeviceType { get; set; }
 
+        /// <summary>
+        /// If true, the route time is shifted by timezone.
+        /// </summary>
+        public bool ShiftByTimeZone { get; set; }
     }
 }

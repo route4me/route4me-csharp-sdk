@@ -309,8 +309,35 @@ namespace Route4MeSDK
 														  HttpMethodType.Get,
 														  out errorString);
 
-			return result;
+            #region Shift the route date and route time to make them as shown in the web app.
+
+            if (result!=null && result.GetType()==typeof(DataObjectRoute) && routeParameters.ShiftByTimeZone)
+            {
+                result = ShiftRouteDateTimeByTz(result);
+            }
+
+            #endregion
+
+            return result;
 		}
+
+        /// <summary>
+        /// Shift the route date and route time to make them as shown in the web app.
+        /// </summary>
+        /// <param name="route">Input route object</param>
+        /// <returns>Modified route object</returns>
+        public DataObjectRoute ShiftRouteDateTimeByTz(DataObjectRoute route)
+        {
+            var tz = R4MeUtils.GetLocalTimeZone();
+            long totalTime = (long)(route.Parameters.RouteDate + route.Parameters.RouteTime);
+
+            totalTime += tz;
+
+            route.Parameters.RouteDate = (totalTime / 86400) * 86400;
+            route.Parameters.RouteTime = (int)(totalTime - route.Parameters.RouteDate);
+
+            return route;
+        }
 
         /// <summary>
         /// Returns array of the routes limited by the parameters: offset and limit.
@@ -325,7 +352,18 @@ namespace Route4MeSDK
 																 HttpMethodType.Get,
 																 out errorString);
 
-			return result;
+            if (result != null && result.GetType() == typeof(DataObjectRoute[]) && routeParameters.ShiftByTimeZone)
+            {
+                List<DataObjectRoute> lsRoutes = new List<DataObjectRoute>();
+
+                foreach (DataObjectRoute route in result)
+                {
+                    lsRoutes.Add(ShiftRouteDateTimeByTz(route));
+                }
+                
+            }
+
+            return result;
 		}
 
         /// <summary>
@@ -364,11 +402,16 @@ namespace Route4MeSDK
 														  R4MEInfrastructureSettings.RouteHost,
 														  HttpMethodType.Put,
 														  out errorString);
+            
+            if (result != null && result.GetType() == typeof(DataObjectRoute) && routeParameters.ShiftByTimeZone)
+            {
+                result = ShiftRouteDateTimeByTz(result);
+            }
 
-			return result;
+            return result;
 		}
 
-        private DataObjectRoute RemoveDuplicatedAddressesFromRoute(DataObjectRoute route)
+        private DataObjectRoute RemoveDuplicatedAddressesFromRoute(DataObjectRoute route, bool ShiftByTimeZone = false)
         {
             var lsAddress = new List<Address>();
 
@@ -381,6 +424,11 @@ namespace Route4MeSDK
             }
 
             route.Addresses = lsAddress.ToArray();
+
+            if (route != null && route.GetType() == typeof(DataObjectRoute) && ShiftByTimeZone)
+            {
+                route = ShiftRouteDateTimeByTz(route);
+            }
 
             return route;
         }
@@ -802,6 +850,11 @@ namespace Route4MeSDK
                                             HttpMethodType.Put,
                                             out errorString);
 
+            if (result != null && result.GetType() == typeof(DataObjectRoute) && queryParams.ShiftByTimeZone)
+            {
+                result = ShiftRouteDateTimeByTz(result);
+            }
+
             return result;
         }
 
@@ -877,7 +930,12 @@ namespace Route4MeSDK
 											HttpMethodType.Put,
 											out errorString);
 
-			return route1;
+            if (route1 != null && route1.GetType() == typeof(DataObjectRoute) && rParams.ShiftByTimeZone)
+            {
+                route1 = ShiftRouteDateTimeByTz(route1);
+            }
+
+            return route1;
 		}
 
         /// <summary>
