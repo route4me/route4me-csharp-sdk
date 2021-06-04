@@ -29,8 +29,8 @@ namespace Route4MeSDK.Examples
                 out string errorString
              );
 
-            int randomNumber = (new Random()).Next(0, vehicles.PerPage - 1);
-            var vehicleId = vehicles.Data[randomNumber].VehicleId;
+            int randomNumber = (new Random()).Next(0, vehicles.Length - 1);
+            var vehicleId = vehicles[randomNumber].VehicleId;
 
             #endregion
 

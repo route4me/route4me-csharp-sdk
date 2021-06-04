@@ -6,7 +6,7 @@ namespace Route4MeSDK.Examples
     public sealed partial class Route4MeExamples
     {
         /// <summary>
-        /// GEt Vehicles List
+        /// Get Vehicles List
         /// </summary>
         public void GetVehicles()
         {
@@ -21,7 +21,7 @@ namespace Route4MeSDK.Examples
             };
 
             // Run the query
-            VehiclesPaginated vehicles = route4Me.GetVehicles(vehicleParameters, out string errorString);
+            DataTypes.V5.Vehicle[] vehicles = route4Me.GetVehicles(vehicleParameters, out string errorString);
 
             PrintTestVehciles(vehicles,errorString);
         }
