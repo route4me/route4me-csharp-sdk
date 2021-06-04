@@ -3586,9 +3586,9 @@ namespace Route4MeSDK
         /// <param name="total"> out: Total number of the vehicles </param>
         /// <param name="errorString"> out: Error as string </param>
         /// <returns> The VehiclesPaginated type object containing an array of the vehicles</returns>
-        public VehiclesPaginated GetVehicles(VehicleParameters vehParams, out string errorString)
+        public DataTypes.V5.Vehicle[] GetVehicles(VehicleParameters vehParams, out string errorString)
 		{
-            return GetJsonObjectFromAPI<VehiclesPaginated>(
+            return GetJsonObjectFromAPI<DataTypes.V5.Vehicle[]>(
                                                 vehParams, 
                                                 R4MEInfrastructureSettings.Vehicle_V4,
 				                                HttpMethodType.Get,

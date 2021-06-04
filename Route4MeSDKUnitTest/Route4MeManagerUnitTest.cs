@@ -498,7 +498,7 @@ namespace Route4MeSDKUnitTest
             var vehicleGroup = new VehiclesGroup();
             var vehicles = vehicleGroup.getVehiclesList();
 
-            if ((vehicles?.Total ?? 0) < 1)
+            if ((vehicles?.Length ?? 0) < 1)
             {
                 var newVehicle = new VehicleV4Parameters()
                 {
@@ -510,8 +510,8 @@ namespace Route4MeSDKUnitTest
                 lsVehicleIDs.Add(vehicle.VehicleGuid);
             }
 
-            string vehicleId = (vehicles?.Total ?? 0) > 0 
-                ? vehicles.Data[(new Random()).Next(0, vehicles.PerPage - 1)].VehicleId
+            string vehicleId = (vehicles?.Length ?? 0) > 0 
+                ? vehicles[(new Random()).Next(0, vehicles.Length - 1)].VehicleId
                 : lsVehicleIDs[0];
 
             //int randomNumber = (new Random()).Next(0, vehicles.PerPage-1);
@@ -12171,17 +12171,19 @@ namespace Route4MeSDKUnitTest
         static string c_ApiKey = ApiKeys.actualApiKey;
 
         static List<string> lsVehicleIDs;
+        static List<string> lsCreatedVehicleIDs;
 
         [ClassInitialize()]
         public static void VehiclesGroupInitialize(TestContext context)
         {
             lsVehicleIDs = new List<string>();
+            lsCreatedVehicleIDs = new List<string>();
 
             var vehicleGroup = new VehiclesGroup();
 
             var vehicles = vehicleGroup.getVehiclesList();
 
-            if ((vehicles?.Total ?? 0) < 1)
+            if ((vehicles?.Length ?? 0) < 1)
             {
                 var newVehicle = new VehicleV4Parameters()
                 {
@@ -12191,10 +12193,11 @@ namespace Route4MeSDKUnitTest
 
                 var vehicle = vehicleGroup.createVehicle(newVehicle);
                 lsVehicleIDs.Add(vehicle.VehicleGuid);
+                lsCreatedVehicleIDs.Add(vehicle.VehicleGuid);
             }
             else
             {
-                foreach (var veh1 in vehicles.Data)
+                foreach (var veh1 in vehicles)
                 {
                     lsVehicleIDs.Add(veh1.VehicleId);
                 }
@@ -12207,7 +12210,7 @@ namespace Route4MeSDKUnitTest
             var vehicles = getVehiclesList();
         }
 
-        public VehiclesPaginated getVehiclesList()
+        public  Route4MeSDK.DataTypes.V5.Vehicle[] getVehiclesList()
         {
             var route4Me = new Route4MeManager(c_ApiKey);
 
@@ -12237,7 +12240,10 @@ namespace Route4MeSDKUnitTest
             var commonVehicle = createVehicle(commonVehicleParams);
 
             if (commonVehicle != null && commonVehicle.GetType() == typeof(VehicleV4CreateResponse))
+            {
                 lsVehicleIDs.Add(commonVehicle.VehicleGuid);
+                lsCreatedVehicleIDs.Add(commonVehicle.VehicleGuid);
+            }
             
             // Create a truck belonging to the class 6
             var class6TruckParams = new VehicleV4Parameters()
@@ -12275,7 +12281,10 @@ namespace Route4MeSDKUnitTest
             var class6Truck = createVehicle(class6TruckParams);
 
             if (class6Truck != null && class6Truck.GetType() == typeof(VehicleV4CreateResponse))
+            {
                 lsVehicleIDs.Add(class6Truck.VehicleGuid);
+                lsCreatedVehicleIDs.Add(class6Truck.VehicleGuid);
+            }
 
             // Create a truck belonging to the class 7
             var class7TruckParams = new VehicleV4Parameters()
@@ -12316,7 +12325,10 @@ namespace Route4MeSDKUnitTest
             var class7Truck = createVehicle(class7TruckParams);
 
             if (class7Truck != null && class7Truck.GetType() == typeof(VehicleV4CreateResponse))
+            {
                 lsVehicleIDs.Add(class7Truck.VehicleGuid);
+                lsCreatedVehicleIDs.Add(class7Truck.VehicleGuid);
+            }
 
             // Create a truck belonging to the class 8
             var class8TruckParams = new VehicleV4Parameters()
@@ -12357,7 +12369,10 @@ namespace Route4MeSDKUnitTest
             var class8Truck = createVehicle(class8TruckParams);
 
             if (class8Truck != null && class8Truck.GetType() == typeof(VehicleV4CreateResponse))
+            {
                 lsVehicleIDs.Add(class8Truck.VehicleGuid);
+                lsCreatedVehicleIDs.Add(class8Truck.VehicleGuid);
+            }
         }
 
         public VehicleV4CreateResponse createVehicle(VehicleV4Parameters vehicleParams)
@@ -12404,6 +12419,7 @@ namespace Route4MeSDKUnitTest
 
                 var vehicle = createVehicle(newVehicle);
                 lsVehicleIDs.Add(vehicle.VehicleGuid);
+                lsCreatedVehicleIDs.Add(vehicle.VehicleGuid);
             }
 
             var route4Me = new Route4MeManager(c_ApiKey);
@@ -12444,6 +12460,7 @@ namespace Route4MeSDKUnitTest
 
                 var vehicle = createVehicle(newVehicle);
                 lsVehicleIDs.Add(vehicle.VehicleGuid);
+                lsCreatedVehicleIDs.Add(vehicle.VehicleGuid);
             }
 
             var route4Me = new Route4MeManager(c_ApiKey);
@@ -12469,7 +12486,7 @@ namespace Route4MeSDKUnitTest
         {
             var route4Me = new Route4MeManager(c_ApiKey);
 
-            foreach (var vehicleId in lsVehicleIDs)
+            foreach (var vehicleId in lsCreatedVehicleIDs)
             {
                 var vehicleParams = new VehicleV4Parameters()
                 {
