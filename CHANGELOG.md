@@ -1,6 +1,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.0.1.5] - 2021-06-04
+
+### Changed
+
+The file [Route4MeManager.cs: ](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/Route4MeManager.cs)
+– The method GetVehicles: Changed response type from VehiclesPaginated to DataTypes.V5.Vehicle[].
+
 ## [1.0.1.4] - 2021-04-10
 
 
