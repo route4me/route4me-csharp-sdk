@@ -26,7 +26,12 @@ namespace Route4MeSDK.Examples
                 EXT_FIELD_last_name = "Carol",
                 EXT_FIELD_email = "lcarol654@yahoo.com",
                 EXT_FIELD_phone = "897946541",
-                EXT_FIELD_custom_data = new Dictionary<string, string>() { { "order_type", "scheduled order" } },
+                EXT_FIELD_custom_data = (
+                    new List<Dictionary<string, string>>()
+                    {
+                        new Dictionary<string, string>() { { "order_type", "scheduled order" } }
+                    }
+                ).ToArray(),
                 day_scheduled_for_YYMMDD = "2017-12-20",
                 local_time_window_end = 39000,
                 local_time_window_end_2 = 46200,
