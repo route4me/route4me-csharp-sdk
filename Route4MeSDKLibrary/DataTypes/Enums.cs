@@ -157,14 +157,13 @@ namespace Route4MeSDK.DataTypes
     /// </summary>
     public enum OptimizationState : uint
     {
-        New = 0,
+        NewHybrid = 0,
         Initial = 1,
         MatrixProcessing = 2,
         Optimizing = 3,
         Optimized = 4,
         Error = 5,
-        ComputingDirections = 6,
-        InQueue = 7
+        ComputingDirections = 6
     }
 
     /// <summary>
