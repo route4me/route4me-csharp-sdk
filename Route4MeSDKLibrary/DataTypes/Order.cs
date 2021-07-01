@@ -158,15 +158,15 @@ namespace Route4MeSDK.DataTypes
         /// Custom data
         /// </summary>
         [DataMember(Name = "EXT_FIELD_custom_data", EmitDefaultValue = false)]
-        public Dictionary<string, string>[] EXT_FIELD_custom_data
+        public Dictionary<string, string> EXT_FIELD_custom_data
         {
             get { return _ext_field_custom_data; }
             set
             {
-                if (value.GetType() == typeof(Dictionary<string, string>[])) _ext_field_custom_data = value; else _ext_field_custom_data = null;
+                if (value.GetType() == typeof(Dictionary<string, string>)) _ext_field_custom_data = value; else _ext_field_custom_data = null;
             }
         }
-        private Dictionary<string, string>[] _ext_field_custom_data;
+        private Dictionary<string, string> _ext_field_custom_data;
 
         /// <summary>
         /// Local timezone string

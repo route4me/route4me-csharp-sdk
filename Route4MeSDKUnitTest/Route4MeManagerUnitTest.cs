@@ -10037,12 +10037,7 @@ namespace Route4MeSDKUnitTest
 
             order.EXT_FIELD_last_name = "Updated " + (new Random()).Next().ToString();
 
-            order.EXT_FIELD_custom_data = (
-                    new List<Dictionary<string, string>>()
-                    {
-                        new Dictionary<string, string>() { { "city", "London" } }
-                    }
-                ).ToArray();
+            order.EXT_FIELD_custom_data =  new Dictionary<string, string>() { { "city", "London" } };
 
             // Run the query
             var updatedOrder = route4Me.UpdateOrder(order, out errorString);
@@ -10070,12 +10065,7 @@ namespace Route4MeSDKUnitTest
                 EXT_FIELD_last_name = "Carol",
                 EXT_FIELD_email = "lcarol654@yahoo.com",
                 EXT_FIELD_phone = "897946541",
-                EXT_FIELD_custom_data = (
-                    new List<Dictionary<string, string>>()
-                    {
-                        new Dictionary<string, string>() { { "order_type", "scheduled order" } }
-                    }
-                ).ToArray(),
+                EXT_FIELD_custom_data = new Dictionary<string, string>() { { "order_type", "scheduled order" } },
                 day_scheduled_for_YYMMDD = "2017-12-20",
                 local_time_window_end = 39000,
                 local_time_window_end_2 = 46200,
