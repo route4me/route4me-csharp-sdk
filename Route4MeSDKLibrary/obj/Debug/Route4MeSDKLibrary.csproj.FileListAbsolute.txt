@@ -77,8 +77,8 @@ C:\Users\hp\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKLibrary\bin\Debug\Sy
 C:\Users\hp\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKLibrary\bin\Debug\System.Security.AccessControl.xml
 C:\Users\hp\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKLibrary\bin\Debug\System.Security.Permissions.xml
 C:\Users\hp\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKLibrary\bin\Debug\System.Security.Principal.Windows.xml
-C:\Users\hp\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKLibrary\obj\Debug\Route4MeSDKLibrary.csprojAssemblyReference.cache
 C:\Users\hp\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKLibrary\obj\Debug\Route4MeSDKLibrary.csproj.CoreCompileInputs.cache
 C:\Users\hp\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKLibrary\obj\Debug\Route4MeSDKLibrary.csproj.CopyComplete
 C:\Users\hp\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKLibrary\obj\Debug\Route4MeSDKLibrary.dll
 C:\Users\hp\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKLibrary\obj\Debug\Route4MeSDKLibrary.pdb
+C:\Users\hp\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKLibrary\obj\Debug\Route4MeSDKLibrary.csproj.AssemblyReference.cache
