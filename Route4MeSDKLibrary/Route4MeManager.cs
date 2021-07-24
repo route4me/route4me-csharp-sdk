@@ -3363,6 +3363,35 @@ namespace Route4MeSDK
 		}
 
         /// <summary>
+        /// Save addresses from temporary storage to database
+        /// </summary>
+        /// <param name="tempOptimizationProblemID">Temporary optimization problem ID with addresses</param>
+        /// <param name="errorString">out: Error as string</param>
+        /// <returns>If true, the addresses saved to the database</returns>
+        public bool saveGeocodedAddressesToDatabase(string tempOptimizationProblemID, out string errorString)
+        {
+            var request = new GeocodingRequest { };
+
+            string json = "{\"optimization_problem_id\":" + tempOptimizationProblemID + "}";
+            HttpContent content = new StringContent(json);
+            content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+            Tuple<uploadAddressesToTemporaryStorageResponse, string> result =
+                GetJsonObjectFromAPIAsync<uploadAddressesToTemporaryStorageResponse>(
+                    request,
+                    R4MEInfrastructureSettings.SaveGeocodedAddresses,
+                    HttpMethodType.Post,
+                    content,
+                    false).GetAwaiter().GetResult();
+
+            Thread.SpinWait(5000);
+
+            errorString = result.Item2;
+
+            return result?.Item1?.status ?? false;
+        }
+
+        /// <summary>
         /// Asynchronous bath geocoding of the addresses.
         /// </summary>
         /// <param name="geoParams">The GeocodingParameters type object as the request parameters</param>

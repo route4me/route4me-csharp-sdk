@@ -56,13 +56,13 @@ namespace Route4MeSDK
         /// <summary>
         /// The request parameter for the address book contacts removing process.
         /// </summary>
-        [DataContract]
-        private sealed class RemoveAddressBookContactsRequest : QueryTypes.GenericParameters
-        {
-            /// <value>The array of the address IDs</value>
-			[DataMember(Name = "address_ids", EmitDefaultValue = false)]
-            public string[] AddressIds { get; set; }
-        }
+   //     [DataContract]
+   //     private sealed class RemoveAddressBookContactsRequest : QueryTypes.GenericParameters
+   //     {
+   //         /// <value>The array of the address IDs</value>
+			//[DataMember(Name = "address_ids", EmitDefaultValue = false)]
+   //         public string[] AddressIds { get; set; }
+   //     }
 
         /// <summary>
         /// Remove the address book contacts.
@@ -70,19 +70,133 @@ namespace Route4MeSDK
         /// <param name="addressIds">The array of the address IDs</param>
         /// <param name="errorString">out: Error as string</param>
         /// <returns>If true the contacts were removed successfully</returns>
-		public bool RemoveAddressBookContacts(string[] addressIds, out ResultResponse resultResponse)
+		public bool RemoveAddressBookContacts(int[] contactIDs, out ResultResponse resultResponse)
         {
-            var request = new RemoveAddressBookContactsRequest()
+            var request = new AddressBookContactsRequest()
             {
-                AddressIds = addressIds
+                AddressIds = contactIDs
             };
 
             var response = GetJsonObjectFromAPI<StatusResponse>(request,
-                                R4MEInfrastructureSettings.AddressBook,
+                                R4MEInfrastructureSettingsV5.ContactsDeleteMultiple,
                                 HttpMethodType.Delete,
                                 out resultResponse);
 
-            return (response != null && response.status) ? true : false;
+            return response?.status ?? false;
+        }
+
+        /// <summary>
+        /// Returns address book contacts
+        /// </summary>
+        /// <param name="addressBookParameters">An AddressParameters type object as the input parameters containg the parameters: Offset, Limit</param>
+        /// <param name="resultResponse">Failing response</param>
+        /// <returns>An AddressBookContactsResponse type object</returns>
+        public AddressBookContactsResponse GetAddressBookContacts(AddressBookParameters addressBookParameters, out ResultResponse resultResponse)
+        {
+            var response = GetJsonObjectFromAPI<AddressBookContactsResponse>(addressBookParameters,
+                                                            R4MEInfrastructureSettingsV5.ContactsGetAll,
+                                                            HttpMethodType.Get,
+                                                            out resultResponse);
+
+            return response;
+        }
+
+        /// <summary>
+        /// Get an address book contact by ID
+        /// </summary>
+        /// <param name="contactId">contact ID</param>
+        /// <param name="resultResponse">Failing response</param>
+        /// <returns>An AddressBookContact type object</returns>
+        public AddressBookContact GetAddressBookContactById(int contactId, out ResultResponse resultResponse)
+        {
+            var gparams = new Route4MeSDK.QueryTypes.GenericParameters();
+            gparams.ParametersCollection.Add("address_id", contactId.ToString());
+
+            var response = GetJsonObjectFromAPI<AddressBookContact>(gparams,
+                                                            R4MEInfrastructureSettingsV5.ContactsFind,
+                                                            HttpMethodType.Get,
+                                                            out resultResponse);
+
+            return response;
+        }
+
+        /// <summary>
+        /// The request parameter for the address book contacts removing process.
+        /// </summary>
+        [DataContract]
+        private sealed class AddressBookContactsRequest : QueryTypes.GenericParameters
+        {
+            /// The array of the address IDs
+			[DataMember(Name = "address_ids", EmitDefaultValue = false)]
+            public int[] AddressIds { get; set; }
+        }
+
+        /// <summary>
+        /// Get address book contacts by sending an array of address IDs.
+        /// </summary>
+        /// <param name="contactIDs">An array of address IDs</param>
+        /// <param name="resultResponse">Failing response</param>
+        /// <returns>An AddressBookContactsResponse type object</returns>
+        public AddressBookContactsResponse GetAddressBookContactsByIds(int[] contactIDs, out ResultResponse resultResponse)
+        {
+            var request = new AddressBookContactsRequest()
+            {
+                AddressIds = contactIDs
+            };
+
+            var response = GetJsonObjectFromAPI<AddressBookContactsResponse>(request,
+                                R4MEInfrastructureSettingsV5.ContactsFind,
+                                HttpMethodType.Post,
+                                out resultResponse);
+
+            return response;
+        }
+
+        /// <summary>
+        /// Add an address book contact to database.
+        /// </summary>
+        /// <param name="contactParams">The contact parameters</param>
+        /// <param name="resultResponse">Failing response</param>
+        /// <returns>Created address book contact</returns>
+        public AddressBookContact AddAddressBookContact(AddressBookContact contactParams, out ResultResponse resultResponse)
+        {
+            parseWithNewtonJson = true;
+
+            contactParams.PrepareForSerialization();
+
+            return GetJsonObjectFromAPI<AddressBookContact>(contactParams,
+                            R4MEInfrastructureSettingsV5.ContactsAddNew,
+                            HttpMethodType.Post,
+                            out resultResponse);
+        }
+
+        /// <summary>
+        /// The request parameter for the multiple address book contacts creating process.
+        /// </summary>
+        [DataContract]
+        public sealed class BatchCreatingAddressBookContactsRequest : QueryTypes.GenericParameters
+        {
+            /// The array of the address IDs
+			[DataMember(Name = "data", EmitDefaultValue = false)]
+            public AddressBookContact[] Data { get; set; }
+        }
+
+        /// <summary>
+        /// Add multiple address book contacts to database.
+        /// </summary>
+        /// <param name="contactParams">The data with multiple contacts parameters</param>
+        /// <param name="resultResponse">Failing response</param>
+        /// <returns>Status response (TO DO: expected result with created multiple contacts)</returns>
+        public StatusResponse BatchCreateAdressBookContacts(BatchCreatingAddressBookContactsRequest contactParams, out ResultResponse resultResponse)
+        {
+            //parseWithNewtonJson = true;
+
+            contactParams.PrepareForSerialization();
+
+            return GetJsonObjectFromAPI<StatusResponse>(contactParams,
+                            R4MEInfrastructureSettingsV5.ContactsAddMultiple,
+                            HttpMethodType.Post,
+                            out resultResponse);
         }
 
         #endregion

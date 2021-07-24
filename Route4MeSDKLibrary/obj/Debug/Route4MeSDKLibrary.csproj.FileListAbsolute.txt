@@ -82,3 +82,5 @@ C:\Users\hp\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKLibrary\obj\Debug\Ro
 C:\Users\hp\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKLibrary\obj\Debug\Route4MeSDKLibrary.dll
 C:\Users\hp\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKLibrary\obj\Debug\Route4MeSDKLibrary.pdb
 C:\Users\hp\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKLibrary\obj\Debug\Route4MeSDKLibrary.csproj.AssemblyReference.cache
+C:\Users\hp\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKLibrary\bin\Debug\CsvHelper.dll
+C:\Users\hp\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKLibrary\bin\Debug\CsvHelper.xml

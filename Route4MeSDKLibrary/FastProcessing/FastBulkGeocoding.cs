@@ -16,6 +16,8 @@ using Newtonsoft.Json.Linq;
 using Route4MeSDK.DataTypes;
 using Newtonsoft.Json.Serialization;
 using System.Diagnostics;
+using System.IO;
+using Route4MeSDK.DataTypes.V5;
 
 namespace Route4MeSDK.FastProcessing
 {
@@ -41,11 +43,20 @@ namespace Route4MeSDK.FastProcessing
         bool largeJsonFileProcessingIsDone;
         bool geocodedAddressesDownloadingIsDone;
 
+        bool largeCsvFileProcessingIsDone;
+        bool uploadContactsIsDone;
+
+        int totalCsvChunks;
+
         List<AddressGeocoded> savedAddresses;
 
         JsonSerializer jsSer = new JsonSerializer();
 
         public string apiKey { get; set; }
+
+        public int CsvChankSize { get; set; } = 300;
+        public int JsonChankSize { get; set; } = 300;
+        public int ChankPause { get; set; } = 2000;
 
         public FastBulkGeocoding(string ApiKey, bool EnableTraceSource = false)
         {
@@ -122,6 +133,121 @@ namespace Route4MeSDK.FastProcessing
 
         }
 
+        public void uploadLargeContactsCsvFile(string fileName, out string errorString)
+        {
+            errorString = null;
+            totalCsvChunks = 0;
+
+            if (!File.Exists(fileName))
+            {
+                errorString = "The file " + fileName + " doesn't exist.";
+                return;
+            }
+
+            var route4Me = new Route4MeManager(apiKey);
+
+            largeCsvFileProcessingIsDone = false;
+
+            fileReading = new FastFileReading();
+
+            fileReading.csvObjectsChunkSize = CsvChankSize;
+            fileReading.chunkPause = ChankPause;
+            fileReading.jsonObjectsChunkSize = JsonChankSize;
+
+            fileReading.CsvFileChunkIsReady += FileReading_CsvFileChunkIsReady;
+
+            //fileReading.CsvFileReadingIsDone += FileReading_CsvFileReadingIsDone;
+
+            //fileReading.JsonFileChunkIsReady += FileReading_JsonFileChunkIsReady;
+
+            fileReading.CsvFileReadingIsDone += FileReading_CsvFileReadingIsDone;
+
+            mainResetEvent = new ManualResetEvent(false);
+
+            fileReading.readingChunksFromLargeCsvFile(fileName, out errorString);
+        }
+
+        private void FileReading_CsvFileReadingIsDone(object sender, FastFileReading.CsvFileReadingIsDoneArgs e)
+        {
+            bool isDone = e.IsDone;
+            if (isDone)
+            {
+                largeCsvFileProcessingIsDone = true;
+                mainResetEvent.Set();
+                if (geocodedAddressesDownloadingIsDone)
+                {
+                    OnGeocodingIsFinished(new GeocodingIsFinishedArgs() { isFinished = true });
+                }
+                // fire here event for external (test) code
+            }
+        }
+
+        private void FileReading_CsvFileChunkIsReadyOld(object sender, FastFileReading.CsvFileChunkIsReadyArgs e)
+        {
+            string csvAddressesChunk = e.AddressesChunk;
+
+            var uploadAddressesResponse = uploadAddressesToTemporaryStorage(csvAddressesChunk);
+
+            if (uploadAddressesResponse != null)
+            {
+                string tempAddressesStorageID = uploadAddressesResponse.optimization_problem_id;
+                int addressesInChunk = (int)uploadAddressesResponse.address_count;
+
+                if (addressesInChunk < fileReading.csvObjectsChunkSize) requestedAddresses = addressesInChunk; // last chunk
+
+                geocodedAddressesDownloadingIsDone = true;
+
+                SaveAddressesToDatabase(tempAddressesStorageID);
+
+
+                //downloadGeocodedAddresses(tempAddressesStorageID, addressesInChunk);
+            }
+
+        }
+
+        private void FileReading_CsvFileChunkIsReady(object sender, FastFileReading.CsvFileChunkIsReadyArgs e)
+        {
+            var route4Me = new Route4MeManagerV5(apiKey);
+
+            var contactParams = new Route4MeManagerV5.BatchCreatingAddressBookContactsRequest()
+            {
+                Data = e.multiContacts.ToArray()
+            };
+
+            var response = route4Me.BatchCreateAdressBookContacts(contactParams, out ResultResponse resultResponse);
+
+            if (response?.status ?? false) totalCsvChunks += e.multiContacts.Count;
+
+            Console.WriteLine(
+                (response?.status ?? false)
+                ? totalCsvChunks + " address book contacts added to database"
+                : "Faild to add " + e.multiContacts.Count + " address book contacts");
+
+            if (!(response?.status ?? false))
+            {
+                Console.WriteLine("Exit code: " + resultResponse.ExitCode + Environment.NewLine+
+                    "Code: " + resultResponse.Code + Environment.NewLine +
+                    "Status: " + resultResponse.Status + Environment.NewLine
+                    );
+
+                foreach (var msg in resultResponse.Messages)
+                {
+                    Console.WriteLine(msg.Key + ": " + msg.Value);
+                }
+                Console.WriteLine("-------------------------------");
+            }
+        }
+
+        private void SaveAddressesToDatabase(string tempOptimizationProblemId)
+        {
+            var r4me = new Route4MeManager(apiKey);
+
+            bool saved = r4me.saveGeocodedAddressesToDatabase(tempOptimizationProblemId, out string errorString);
+
+            Console.WriteLine(saved ? "Uploaded addesses saved to database" : "Cannot save uploaded addesses to database");
+
+        }
+
         /// <summary>
         /// Event handler for the JsonFileReadingIsDone event
         /// </summary>
@@ -163,6 +289,8 @@ namespace Route4MeSDK.FastProcessing
                 if (addressesInChunk < fileReading.jsonObjectsChunkSize) requestedAddresses = addressesInChunk; // last chunk
 
                 downloadGeocodedAddresses(tempAddressesStorageID, addressesInChunk);
+
+                SaveAddressesToDatabase(tempAddressesStorageID);
             }
             
         }
@@ -195,6 +323,7 @@ namespace Route4MeSDK.FastProcessing
 
             return uploadResponse;
         }
+
 
         /// <summary>
         /// Geocode and download the addresses from the temporary storage.
@@ -314,7 +443,7 @@ namespace Route4MeSDK.FastProcessing
 
                 JsonSerializerSettings jsonSettings = new JsonSerializerSettings()
                 {
-                    Error = delegate (object sender, ErrorEventArgs args)
+                    Error = delegate (object sender, Newtonsoft.Json.Serialization.ErrorEventArgs args)
                     {
                         errors.Add(args.ErrorContext.Error.Message);
                         args.ErrorContext.Handled = true;

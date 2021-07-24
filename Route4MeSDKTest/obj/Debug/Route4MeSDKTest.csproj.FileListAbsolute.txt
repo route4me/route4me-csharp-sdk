@@ -99,10 +99,10 @@ C:\Users\hp\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKTest\bin\Debug\Newto
 C:\Users\hp\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKTest\bin\Debug\SocketIoClientDotNet.pdb
 C:\Users\hp\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKTest\bin\Debug\SocketIoClientDotNet.dll.config
 C:\Users\hp\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKTest\bin\Debug\System.Collections.Immutable.xml
-C:\Users\hp\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKTest\obj\Debug\Route4MeSDKTest.csprojAssemblyReference.cache
 C:\Users\hp\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKTest\obj\Debug\Route4MeSDKTest.Properties.Resources.resources
 C:\Users\hp\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKTest\obj\Debug\Route4MeSDKTest.csproj.GenerateResource.cache
 C:\Users\hp\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKTest\obj\Debug\Route4MeSDKTest.csproj.CoreCompileInputs.cache
 C:\Users\hp\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKTest\obj\Debug\Route4MeSDKTest.csproj.CopyComplete
 C:\Users\hp\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKTest\obj\Debug\Route4MeSDKTest.exe
 C:\Users\hp\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKTest\obj\Debug\Route4MeSDKTest.pdb
+C:\Users\hp\Documents\GitHub\route4me-csharp-sdk\Route4MeSDKTest\obj\Debug\Route4MeSDKTest.csproj.AssemblyReference.cache

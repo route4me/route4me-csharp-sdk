@@ -559,6 +559,8 @@ namespace Route4MeSDK.DataTypes
             }
         }
 
+        
+
         /// <summary>
         /// Method for exporting addressbook data from SQL type server to the CSV file
         /// (with structure equal to the CSV file exported by Route4Me web UI).

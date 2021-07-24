@@ -54,6 +54,7 @@ namespace Route4MeSDK
 
         public const string Geocoder = MainHost + "/api/geocoder.php";
         public const string FastGeocoder = MainHost + "/actions/upload/json-geocode.php";
+        public const string SaveGeocodedAddresses = MainHost + "/api/address_book/save_geocoded.php";
         public const string r4meValidator = "https://validator.route4me.com:443/";
         public const string RapidStreetData = "https://rapid.route4me.com/street_data";
         public const string RapidStreetZipcode = "https://rapid.route4me.com/street_data/zipcode";
@@ -141,7 +142,7 @@ namespace Route4MeSDK
 
         #region Telematics Platform
 
-        public const string StagingHost = "https://virtserver.swaggerhub.com/Route4Me/telematics-gateway/1.0.0";
+        public const string StagingHost = "/api"; // Temporary unavailable
 
         public const string TelematicsConnection = StagingHost+"/connections";
         public const string TelematicsConnectionVehicles = StagingHost + "/connections/{connection_token}/vehicles";
@@ -182,6 +183,31 @@ namespace Route4MeSDK
 
         public const string TelematicsVendors = StagingHost + "​/vendors";
         public const string TelematicsVendorId = StagingHost + "​​/vendors​/{vendor_id}";
+
+        #endregion
+
+        #region Address Book Contacts
+        public const string ContactHost = MainHost + "/address-book";
+
+        public const string ContactsGetAll = ContactHost + "/addresses/index/all";
+        public const string ContactsGetAllPaginated = ContactHost + "/addresses/index/pagination";
+        public const string ContactsGetClusters = ContactHost + "/addresses/index/clustering";
+        public const string ContactsFind = ContactHost + "/addresses/show";
+        public const string ContactsAddNew = ContactHost + "/addresses";
+        public const string ContactsAddMultiple = ContactHost + "/addresses/batch-create";
+        public const string ContactsUpdateById = ContactHost + "/addresses/{address_id}";
+        public const string ContactsUpdateMultiple = ContactHost + "/addresses/batch-update";
+        public const string ContactsUpdateByAreas = ContactHost + "/addresses/update-by-areas";
+        public const string ContactsDeleteMultiple = ContactHost + "/addresses/delete";
+        public const string ContactsDeleteByAreas = ContactHost + "/addresses/delete-by-areas";
+        public const string ContactsGetCustomFields = ContactHost + "/addresses/custom-fields";
+        public const string ContactsGetDepots = ContactHost + "/addresses/depots";
+        public const string ContactsReindexCallback = ContactHost + "/reindex-callback";
+        public const string ContactsExport = ContactHost + "/addresses/export";
+        public const string ContactsExportByAreas = ContactHost + "/addresses/export-by-areas";
+        public const string ContactsExportByAreaIds = ContactHost + "/addresses/export-by-area-ids";
+        public const string ContactsGetAsyncJobStatus = ContactHost + "/addresses/job-tracker/status/{job_id}";
+        public const string ContactsGetAsyncJobResult = ContactHost + "/addresses/job-tracker/result/{job_id}";
 
         #endregion
 
