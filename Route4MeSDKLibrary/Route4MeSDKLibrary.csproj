@@ -43,6 +43,9 @@
     </ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CsvHelper, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
+      <HintPath>..\packages\CsvHelper.2.16.3.0\lib\net45\CsvHelper.dll</HintPath>
+    </Reference>
     <Reference Include="fastJSON, Version=2.2.0.0, Culture=neutral, PublicKeyToken=6b75a806b86095cd, processorArchitecture=MSIL">
       <HintPath>..\packages\fastJSON.2.2.0.1\lib\net40\fastJSON.dll</HintPath>
       <Private>True</Private>
@@ -151,6 +154,8 @@
     <Compile Include="DataTypes\TelematicsConnection.cs" />
     <Compile Include="DataTypes\TelematicsRegisterMemberResponse.cs" />
     <Compile Include="DataTypes\V5\AccountProfile.cs" />
+    <Compile Include="DataTypes\V5\AddressBookContact\AddressBookContact.cs" />
+    <Compile Include="DataTypes\V5\AddressBookContact\AddressBookContactsResponse.cs" />
     <Compile Include="DataTypes\V5\Address\Address.cs" />
     <Compile Include="DataTypes\V5\Address\Geocoding.cs" />
     <Compile Include="DataTypes\V5\DataObject.cs" />
@@ -235,6 +240,7 @@
     <Compile Include="QueryTypes\RouteParametersQuery.cs" />
     <Compile Include="QueryTypes\ScheduleCalendarQuery.cs" />
     <Compile Include="QueryTypes\TelematicsConnectionParameters.cs" />
+    <Compile Include="QueryTypes\V5\AddressBookContact\AddressBookParameters.cs" />
     <Compile Include="QueryTypes\V5\DriverReviewParameters.cs" />
     <Compile Include="QueryTypes\V5\OptimizationParameters.cs" />
     <Compile Include="QueryTypes\V5\RouteFilterParameters.cs" />
