@@ -1,6 +1,45 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.0.1.8] - 2021-08-10
+
+### Changed
+
+The file [Address.cs: ](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/DataTypes/Address.cs)
+– Changed the type of the property Joint form int? to bool?  
+The file [Address.cs: ](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/DataTypes/V5/Address/Address.cs)
+– Changed the type of the property Joint form int? to bool?  
+
+## [1.0.1.7] - 2021-07-24
+
+### Changed
+
+The file [FastBulkGeocoding.cs: ](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/FastProcessing/FastBulkGeocoding.cs)
+– Added large CSV file uploading function (to be finished in next versions)
+
+The file [FastFileReading.cs: ](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/FastProcessing/FastFileReading.cs)
+– Added large CSV file uploading function (to be finished in next versions) (API 5 version)  
+
+## [1.0.1.6] - 2021-07-02
+
+### Changed
+
+The file [Route4MeManagerV5.cs: ](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/Route4MeManagerV5.cs)
+– Added the methods: GetAddressBookContacts, GetAddressBookContactById, GetAddressBookContactsByIds, AddAddressBookContact, BatchCreateAdressBookContacts.  
+- Added the classes: AddressBookContactsRequest, BatchCreatingAddressBookContactsReque.  
+
+### Added
+
+The file [AddressBookContact.cs: ](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/DataTypes/V5/AddressBookContact/AddressBookContact.cs)  
+– **Class (API 5 version)**: AddressBookContact  
+
+The file [AddressBookContactsResponse.cs: ](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/DataTypes/V5/AddressBookContact/AddressBookContactsResponse.cs)  
+– **Class (API 5 version)**: AddressBookContactsResponse  
+
+The file [AddressBookParameters.cs: ](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/QueryTypes/V5/AddressBookContact/AddressBookParameters.cs)  
+– **Class (API 5 version)**: AddressBookParameters  
+
+
 ## [1.0.1.5] - 2021-06-04
 
 ### Changed
