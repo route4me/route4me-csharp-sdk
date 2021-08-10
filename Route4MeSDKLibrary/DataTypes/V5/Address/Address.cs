@@ -538,13 +538,13 @@ namespace Route4MeSDK.DataTypes.V5
         public string Dropoff { get; set; }
 
         /// <summary>
-        /// If equal to 1, the pickup and dropoff addresses are joint 
+        /// If true, the pickup and dropoff addresses are joint 
         /// (one by one despite the regular pickup-dropoff addresses 
         /// when it's possible to have multiple pickup addresses with one dropoff address).
         /// </summary>
         [DataMember(Name = "joint", EmitDefaultValue = false)]
-        public int? Joint { get; set; }
-
+        public bool? Joint { get; set; }
+         
         /// <summary>
         /// Bundle count
         /// </summary>
