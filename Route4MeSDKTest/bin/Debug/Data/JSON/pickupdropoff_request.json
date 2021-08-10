@@ -1,0 +1,143 @@
+{
+    "parameters":
+    {
+        "rt": true,
+        "route_name": "Pickup/Dropoff Test",
+        "optimize": "Time",
+        "travel_mode": "Driving",
+        "algorithm_type": 3,
+        "parts": 999
+    },
+    "addresses":
+    [
+        {
+            "address": "L00001",
+            "alias": "Pickup - PD00001",
+            "lat": 38.141598,
+			"lng": -85.793846,
+            "time": 120,
+            "weight": 0,
+            "cube": 9,
+            "pieces": 1,
+            "joint": 1,
+            "pickup": "PD00001",
+            "dropoff": ""
+        },
+        {
+            "address": "L00002",
+            "alias": "Dropoff - PD00001",
+            "lat": 38.202496,
+			"lng": -85.786514,
+            "time": 120,
+            "joint": 1,
+            "weight": 10,
+            "cube": 4,
+            "pieces": 1,
+            "pickup": "",
+            "dropoff": "PD00001"
+        },
+        {
+            "address": "L00003",
+            "alias": "Pickup - PD00003",
+            "lat": 38.178844,
+			"lng": -85.774864,
+            "time": 120,
+            "weight": 2,
+            "cube": 1,
+            "pieces": 0,
+            "pickup": "PD00003",
+            "dropoff": ""
+        },
+        {
+            "address": "L00004",
+            "alias": "Dropoff - PD00003",
+            "lat": 38.248684,
+			"lng": -85.821121,
+            "time": 120,
+            "weight": 2,
+            "cube": 6,
+            "pieces": 1,
+            "pickup": "",
+            "dropoff": "PD00003"
+        },
+        {
+            "address": "L00005",
+            "alias": "Pickup - PD00005",
+            "lat": 38.251923,
+			"lng": -85.800034,
+            "time": 120,
+            "weight": 4,
+            "cube": 6,
+            "pieces": 1,
+            "pickup": "PD00005",
+            "dropoff": ""
+        },
+        {
+            "address": "L00006",
+            "alias": "Dropoff - PD00005",
+            "lat": 38.176067,
+			"lng": -85.824638,
+            "time": 120,
+            "weight": 1,
+            "cube": 3,
+            "pieces": 3,
+            "pickup": "",
+            "dropoff": "PD00005"
+        },
+        {
+            "address": "L00007",
+            "alias": "Pickup - PD00007",
+            "lat": 38.179806,
+			"lng": -85.775558,
+            "time": 120,
+            "weight": 0,
+            "cube": 0,
+            "pieces": 0,
+            "pickup": "PD00007",
+            "dropoff": ""
+        },
+        {
+            "address": "L00008",
+            "alias": "Dropoff - PD00007",
+            "lat": 38.259335,
+			"lng": -85.815094,
+            "time": 120,
+            "weight": 2,
+            "cube": 6,
+            "pieces": 2,
+            "pickup": "",
+            "dropoff": "PD00007"
+        },
+        {
+            "address": "L00009",
+            "alias": "Pickup - PD00009",
+            "lat": 38.179253,
+			"lng": -85.785118,
+            "time": 120,
+            "weight": 5,
+            "cube": 9,
+            "pieces": 1,
+            "pickup": "PD00009",
+            "dropoff": ""
+        },
+        {
+            "address": "L00010",
+            "alias": "Dropoff - PD00009",
+            "lat": 38.162472,
+			"lng": -85.792854,
+            "time": 120,
+            "weight": 0,
+            "cube": 5,
+            "pieces": 1,
+            "pickup": "",
+            "dropoff": "PD00009"
+        },
+        {
+            "address": "DEPOT",
+            "alias": "DEPOT",
+            "lat": 38.251698,
+			"lng": -85.757308,
+            "is_depot": true
+        }
+    ]
+}
