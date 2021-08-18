@@ -1,41 +1,36 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Linq;
 using System.Reflection;
-using System.Runtime.Remoting.Lifetime;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using Route4MeSDK.DataTypes;
 
 namespace Route4MeSDK
 {
     public class DataContractResolver : DefaultContractResolver
     {
+        public string[] MandatoryFields { get; set; }
+
+        public DataContractResolver()
+        {
+
+        }
+
+        public DataContractResolver(string[] mandatoryFields)
+        {
+            MandatoryFields = mandatoryFields;
+        }
+
         protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
         {
             var property = base.CreateProperty(member, memberSerialization);
-
-            property.NullValueHandling = NullValueHandling.Include;
+            //property.NullValueHandling = NullValueHandling.Include;
             property.DefaultValueHandling = DefaultValueHandling.Include;
-            property.ShouldSerialize = instance => true;
-
-            property.ShouldDeserialize = instance =>
+            if ((MandatoryFields?.Length ?? 0) > 0)
             {
-                if (property.PropertyName == "schedule" && instance != null)
-                {
-                    if (instance.GetType() == typeof(AddressBookContact))
-                    {
-                        var schedules = ((AddressBookContact)instance).schedule;
+                bool shouldSerialized = MandatoryFields.Contains(property.PropertyName) ? true : false;
+                property.ShouldSerialize = o => shouldSerialized;
+            }
 
-                        Console.WriteLine("schedules: " + (schedules != null ? schedules.GetType().ToString() : ""));
-
-                        return schedules == null ? true : (schedules.GetType() != typeof(Schedule) ? true : false);
-                        //return true;
-                    }
-                }
-
-                return true;
-            };
-
+            //property.ShouldSerialize = o => true;
             return property;
         }
     }

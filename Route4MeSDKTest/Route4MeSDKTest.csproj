@@ -119,6 +119,7 @@
     <Compile Include="Examples\AddressBookGroup\GetAddressBookContactsByGroup.cs" />
     <Compile Include="Examples\AddressBookGroup\GetAddressBookGroup.cs" />
     <Compile Include="Examples\AddressBookGroup\GetAddressBookGroups.cs" />
+    <Compile Include="Examples\AddressBookGroup\GetContactsByCustomDataField.cs" />
     <Compile Include="Examples\AddressBookGroup\RemoveAddressBookGroup.cs" />
     <Compile Include="Examples\AddressBookGroup\SearchAddressBookContactsByFilter.cs" />
     <Compile Include="Examples\AddressBookGroup\UpdateAddressBookGroup.cs" />
@@ -143,6 +144,7 @@
     <Compile Include="Examples\API5\DriverReview\UpdateDriverReview.cs" />
     <Compile Include="Examples\API5\RouteTypes\CreateBBCSOptimizationWithDriverSkills.cs" />
     <Compile Include="Examples\API5\RouteTypes\CreateOptimizationWithDriverSkills.cs" />
+    <Compile Include="Examples\API5\RouteTypes\StartDepotEndDepotConstraint.cs" />
     <Compile Include="Examples\API5\TeamManagement\AddSkillsToDriver.cs" />
     <Compile Include="Examples\API5\TeamManagement\BulkCreateTeamMembers.cs" />
     <Compile Include="Examples\API5\TeamManagement\CreateTeamMember.cs" />
@@ -155,8 +157,10 @@
     <Compile Include="Examples\ExamplesInfrastructureV5.cs" />
     <Compile Include="Examples\Geocoding\BatchGeocodingForward.cs" />
     <Compile Include="Examples\Geocoding\BatchGeocodingForwardAsync.cs" />
+    <Compile Include="Examples\Geocoding\BulkRemoveContactsFromDb.cs" />
     <Compile Include="Examples\Geocoding\uploadAndGeocodeLargeJsonFile.cs" />
     <Compile Include="Examples\Geocoding\uploaLargeContactsCsvFile.cs" />
+    <Compile Include="Examples\Geocoding\validateLargeContactsCsvFile.cs" />
     <Compile Include="Examples\MemberConfiguration\AddConfigurationKeyArray.cs" />
     <Compile Include="Examples\Notes\AddComplexAddressNote.cs" />
     <Compile Include="Examples\Notes\AddCustomNoteToRoute.cs" />
@@ -383,13 +387,13 @@
     <Content Include="Data\Other files\schedules.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Data\CSV\60k_prob.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\JSON\start_depot_end_depot_data.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Route4MeSDKLibrary\Route4MeSDKLibrary.csproj">
-      <Project>{37E5D3FC-BBF7-4BD8-98E6-A58DC9138D98}</Project>
-      <Name>Route4MeSDKLibrary</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\test.png" />
@@ -420,6 +424,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Examples\API5\RoutesGroup\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Route4MeSDKLibrary\Route4MeSDKLibrary.csproj">
+      <Project>{37e5d3fc-bbf7-4bd8-98e6-a58dc9138d98}</Project>
+      <Name>Route4MeSDKLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

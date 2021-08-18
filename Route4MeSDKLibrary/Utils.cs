@@ -152,6 +152,20 @@ namespace Route4MeSDK
             return result;
         }
 
+        public static string SerializeObjectToJson(object obj, string[] mandatoryFields)
+        {
+            var jsonSettings = new JsonSerializerSettings()
+            {
+                //NullValueHandling = ignoreNullValues ? NullValueHandling.Ignore : NullValueHandling.Include,
+                //DefaultValueHandling = DefaultValueHandling.Include,
+                ContractResolver = new DataContractResolver()
+            };
+
+            string result = JsonConvert.SerializeObject(obj, Formatting.None, jsonSettings);
+
+            return result;
+        }
+
         /// <summary>
         /// Returns the DescriptionAttribute of a enum value
         /// </summary>

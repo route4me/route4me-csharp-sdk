@@ -197,12 +197,21 @@ namespace Route4MeSdkV5UnitTest.AddressBookContactApi
                 }
             };
 
+            var mandatoryFields = new string[]
+                {
+                    R4MeUtils.GetPropertyName(() => lsContacts[0].first_name),
+                    R4MeUtils.GetPropertyName(() => lsContacts[0].address_1),
+                    R4MeUtils.GetPropertyName(() => lsContacts[0].cached_lat),
+                    R4MeUtils.GetPropertyName(() => lsContacts[0].cached_lng),
+                    R4MeUtils.GetPropertyName(() => lsContacts[0].AddressStopType)
+                };
+
             var contactParams = new Route4MeManagerV5.BatchCreatingAddressBookContactsRequest()
             {
                 Data = lsContacts.ToArray()
             };
 
-            var response = route4Me.BatchCreateAdressBookContacts(contactParams, out ResultResponse resultResponse);
+            var response = route4Me.BatchCreateAdressBookContacts(contactParams, mandatoryFields, out ResultResponse resultResponse);
 
             Assert.IsType<StatusResponse>(response);
             Assert.True(response.status);
