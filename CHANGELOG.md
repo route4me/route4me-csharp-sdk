@@ -1,6 +1,46 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.0.1.9] - 2021-08-18
+
+### Changed
+
+The file [Address.cs: ](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/DataContractResolver.cs)
+– Added mandatory field option/feature.  
+
+The file [RouteAdvancedConstraints.cs: ](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/DataTypes/V5/RouteAdvancedConstraints.cs)  
+– **Class (API 5 version)**: RouteAdvancedConstraints  - added the property LocationSequencePattern.  
+
+The file [FastBulkGeocoding.cs: ](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/FastProcessing/FastBulkGeocoding.cs)
+– Added large CSV file reading/update feature.  
+
+The file [FastFileReading.cs: ](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/FastProcessing/FastFileReading.cs)
+– Added large CSV file reading feature.  
+
+The file [PropertyValidation.cs: ](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/PropertyValidation.cs)
+– Enhanced the variable validator.  
+
+The file [Route4MeManager.cs: ](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/Route4MeManager.cs)
+– Changed the method: GetAddressBookContactsByGroup;  
+- Added the method: GetAddressBookContactsByCustomField.  
+
+The file [Utils.cs: ](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/Utils.cs)
+– Added the method: SerializeObjectToJson(object obj, string[] mandatoryFields).  
+
+
+### Added
+
+The file [AddressBookSearchResponse.cs: ](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/DataTypes/AddressBookSearchResponse.cs)  
+– **Class**: AddressBookSearchResponse  
+
+The file [FastBulkRemoveContacts.cs: ](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/FastProcessing/FastBulkRemoveContacts.cs)
+– **Class**: FastBulkRemoveContacts  
+
+The file [FastValidateData.cs: ](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/FastProcessing/FastValidateData.cs)
+– **Class**: FastValidateData  
+
+
+
 ## [1.0.1.8] - 2021-08-10
 
 ### Changed
