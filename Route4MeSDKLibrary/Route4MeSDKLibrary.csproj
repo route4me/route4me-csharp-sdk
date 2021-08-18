@@ -114,6 +114,7 @@
     <Compile Include="DataTypes\AddressBookContactsResponse.cs" />
     <Compile Include="DataTypes\AddressBookGroup.cs" />
     <Compile Include="DataTypes\AddressBookGroupRule.cs" />
+    <Compile Include="DataTypes\AddressBookSearchResponse.cs" />
     <Compile Include="DataTypes\AddressBundling.cs" />
     <Compile Include="DataTypes\AddressCustomNote.cs" />
     <Compile Include="DataTypes\AddressGeocoded.cs" />
@@ -210,7 +211,9 @@
     <Compile Include="FastProcessing\Connection.cs" />
     <Compile Include="FastProcessing\ConnectionConstants.cs" />
     <Compile Include="FastProcessing\FastBulkGeocoding.cs" />
+    <Compile Include="FastProcessing\FastBulkRemoveContacts.cs" />
     <Compile Include="FastProcessing\FastFileReading.cs" />
+    <Compile Include="FastProcessing\FastValidateData.cs" />
     <Compile Include="FastProcessing\Options.cs" />
     <Compile Include="HttpClientExtensions.cs" />
     <Compile Include="HttpConnectionResponseContent2 .cs" />

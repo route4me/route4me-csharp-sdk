@@ -17,7 +17,7 @@ using Route4MeSDK.DataTypes;
 using Newtonsoft.Json.Serialization;
 using System.Diagnostics;
 using System.IO;
-using Route4MeSDK.DataTypes.V5;
+//using Route4MeSDK.DataTypes.V5;
 
 namespace Route4MeSDK.FastProcessing
 {
@@ -58,10 +58,28 @@ namespace Route4MeSDK.FastProcessing
         public int JsonChankSize { get; set; } = 300;
         public int ChankPause { get; set; } = 2000;
 
+        static List<Task> taskList;
+
+        static List<List<DataTypes.V5.AddressBookContact>> threadPackage;
+
+        public string[] MandatoryFields { get; set; }
+
+        public bool DoGeocoding { get; set; } = false;
+
+        /// <summary>
+        /// Geocode only addresses with empty coordinates (latitude longitude)
+        /// </summary>
+        public bool GeocodeOnlyEmpty { get; set; } = false;
+
+        JsonSerializer jsonSerializer = new JsonSerializer();
+
         public FastBulkGeocoding(string ApiKey, bool EnableTraceSource = false)
         {
-            if (ApiKey!="") apiKey = ApiKey;
+            if (ApiKey != "") apiKey = ApiKey;
             Quobject.SocketIoClientDotNet.TraceSourceTools.LogTraceSource.TraceSourceLogging(EnableTraceSource);
+
+            taskList = new List<Task>();
+            threadPackage = new List<List<DataTypes.V5.AddressBookContact>>();
         }
 
         #region // Addresses chunk's geocoding is finished event handler
@@ -69,7 +87,7 @@ namespace Route4MeSDK.FastProcessing
 
         protected virtual void OnAddressesChunkGeocoded(AddressesChunkGeocodedArgs e)
         {
-            EventHandler< AddressesChunkGeocodedArgs> handler = AddressesChunkGeocoded;
+            EventHandler<AddressesChunkGeocodedArgs> handler = AddressesChunkGeocoded;
 
             if (handler != null)
             {
@@ -133,121 +151,6 @@ namespace Route4MeSDK.FastProcessing
 
         }
 
-        public void uploadLargeContactsCsvFile(string fileName, out string errorString)
-        {
-            errorString = null;
-            totalCsvChunks = 0;
-
-            if (!File.Exists(fileName))
-            {
-                errorString = "The file " + fileName + " doesn't exist.";
-                return;
-            }
-
-            var route4Me = new Route4MeManager(apiKey);
-
-            largeCsvFileProcessingIsDone = false;
-
-            fileReading = new FastFileReading();
-
-            fileReading.csvObjectsChunkSize = CsvChankSize;
-            fileReading.chunkPause = ChankPause;
-            fileReading.jsonObjectsChunkSize = JsonChankSize;
-
-            fileReading.CsvFileChunkIsReady += FileReading_CsvFileChunkIsReady;
-
-            //fileReading.CsvFileReadingIsDone += FileReading_CsvFileReadingIsDone;
-
-            //fileReading.JsonFileChunkIsReady += FileReading_JsonFileChunkIsReady;
-
-            fileReading.CsvFileReadingIsDone += FileReading_CsvFileReadingIsDone;
-
-            mainResetEvent = new ManualResetEvent(false);
-
-            fileReading.readingChunksFromLargeCsvFile(fileName, out errorString);
-        }
-
-        private void FileReading_CsvFileReadingIsDone(object sender, FastFileReading.CsvFileReadingIsDoneArgs e)
-        {
-            bool isDone = e.IsDone;
-            if (isDone)
-            {
-                largeCsvFileProcessingIsDone = true;
-                mainResetEvent.Set();
-                if (geocodedAddressesDownloadingIsDone)
-                {
-                    OnGeocodingIsFinished(new GeocodingIsFinishedArgs() { isFinished = true });
-                }
-                // fire here event for external (test) code
-            }
-        }
-
-        private void FileReading_CsvFileChunkIsReadyOld(object sender, FastFileReading.CsvFileChunkIsReadyArgs e)
-        {
-            string csvAddressesChunk = e.AddressesChunk;
-
-            var uploadAddressesResponse = uploadAddressesToTemporaryStorage(csvAddressesChunk);
-
-            if (uploadAddressesResponse != null)
-            {
-                string tempAddressesStorageID = uploadAddressesResponse.optimization_problem_id;
-                int addressesInChunk = (int)uploadAddressesResponse.address_count;
-
-                if (addressesInChunk < fileReading.csvObjectsChunkSize) requestedAddresses = addressesInChunk; // last chunk
-
-                geocodedAddressesDownloadingIsDone = true;
-
-                SaveAddressesToDatabase(tempAddressesStorageID);
-
-
-                //downloadGeocodedAddresses(tempAddressesStorageID, addressesInChunk);
-            }
-
-        }
-
-        private void FileReading_CsvFileChunkIsReady(object sender, FastFileReading.CsvFileChunkIsReadyArgs e)
-        {
-            var route4Me = new Route4MeManagerV5(apiKey);
-
-            var contactParams = new Route4MeManagerV5.BatchCreatingAddressBookContactsRequest()
-            {
-                Data = e.multiContacts.ToArray()
-            };
-
-            var response = route4Me.BatchCreateAdressBookContacts(contactParams, out ResultResponse resultResponse);
-
-            if (response?.status ?? false) totalCsvChunks += e.multiContacts.Count;
-
-            Console.WriteLine(
-                (response?.status ?? false)
-                ? totalCsvChunks + " address book contacts added to database"
-                : "Faild to add " + e.multiContacts.Count + " address book contacts");
-
-            if (!(response?.status ?? false))
-            {
-                Console.WriteLine("Exit code: " + resultResponse.ExitCode + Environment.NewLine+
-                    "Code: " + resultResponse.Code + Environment.NewLine +
-                    "Status: " + resultResponse.Status + Environment.NewLine
-                    );
-
-                foreach (var msg in resultResponse.Messages)
-                {
-                    Console.WriteLine(msg.Key + ": " + msg.Value);
-                }
-                Console.WriteLine("-------------------------------");
-            }
-        }
-
-        private void SaveAddressesToDatabase(string tempOptimizationProblemId)
-        {
-            var r4me = new Route4MeManager(apiKey);
-
-            bool saved = r4me.saveGeocodedAddressesToDatabase(tempOptimizationProblemId, out string errorString);
-
-            Console.WriteLine(saved ? "Uploaded addesses saved to database" : "Cannot save uploaded addesses to database");
-
-        }
-
         /// <summary>
         /// Event handler for the JsonFileReadingIsDone event
         /// </summary>
@@ -281,19 +184,241 @@ namespace Route4MeSDK.FastProcessing
 
             var uploadAddressesResponse = uploadAddressesToTemporaryStorage(jsonAddressesChunk);
 
-            if (uploadAddressesResponse!=null)
+            if (uploadAddressesResponse != null)
             {
                 string tempAddressesStorageID = uploadAddressesResponse.optimization_problem_id;
-                int addressesInChunk = (int)uploadAddressesResponse.address_count;
+                int addressesInChunk = (int)(uploadAddressesResponse.address_count);
 
                 if (addressesInChunk < fileReading.jsonObjectsChunkSize) requestedAddresses = addressesInChunk; // last chunk
 
                 downloadGeocodedAddresses(tempAddressesStorageID, addressesInChunk);
+            }
+
+        }
+
+        public void uploadLargeContactsCsvFile(string fileName, out string errorString)
+        {
+            errorString = null;
+            totalCsvChunks = 0;
+
+            if (!File.Exists(fileName))
+            {
+                errorString = "The file " + fileName + " doesn't exist.";
+                return;
+            }
+
+            var route4Me = new Route4MeManager(apiKey);
+
+            largeCsvFileProcessingIsDone = false;
+
+            fileReading = new FastFileReading();
+
+            fileReading.csvObjectsChunkSize = CsvChankSize;
+            fileReading.chunkPause = ChankPause;
+            fileReading.jsonObjectsChunkSize = JsonChankSize;
+
+            fileReading.CsvFileChunkIsReady += FileReading_CsvFileChunkIsReady;
+
+            //fileReading.CsvFileReadingIsDone += FileReading_CsvFileReadingIsDone;
+
+            //fileReading.JsonFileChunkIsReady += FileReading_JsonFileChunkIsReady;
+
+            fileReading.CsvFileReadingIsDone += FileReading_CsvFileReadingIsDone;
+
+            mainResetEvent = new ManualResetEvent(false);
+
+            fileReading.readingChunksFromLargeCsvFile(fileName, out errorString);
+
+            if ((errorString?.Length ?? 0) > 0)
+                Console.WriteLine("Contacts file uploading canceled:" + Environment.NewLine + errorString);
+        }
+
+        private void FileReading_CsvFileReadingIsDone(object sender, FastFileReading.CsvFileReadingIsDoneArgs e)
+        {
+            bool isDone = e.IsDone;
+            if (isDone)
+            {
+                Parallel.ForEach(threadPackage, chunk =>
+                {
+                    CsvFileChunkIsReady(chunk);
+                });
+
+                threadPackage = new List<List<DataTypes.V5.AddressBookContact>>();
+
+            }
+        }
+
+        private void FileReading_CsvFileChunkIsReadyOld(object sender, FastFileReading.CsvFileChunkIsReadyArgs e)
+        {
+            string csvAddressesChunk = e.AddressesChunk;
+
+            var uploadAddressesResponse = uploadAddressesToTemporaryStorage(csvAddressesChunk);
+
+            if (uploadAddressesResponse != null)
+            {
+                string tempAddressesStorageID = uploadAddressesResponse.optimization_problem_id;
+                int addressesInChunk = (int)(uploadAddressesResponse.address_count);
+
+                if (addressesInChunk < fileReading.csvObjectsChunkSize) requestedAddresses = addressesInChunk; // last chunk
+
+                geocodedAddressesDownloadingIsDone = true;
 
                 SaveAddressesToDatabase(tempAddressesStorageID);
+
+
+                //downloadGeocodedAddresses(tempAddressesStorageID, addressesInChunk);
             }
-            
+
         }
+
+        private void FileReading_CsvFileChunkIsReady(object sender, FastFileReading.CsvFileChunkIsReadyArgs e)
+        {
+            threadPackage.Add(e.multiContacts);
+
+            if (threadPackage.Count > 15)
+            {
+                Parallel.ForEach(threadPackage, chunk =>
+                {
+                    CsvFileChunkIsReady(chunk);
+                });
+
+                threadPackage = new List<List<DataTypes.V5.AddressBookContact>>();
+            }
+
+            /* This works: 30 000 contacts in 3 min
+            taskList.Add(Task.Run(() => CsvFileChunkIsReady(e.multiContacts)));
+
+            if (taskList.Count>9)
+            {
+                Task.WaitAll(taskList.ToArray());
+
+                taskList = new List<Task>();
+            }
+            */
+        }
+
+        private async void CsvFileChunkIsReady(List<DataTypes.V5.AddressBookContact> contactsChunk)
+        {
+            var route4Me = new Route4MeManagerV5(apiKey);
+            var route4MeV4 = new Route4MeManager(apiKey);
+
+            if (DoGeocoding && contactsChunk != null)
+            {
+                var contactsToGeocode = new Dictionary<int, DataTypes.V5.AddressBookContact>();
+
+                if (GeocodeOnlyEmpty)
+                {
+                    var emptyContacts = contactsChunk.Where(x => x.cached_lat == 0 && x.cached_lng == 0);
+                    if (emptyContacts != null)
+                    {
+                        foreach (var econt in emptyContacts)
+                            contactsToGeocode.Add(contactsChunk.IndexOf(econt), econt);
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < (contactsChunk?.Count ?? 0); i++)
+                    {
+                        contactsToGeocode.Add(i, contactsChunk[i]);
+                    }
+                }
+
+                var lsAddressesToGeocode = contactsToGeocode
+                    .Select(x => x.Value)
+                    .Select(x => x.address_1 +
+                            ((x?.address_city?.Length ?? 0) > 0 ? ", " + x.address_city : "") +
+                            ((x?.address_state_id?.Length ?? 0) > 0 ? ", " + x.address_state_id : "") +
+                            ((x?.address_zip?.Length ?? 0) > 0 ? ", " + x.address_zip : "") +
+                            ((x?.address_country_id?.Length ?? 0) > 0 ? ", " + x.address_country_id : "")
+                            )
+                    .ToList();
+
+                var addressesToGeocode = String.Join(Environment.NewLine, lsAddressesToGeocode);
+
+                var geoParams = new QueryTypes.GeocodingParameters
+                {
+                    Addresses = addressesToGeocode,
+                    ExportFormat = "json"
+                };
+
+                var geocodedAddresses = route4MeV4.BatchGeocodingAsync(geoParams, out string errorString);
+
+                if ((geocodedAddresses?.Length ?? 0) > 50)
+                {
+                    var geocodedObjects = JsonConvert.DeserializeObject<GeocodingResponse[]>(geocodedAddresses).ToList();
+
+                    // If returned objects not equal to input contacts, remove with duplicated original
+                    if (geocodedObjects != null && geocodedObjects.Count > contactsToGeocode.Count)
+                    {
+                        var dupicates = new List<GeocodingResponse>();
+
+                        for (int i = 1; i < geocodedObjects.Count; i++)
+                        {
+                            if (geocodedObjects[i].original == geocodedObjects[i - 1].original)
+                                dupicates.Add(geocodedObjects[i]);
+                        }
+
+                        foreach (var duplicate in dupicates) geocodedObjects.Remove(duplicate);
+                    }
+
+                    if (geocodedObjects != null && geocodedObjects.Count == contactsToGeocode.Count)
+                    {
+                        var indexList = contactsToGeocode.Keys.ToList();
+
+                        for (int i = 0; i < geocodedObjects.Count; i++)
+                        {
+                            contactsChunk[indexList[i]].cached_lat = geocodedObjects[i].lat;
+                            contactsChunk[indexList[i]].cached_lng = geocodedObjects[i].lng;
+                        }
+                    }
+                }
+            }
+
+            var contactParams = new Route4MeManagerV5.BatchCreatingAddressBookContactsRequest()
+            {
+                Data = contactsChunk.ToArray()
+            };
+
+            var response = route4Me.BatchCreateAdressBookContacts(
+                contactParams,
+                MandatoryFields,
+                out DataTypes.V5.ResultResponse resultResponse);
+
+            if (response?.status ?? false) totalCsvChunks += contactsChunk.Count;
+
+            Console.WriteLine(
+                (response?.status ?? false)
+                ? totalCsvChunks + " address book contacts added to database"
+                : "Faild to add " + contactsChunk.Count + " address book contacts");
+
+            if (!(response?.status ?? false))
+            {
+                Console.WriteLine("Exit code: " + resultResponse.ExitCode + Environment.NewLine +
+                    "Code: " + resultResponse.Code + Environment.NewLine +
+                    "Status: " + resultResponse.Status + Environment.NewLine
+                    );
+
+                foreach (var msg in resultResponse.Messages)
+                {
+                    Console.WriteLine(msg.Key + ": " + msg.Value);
+                }
+
+                Console.WriteLine("Start address: " + contactsChunk[0].address_1);
+                Console.WriteLine("End address: " + contactsChunk[contactsChunk.Count - 1].address_1);
+                Console.WriteLine("-------------------------------");
+            }
+        }
+
+        private void SaveAddressesToDatabase(string tempOptimizationProblemId)
+        {
+            var r4me = new Route4MeManager(apiKey);
+
+            bool saved = r4me.saveGeocodedAddressesToDatabase(tempOptimizationProblemId, out string errorString);
+
+            Console.WriteLine(saved ? "Uploaded addesses saved to database" : "Cannot save uploaded addesses to database");
+
+        }
+
 
         /// <summary>
         /// Upload JSON addresses to a temporary storage
@@ -308,7 +433,7 @@ namespace Route4MeSDK.FastProcessing
 
             string jsonText = "";
 
-            if (streamSource.Contains("{") && streamSource.Contains("}")) 
+            if (streamSource.Contains("{") && streamSource.Contains("}"))
                 jsonText = streamSource;
             else
                 jsonText = readJsonTextFromLargeJsonFileOfAddresses(streamSource);
@@ -323,7 +448,6 @@ namespace Route4MeSDK.FastProcessing
 
             return uploadResponse;
         }
-
 
         /// <summary>
         /// Geocode and download the addresses from the temporary storage.
@@ -357,11 +481,11 @@ namespace Route4MeSDK.FastProcessing
             options.Upgrade = true;
             options.ForceJsonp = true;
             options.Transports = ImmutableList.Create<string>(new string[] { Polling.NAME, WebSocket.NAME });
-            
+
 
             var uri = CreateUri();
             socket = IO.Socket(uri, options);
-            
+
 
             socket.On("error", (message) =>
             {
@@ -376,13 +500,13 @@ namespace Route4MeSDK.FastProcessing
             socket.On(Socket.EVENT_ERROR, (e) =>
             {
                 var exception = (Quobject.SocketIoClientDotNet.EngineIoClientDotNet.Client.EngineIOException)e;
-                Console.WriteLine("EVENT_ERROR. "+exception.Message);
+                Console.WriteLine("EVENT_ERROR. " + exception.Message);
                 Console.WriteLine("BASE EXCEPTION. " + exception.GetBaseException());
                 Console.WriteLine("DATA COUNT. " + exception.Data.Count);
                 //events.Enqueue(exception.code);
                 socket.Disconnect();
                 //manager.Close();
-                 manualResetEvent.Set(); ;
+                manualResetEvent.Set(); ;
             });
 
             socket.On(Socket.EVENT_MESSAGE, (message) =>
@@ -453,12 +577,12 @@ namespace Route4MeSDK.FastProcessing
 
                 var addressesChunk = JsonConvert.DeserializeObject<AddressGeocoded[]>(jsonChunkText, jsonSettings);
 
-                if (errors.Count>0)
+                if (errors.Count > 0)
                 {
                     Debug.Print("Json serializer errors:");
                     foreach (string errMessage in errors) Debug.Print(errMessage);
                 }
-                
+
                 savedAddresses = savedAddresses.Concat(addressesChunk).ToList();
 
                 loadedAddressesCount += addressesChunk.Length;
@@ -493,7 +617,7 @@ namespace Route4MeSDK.FastProcessing
 
                     socket.Close();
                 }
-                
+
             });
 
             socket.On("geocode_progress", (message) =>
@@ -576,3 +700,4 @@ namespace Route4MeSDK.FastProcessing
         public int done { get; set; }
     }
 }
+

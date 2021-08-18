@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using Route4MeSDK.DataTypes;
 using System.Threading;
 using CsvHelper;
+using System.Text.RegularExpressions;
 
 namespace Route4MeSDK.FastProcessing
 {
@@ -59,7 +60,7 @@ namespace Route4MeSDK.FastProcessing
         #region // Event handler for the JsonFileReadingIsDone event
         protected virtual void OnJsonFileReadingIsDone(JsonFileReadingIsDoneArgs e)
         {
-            EventHandler< JsonFileReadingIsDoneArgs> handler = JsonFileReadingIsDone;
+            EventHandler<JsonFileReadingIsDoneArgs> handler = JsonFileReadingIsDone;
 
             if (handler != null)
             {
@@ -129,7 +130,6 @@ namespace Route4MeSDK.FastProcessing
             {
                 String startupPath = AppDomain.CurrentDomain.BaseDirectory;
                 sFileName = startupPath + "/" + sFileName;
-
             }
 
             try
@@ -143,7 +143,6 @@ namespace Route4MeSDK.FastProcessing
                         memoryMappedViewStream.Read(contentArray, 0, contentArray.Length);
 
                         string content = Encoding.UTF8.GetString(contentArray);
-
                     }
 
                 }
@@ -153,7 +152,6 @@ namespace Route4MeSDK.FastProcessing
                 Console.WriteLine("Error during JSON file readinf. " + ex.Message);
             }
 
-            
         }
 
         //static AutoResetEvent autoEvent = new AutoResetEvent(false);
@@ -229,12 +227,19 @@ namespace Route4MeSDK.FastProcessing
             }
         }
 
+        private void FbGeocoding_GeocodingIsFinished(object sender, FastBulkGeocoding.GeocodingIsFinishedArgs e)
+        {
+            //manualResetEvent.Set();
+        }
+
         public void readingChunksFromLargeCsvFile(string fileName, out string errorString)
         {
             errorString = null;
             int curJsonObjects = 0;
             //string sJsonAddressesChunk = "";
             //var serializer = new JsonSerializer();
+
+            string wrongCoordPattern = @"^\-{0,1}\d{1,3}\.\d$"; // TO DO: API 5 contacts Batch uploading recognizes numbers with only one digit after point as wrong
 
             var lsMultiContacts = new List<DataTypes.V5.AddressBookContact>();
 
@@ -243,7 +248,7 @@ namespace Route4MeSDK.FastProcessing
                 var csv = new CsvReader(reader);
 
                 csv.ReadHeader();
-                string[] csvHeaders = csv.FieldHeaders.Where(x=>x.Length>0).ToArray();
+                string[] csvHeaders = csv.FieldHeaders.Where(x => x.Length > 0).ToArray();
 
                 foreach (var csvHeader in csvHeaders)
                 {
@@ -271,17 +276,28 @@ namespace Route4MeSDK.FastProcessing
                     {
                         int fieldIndex = Array.IndexOf(csvHeaders, csvHeader);
                         var fieldValue = csv.GetField(fieldIndex);
+                        object oFieldValue = (object)fieldValue;
 
-                        if (fieldValue != null)
+                        if ((fieldValue?.Length ?? 0) > 0)
                         {
-                            string fieldType = abContact.GetType().GetProperty(csvAddressMapping[csvHeader]).PropertyType.Name;
+                            var propinfo = abContact.GetType().GetProperty(csvAddressMapping[csvHeader]);
+                            //string fieldType = propinfo.PropertyType.FullName;
+
+                            //if (Nullable.GetUnderlyingType(propinfo.PropertyType) != null)
+                            //{
+                            //    fieldType = Nullable.GetUnderlyingType(propinfo.PropertyType).Name;
+                            //}
+
+                            string fieldType = Nullable.GetUnderlyingType(propinfo.PropertyType) != null
+                                ? Nullable.GetUnderlyingType(propinfo.PropertyType).Name
+                                : propinfo.PropertyType.Name;
 
                             switch (fieldType)
                             {
                                 case "String":
-                                    if (csvAddressMapping[csvHeader] == "address_alias" && fieldValue.ToString().Length > 59)
+                                    if (csvAddressMapping[csvHeader] == "AddressAlias" && fieldValue.ToString().Length > 59)
                                         fieldValue = fieldValue.ToString().Substring(0, 59);
-                                    if (csvAddressMapping[csvHeader] == "address_zip" && fieldValue.ToString().Length > 6)
+                                    if (csvAddressMapping[csvHeader] == "AddressZip" && fieldValue.ToString().Length > 6)
                                         fieldValue = fieldValue.ToString().Substring(0, 5);
 
                                     abContact
@@ -290,43 +306,112 @@ namespace Route4MeSDK.FastProcessing
                                         .SetValue(abContact, fieldValue);
                                     break;
                                 case "Int32":
-                                    if (Int32.TryParse(fieldValue.ToString(), out Int32 __32))
+                                    int? intVal = R4MeUtils.ConvertObjectToType<Int32>(ref oFieldValue);
+
+                                    if (intVal != null)
                                     {
                                         abContact
                                             .GetType()
                                             .GetProperty(csvAddressMapping[csvHeader])
-                                            .SetValue(abContact, Convert.ToInt32(fieldValue));
+                                            .SetValue(abContact, intVal);
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("The field " + csvHeader + " of the address book contact " + abContact.address_1 + " ommited");
                                     }
                                     break;
                                 case "Int64":
-                                    if (Int64.TryParse(fieldValue.ToString(), out Int64 __64))
+                                    if ((new string[]
+                                    {
+                                        "LocalTimeWindowStart", "LocalTimeWindowEnd",
+                                        "LocalTimeWindowStart2", "LocalTimeWindowEnd2"
+                                    }).Contains(csvAddressMapping[csvHeader]) && fieldValue.Contains(":"))
+                                    {
+                                        string hmValue = fieldValue.Length < 5 ? "0" + fieldValue : fieldValue;
+                                        hmValue = hmValue.Length == 7 ? "0" + hmValue : hmValue;
+                                        hmValue = hmValue.Length < 8 ? "00:" + hmValue : hmValue;
+
+                                        var secValue = R4MeUtils.DDHHMM2Seconds(hmValue, out string errorString2);
+
+                                        long? seconds = secValue != null ? (long)secValue : default(long);
+
+                                        if (seconds != null)
+                                            abContact
+                                            .GetType()
+                                            .GetProperty(csvAddressMapping[csvHeader])
+                                            .SetValue(abContact, seconds);
+
+                                        continue;
+                                    }
+
+                                    long? longVal = R4MeUtils.ConvertObjectToType<long>(ref oFieldValue);
+
+                                    if (csvAddressMapping[csvHeader] == "ServiceTime") longVal = longVal * 60;
+
+                                    if (longVal != null)
                                     {
                                         abContact
                                             .GetType()
                                             .GetProperty(csvAddressMapping[csvHeader])
-                                            .SetValue(abContact, Convert.ToInt64(fieldValue));
+                                            .SetValue(abContact, longVal);
+
+                                        continue;
                                     }
                                     break;
                                 case "Double":
-                                    if (Double.TryParse(fieldValue.ToString(), out double __d))
+                                    if ((new string[]
+                                    {
+                                        "CachedLat","CachedLng","CurbsideLat","CurbsideLng"
+                                    }).Contains(csvAddressMapping[csvHeader]))
+                                    {
+                                        var problematic = Regex.IsMatch(fieldValue, wrongCoordPattern);
+                                        if (problematic)
+                                        {
+                                            fieldValue += "0000001";
+                                            oFieldValue = (object)fieldValue;
+                                        }
+                                    }
+
+                                    double? dbVal = R4MeUtils.ConvertObjectToType<double>(ref oFieldValue);
+
+                                    if (dbVal != null)
                                     {
                                         abContact
                                             .GetType()
                                             .GetProperty(csvAddressMapping[csvHeader])
-                                            .SetValue(abContact, Convert.ToDouble(fieldValue));
+                                            .SetValue(abContact, dbVal);
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("The field " + csvHeader + " of the address book contact " + abContact.address_1 + " ommited");
                                     }
                                     break;
                                 case "Boolean":
-                                    if (Boolean.TryParse(fieldValue.ToString(), out bool __b))
+                                    bool? blVal = R4MeUtils.ConvertObjectToType<bool>(ref oFieldValue);
+
+                                    if (blVal != null)
                                     {
                                         abContact
                                             .GetType()
                                             .GetProperty(csvAddressMapping[csvHeader])
-                                            .SetValue(abContact, Convert.ToBoolean(fieldValue));
+                                            .SetValue(abContact, blVal);
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("The field " + csvHeader + " of the address book contact " + abContact.address_1 + " ommited");
                                     }
                                     break;
                                 default:
+                                    if (fieldType == "Object" && propinfo.Name == "address_custom_data")
+                                    {
+                                        var customData = JsonConvert
+                                            .DeserializeObject<Dictionary<string, string>>(oFieldValue.ToString());
 
+                                        abContact
+                                            .GetType()
+                                            .GetProperty(csvAddressMapping[csvHeader])
+                                            .SetValue(abContact, customData);
+                                    }
                                     break;
                             }
                         }
@@ -353,7 +438,7 @@ namespace Route4MeSDK.FastProcessing
 
                 }
 
-                if (lsMultiContacts.Count>0)
+                if (lsMultiContacts.Count > 0)
                 {
                     CsvFileChunkIsReadyArgs chunkIsReady = new CsvFileChunkIsReadyArgs();
                     chunkIsReady.multiContacts = lsMultiContacts;
@@ -465,7 +550,7 @@ namespace Route4MeSDK.FastProcessing
                                     break;
                             }
                         }
-                            
+
                     }
 
                     sJsonAddressesChunk += JsonConvert.SerializeObject(abContact, Formatting.None) + ",";
@@ -487,7 +572,7 @@ namespace Route4MeSDK.FastProcessing
                         //manualResetEvent.WaitOne();
                     }
 
-                    
+
                 }
 
                 if (sJsonAddressesChunk != "")
@@ -510,16 +595,7 @@ namespace Route4MeSDK.FastProcessing
             }
         }
 
-        private string csvRowToJsonObject(object csvRow)
-        {
-            
-            return null;
-        }
 
-        private void FbGeocoding_GeocodingIsFinished(object sender, FastBulkGeocoding.GeocodingIsFinishedArgs e)
-        {
-            //manualResetEvent.Set();
-        }
 
         public string readJsonTextFromFile(String sFileName)
         {
@@ -551,3 +627,4 @@ namespace Route4MeSDK.FastProcessing
 
     }
 }
+

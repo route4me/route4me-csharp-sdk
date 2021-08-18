@@ -44,5 +44,55 @@ namespace Route4MeSDK.DataTypes.V5
         /// </summary>
         [DataMember(Name = "route4me_members_id", EmitDefaultValue = false)]
         public int[] Route4meMembersId { get; set; }
+
+        /// <summary>
+        /// An array of the skilled driver IDs.
+        /// </summary>
+        [DataMember(Name = "location_sequence_pattern", EmitDefaultValue = false)]
+        public LocationSequencePattern[] LocationSequencePattern { get; set; }
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    [DataContract]
+    public class LocationSequencePattern
+    {
+        /// <summary>
+        /// Address alias
+        /// </summary>
+        [DataMember(Name = "alias", EmitDefaultValue = false)]
+        public string Alias { get; set; }
+
+        /// <summary>
+        /// Route destination address
+        /// </summary>
+        [DataMember(Name = "address")]
+        public string AddressString { get; set; }
+
+        /// <summary>
+        /// The latitude of this address
+        /// </summary>
+        [DataMember(Name = "lat")]
+        public double Latitude { get; set; }
+
+        /// <summary>
+        /// The longitude of this address
+        /// </summary>
+        [DataMember(Name = "lng")]
+        public double Longitude { get; set; }
+
+        // <summary>
+        /// The expected amount of time that will be spent at this address by the driver/user.
+        /// </summary>
+        [DataMember(Name = "time", EmitDefaultValue = false)]
+        public long? Time { get; set; }
+
+        /// <summary>
+        /// Route destination ID
+        /// </summary>
+        [DataMember(Name = "route_destination_id", EmitDefaultValue = false)]
+        public int? RouteDestinationId { get; set; }
     }
 }

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Route4MeSDK.FastProcessing
+﻿namespace Route4MeSDK.FastProcessing
 {
     public static class ConnectionConstants
     {

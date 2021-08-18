@@ -18,7 +18,7 @@ namespace Route4MeSDK.DataTypes.V5
         public int? RouteDestinationId { get; set; }
 
         /// <summary>
-        /// Route alias
+        /// Address alias
         /// </summary>
         [DataMember(Name = "alias", EmitDefaultValue = false)]
         public string Alias { get; set; }

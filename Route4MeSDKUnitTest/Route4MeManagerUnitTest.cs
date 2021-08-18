@@ -695,7 +695,7 @@ namespace Route4MeSDKUnitTest
             // Run the query
             var duplicatedRouteId = route4Me.DuplicateRoute(routeDuplicateParameters, out string errorString);
 
-            Assert.IsNotNull(duplicatedRouteId, "Cannot duplicate a route. "+ errorString);
+            Assert.IsNotNull(duplicatedRouteId, $"Cannot duplicate a route {duplicatedRouteId ?? "nll"}. " + errorString);
             Assert.IsTrue(duplicatedRouteId.Length==32, "Cannot duplicate a route.");
 
             var duplicatedRoute = route4Me.GetRoute(
@@ -724,7 +724,7 @@ namespace Route4MeSDKUnitTest
                 unlinkedRoute, 
                 "UnlinkRouteFromOptimizationTest failed. " + errorString);
             Assert.IsNull(
-                unlinkedRoute.OptimizationProblemId, 
+                unlinkedRoute?.OptimizationProblemId ?? null,
                 "Optimization problem ID of the unlinked route is not null.");
         }
 
@@ -9194,18 +9194,16 @@ namespace Route4MeSDKUnitTest
 
             var addressBookGroupParameters = new AddressBookGroupParameters()
             {
-                groupID = group2.groupID,
-                Fields = new string[] { "address_id" }
+                groupID = group2.groupID
             };
 
             // Run the query
-            var response = route4Me.GetAddressBookContactsByGroup(
-                                                addressBookGroupParameters, 
-                                                out string errorString);
+            var addressBookGroup = route4Me.GetAddressBookContactsByGroup(addressBookGroupParameters,
+                                                                        out string errorString);
 
             Assert.IsInstanceOfType(
-                response, 
-                typeof(AddressBookContactsResponse), 
+                addressBookGroup,
+                typeof(AddressBookSearchResponse),
                 "GetAddressBookContactsByGroupTest failed. " + errorString);
         }
 

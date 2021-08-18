@@ -28,9 +28,9 @@ namespace Route4MeSDK.Examples
                 addressBookGroupParameters, 
                 out string errorString);
 
-            Console.WriteLine((response?.results?.Length ?? 0) < 1
+            Console.WriteLine((response?.Results?.Length ?? 0) < 1
                 ? "Cannot retrieve contacts by group "+ groupId + Environment.NewLine+errorString  
-                : "Retrieved the contacts by group "+groupId +": " + response.results.Length
+                : "Retrieved the contacts by group "+groupId +": " + response.Results.Length
                 );
 
             RemoveAddressBookGroups();

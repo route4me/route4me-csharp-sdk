@@ -2726,25 +2726,94 @@ namespace Route4MeSDK
 		}
 
         /// <summary>
-        /// Get address book contacts by specified group
-        /// </summary>
-        /// <param name="addressBookGroupParameters">Query parameters</param>
-        /// <param name="errorString">Error string</param>
-        /// <returns>An address book group</returns>
-		public AddressBookContactsResponse GetAddressBookContactsByGroup(
-            AddressBookGroupParameters addressBookGroupParameters, 
-            out string errorString)
-		{
-			addressBookGroupParameters.PrepareForSerialization();
-			
-            var response = GetJsonObjectFromAPI<AddressBookContactsResponse>(
-                addressBookGroupParameters,
-				R4MEInfrastructureSettings.AddressBookGroupSearch,
-				HttpMethodType.Post,
-				out errorString);
-			
+		/// Get address book contacts by specified group
+		/// </summary>
+		/// <param name="addressBookGroupParameters">Query parameters</param>
+		/// <param name="errorString">Error string</param>
+		/// <returns>An address book group</returns>
+		public AddressBookSearchResponse GetAddressBookContactsByGroup(AddressBookGroupParameters addressBookGroupParameters, out string errorString)
+        {
+            addressBookGroupParameters.PrepareForSerialization();
+            var response = GetJsonObjectFromAPI<AddressBookSearchResponse>(addressBookGroupParameters,
+                                                    R4MEInfrastructureSettings.AddressBookGroupSearch,
+                                                    HttpMethodType.Post,
+                                                    out errorString);
+
             return response;
-		}
+        }
+
+        /// <summary>
+		/// Get response containing contact IDs by sending custom field and its value array.
+		/// </summary>
+		/// <param name="customField">Custom field name</param>
+		/// <param name="customFieldValues">An array of the custom field values</param>
+		/// <param name="errorString">Error string</param>
+		/// <returns>Response containing an array of the Contact IDs</returns>
+		public long[] GetAddressBookContactsByCustomField(string customField, string[] customFieldValues, out string errorString)
+        {
+            var addressBookGroupRules = new List<AddressBookGroupRule>();
+
+            if ((customField?.Length ?? 0) < 1 || (customFieldValues?.Length ?? 0) < 1)
+            {
+                errorString = "Empty custom field value(s)";
+                return null;
+            }
+
+            foreach (var customFieldValue in customFieldValues)
+            {
+                var addressBookGroupRule = new AddressBookGroupRule()
+                {
+                    ID = "custom_data." + customField,
+                    Field = "custom_data." + customField,
+                    Operator = "contains",
+                    Value = customFieldValue
+                };
+
+                addressBookGroupRules.Add(addressBookGroupRule);
+            }
+
+            var addressBookGroupFilter = new AddressBookGroupFilter()
+            {
+                Condition = "OR",
+                Rules = addressBookGroupRules.ToArray()
+            };
+
+            var addressBookGroupParameters = new AddressBookGroup()
+            {
+                groupName = "Custom Fied Contains",
+                groupColor = "92e1c0",
+                Filter = addressBookGroupFilter
+            };
+
+            var addressBookGroup = this.AddAddressBookGroup(addressBookGroupParameters,
+                                                             out errorString);
+
+            if (addressBookGroup == null || addressBookGroup.GetType() != typeof(AddressBookGroup)) return null;
+
+            var addressBookGroupParams = new AddressBookGroupParameters()
+            {
+                groupID = addressBookGroup.groupID,
+                Fields = new string[] { "address_id" }
+            };
+
+            var response = this.GetAddressBookContactsByGroup(
+                addressBookGroupParams,
+                out errorString);
+
+            if ((response?.Results?.Length ?? 0) < 1) return null;
+
+            var contactIDs = new List<long>();
+
+            foreach (object[] oContId in response.Results)
+            {
+                if (long.TryParse(oContId[0].ToString(), out long __)) contactIDs.Add(Convert.ToInt64(oContId[0]));
+            }
+
+            var removeGroupParams = new AddressBookGroupParameters() { groupID = addressBookGroup.groupID };
+            this.RemoveAddressBookGroup(removeGroupParams, out errorString);
+
+            return contactIDs.Count > 0 ? contactIDs.ToArray() : null;
+        }
 
         /// <summary>
         /// Search the address book groups by specified filter.
