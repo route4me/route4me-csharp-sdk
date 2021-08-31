@@ -30,7 +30,7 @@ namespace Route4MeSDK.FastProcessing
         private ManualResetEvent mainResetEvent = null;
         private Socket socket;
         public string Message;
-        private int Number;
+        //private int Number;
         private bool Flag;
         public static Connection con = new Connection();
         private int requestedAddresses;
@@ -44,13 +44,13 @@ namespace Route4MeSDK.FastProcessing
         bool geocodedAddressesDownloadingIsDone;
 
         bool largeCsvFileProcessingIsDone;
-        bool uploadContactsIsDone;
+        //bool uploadContactsIsDone;
 
         int totalCsvChunks;
 
         List<AddressGeocoded> savedAddresses;
 
-        JsonSerializer jsSer = new JsonSerializer();
+        //JsonSerializer jsSer = new JsonSerializer();
 
         public string apiKey { get; set; }
 
@@ -467,7 +467,7 @@ namespace Route4MeSDK.FastProcessing
             savedAddresses = new List<AddressGeocoded>();
 
             TEMPORARY_ADDRESSES_STORAGE_ID = temporaryAddressesStorageID;
-            if (addressesInFile != null) requestedAddresses = addressesInFile;
+            if (addressesInFile != default(int)) requestedAddresses = addressesInFile;
 
             manualResetEvent = new ManualResetEvent(false);
             Flag = false;
@@ -629,7 +629,7 @@ namespace Route4MeSDK.FastProcessing
                 if (progressMessage.total == progressMessage.done)
                 {
                     //Debug.Print("Geocoding Done, Downloading...");
-                    if (requestedAddresses == null) requestedAddresses = progressMessage.total;
+                    if (requestedAddresses == default(int)) requestedAddresses = progressMessage.total;
                     download(0);
                 }
             });

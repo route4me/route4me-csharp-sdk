@@ -58,7 +58,7 @@ namespace Route4MeSDK.Examples
                         if (DateTime.TryParse(sched_date.ToString(), out dt))
                         {
                             dt = Convert.ToDateTime(sched_date);
-                            newOrder.day_scheduled_for_YYMMDD = dt.ToString("yyyy-MM-dd");
+                            newOrder.day_scheduled_for_YYYYMMDD = dt.ToString("yyyy-MM-dd");
                         }
                     }
 

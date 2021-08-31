@@ -1017,15 +1017,15 @@ namespace Route4MeSDK
 		{
             /// <value>A route ID to be updated</value>
 			[HttpQueryMemberAttribute(Name = "route_id", EmitDefaultValue = false)]
-			public string RouteId { get; set; }
+			public new string RouteId { get; set; }
 
             /// <value>A optimization ID to be updated</value>
 			[HttpQueryMemberAttribute(Name = "optimization_problem_id", EmitDefaultValue = false)]
-            public string OptimizationProblemId { get; set; }
+            public new string OptimizationProblemId { get; set; }
 
             /// <value>A route destination ID to be updated</value>
 			[HttpQueryMemberAttribute(Name = "route_destination_id", EmitDefaultValue = false)]
-			public int? RouteDestinationId { get; set; }
+			public new int? RouteDestinationId { get; set; }
 		}
 
         /// <summary>

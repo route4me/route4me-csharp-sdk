@@ -8,7 +8,7 @@ namespace Route4MeSDK.Examples
 {
     public sealed partial class Route4MeExamples
     {
-        public void uploaLargeContactsCsvFile()
+        public void uploadLargeContactsCsvFile()
         {
             var fastProcessing = new FastBulkGeocoding(ActualApiKey, false)
             {
