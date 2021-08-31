@@ -120,7 +120,7 @@ namespace Route4MeSDK
                 {
                     writer.WriteObject(memoryStream, obj);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     result = SerializeObjectToJson(obj, true);
                     return result;

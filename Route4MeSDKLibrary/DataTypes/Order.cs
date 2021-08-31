@@ -53,10 +53,10 @@ namespace Route4MeSDK.DataTypes
         public double? curbside_lng { get; set; }
 
         /// <summary>
-        /// Scheduled day
+        /// Scheduled day (format: yyyy-MM-dd)
         /// </summary>
         [DataMember(Name = "day_scheduled_for_YYMMDD", EmitDefaultValue = false)]
-        public string day_scheduled_for_YYMMDD { get; set; }
+        public string day_scheduled_for_YYYYMMDD { get; set; }
 
         /// <summary>
         /// Address Alias. Required

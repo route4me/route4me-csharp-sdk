@@ -1,14 +1,11 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Data;
 using System.Data.Common;
 using System.Configuration;
 using System.Data.OleDb;
-using System.Data.SqlServerCe;
-using System.Web.Script;
 
 namespace Route4MeSDK.DataTypes
 {

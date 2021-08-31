@@ -16,21 +16,21 @@ namespace Route4MeSDK.FastProcessing
         private ManualResetEvent mainResetEvent = null;
         //private Socket socket;
         public string Message;
-        private int Number;
+        //private int Number;
         private bool Flag;
         public static Connection con = new Connection();
-        private int requestedAddresses;
-        private int nextDownloadStage;
-        private int loadedAddressesCount;
-        string TEMPORARY_ADDRESSES_STORAGE_ID;
+        //private int requestedAddresses;
+        //private int nextDownloadStage;
+        //private int loadedAddressesCount;
+        //string TEMPORARY_ADDRESSES_STORAGE_ID;
 
         FastFileReading fileReading;
 
-        bool largeJsonFileProcessingIsDone;
-        bool geocodedAddressesDownloadingIsDone;
+        //bool largeJsonFileProcessingIsDone;
+        //bool geocodedAddressesDownloadingIsDone;
 
         bool largeCsvFileProcessingIsDone;
-        bool uploadContactsIsDone;
+        //bool uploadContactsIsDone;
 
         int totalCsvChunks;
 

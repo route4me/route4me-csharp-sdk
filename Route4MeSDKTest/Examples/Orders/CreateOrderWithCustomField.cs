@@ -17,7 +17,7 @@ namespace Route4MeSDK.Examples
                 address_1 = "1358 E Luzerne St, Philadelphia, PA 19124, US",
                 cached_lat = 48.335991,
                 cached_lng = 31.18287,
-                day_scheduled_for_YYMMDD = "2019-10-11",
+                day_scheduled_for_YYYYMMDD = "2019-10-11",
                 address_alias = "Auto test address",
                 CustomUserFields = new OrderCustomField[]
                 {

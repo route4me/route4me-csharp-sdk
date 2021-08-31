@@ -8,19 +8,16 @@ namespace Route4MeSDK.Examples
         /// Forward Geocoding
         /// </summary>
         /// <returns> json/xml object </returns>
-        public void GeocodingForward(GeocodingParameters geoParams = null)
+        public void GeocodingForward()
         {
             // Create the manager with the api key
             var route4Me = new Route4MeManager(ActualApiKey);
 
-            if (geoParams==null)
+            var geoParams = new GeocodingParameters()
             {
-                geoParams = new GeocodingParameters()
-                {
-                    Addresses = "Los Angeles International Airport, CA||3495 Purdue St, Cuyahoga Falls, OH 44221",
-                    Format = "json"
-                };
-            }
+                Addresses = "Los Angeles International Airport, CA",
+                Format = "json"
+            };
 
             //Run the query
             string result = route4Me.Geocoding(geoParams, out string errorString);

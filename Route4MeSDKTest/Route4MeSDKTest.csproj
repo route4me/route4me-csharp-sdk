@@ -88,7 +88,7 @@
   <ItemGroup>
     <Compile Include="Examples\Activities\GetActivitiesByMember.cs" />
     <Compile Include="Examples\Activities\GetLastActivities.cs" />
-    <Compile Include="Examples\Activities\SearcAreaUpdated.cs" />
+    <Compile Include="Examples\Activities\SearchAreaUpdated.cs" />
     <Compile Include="Examples\Activities\SearchAreaRemoved.cs" />
     <Compile Include="Examples\Activities\SearchDestinationOutSequence.cs" />
     <Compile Include="Examples\Activities\SearchDestinationUpdated.cs" />
@@ -159,7 +159,7 @@
     <Compile Include="Examples\Geocoding\BatchGeocodingForwardAsync.cs" />
     <Compile Include="Examples\Geocoding\BulkRemoveContactsFromDb.cs" />
     <Compile Include="Examples\Geocoding\uploadAndGeocodeLargeJsonFile.cs" />
-    <Compile Include="Examples\Geocoding\uploaLargeContactsCsvFile.cs" />
+    <Compile Include="Examples\Geocoding\uploadLargeContactsCsvFile.cs" />
     <Compile Include="Examples\Geocoding\validateLargeContactsCsvFile.cs" />
     <Compile Include="Examples\MemberConfiguration\AddConfigurationKeyArray.cs" />
     <Compile Include="Examples\Notes\AddComplexAddressNote.cs" />
