@@ -12,8 +12,8 @@ namespace Route4MeSDK.Examples
         {
             var fastValidating = new FastValidateData(ActualApiKey, false)
             {
-                CsvChankSize = 500,
-                ChankPause = 0,
+                CsvChunkSize = 500,
+                ChunkPause = 0,
                 ConsoleWriteMessage = true
             };
 

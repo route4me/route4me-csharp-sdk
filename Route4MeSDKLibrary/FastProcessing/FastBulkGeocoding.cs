@@ -3,21 +3,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Immutable;
-using Quobject.SocketIoClientDotNet.EngineIoClientDotNet;
 using Quobject.SocketIoClientDotNet.EngineIoClientDotNet.Client.Transports;
-using Client = Quobject.SocketIoClientDotNet.Client;
 using IO = Quobject.SocketIoClientDotNet.Client.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Route4MeSDK.DataTypes;
-using Newtonsoft.Json.Serialization;
 using System.Diagnostics;
 using System.IO;
-//using Route4MeSDK.DataTypes.V5;
 
 namespace Route4MeSDK.FastProcessing
 {
@@ -54,9 +49,9 @@ namespace Route4MeSDK.FastProcessing
 
         public string apiKey { get; set; }
 
-        public int CsvChankSize { get; set; } = 300;
-        public int JsonChankSize { get; set; } = 300;
-        public int ChankPause { get; set; } = 2000;
+        public int CsvChunkSize { get; set; } = 300;
+        public int JsonChunkSize { get; set; } = 300;
+        public int ChunkPause { get; set; } = 2000;
 
         static List<Task> taskList;
 
@@ -213,9 +208,9 @@ namespace Route4MeSDK.FastProcessing
 
             fileReading = new FastFileReading();
 
-            fileReading.csvObjectsChunkSize = CsvChankSize;
-            fileReading.chunkPause = ChankPause;
-            fileReading.jsonObjectsChunkSize = JsonChankSize;
+            fileReading.csvObjectsChunkSize = CsvChunkSize;
+            fileReading.chunkPause = ChunkPause;
+            fileReading.jsonObjectsChunkSize = JsonChunkSize;
 
             fileReading.CsvFileChunkIsReady += FileReading_CsvFileChunkIsReady;
 

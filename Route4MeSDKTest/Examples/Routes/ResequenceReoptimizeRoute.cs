@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Route4MeSDK.QueryTypes;
 
 namespace Route4MeSDK.Examples
 {
@@ -27,21 +28,21 @@ namespace Route4MeSDK.Examples
                 routeId = SD10Stops_route_id;
             }
 
-            var roParameters = new Dictionary<string, string>()
+            var queryParameters = new RouteParametersQuery()
             {
-                {"route_id",routeId},
-                {"disable_optimization","0"},
-                {"optimize","Distance"},
+                RouteId = routeId,
+                DisableOptimization = false,
+                Optimize  = DataTypes.Optimize.Distance.Description()
             };
 
             // Run the query
-            bool result = route4Me.ResequenceReoptimizeRoute(
-                roParameters, 
+            var result = route4Me.ReoptimizeRoute(
+                queryParameters, 
                 out string errorString
             );
 
             Console.WriteLine(
-                result 
+                result!=null && result.GetType()==typeof(Route4MeSDK.DataTypes.DataObjectRoute)  
                 ? "ResequenceReoptimizeRoute executed successfully"
                 : String.Format("ResequenceReoptimizeRoute error: {0}", errorString)
             );

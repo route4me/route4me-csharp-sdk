@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -17,7 +15,7 @@ namespace Route4MeSDK.FastProcessing
         //private Socket socket;
         public string Message;
         //private int Number;
-        private bool Flag;
+        //private bool Flag;
         public static Connection con = new Connection();
         //private int requestedAddresses;
         //private int nextDownloadStage;
@@ -38,9 +36,9 @@ namespace Route4MeSDK.FastProcessing
 
         public string apiKey { get; set; }
 
-        public int CsvChankSize { get; set; } = 300;
-        public int JsonChankSize { get; set; } = 300;
-        public int ChankPause { get; set; } = 2000;
+        public int CsvChunkSize { get; set; } = 300;
+        public int JsonChunkSize { get; set; } = 300;
+        public int ChunkPause { get; set; } = 2000;
 
         static List<Task> taskList;
 
@@ -84,9 +82,9 @@ namespace Route4MeSDK.FastProcessing
 
             fileReading = new FastFileReading();
 
-            fileReading.csvObjectsChunkSize = CsvChankSize;
-            fileReading.chunkPause = ChankPause;
-            fileReading.jsonObjectsChunkSize = JsonChankSize;
+            fileReading.csvObjectsChunkSize = CsvChunkSize;
+            fileReading.chunkPause = ChunkPause;
+            fileReading.jsonObjectsChunkSize = JsonChunkSize;
 
             fileReading.CsvFileChunkIsReady += FileReading_CsvFileChunkIsReady;
 
