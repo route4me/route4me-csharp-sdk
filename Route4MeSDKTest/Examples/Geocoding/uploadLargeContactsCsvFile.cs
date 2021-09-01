@@ -12,8 +12,8 @@ namespace Route4MeSDK.Examples
         {
             var fastProcessing = new FastBulkGeocoding(ActualApiKey, false)
             {
-                ChankPause = 0,
-                CsvChankSize = 500,
+                ChunkPause = 0,
+                CsvChunkSize = 500,
                 DoGeocoding = true,
                 GeocodeOnlyEmpty = true
             };

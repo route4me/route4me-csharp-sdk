@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using System.IO.MemoryMappedFiles;
-using System.Runtime.Serialization.Formatters.Binary;
 using Newtonsoft.Json;
 using Route4MeSDK.DataTypes;
 using System.Threading;
@@ -19,11 +17,11 @@ namespace Route4MeSDK.FastProcessing
     /// </summary>
     public class FastFileReading
     {
-        const long offset = 0x10000000; // 256 megabytes
-        const long length = 0x20000000; // 512 megabytes
+        //const long offset = 0x10000000; // 256 megabytes
+        //const long length = 0x20000000; // 512 megabytes
 
-        string jsonFileName;
-        string csvFileName;
+        //string jsonFileName;
+        //string csvFileName;
 
         public int chunkPause { get; set; } = 2000;
 

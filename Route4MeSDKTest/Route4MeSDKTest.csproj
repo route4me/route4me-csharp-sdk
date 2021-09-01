@@ -197,6 +197,7 @@
     <Compile Include="Examples\Routes\ReoptimizeRemainingStops.cs" />
     <Compile Include="Examples\Routes\ResequenceRouteDestinations.cs" />
     <Compile Include="Examples\Routes\RouteOriginParameter.cs" />
+    <Compile Include="Examples\Routes\RoutParametersQuery.cs" />
     <Compile Include="Examples\Routes\ShareRoute.cs" />
     <Compile Include="Examples\Routes\UnlinkRouteFromOptimization.cs" />
     <Compile Include="Examples\Routes\UpdateRouteAvoidanceZones.cs" />
