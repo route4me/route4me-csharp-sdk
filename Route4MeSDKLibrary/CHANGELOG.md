@@ -1,6 +1,27 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.0.1.11] - 2021-09-01
+
+### Changed
+
+The file [Order.cs: ](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/DataTypes/Order.cs)
+– Changed the property day_scheduled_for_YYMMDD to day_scheduled_for_YYYYMMDD.
+
+The file [FastBulkGeocoding.cs: ](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/FastProcessing/FastBulkGeocoding.cs)
+– Removed non-used variables. 
+- Fixed typos Chank to Chunk. 
+
+The file [FastValidateData.cs: ](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/FastProcessing/FastValidateData.cs)
+– Removed non-used variables.  
+- Fixed typos Chank to Chunk. 
+
+The file [FastFileReading.cs: ](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/FastProcessing/FastFileReading.cs)
+– Removed non-used variables. 
+
+The file [Route4MeManager.cs: ](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/Route4MeManager.cs)
+– In the class UpdateRouteDestinationRequest was sat as shadowed properties: RouteId, OptimizationProblemId, RouteDestinationId. 
+
 ## [1.0.1.9] - 2021-08-18
 
 ### Changed
@@ -79,5 +100,4 @@ The file [FastFileReading.cs: ](https://github.com/route4me/route4me-csharp-sdk/
 - The class [Utils](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/Utils.cs). Modified the methods:
     1. The method [TValue ToObject<TValue>(object obj, out string errorString)](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/Utils.cs#L556) - remade using try-catch.
 - The class [NoteParameters](https://github.com/route4me/route4me-csharp-sdk/blob/master/Route4MeSDKLibrary/QueryTypes/NoteParameters.cs)- added properties for form data.
-
 
