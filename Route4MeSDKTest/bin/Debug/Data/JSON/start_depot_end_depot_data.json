@@ -6,7 +6,7 @@
     "optimize": "Distance",
     "travel_mode": "Driving",
     "rt": false,
-    "locked_last": true,
+    "lock_last": false,
     "algorithm_type": 9,
     "bundling": null,
     "advanced_constraints": [
