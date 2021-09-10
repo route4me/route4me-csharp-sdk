@@ -66,12 +66,13 @@
         /// If specified, the response will include only activities of the specified type.
         /// <remarks><para>Query parameter.</para></remarks>
         /// <para>Available values:</para>
-        /// <value>'', 'area-removed', 'area-added', 'area-updated', 'delete-destination', </value>
-        /// <para><value>'insert-destination', 'destination-out-sequence', 'driver-arrived-early', 'driver-arrived-late', </value></para>
-        /// <value>'driver-arrived-on-time', 'geofence-left', 'geofence-entered', 'mark-destination-departed', </value>
-        /// <para><value>'mark-destination-visited', 'member-created', 'member-deleted', 'member-modified', </value></para>
-        /// <value>'move-destination', 'note-insert', 'route-delete', 'route-optimized', </value>
-        /// <para><value>'route-owner-changed', 'route-duplicate', 'update-destinations', 'user_message'</value></para>
+        /// <para>'', 'area-removed', 'area-added', 'area-updated', 'delete-destination', </para>
+        /// <para>'insert-destination', 'destination-out-sequence', 'driver-arrived-early', 'driver-arrived-late', </para>
+        /// <para>'driver-arrived-on-time', 'geofence-left', 'geofence-entered', 'mark-destination-departed', </para>
+        /// <para>'mark-destination-visited', 'member-created', 'member-deleted', 'member-modified', </para>
+        /// <para>'move-destination', 'note-insert', 'route-delete', 'route-optimized', </para>
+        /// <para>'route-owner-changed', 'route-duplicate', 'update-destinations', 'user_message'</para>
+        /// <para>'order-created', 'order-updated', 'order-deleted', 'unapproved-to-execute', 'route-update'</para>
         /// </summary>
         [HttpQueryMemberAttribute(Name = "activity_type", EmitDefaultValue = false)]
         public string ActivityType { get; set; }
