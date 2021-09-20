@@ -23,7 +23,7 @@ namespace Route4MeSDK.Examples
                 Filter = new FilterDetails()
                 {
                     Display = "all",
-                    Scheduled_for_YYMMDD = new string[] { startDate, endDate }
+                    Scheduled_for_YYYYMMDD = new string[] { startDate, endDate }
                 }
             };
 

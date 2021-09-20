@@ -152,6 +152,7 @@
     <Compile Include="DataTypes\MemberConfigurationResponse.cs" />
     <Compile Include="DataTypes\MemberResponse.cs" />
     <Compile Include="DataTypes\MemberResponseV4.cs" />
+    <Compile Include="DataTypes\OrderTerritories.cs" />
     <Compile Include="DataTypes\TelematicsConnection.cs" />
     <Compile Include="DataTypes\TelematicsRegisterMemberResponse.cs" />
     <Compile Include="DataTypes\V5\AccountProfile.cs" />

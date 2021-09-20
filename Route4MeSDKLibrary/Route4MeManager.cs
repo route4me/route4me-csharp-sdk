@@ -71,6 +71,24 @@ namespace Route4MeSDK
 		}
 
         /// <summary>
+		/// Generates optimized routes by order territories.
+		/// </summary>
+		/// <param name="optimizationParameters">The input parameters for the routes optimization, which encapsulates:
+		/// the route parameters, addresses and order territories. </param>
+		/// <param name="errorString">Returned error string in case of an optimization processs failing</param>
+		/// <returns>An array of the optimization problem and smart optimization problem objects</returns>
+		public DataObject[] RunOptimizationByOrderTerritories(OptimizationParameters optimizationParameters, out string errorString)
+        {
+            var result = GetJsonObjectFromAPI<DataObject[]>(optimizationParameters,
+                                                          R4MEInfrastructureSettings.ApiHost,
+                                                          HttpMethodType.Post,
+                                                          false,
+                                                          out errorString);
+
+            return result;
+        }
+
+        /// <summary>
         /// Asynchronously generates an optimization problem. Especially important in case of the large addresses arrays.
         /// </summary>
         /// <param name="optimizationParameters">The input parameters for the routes optimization, which encapsulates:
@@ -2408,10 +2426,10 @@ namespace Route4MeSDK
                                                             HttpMethodType.Get, 
                                                             out errorString);
 
-            total = (response != null) ? response.total : 0;
+            total = response?.total ?? 0;
 
-            return (response != null) ? response.results : null;
-		}
+            return response?.results ?? null;
+        }
         
         /// <summary>
         /// The request parameters for the address book locations searching process.
