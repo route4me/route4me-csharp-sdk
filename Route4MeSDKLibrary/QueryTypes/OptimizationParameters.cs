@@ -72,6 +72,14 @@ namespace Route4MeSDK.QueryTypes
         public uint? State { get; set; }
 
         /// <summary>
+        /// If true, the response contains only optimization_problem_id
+        /// <remarks><para>Query parameter.</para></remarks>
+        /// </summary>
+        [IgnoreDataMember] // Don't serialize as JSON
+        [HttpQueryMemberAttribute(Name = "id_only", EmitDefaultValue = false)]
+        public bool? IdOnly { get; set; }
+
+        /// <summary>
         /// Route Parameters to update.
         /// (After a PUT there is no guarantee that the route_destination_id values are preserved! It may create copies resulting in new destination IDs, especially when dealing with multiple depots.)
         /// </summary>
@@ -89,5 +97,11 @@ namespace Route4MeSDK.QueryTypes
         /// </summary>
         [DataMember(Name = "depots", EmitDefaultValue = false)]
         public Address[] Depots { get; set; }
+
+        /// <summary>
+        /// The order territories containing addresses for an optimization process.
+        /// </summary>
+        [DataMember(Name = "order_territories")]
+        public OrderTerritories OrderTerritories { get; set; }
     }
 }

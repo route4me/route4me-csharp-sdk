@@ -191,5 +191,19 @@ namespace Route4MeSDK.DataTypes
         /// </summary>
         [DataMember(Name = "visited_count", EmitDefaultValue = false)]
         public int VisitedCount { get; set; }
+
+        /// <summary>
+        /// Route address stop type. For available values see Enums.AddressStopType
+        /// </summary>
+        [DataMember(Name = "address_stop_type")]
+        public string AddressStopType { get; set; }
+
+        /// <summary>
+        /// System-wide unique code, which permits end-users (recipients) 
+        /// to track the status of their order.
+        /// </summary>
+        [DataMember(Name = "tracking_number", EmitDefaultValue = false)]
+        [ReadOnly(true)]
+        public string TrackingNumber { get; set; }
     }
 }

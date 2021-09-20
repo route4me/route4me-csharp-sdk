@@ -4978,6 +4978,61 @@ namespace Route4MeSDKUnitTest
         }
 
         [TestMethod]
+        public void OptimizationByOrderTerritoriesTest()
+        {
+            var route4Me = new Route4MeManager(c_ApiKey);
+
+            // Set parameters
+            var parameters = new RouteParameters()
+            {
+                AlgorithmType = AlgorithmType.CVRP_TW_SD,
+                RouteName = "Optimization by order territories, " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                is_dynamic_start_time = false,
+                Optimize = "Time",
+                IgnoreTw = false,
+                Parts = 10,
+                RT = false,
+                LockLast = false,
+                DisableOptimization = false,
+                VehicleId = ""
+            };
+
+            var orderTerritories = new OrderTerritories()
+            {
+                SplitTerritories = true,
+                TerritoriesId = new string[] { "5E66A5AFAB087B08E690DFAE4F8B151B", "6160CFC4CC3CD508409D238E04D6F6C4" },
+                filters = new FilterDetails()
+                {
+                    // Specified as 'all' for test purpose - after the first optimization, the orders become routed and the test is failing.
+                    // For real tasks should be specified as 'unrouted'
+                    Display = "all",
+                    Scheduled_for_YYYYMMDD = new string[] { "2021-09-21" }
+                }
+            };
+
+            var optimizationParameters = new OptimizationParameters()
+            {
+                Redirect = false,
+                OrderTerritories = orderTerritories,
+                Parameters = parameters
+            };
+
+            // Run the query
+            var dataObjects = route4Me.RunOptimizationByOrderTerritories(optimizationParameters, out string errorString);
+
+
+
+            Assert.IsNotNull(dataObjects, "OptimizationByOrderTerritoriesTest failed. " + errorString);
+
+            int returnedOptimizations = dataObjects.Length;
+
+            foreach (var optProblem in dataObjects)
+                tdr.RemoveOptimization(new string[] { optProblem.OptimizationProblemId });
+
+            Assert.IsTrue(returnedOptimizations == 2, "OptimizationByOrderTerritoriesTest failed - smart optimization ID not returned.");
+        }
+
+        [TestMethod]
         public void BundledAddressesTest()
         {
             var route4Me = new Route4MeManager(c_ApiKey);
@@ -8958,17 +9013,17 @@ namespace Route4MeSDKUnitTest
             };
 
             // Run the query
-            uint total = 0;
-
             AddressBookContact[] contacts = route4Me.GetAddressBookLocation(
-                addressBookParameters, 
-                out total,
-                out string errorString);
+                                                        addressBookParameters,
+                                                        out uint total,
+                                                        out string errorString);
 
             Assert.IsInstanceOfType(
-                contacts, 
-                typeof(AddressBookContact[]), 
+                contacts,
+                typeof(AddressBookContact[]),
                 "SearchLocationsByTextTest failed. " + errorString);
+
+            Assert.IsNotNull(total, "SearchLocationsByTextTest failed.");
         }
 
         [TestMethod]
@@ -9949,7 +10004,7 @@ namespace Route4MeSDKUnitTest
                 Filter = new FilterDetails()
                 {
                     Display = "all",
-                    Scheduled_for_YYMMDD = new string[] { startDate, endDate }
+                    Scheduled_for_YYYYMMDD = new string[] { startDate, endDate }
                 }
             };
 
@@ -9960,6 +10015,31 @@ namespace Route4MeSDKUnitTest
                 typeof(Order[]), 
                 "GetOrdersByScheduleFilter failed. " + errorString
              );
+        }
+
+        [TestMethod]
+        public void FilterOrdersByTrackingNumbers()
+        {
+            if (skip == "yes") return;
+
+            var route4Me = new Route4MeManager(c_ApiKey);
+
+            var oParams = new OrderFilterParameters()
+            {
+                Limit = 10,
+                Filter = new FilterDetails()
+                {
+                    Display = "all",
+                    TrackingNumbers = new string[] { "TN1" }
+                }
+            };
+
+            Order[] orders = route4Me.FilterOrders(oParams, out string errorString);
+
+            Assert.IsInstanceOfType(
+                orders,
+                typeof(Order[]),
+                "FilterOrdersByTrackingNumbers failed. " + errorString);
         }
 
         [TestMethod]
@@ -10218,6 +10298,29 @@ namespace Route4MeSDKUnitTest
             var result = route4Me.AddOrder(orderParams, out string errorString);
 
             Assert.IsNotNull(result, "AddOrdersToRouteTest failed. " + errorString);
+
+            lsOrderIds.Add(result.order_id.ToString());
+
+            lsOrders.Add(result);
+        }
+
+        [TestMethod]
+        public void CreateOrderWithTrackingNumberTest()
+        {
+            if (skip == "yes") return;
+
+            var route4Me = new Route4MeManager(c_ApiKey);
+
+            var orderParams = new Order()
+            {
+                address_1 = "201 LAVACA ST APT 746, AUSTIN, TX, 78701, US",
+                TrackingNumber = "AA11ZZCC",
+                AddressStopType = AddressStopType.PickUp.Description()
+            };
+
+            var result = route4Me.AddOrder(orderParams, out string errorString);
+
+            Assert.IsNotNull(result, "CreateOrderWithTrackingNumberTest failed. " + errorString);
 
             lsOrderIds.Add(result.order_id.ToString());
 
