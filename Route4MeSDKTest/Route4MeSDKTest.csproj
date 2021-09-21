@@ -174,7 +174,7 @@
     <Compile Include="Examples\OrderCustomUserFields\GetOrderCustomUserFields.cs" />
     <Compile Include="Examples\OrderCustomUserFields\RemoveOrderCustomUserField.cs" />
     <Compile Include="Examples\OrderCustomUserFields\UpdateOrderCustomUserField.cs" />
-    <Compile Include="Examples\Orders\AddOrderWithTrackingNumber.cs" />
+    <Compile Include="Examples\Orders\AddOrderWithOrderType.cs" />
     <Compile Include="Examples\Orders\CreateOrderWithCustomField.cs" />
     <Compile Include="Examples\Orders\GetOrdersByInsertedDate.cs" />
     <Compile Include="Examples\Orders\GetOrdersByScheduleFilter.cs" />

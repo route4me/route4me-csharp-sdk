@@ -51,5 +51,17 @@ namespace Route4MeSDK.QueryTypes
         /// </summary>
         [DataMember(Name = "tracking_numbers")]
         public string[] TrackingNumbers { get; set; }
+
+        /// <summary>
+        /// Start of a time range to filter the orders.
+        /// </summary>
+        [DataMember(Name = "created_timestamp_start")]
+        public long? CreatedTimestampStart { get; set; }
+
+        /// <summary>
+        /// Start of a time range to filter the orders.
+        /// </summary>
+        [DataMember(Name = "created_timestamp_end")]
+        public long? CreatedTimestampEnd { get; set; }
     }
 }
