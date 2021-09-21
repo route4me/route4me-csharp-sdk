@@ -6,3 +6,5 @@ shortTest.cs
 /**/obj/
 /packages/
 /TestResults/
+/Debug/
+/Release/
