@@ -831,5 +831,19 @@ namespace Route4MeSDK
 
             return seconds;
         }
+
+        /// <summary>
+        /// Generate random string with a specified length from specified source string.
+        /// </summary>
+        /// <param name="length">Length of the generated random string</param>
+        /// <param name="sourceString">Source string. Default: 'ABCDEF0123456789'</param>
+        /// <returns></returns>
+        public static string GenerateRandomString(int length, string sourceString = "ABCDEF0123456789")
+        {
+            var random = new Random();
+
+            return new string(Enumerable.Repeat(sourceString, length)
+              .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
     }
 }
