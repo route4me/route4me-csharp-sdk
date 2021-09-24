@@ -684,45 +684,46 @@ namespace Route4MeSDKUnitTest
         {
             var route4Me = new Route4MeManager(c_ApiKey);
 
-            string routeId = tdr.SD10Stops_route_id;
+            string routeId = tdr2.SDRT_route_id;
             Assert.IsNotNull(routeId, "routeId_SingleDriverRoute10Stops is null.");
 
             var routeDuplicateParameters = new RouteParametersQuery()
             {
-                RouteId = routeId
+                DuplicateRoutesId = new string[] { routeId }
             };
 
             // Run the query
-            var duplicatedRouteId = route4Me.DuplicateRoute(routeDuplicateParameters, out string errorString);
+            var duplicateResult = route4Me.DuplicateRoute(routeDuplicateParameters, out string errorString);
 
-            Assert.IsNotNull(duplicatedRouteId, $"Cannot duplicate a route {duplicatedRouteId ?? "nll"}. " + errorString);
-            Assert.IsTrue(duplicatedRouteId.Length==32, "Cannot duplicate a route.");
+            Assert.IsNotNull(duplicateResult, $"Cannot duplicate a route {routeId ?? "nll"}. " + errorString);
+            Assert.IsTrue(duplicateResult.Status, $"Cannot duplicate a route {routeId ?? "nll"}.");
+            Assert.IsTrue((duplicateResult?.RouteIDs?.Length ?? 0) > 0, $"Cannot duplicate a route {routeId ?? "nll"}.");
+
+            Thread.Sleep(5000);
 
             var duplicatedRoute = route4Me.GetRoute(
-                new RouteParametersQuery() { RouteId = duplicatedRouteId }, 
+                new RouteParametersQuery() { RouteId = duplicateResult.RouteIDs[0] },
                 out errorString);
 
             Assert.IsNotNull(duplicatedRoute, "Cannot retrieve the duplicated route.");
             Assert.IsInstanceOfType(
-                duplicatedRoute, 
-                typeof(DataObjectRoute), 
+                duplicatedRoute,
+                typeof(DataObjectRoute),
                 "Cannot retrieve the duplicated route.");
             //Assert.IsNotNull(duplicatedRoute.OptimizationProblemId, "Optimization problem ID of the duplicated route is null.");
 
             var routeParameters = new RouteParametersQuery()
             {
-                RouteId = duplicatedRouteId,
+                RouteId = duplicateResult.RouteIDs[0],
                 UnlinkFromMasterOptimization = true
             };
-
-            lsOptimizationIDs.Add(duplicatedRoute.OptimizationProblemId);
 
             // Run the query
             var unlinkedRoute = route4Me.UpdateRoute(routeParameters, out errorString);
 
             Assert.IsNotNull(
-                unlinkedRoute, 
-                "UnlinkRouteFromOptimizationTest failed. " + errorString);
+                unlinkedRoute,
+                "UnlinkRouteFromOptimizationTest failed. " + errorString + Environment.NewLine + "Route ID: " + routeId);
             Assert.IsNull(
                 unlinkedRoute?.OptimizationProblemId ?? null,
                 "Optimization problem ID of the unlinked route is not null.");
@@ -734,17 +735,28 @@ namespace Route4MeSDKUnitTest
             var route4Me = new Route4MeManager(c_ApiKey);
 
             string routeId = tdr.SD10Stops_route_id;
-            Assert.IsNotNull(routeId, "routeId is null...");
+            Assert.IsNotNull(routeId, "routeId is null.");
 
             var routeParameters = new RouteParametersQuery()
             {
-                RouteId = routeId
+                DuplicateRoutesId = new string[] { routeId }
             };
 
             // Run the query
-            string routeId_DuplicateRoute = route4Me.DuplicateRoute(routeParameters, out string errorString);
+            var result = route4Me.DuplicateRoute(routeParameters, out string errorString);
 
-            Assert.IsNotNull(routeId_DuplicateRoute, "DuplicateRouteTest failed. " + errorString);
+            Assert.IsNotNull(result, "DuplicateRouteTest failed. " + errorString);
+            Assert.IsInstanceOfType(
+                result,
+                typeof(DuplicateRouteResponse),
+                "DeleteRoutesTest failed. " + errorString);
+            Assert.IsTrue(result.Status, "DuplicateRouteTest failed");
+
+            var routeIdsToDelete = new List<string>();
+
+            foreach (var id in result.RouteIDs) routeIdsToDelete.Add(id);
+
+            route4Me.DeleteRoutes(routeIdsToDelete.ToArray(), out string errorString2);
         }
 
         [TestMethod]
@@ -5010,11 +5022,25 @@ namespace Route4MeSDKUnitTest
                 }
             };
 
+            var depots = new Address[1]
+            {
+                new Address()
+                {
+                    Alias = "HQ1",
+                    AddressString = "1010 N Florida ave, Tampa, FL",
+                    IsDepot = true,
+                    Latitude = 27.952941,
+                    Longitude = -82.459493,
+                    Time = 0
+                }
+            };
+
             var optimizationParameters = new OptimizationParameters()
             {
                 Redirect = false,
                 OrderTerritories = orderTerritories,
-                Parameters = parameters
+                Parameters = parameters,
+                Depots = depots
             };
 
             // Run the query
@@ -10156,6 +10182,12 @@ namespace Route4MeSDKUnitTest
             var newOrder = route4Me.AddOrder(orderParams, out string errorString);
 
             Assert.IsNotNull(newOrder, "AddScheduledOrdersTest failed. " + errorString);
+            Assert.IsInstanceOfType(
+                    newOrder,
+                    typeof(Order),
+                    $"Cannot create the order in the test AddScheduledOrderTest. {errorString}");
+
+            lsOrders.Add(newOrder);
         }
 
         [TestMethod]
@@ -10305,16 +10337,19 @@ namespace Route4MeSDKUnitTest
         }
 
         [TestMethod]
-        public void CreateOrderWithTrackingNumberTest()
+        public void CreateOrderWithOrderTypeTest()
         {
             if (skip == "yes") return;
 
             var route4Me = new Route4MeManager(c_ApiKey);
 
+            // Using of an existing tracking number raises error
+            var randomTrackingNumber = R4MeUtils.GenerateRandomString(8, "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789");
+
             var orderParams = new Order()
             {
                 address_1 = "201 LAVACA ST APT 746, AUSTIN, TX, 78701, US",
-                TrackingNumber = "AA11ZZCC",
+                TrackingNumber = randomTrackingNumber,
                 AddressStopType = AddressStopType.PickUp.Description()
             };
 
@@ -10322,9 +10357,7 @@ namespace Route4MeSDKUnitTest
 
             Assert.IsNotNull(result, "CreateOrderWithTrackingNumberTest failed. " + errorString);
 
-            lsOrderIds.Add(result.order_id.ToString());
-
-            lsOrders.Add(result);
+            route4Me.RemoveOrders(new string[] { result.order_id.ToString() }, out string errorString2);
         }
 
         [TestMethod]

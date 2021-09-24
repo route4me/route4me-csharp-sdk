@@ -30,28 +30,25 @@ namespace Route4MeSDK.Examples
 
             var routeParameters = new RouteParametersQuery()
             {
-                RouteId = routeId
+                DuplicateRoutesId = new string[] { routeId }
             };
 
             // Run the query
-            string duplicatedRouteId = route4Me.DuplicateRoute(
-                routeParameters,
-                out string errorString
-             );
+            var result = route4Me.DuplicateRoute(routeParameters, out string errorString);
 
-            if (duplicatedRouteId != null) RoutesToRemove = new List<string>()
+            if (((result?.Status ?? false) && (result?.RouteIDs?.Length ?? 0) > 0))
             {
-                duplicatedRouteId
-            };
+                RoutesToRemove = new List<string>() { result.RouteIDs[0] };
+            }
 
             Console.WriteLine(
-                duplicatedRouteId != null
+                (result?.Status ?? false) && (result?.RouteIDs?.Length ?? 0) > 0
                 ? String.Format(
-                    "DuplicateRoute executed successfully, duplicated route ID: {0}", 
-                    duplicatedRouteId
+                    "DuplicateRoute executed successfully, duplicated route ID: {0}",
+                    result.RouteIDs[0]
                   )
                 : String.Format(
-                    "DuplicateRoute error {0}", 
+                    "DuplicateRoute error {0}",
                     errorString
                   )
              );

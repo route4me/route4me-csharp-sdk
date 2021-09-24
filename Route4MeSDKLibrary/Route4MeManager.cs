@@ -699,43 +699,32 @@ namespace Route4MeSDK
         /// The response from a route duplicating process
         /// </summary>
 		[DataContract]
-		private sealed class DuplicateRouteResponse
+		public sealed class DuplicateRouteResponse
 		{
-            /// <value>ID of a duplicate optimization</value>
-			[DataMember(Name = "optimization_problem_id")]
-			public string OptimizationProblemId { get; set; }
+            /// If true, the route(s) duplicated successfully
+			[DataMember(Name = "status")]
+            public bool Status { get; set; }
 
-            /// <value>True if a route duplicated successfuly</value>
-			[DataMember(Name = "success")]
-			public Boolean Success { get; set; }
-		}
+            /// An array of the duplicated route IDs
+			[DataMember(Name = "route_ids")]
+            public string[] RouteIDs { get; set; }
+        }
 
         /// <summary>
-        /// Duplicates a route
-        /// </summary>
-        /// <param name="queryParameters">The query parameters containing a route ID to be duplicated</param>
-        /// <param name="errorString">Returned error string in case of the processs failing</param>
-        /// <returns>ID of a duplicate route</returns>
-		public string DuplicateRoute(RouteParametersQuery queryParameters, out string errorString)
+		/// Duplicates a route
+		/// </summary>
+		/// <param name="queryParameters">The query parameters containing a route ID to be duplicated</param>
+		/// <param name="errorString">Returned error string in case of the processs failing</param>
+		/// <returns>DuplicateRouteResponse type object</returns>
+		public DuplicateRouteResponse DuplicateRoute(RouteParametersQuery queryParameters, out string errorString)
 		{
-			queryParameters.ParametersCollection["to"] = "none";
-			var response = GetJsonObjectFromAPI<DuplicateRouteResponse>(queryParameters,
-											R4MEInfrastructureSettings.DuplicateRoute,
-											HttpMethodType.Get,
-											out errorString);
+            //queryParameters.ParametersCollection["to"] = "none";
+            var response = GetJsonObjectFromAPI<DuplicateRouteResponse>(queryParameters,
+                                            R4MEInfrastructureSettings.RouteHost,
+                                            HttpMethodType.Post,
+                                            out errorString);
 
-            //return (response != null && response.Success) 
-            //    ? (response.OptimizationProblemId != null 
-            //      ? this.GetRouteId(response.OptimizationProblemId, out errorString) : null)
-            //    : null;
-
-            // TO DO: response.OptimizationProblemId in fact is route ID - it's bug. Inform Igor, after fixing restore above code.
-            var routeId = (response != null && response.Success)
-                ? (response.OptimizationProblemId != null
-                  ? response.OptimizationProblemId : null)
-                : null;
-
-            return routeId;
+            return response;
         }
 
         /// <summary>
@@ -4262,16 +4251,31 @@ namespace Route4MeSDK
                                 }
                                 else
 								{
-									var streamTask = await ((StreamContent)response.Content).ReadAsStreamAsync();
 									ErrorResponse errorResponse = null;
+
 									try
 									{
-										errorResponse = streamTask.ReadObject<ErrorResponse>();
+                                        var streamTask = await ((StreamContent)response.Content).ReadAsStreamAsync();
+
+                                        errorResponse = streamTask.ReadObject<ErrorResponse>();
 									}
-									catch// (Exception e)
+									catch (Exception)
 									{
-										errorResponse = default(ErrorResponse);
-									}
+                                        if ((response?.ReasonPhrase ?? null) != null)
+                                        {
+                                            errorResponse = new ErrorResponse();
+                                            errorResponse.Errors = new List<string>() { response.ReasonPhrase };
+
+                                            var reqMessage = response?.RequestMessage?.Content.ReadAsStringAsync().Result ?? "";
+
+                                            if (reqMessage != "") errorResponse.Errors.Add($"Request content: {Environment.NewLine} {reqMessage}");
+                                        }
+                                        else
+                                        {
+                                            errorResponse = default(ErrorResponse);
+                                        }
+                                    }
+
 									if (errorResponse != null && errorResponse.Errors != null && errorResponse.Errors.Count > 0)
 									{
 										foreach (String error in errorResponse.Errors)
@@ -4620,18 +4624,30 @@ namespace Route4MeSDK
 								}
 								else
 								{
-									var streamTask = ((StreamContent)response.Result.Content).ReadAsStreamAsync();
-									streamTask.Wait();
 									ErrorResponse errorResponse = null;
 									try
 									{
-										errorResponse = streamTask.Result.ReadObject<ErrorResponse>();
+                                        var streamTask = ((StreamContent)response.Result.Content).ReadAsStreamAsync();
+                                        streamTask.Wait();
+
+                                        errorResponse = streamTask.Result.ReadObject<ErrorResponse>();
 									}
-									catch
-									{
-										// (Exception e)
-										errorResponse = null;
-									}
+									catch (Exception) // If cannot read ErrorResponse from the stream, try another way
+                                    {
+                                        if ((response?.Result?.ReasonPhrase ?? null) != null)
+                                        {
+                                            errorResponse = new ErrorResponse();
+                                            errorResponse.Errors = new List<string>() { response.Result.ReasonPhrase };
+                                            
+                                            var reqMessage = response?.Result?.RequestMessage?.Content.ReadAsStringAsync().Result ?? "";
+
+                                            if (reqMessage != "") errorResponse.Errors.Add($"Request content: {Environment.NewLine} {reqMessage}");
+                                        }
+                                        else
+                                        {
+                                            errorResponse = default(ErrorResponse);
+                                        }
+                                    }
 									if (errorResponse != null && errorResponse.Errors != null && errorResponse.Errors.Count > 0)
 									{
 										foreach (String error in errorResponse.Errors)

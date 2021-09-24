@@ -14,7 +14,7 @@ namespace Route4MeSDK.Examples
             var route4Me = new Route4MeManager(ActualApiKey);
 
             RunOptimizationSingleDriverRoute10Stops();
-            OptimizationsToRemove = new System.Collections.Generic.List<string>()
+            OptimizationsToRemove = new List<string>()
             {
                 SD10Stops_optimization_problem_id
             };
@@ -27,16 +27,13 @@ namespace Route4MeSDK.Examples
             };
 
             // Run the query
-            string duplicatedRouteId = route4Me.DuplicateRoute(
-                duplParameters,
-                out string errorString
-             );
+            var duplicateResult = route4Me.DuplicateRoute(duplParameters, out string errorString);
 
-            if (duplicatedRouteId!=null)
+            if ((duplicateResult?.RouteIDs?.Length ?? 0) > 0)
             {
                 RoutesToRemove = new List<string>()
                 {
-                    duplicatedRouteId
+                    duplicateResult.RouteIDs[0]
                 };
             }
             else
@@ -49,7 +46,7 @@ namespace Route4MeSDK.Examples
 
             var routeParameters = new RouteParametersQuery()
             {
-                RouteId = duplicatedRouteId,
+                RouteId = duplicateResult.RouteIDs[0],
                 Original = true
             };
 
