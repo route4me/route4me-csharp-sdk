@@ -202,5 +202,11 @@ namespace Route4MeSDK.QueryTypes
         /// If true, the route time is shifted by timezone.
         /// </summary>
         public bool ShiftByTimeZone { get; set; }
+
+        /// <summary>
+        /// An array of the route IDs to duplicate.
+        /// </summary>
+        [DataMember(Name = "duplicate_routes_id", EmitDefaultValue = false)]
+        public string[] DuplicateRoutesId { get; set; }
     }
 }

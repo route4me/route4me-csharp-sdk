@@ -2,6 +2,7 @@
 using Route4MeSDK.QueryTypes;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace Route4MeSDK.Examples
 {
@@ -15,6 +16,7 @@ namespace Route4MeSDK.Examples
             var route4Me = new Route4MeManager(ActualApiKey);
 
             RunOptimizationSingleDriverRoute10Stops();
+
             OptimizationsToRemove = new List<string>()
             {
                 SD10Stops_optimization_problem_id
@@ -24,37 +26,37 @@ namespace Route4MeSDK.Examples
 
             var routeDuplicateParameters = new RouteParametersQuery()
             {
-                RouteId = SD10Stops_route_id
+                DuplicateRoutesId = new string[] { SD10Stops_route_id }
             };
 
             // Run the query
-            var duplicatedRouteId = route4Me.DuplicateRoute(
-                routeDuplicateParameters, 
-                out string errorString);
+            var duplicatedResult = route4Me.DuplicateRoute(routeDuplicateParameters, out string errorString);
 
-            if (duplicatedRouteId == null)
+            if (!(duplicatedResult?.Status ?? false) || (duplicatedResult?.RouteIDs?.Length ?? 0) < 1)
             {
-                Console.WriteLine("Cannot duplicate the route");
+                Console.WriteLine($"Cannot duplicate the route. {errorString}");
                 return;
             }
+
+            Thread.Sleep(5000);
 
             var duplicatedRoute = route4Me.GetRoute(
-                new RouteParametersQuery() { RouteId = duplicatedRouteId },
+                new RouteParametersQuery() { RouteId = duplicatedResult.RouteIDs[0] },
                 out errorString);
 
-            if (duplicatedRoute==null && duplicatedRoute.GetType()!= typeof(DataObjectRoute))
+            if (duplicatedRoute == null && duplicatedRoute.GetType() != typeof(DataObjectRoute))
             {
-                Console.WriteLine("Cannot retrieve the duplicated route.");
+                Console.WriteLine($"Cannot retrieve the duplicated route. {errorString}");
                 return;
             }
 
-            RoutesToRemove = new List<string>() { duplicatedRouteId };
+            RoutesToRemove = new List<string>() { duplicatedResult.RouteIDs[0] };
 
             #endregion
 
             var routeParameters = new RouteParametersQuery()
             {
-                RouteId = duplicatedRouteId,
+                RouteId = duplicatedResult.RouteIDs[0],
                 UnlinkFromMasterOptimization = true
             };
 
