@@ -1,0 +1,13 @@
+version: 2.0.0.{build}
+skip_tags: true
+image: Visual Studio 2017
+configuration: Release
+build_script:
+  - dotnet restore restore ./route4me-csharp-sdk/Route4MeSDK.sln
+  - dotnet build restore route4me-net-core/route4me-csharp-sdk/Route4MeSDK.sln /p:Configuration=Release /p:PackageVersion=%APPVEYOR_BUILD_VERSION%-pre /p:Version=%APPVEYOR_BUILD_VERSION% /verbosity:minimal
+  - dotnet pack route4me-net-core/route4me-csharp-sdk/Route4MeSDKLibrary/Route4MeSDKLibrary.csproj -c Release --no-build /p:PackageVersion=%APPVEYOR_BUILD_VERSION%-pre /p:Version=%APPVEYOR_BUILD_VERSION%
+test_script:
+  - dotnet test --configuration Release --no-build -f netcoreapp2.1 ./route4me-csharp-sdk/Route4MeSDKUnitTest/Route4MeSDKUnitTest.csproj
+
+artifacts:
+  - path: '**\*.nupkg'

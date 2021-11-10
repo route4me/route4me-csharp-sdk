@@ -1,0 +1,48 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Authors>Oleg Guchashvili</Authors>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <Description>Route4Me Route Optimization SaaS C# SDK (.net core framework).
+
+This SDK makes it easier for you use the Route4Me API, which creates optimally sequenced driving routes for many drivers.
+
+The service is typically used by organizations who must route many drivers to many destinations. In addition to route optimization for new (future) routes, the API can also be used to analyze historical routes, and to distribute routes to field personnel.</Description>
+    <Copyright>Copyright (C) 2019 - 2019 Route4Me</Copyright>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+    <PackageProjectUrl>https://github.com/route4me/route4me-net-core/tree/master/route4me-csharp-sdk</PackageProjectUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/route4me/route4me-net-core/master/route4me-csharp-sdk/r4m_icon_rounded_corners.ico</PackageIconUrl>
+    <RepositoryUrl>https://github.com/route4me/route4me-net-core/tree/master/route4me-csharp-sdk</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>Route4Me, Route Optimization, SDK, GIS</PackageTags>
+    <Version>1.1.1.1</Version>
+    <PackageReleaseNotes>See https://github.com/route4me/route4me-net-core/blob/master/route4me-csharp-sdk/CHANGELOG.md for release note details.</PackageReleaseNotes>
+    <AssemblyVersion>1.1.1.1</AssemblyVersion>
+    <FileVersion>1.1.1.1</FileVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="DataTypes\MemberResponseV4.cs~RF1f5ebcb6.TMP" />
+    <None Remove="QueryTypes\V5\OptimizationParameters.cs~RF5453dc6e.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CsvHelper" Version="2.16.3" />
+    <PackageReference Include="fastJSON" Version="2.4.0.4" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="SocketIoClientDotNet.Standard" Version="0.0.6" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE.md">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>

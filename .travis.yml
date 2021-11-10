@@ -1,0 +1,15 @@
+# =============================================================================
+# Access Route4Me's logistics-as-a-service API using our C# SDK
+#
+# Copyright (C) 2016-2019 Route4Me
+#
+# =============================================================================
+
+language: csharp
+
+mono: latest
+
+script:
+  - dotnet restore ./route4me-csharp-sdk/Route4MeSDK.sln
+  - dotnet build -v q -f netcoreapp2.1 ./route4me-csharp-sdk/Route4MeSDKLibrary/Route4MeSDKLibrary.csproj
+  - dotnet test -v n -p:ParallelizeTestCollections=false -f netcoreapp2.1 --filter Category!=Beacon ./route4me-csharp-sdk/Route4MeSDKUnitTest/Route4MeSDKUnitTest.csproj
