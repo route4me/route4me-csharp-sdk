@@ -1,0 +1,145 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <StartupObject>Route4MeSDKTest.Program</StartupObject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="appsettings.json" />
+    <None Remove="Data\CSV\30k_geocoded.csv" />
+    <None Remove="Data\CSV\30k_geocoded_415.csv" />
+    <None Remove="Data\CSV\addressbook v4.csv" />
+    <None Remove="Data\CSV\addresses_1000.csv" />
+    <None Remove="Data\CSV\orders 1000 with order id.csv" />
+    <None Remove="Data\CSV\orders_1000.csv" />
+    <None Remove="Data\CSV\Route4Me Address Book 03-09-2017.csv" />
+    <None Remove="Data\JSON\Addressbook Get Contacts RESPONSE.json" />
+    <None Remove="Data\JSON\batch_socket_upload_error_addresses_data_5.json" />
+    <None Remove="Data\JSON\get orders RESPONSE.json" />
+    <None Remove="Data\JSON\pickupdropoff_request.json" />
+    <None Remove="Data\JSON\start_depot_end_depot_data.json" />
+    <None Remove="Data\Other files\addressbook_v4.csv" />
+    <None Remove="Data\Other files\addressbook_v4_short.csv" />
+    <None Remove="Data\Other files\addressbook_v4_short.xlsx" />
+    <None Remove="Data\Other files\addresses 1000.csv" />
+    <None Remove="Data\Other files\addresses 1000.xlsx" />
+    <None Remove="Data\Other files\new address data.json" />
+    <None Remove="Data\Other files\orders 03-20-2017.csv" />
+    <None Remove="Data\Other files\orders.csv" />
+    <None Remove="Data\Other files\orders_1000.csv" />
+    <None Remove="Data\Other files\orders_1000.xlsx" />
+    <None Remove="Data\Other files\schedules.csv" />
+    <None Remove="Examples\API5\RouteTypes\CreateOptimizationWithDriverSkills.cs~RF334e06da.TMP" />
+    <None Remove="Resources\test.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\CSV\30k_geocoded.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\CSV\30k_geocoded_415.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\CSV\addressbook v4.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\CSV\addresses_1000.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\CSV\orders 1000 with order id.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\CSV\orders_1000.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\CSV\Route4Me Address Book 03-09-2017.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\JSON\Addressbook Get Contacts RESPONSE.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\JSON\batch_socket_upload_error_addresses_data_5.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\JSON\get orders RESPONSE.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\JSON\pickupdropoff_request.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\JSON\start_depot_end_depot_data.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Other files\addressbook_v4.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Other files\addressbook_v4_short.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Other files\addressbook_v4_short.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Other files\addresses 1000.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Other files\addresses 1000.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Other files\new address data.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Other files\orders 03-20-2017.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Other files\orders.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Other files\orders_1000.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Other files\orders_1000.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Other files\schedules.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\test.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CsvHelper" Version="2.16.3" />
+    <PackageReference Include="MSTest.TestAdapter" Version="2.2.7" />
+    <PackageReference Include="MSTest.TestFramework" Version="2.2.7" />
+    <PackageReference Include="System.CodeDom" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Route4MeSDKLibrary\Route4MeSDKLibrary.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>

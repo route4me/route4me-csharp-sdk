@@ -1,0 +1,93 @@
+[
+	{
+	  "ADDRESS": "4700 N HABANA AVE STE 500",
+	  "CITY": "TAMPA",
+	  "STATE": "FL",
+	  "ZIP": 33614,
+	  "ALIAS": "ToDelete"
+	},
+	{
+	  "ADDRESS": "8465 SOUTH ST APT E",
+	  "CITY": "CITRONELLE",
+	  "STATE": "AL",
+	  "ZIP": 36522,
+	  "ALIAS": "ToDelete"
+	},
+	{
+	  "ADDRESS": "7703 LEE RD",
+	  "CITY": "LITHIA SPRINGS",
+	  "STATE": "GA",
+	  "ZIP": 30122,
+	  "ALIAS": "ToDelete"
+	},
+	{
+	  "ADDRESS": "21093 VIA VENTURA",
+	  "CITY": "BOCA RATON",
+	  "STATE": "FL",
+	  "ZIP": 33433,
+	  "ALIAS": "ToDelete"
+	},
+	{
+	  "ADDRESS": "4501 PACKARD DR",
+	  "CITY": "NASHVILLE",
+	  "STATE": "TN",
+	  "ZIP": 37211,
+	  "ALIAS": "ToDelete"
+	},
+	{
+	  "ADDRESS": "501 CAVENDER CREEK RD",
+	  "CITY": "CARROLLTON",
+	  "STATE": "GA",
+	  "ZIP": 30116,
+	  "ALIAS": "ToDelete"
+	},
+	{
+	  "ADDRESS": "251 LEISURE COVE DR",
+	  "CITY": "LAGRANGE",
+	  "STATE": "GA",
+	  "ZIP": 30240,
+	  "ALIAS": "ToDelete"
+	},
+	{
+	  "ADDRESS": "PO BOX 2011",
+	  "CITY": "TUNICA",
+	  "STATE": "MS",
+	  "ZIP": 38676,
+	  "ALIAS": "ToDelete"
+	},
+	{
+	  "ADDRESS": "3031 WOODLEY PARK DR",
+	  "CITY": "MONTGOMERY",
+	  "STATE": "AL",
+	  "ZIP": 36116,
+	  "ALIAS": "ToDelete"
+	},
+	{
+	  "ADDRESS": "509 E 5TH ST",
+	  "CITY": "DONALSONVILLE",
+	  "STATE": "GA",
+	  "ZIP": 39845,
+	  "ALIAS": "ToDelete"
+	},
+	{
+	  "ADDRESS": "299 NW 39TH ST",
+	  "CITY": "MIAMI",
+	  "STATE": "FL",
+	  "ZIP": 33127,
+	  "ALIAS": "ToDelete"
+	},
+	{
+	  "ADDRESS": "8350 PARK BLVD",
+	  "CITY": "SEMINOLE",
+	  "STATE": "FL",
+	  "ZIP": 33777,
+	  "ALIAS": "ToDelete"
+	},
+	{
+	  "ADDRESS": "2110 EXETER AVE",
+	  "CITY": "BESSEMER",
+	  "STATE": "AL",
+	  "ZIP": 35020,
+	  "ALIAS": "ToDelete"
+	}
+]
