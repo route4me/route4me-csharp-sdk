@@ -91,6 +91,8 @@ namespace Route4MeSDK.Examples
                 VehicleCapacity = 1,
                 VehicleMaxDistanceMI = 10000,
 
+                RT = true, // if true, a round trip route is generated.
+
                 Optimize = Optimize.Time.Description(),
                 DistanceUnit = DistanceUnit.KM.Description(),
                 DeviceType = DeviceType.Web.Description(),
